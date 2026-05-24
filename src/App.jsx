@@ -14,6 +14,7 @@ import './styles/finalVisualFix.css';
 import './styles/dashboardFullWidthFix.css';
 import './styles/referenceFitFix.css';
 import './styles/crmChart.css';
+import './styles/emergencyFix.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
