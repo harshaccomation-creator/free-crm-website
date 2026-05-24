@@ -12,6 +12,7 @@ import './styles/loginPage.css';
 import './styles/loginDarkHero.css';
 import './styles/stableCrmShell.css';
 import './styles/loginHeroStableFix.css';
+import './styles/dashboardStableFinal.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
