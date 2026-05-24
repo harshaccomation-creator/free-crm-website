@@ -20,6 +20,7 @@ import './styles/leadActionsFinal.css';
 import './styles/leadPremiumPolish.css';
 import './styles/sidebarPremiumPolish.css';
 import './styles/leadDetailPremiumFix.css';
+import './styles/leadHeaderButtonsCompact.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
