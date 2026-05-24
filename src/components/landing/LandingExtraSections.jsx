@@ -39,7 +39,7 @@ const sections = [
   },
 ];
 
-function FeatureVisual({ type, action }) {
+function FeatureVisual({ type }) {
   if (type === 'secure') {
     return (
       <div className="feature-visual premium-visual secure-visual">
@@ -52,8 +52,8 @@ function FeatureVisual({ type, action }) {
           <span>Encrypted lead records</span>
           <div className="status-line"><b />Permission verified</div>
         </div>
-        <button className="floating-chip chip-1" onClick={() => action('Access control opened')}>🔐 Access Control</button>
-        <button className="floating-chip chip-2" onClick={() => action('Encryption opened')}>🧾 Encrypted Data</button>
+        <span className="floating-chip chip-1">🔐 Access Control</span>
+        <span className="floating-chip chip-2">🧾 Encrypted Data</span>
       </div>
     );
   }
@@ -67,8 +67,8 @@ function FeatureVisual({ type, action }) {
           <div className="timeline-list"><span /><span /><span /></div>
           <strong>Smart Task Queue</strong>
         </div>
-        <button className="task-pill pill-a" onClick={() => action('Reminder automation opened')}>↻ Follow-up reminder</button>
-        <button className="task-pill pill-b" onClick={() => action('Task schedule opened')}>✓ Task scheduled</button>
+        <span className="task-pill pill-a">↻ Follow-up reminder</span>
+        <span className="task-pill pill-b">✓ Task scheduled</span>
       </div>
     );
   }
@@ -83,7 +83,7 @@ function FeatureVisual({ type, action }) {
           <div className="line-up" />
           <div className="chart-foot"><strong>+28%</strong><span>Revenue growth</span></div>
         </div>
-        <button className="floating-chip chip-revenue" onClick={() => action('Growth report opened')}>📈 Growth report</button>
+        <span className="floating-chip chip-revenue">📈 Growth report</span>
       </div>
     );
   }
@@ -97,7 +97,7 @@ function FeatureVisual({ type, action }) {
         <div className="message-card soft">Manager reviewed activity</div>
         <div className="message-card orange">New lead assigned</div>
       </div>
-      <button className="floating-chip chip-team" onClick={() => action('Team workspace opened')}>👥 Team workspace</button>
+      <span className="floating-chip chip-team">👥 Team workspace</span>
     </div>
   );
 }
@@ -124,7 +124,7 @@ export default function LandingExtraSections({ action }) {
               ))}
             </div>
           </div>
-          <FeatureVisual type={item.type} action={action} />
+          <FeatureVisual type={item.type} />
         </article>
       ))}
     </section>
