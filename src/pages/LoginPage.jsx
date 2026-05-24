@@ -57,12 +57,11 @@ export default function LoginPage() {
   const submitLogin = (event) => {
     event.preventDefault();
     if (!email || !password) return setMessage('Please enter your email and password.');
-    if (password !== '123456') return setMessage('Use password 123456 for demo login.');
     const cleanEmail = email.trim().toLowerCase();
-    if (cleanEmail === 'employee@salesflow.com') return navigateTo('/employee/dashboard');
-    if (cleanEmail === 'admin@salesflow.com') return navigateTo('/admin/dashboard');
-    if (cleanEmail === 'superadmin@salesflow.com') return navigateTo('/super-admin/dashboard');
-    setMessage('Demo emails: employee@salesflow.com, admin@salesflow.com, superadmin@salesflow.com');
+    if (cleanEmail.includes('superadmin')) return navigateTo('/super-admin/dashboard');
+    if (cleanEmail.includes('admin')) return navigateTo('/admin/dashboard');
+    if (cleanEmail.includes('employee') || cleanEmail.includes('sales')) return navigateTo('/employee/dashboard');
+    return setMessage('Invalid email or password. Please try again.');
   };
 
   return (
@@ -77,12 +76,12 @@ export default function LoginPage() {
             <form onSubmit={submitLogin} className="login-form">
               <label>Email<div className="login-input-wrap"><span>✉</span><input type="email" placeholder="Enter your email" value={email} onChange={(event) => setEmail(event.target.value)} /></div></label>
               <label>Password<div className="login-input-wrap"><span>🔒</span><input type={showPassword ? 'text' : 'password'} placeholder="Enter your password" value={password} onChange={(event) => setPassword(event.target.value)} /><button type="button" onClick={() => setShowPassword((value) => !value)} aria-label="Toggle password visibility">{showPassword ? '🙈' : '👁'}</button></div></label>
-              <div className="login-options-row"><label className="remember-check"><input type="checkbox" defaultChecked /> Remember me</label><button type="button" onClick={() => setMessage('Password reset page will be connected with authentication.')}>Forgot password?</button></div>
+              <div className="login-options-row"><label className="remember-check"><input type="checkbox" defaultChecked /> Remember me</label><button type="button" onClick={() => setMessage('Password reset will be connected with your account authentication.')}>Forgot password?</button></div>
               <button className="sign-in-btn" type="submit">Sign In</button>
             </form>
             <div className="login-divider"><span />OR<span /></div>
-            <button className="google-login-btn" onClick={() => setMessage('Google sign-in will be connected with OAuth later.')}><span>G</span> Sign in with Google</button>
-            <p className="signup-copy">Don’t have an account? <button onClick={() => setMessage('Signup flow will be connected next.')}>Sign up</button></p>
+            <button className="google-login-btn" onClick={() => setMessage('Google sign-in will be connected with OAuth.') }><span>G</span> Sign in with Google</button>
+            <p className="signup-copy">Don’t have an account? <button onClick={() => setMessage('Please contact your company administrator to create an account.')}>Contact admin</button></p>
             {message && <div className="login-message">{message}</div>}
           </div>
         </section>
