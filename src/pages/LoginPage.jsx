@@ -9,7 +9,7 @@ export default function LoginPage() {
 
   const goHome = () => {
     window.history.pushState({}, '', '/');
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    window.dispatchEvent(new Event('salesflow:navigate'));
   };
 
   const submitLogin = (event) => {
@@ -31,42 +31,71 @@ export default function LoginPage() {
             <span className="login-brand-mark">S</span>
             <div>
               <strong>Sales<span>Flow</span></strong>
-              <small>CRM workspace for faster follow-ups</small>
+              <small>Grow your business, build better relationships.</small>
             </div>
           </div>
 
           <div className="crm-illustration" aria-label="SalesFlow CRM illustration">
-            <div className="analytics-window">
-              <div className="window-sidebar"><i /><i /><i /><i /></div>
-              <div className="window-body">
-                <div className="metric-row">
-                  <span><b>1,250</b><small>Leads</small></span>
-                  <span><b>850</b><small>Deals</small></span>
-                  <span><b>₹24.5k</b><small>Revenue</small></span>
+            <div className="crm-board">
+              <div className="crm-sidebar"><i /><i /><i /><i /><i /></div>
+              <div className="crm-screen">
+                <div className="crm-stats">
+                  <div><b>1,250</b><span>Leads</span></div>
+                  <div><b>850</b><span>Deals</span></div>
+                  <div><b>$24,500</b><span>Revenue</span></div>
                 </div>
-                <div className="chart-box"><i /><i /></div>
-                <div className="activity-lines"><span /><span /><span /></div>
+                <div className="crm-main-panels">
+                  <div className="chart-panel">
+                    <span className="panel-title">Sales Overview</span>
+                    <div className="chart-grid" />
+                    <div className="chart-line line-one" />
+                    <div className="chart-line line-two" />
+                  </div>
+                  <div className="activity-panel">
+                    <span className="panel-title">Recent Activities</span>
+                    {[1, 2, 3].map((row) => (
+                      <div className="activity-row" key={row}><i /><div><span /><span /></div></div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
-            <div className="person-block">
-              <span className="person-head" />
-              <span className="person-body" />
-              <span className="person-desk" />
+
+            <div className="illustration-dots" />
+
+            <div className="desk-scene">
+              <div className="desk-table" />
+              <div className="desk-leg left" />
+              <div className="desk-leg right" />
+              <div className="laptop"><div className="laptop-screen"><span /><span /><span /></div></div>
+              <div className="person">
+                <div className="person-head" />
+                <div className="person-body" />
+                <div className="person-arm" />
+                <div className="person-chair" />
+                <div className="person-leg one" />
+                <div className="person-leg two" />
+              </div>
             </div>
-            <div className="plant-block"><i /><i /><i /></div>
+
+            <div className="left-plant">
+              <span className="pot" />
+              <i className="leaf one" />
+              <i className="leaf two" />
+              <i className="leaf three" />
+              <i className="leaf four" />
+            </div>
           </div>
 
           <div className="login-visual-copy">
-            <h1>Manage leads. Close deals. Grow your business.</h1>
-            <p>Track leads, activity, tasks and revenue from one clean SalesFlow workspace.</p>
+            <h1>Manage Leads. Close Deals. Grow Your Business.</h1>
           </div>
         </aside>
 
         <section className="login-form-panel">
           <div className="login-form-box">
-            <span className="login-kicker">Welcome back</span>
-            <h2>Sign in to SalesFlow</h2>
-            <p>Access your CRM dashboard and continue managing your sales pipeline.</p>
+            <h2>Welcome Back!</h2>
+            <p>Please sign in to your account</p>
 
             <form onSubmit={submitLogin} className="login-form">
               <label>
