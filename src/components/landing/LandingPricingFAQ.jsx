@@ -10,6 +10,7 @@ const pricingPlans = [
     features: ['Lead capture preview', 'Follow-up reminders', 'Basic sales dashboard'],
     action: 'Start Free Trial',
     highlight: false,
+    badge: 'Try first',
   },
   {
     name: 'Starter',
@@ -19,6 +20,7 @@ const pricingPlans = [
     features: ['Lead pipeline', 'Activity notes', 'Task board', 'Reports preview'],
     action: 'Choose Starter Plan',
     highlight: true,
+    badge: 'Most popular',
   },
   {
     name: 'Business',
@@ -28,6 +30,7 @@ const pricingPlans = [
     features: ['Admin controls', 'Super admin module', 'Custom workflows', 'Priority support'],
     action: 'Contact Sales',
     highlight: false,
+    badge: 'Scale plan',
   },
 ];
 
@@ -55,11 +58,11 @@ const faqs = [
 ];
 
 export default function LandingPricingFAQ({ openModal }) {
-  const [activeFaq, setActiveFaq] = useState(0);
+  const [activeFaq, setActiveFaq] = useState(null);
 
   return (
     <section className="landing-shell pricing-faq-section">
-      <div id="pricing" className="pricing-block">
+      <div id="pricing" className="pricing-block premium-pricing-block">
         <div className="section-center-heading">
           <span>Simple Pricing</span>
           <h2>Start small, upgrade when your CRM grows.</h2>
@@ -69,7 +72,10 @@ export default function LandingPricingFAQ({ openModal }) {
         <div className="pricing-grid">
           {pricingPlans.map((plan) => (
             <article className={`pricing-card ${plan.highlight ? 'highlight' : ''}`} key={plan.name}>
-              {plan.highlight && <span className="popular-badge">Most Popular</span>}
+              <div className="pricing-card-top">
+                <span className="plan-badge">{plan.badge}</span>
+                {plan.highlight && <span className="popular-badge">Recommended</span>}
+              </div>
               <h3>{plan.name}</h3>
               <div className="price-row"><strong>{plan.price}</strong><span>{plan.label}</span></div>
               <p>{plan.text}</p>
@@ -91,12 +97,15 @@ export default function LandingPricingFAQ({ openModal }) {
         </div>
 
         <div className="faq-list">
-          {faqs.map((faq, index) => (
-            <button className={`faq-item ${activeFaq === index ? 'active' : ''}`} key={faq.question} onClick={() => setActiveFaq(index)}>
-              <div><strong>{faq.question}</strong><span>{activeFaq === index ? '−' : '+'}</span></div>
-              {activeFaq === index && <p>{faq.answer}</p>}
-            </button>
-          ))}
+          {faqs.map((faq, index) => {
+            const isOpen = activeFaq === index;
+            return (
+              <button className={`faq-item ${isOpen ? 'active' : ''}`} key={faq.question} onClick={() => setActiveFaq(isOpen ? null : index)}>
+                <div><strong>{faq.question}</strong><span>{isOpen ? '−' : '+'}</span></div>
+                {isOpen && <p>{faq.answer}</p>}
+              </button>
+            );
+          })}
         </div>
       </div>
     </section>
