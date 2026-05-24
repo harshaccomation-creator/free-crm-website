@@ -7,6 +7,7 @@ import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
 import './styles/dashboardPolish.css';
 import './styles/dashboardLayoutFix.css';
 import './styles/dashboardCompactFit.css';
+import './styles/superExactDashboard.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
