@@ -4,28 +4,31 @@ import '../styles/loginDarkHero.css';
 
 function DarkCrmHero() {
   return (
-    <div className="dark-crm-hero">
+    <div className="dark-crm-hero stable-login-hero">
       <div className="hero-glow hero-glow-one" />
       <div className="hero-glow hero-glow-two" />
       <div className="hero-grid-wave" />
 
-      <div className="dark-hero-brand">
-        <span className="bar-logo"><i /><i /><i /></span>
-        <strong>SalesFlow <em>CRM</em></strong>
+      <div className="dark-hero-content">
+        <div className="dark-hero-brand salesflow-orange-brand">
+          <span className="salesflow-orange-mark">S</span>
+          <strong>Sales<span>Flow</span></strong>
+        </div>
+
+        <h1>Manage leads.<br />Close deals <span>faster.</span></h1>
+        <p className="dark-hero-copy">Manage leads, follow-ups, sales, clients, and team activity from one powerful dashboard.</p>
+
+        <div className="dark-feature-list">
+          <article><span>♙</span><div><strong>Lead Tracking</strong><p>Capture, track, and manage leads through every stage.</p></div></article>
+          <article><span>👥</span><div><strong>Team Collaboration</strong><p>Assign tasks, manage follow-ups, and keep your team aligned.</p></div></article>
+          <article><span>♢</span><div><strong>Secure Access</strong><p>Role-based CRM access for employees, admins and super admins.</p></div></article>
+        </div>
       </div>
 
-      <h1>Manage leads.<br />Close deals <span>faster.</span></h1>
-      <p className="dark-hero-copy">Manage leads, follow-ups, sales, clients, and team activity from one powerful dashboard.</p>
-
-      <div className="dark-feature-list">
-        <article><span>♙</span><div><strong>Lead Tracking</strong><p>Capture, track, and manage leads through every stage.</p></div></article>
-        <article><span>👥</span><div><strong>Team Collaboration</strong><p>Work together, assign tasks, and stay aligned with your team.</p></div></article>
-        <article><span>♢</span><div><strong>Secure Access</strong><p>Role-based security to keep your CRM data safe and compliant.</p></div></article>
-      </div>
-
-      <div className="dark-dashboard-preview">
+      <div className="dark-dashboard-preview clean-preview-card">
         <div className="dash-side">
-          <b>▥ CRM</b><span className="active">⌂ Dashboard</span><span>♙ Leads</span><span>◇ Deals</span><span>☷ Contacts</span><span>☑ Tasks</span><span>▣ Calendar</span><span>◔ Reports</span><span>⚙ Settings</span>
+          <b><span className="mini-s">S</span> CRM</b>
+          <span className="active">⌂ Dashboard</span><span>♙ Leads</span><span>◇ Deals</span><span>☷ Contacts</span><span>☑ Tasks</span><span>▣ Calendar</span><span>◔ Reports</span>
         </div>
         <div className="dash-main">
           <h3>Dashboard</h3>
@@ -35,7 +38,7 @@ function DarkCrmHero() {
         </div>
       </div>
 
-      <div className="floating-revenue"><small>Revenue This Month</small><b>$78,420</b><em>↑ 16.3% vs last month</em></div>
+      <div className="floating-revenue"><small>Revenue This Month</small><b>₹78,420</b><em>↑ 16.3% vs last month</em></div>
     </div>
   );
 }
