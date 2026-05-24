@@ -4,6 +4,8 @@ import LoginPage from './pages/LoginPage.jsx';
 import EmployeeDashboard from './pages/dashboards/EmployeeDashboard.jsx';
 import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
 import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
+import LeadListPage from './pages/leads/LeadListPage.jsx';
+import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
 import './styles/dashboardPolish.css';
 import './styles/dashboardLayoutFix.css';
 import './styles/dashboardCompactFit.css';
@@ -28,6 +30,8 @@ export default function App() {
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
   if (path === '/admin/dashboard') return <AdminDashboard />;
   if (path === '/super-admin/dashboard') return <SuperAdminDashboard />;
+  if (path === '/leads') return <LeadListPage />;
+  if (path.startsWith('/leads/')) return <LeadDetailPage leadId={path.split('/')[2]} />;
 
   return <LandingPage />;
 }
