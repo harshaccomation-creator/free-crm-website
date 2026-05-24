@@ -1,4 +1,5 @@
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
+import CrmLineChart from '../../components/dashboard/CrmLineChart.jsx';
 import '../../styles/dashboardBase.css';
 import '../../styles/employeeDashboard.css';
 import '../../styles/roleDashboards.css';
@@ -38,7 +39,7 @@ export default function EmployeeDashboard() {
         <section className="employee-grid-one">
           <article className="exact-card performance-card">
             <div className="exact-card-head"><h2>My Performance Overview</h2><button>This Month ▾</button></div>
-            <div className="line-chart"><i /><b /><span className="p1" /><span className="p2" /><span className="p3" /><span className="p4" /><span className="p5" /><span className="p6" /></div>
+            <CrmLineChart type="employee" />
           </article>
           <article className="exact-card tasks-card">
             <div className="exact-card-head"><h2>Today's Tasks</h2><button>View All</button></div>
