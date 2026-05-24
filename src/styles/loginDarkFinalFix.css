@@ -1,0 +1,229 @@
+/* Final clean login layout: no overlap, no crop */
+.login-dark-page{
+  min-height:100vh!important;
+  padding:24px!important;
+  background:#eaf2ff!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:auto!important;
+}
+
+.login-dark-card{
+  width:min(1440px,96vw)!important;
+  height:min(820px,92vh)!important;
+  min-height:680px!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1.05fr) minmax(460px,.95fr)!important;
+  border-radius:24px!important;
+  overflow:hidden!important;
+  background:#fff!important;
+}
+
+.login-dark-left{
+  min-width:0!important;
+  overflow:hidden!important;
+}
+
+.login-dark-form-panel{
+  min-width:0!important;
+  overflow:auto!important;
+  padding:36px 54px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+
+.login-dark-form-panel .login-form-box{
+  width:100%!important;
+  max-width:520px!important;
+}
+
+.dark-crm-hero{
+  min-height:100%!important;
+  height:100%!important;
+  padding:44px 42px!important;
+  overflow:hidden!important;
+  display:grid!important;
+  grid-template-columns:minmax(330px,.95fr) minmax(300px,.78fr)!important;
+  grid-template-rows:auto auto auto 1fr!important;
+  column-gap:22px!important;
+  align-items:start!important;
+}
+
+.dark-hero-brand{
+  grid-column:1 / 2!important;
+  margin:0 0 26px!important;
+  position:relative!important;
+  z-index:3!important;
+}
+
+.dark-hero-brand strong{
+  font-size:32px!important;
+}
+
+.dark-hero-brand em{
+  font-size:20px!important;
+}
+
+.dark-crm-hero h1{
+  grid-column:1 / 2!important;
+  position:relative!important;
+  z-index:3!important;
+  font-size:48px!important;
+  line-height:1.12!important;
+  letter-spacing:-1.5px!important;
+  margin:0 0 22px!important;
+}
+
+.dark-hero-copy{
+  grid-column:1 / 2!important;
+  position:relative!important;
+  z-index:3!important;
+  max-width:500px!important;
+  font-size:18px!important;
+  line-height:1.5!important;
+  margin:0 0 28px!important;
+}
+
+.dark-feature-list{
+  grid-column:1 / 2!important;
+  position:relative!important;
+  z-index:3!important;
+  width:100%!important;
+  max-width:430px!important;
+  gap:18px!important;
+}
+
+.dark-feature-list article{
+  gap:14px!important;
+}
+
+.dark-feature-list span{
+  width:56px!important;
+  height:56px!important;
+  min-width:56px!important;
+  font-size:24px!important;
+}
+
+.dark-feature-list strong{
+  font-size:18px!important;
+}
+
+.dark-feature-list p{
+  font-size:15px!important;
+  line-height:1.38!important;
+  margin-top:5px!important;
+}
+
+.dark-dashboard-preview{
+  grid-column:2 / 3!important;
+  grid-row:1 / 5!important;
+  position:relative!important;
+  right:auto!important;
+  top:auto!important;
+  width:100%!important;
+  max-width:360px!important;
+  height:560px!important;
+  margin:36px 0 0 auto!important;
+  transform:none!important;
+  z-index:2!important;
+}
+
+.dash-side{
+  width:auto!important;
+  padding:22px 12px!important;
+}
+
+.dash-side span{
+  font-size:11px!important;
+  padding:8px!important;
+}
+
+.dash-main{
+  padding:22px 14px!important;
+}
+
+.dash-main h3{
+  font-size:17px!important;
+  margin-bottom:16px!important;
+}
+
+.dash-top-cards{
+  grid-template-columns:1fr 1fr!important;
+  gap:10px!important;
+}
+
+.dash-top-cards article,
+.dash-chart,
+.dash-source{
+  padding:12px!important;
+}
+
+.dash-top-cards b{
+  font-size:20px!important;
+}
+
+.dash-chart svg{
+  height:96px!important;
+}
+
+.dash-source{
+  margin-top:12px!important;
+}
+
+.source-row{
+  font-size:11px!important;
+  margin:8px 0!important;
+}
+
+.floating-revenue{
+  left:420px!important;
+  right:auto!important;
+  bottom:34px!important;
+  width:210px!important;
+  z-index:4!important;
+  padding:16px!important;
+}
+
+.floating-revenue b{
+  font-size:24px!important;
+}
+
+.login-form-box h2{
+  font-size:42px!important;
+  line-height:1.1!important;
+  margin-bottom:10px!important;
+}
+
+.login-form-box>p{
+  margin-bottom:34px!important;
+}
+
+.login-input-wrap{
+  height:62px!important;
+}
+
+.sign-in-btn,
+.google-login-btn{
+  height:62px!important;
+}
+
+.dark-back{
+  top:16px!important;
+  left:20px!important;
+}
+
+@media(max-width:1250px){
+  .login-dark-card{
+    grid-template-columns:1fr!important;
+    height:auto!important;
+    min-height:auto!important;
+  }
+  .login-dark-left{
+    display:none!important;
+  }
+  .login-dark-form-panel{
+    padding:48px 26px!important;
+  }
+}
