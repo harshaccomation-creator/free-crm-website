@@ -3,6 +3,7 @@ import LandingExtraSections from '../components/landing/LandingExtraSections.jsx
 import LandingFooter from '../components/landing/LandingFooter.jsx';
 import LandingInfoPage from '../components/landing/LandingInfoPage.jsx';
 import LandingModules from '../components/landing/LandingModules.jsx';
+import LandingPricingFAQ from '../components/landing/LandingPricingFAQ.jsx';
 import PageLoader from '../components/landing/PageLoader.jsx';
 import { pageFromPathname, slugifyInfoPage } from '../components/landing/infoRoutes.js';
 import '../styles/landingPage.css';
@@ -27,7 +28,7 @@ export default function LandingPage() {
   const [loadingLabel, setLoadingLabel] = useState('Loading SalesFlow page...');
   const goTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   const action = (text) => setNotice(text);
-  const shouldShowForm = formModals.has(modal) || modal.includes('Module');
+  const shouldShowForm = formModals.has(modal) || modal.includes('Module') || modal.includes('Plan') || modal.includes('Trial');
 
   useEffect(() => {
     const syncRoute = () => {
@@ -81,6 +82,7 @@ export default function LandingPage() {
       <main id="hero" className="hero-section"><div className="landing-shell hero-layout"><section className="hero-content"><span className="pill">⚡ All-in-one CRM platform</span><h1>Where Sales Teams <span>Close More.</span> Faster.</h1><p>Manage leads, automate follow-ups, close deals and grow your revenue with a clean CRM built for speed.</p><div className="value-grid"><button onClick={() => action('Lead capture selected')}><strong>◎ Capture More Leads</strong><span>Collect leads from every channel in one clean pipeline.</span></button><button onClick={() => action('Follow-up automation selected')}><strong>↻ Automate Follow-ups</strong><span>Never miss calls, reminders, meetings or next actions.</span></button><button onClick={() => action('Deals insight selected')}><strong>◆ Close More Deals</strong><span>Track activity, stages and team performance faster.</span></button></div><div className="hero-cta"><button className="btn btn-primary btn-big" onClick={() => setModal('Start Free Trial')}><span className="btn-icon">🚀</span>Start 7 Days Free Trial</button><button className="btn btn-outline btn-big" onClick={() => goTo('platform-highlights')}><span className="btn-icon">▼</span>Explore Features</button></div></section><section className="dashboard-mock"><div className="mock-sidebar"><strong>SalesFlow</strong>{sideItems.map(([item, icon]) => <button key={item} className={item === 'Dashboard' ? 'active' : ''} onClick={() => action(item + ' preview opened')}><span>{icon}</span>{item}</button>)}</div><div className="mock-main"><div className="mock-top"><div><span>Good morning, Aman</span><h3>Sales Overview</h3></div><button onClick={() => action('Date filter opened')}>📅 May 1 - May 31</button></div><div className="mock-stats">{stats.map((item) => <button key={item.label} onClick={() => action(item.label + ': ' + item.value)}><span>{item.label}</span><strong>{item.value}</strong><small>{item.trend}</small></button>)}</div><div className="mock-card chart-card"><div className="card-head"><span>Sales Overview</span><button onClick={() => action('Report opened')}>📊 View Report</button></div><div className="chart-line"><i /></div></div></div><div className="floating-task"><strong>Upcoming Tasks</strong><button onClick={() => action('Call task opened')}>☎ Call with new lead</button><button onClick={() => action('Follow-up opened')}>↻ Follow-up with Raj</button><button onClick={() => action('Proposal opened')}>✉ Send proposal</button></div></section></div></main>
       <LandingExtraSections action={action} />
       <LandingModules action={action} openModal={setModal} />
+      <LandingPricingFAQ openModal={setModal} />
       <LandingFooter openModal={setModal} openInfoPage={openInfoPage} />
       <button className="chat-bubble" onClick={() => setModal('Chat')} aria-label="Open chat">💬</button>
       {notice && <div className="toast-message">{notice}</div>}
