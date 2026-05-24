@@ -1,35 +1,34 @@
 import '../../styles/dashboardBase.css';
 
 const menuByRole = {
-  employee: ['Dashboard', 'My Leads', 'Follow-ups', 'Tasks', 'Calendar', 'Messages', 'Profile'],
-  admin: ['Dashboard', 'Team Management', 'Leads', 'Deals', 'Tasks', 'Attendance', 'Reports', 'Billing', 'Settings'],
-  superAdmin: ['Dashboard', 'Companies', 'Users', 'Subscriptions', 'Plans', 'Support Tickets', 'Integrations', 'Analytics', 'Security', 'System Settings'],
+  employee: ['Dashboard', 'My Leads', 'Follow-ups', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Profile'],
+  admin: ['Dashboard', 'Leads', 'Deals', 'Contacts', 'Companies', 'Tasks', 'Activities', 'Reports', 'Calendar', 'Users', 'Settings'],
+  superAdmin: ['Dashboard', 'Users', 'Roles & Permissions', 'Organizations', 'Modules', 'Plans & Billing', 'Settings', 'Activity Logs', 'System Logs', 'Integrations', 'Backup & Restore'],
 };
 
 const icons = {
   Dashboard: '▦',
   'My Leads': '♙',
-  'Follow-ups': '◴',
+  'Follow-ups': '↻',
   Tasks: '☑',
   Calendar: '▣',
-  Messages: '✉',
+  Activities: '▤',
+  Reports: '◔',
   Profile: '♙',
-  'Team Management': '👥',
-  Leads: '◉',
+  Leads: '◎',
   Deals: '◆',
-  Attendance: '◷',
-  Reports: '▤',
-  Billing: '₹',
-  Settings: '⚙',
+  Contacts: '♙',
   Companies: '▥',
   Users: '♙',
-  Subscriptions: '↻',
-  Plans: '▣',
-  'Support Tickets': '☏',
+  Settings: '⚙',
+  'Roles & Permissions': '♙',
+  Organizations: '▥',
+  Modules: '◇',
+  'Plans & Billing': '₹',
+  'Activity Logs': '▤',
+  'System Logs': '☷',
   Integrations: '◇',
-  Analytics: '▥',
-  Security: '🛡',
-  'System Settings': '⚙',
+  'Backup & Restore': '↻',
 };
 
 export default function DashboardSidebar({ role = 'employee' }) {
@@ -40,7 +39,7 @@ export default function DashboardSidebar({ role = 'employee' }) {
   return (
     <aside className="sf-sidebar">
       <button className="sf-sidebar-brand" onClick={() => window.location.href = '/'}>
-        <span className="sf-logo-cube">S</span>
+        <span className="sf-logo-cube orange-logo">S</span>
         <strong>Sales<span>Flow</span></strong>
       </button>
 
@@ -49,8 +48,6 @@ export default function DashboardSidebar({ role = 'employee' }) {
           <button className={index === 0 ? 'active' : ''} key={item} type="button">
             <span>{icons[item] || '•'}</span>
             {item}
-            {item === 'Messages' && <i>3</i>}
-            {item === 'Support Tickets' && <i>12</i>}
           </button>
         ))}
       </nav>
