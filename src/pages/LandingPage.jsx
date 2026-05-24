@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import LandingExtraSections from '../components/landing/LandingExtraSections.jsx';
+import LandingFooter from '../components/landing/LandingFooter.jsx';
 import '../styles/landingPage.css';
 import '../styles/landingFit.css';
 
@@ -28,7 +29,7 @@ export default function LandingPage() {
       <section id="products" className="landing-shell cards-row"><article><strong>◎ Lead Management</strong><span>Clean lead pipeline with smart status tracking.</span></article><article><strong>↻ Activity Tracking</strong><span>Calls, meetings, notes and follow-ups in one place.</span></article><article><strong>⚙ Team Control</strong><span>Admin and super admin modules stay separate.</span></article></section>
       <section id="solutions" className="landing-shell split-section"><div><span className="section-tag">Built for growing teams</span><h2>Professional CRM that fits every screen.</h2></div><p>No horizontal overflow, no broken header, no dead buttons. Each module will stay separate so fixes remain simple.</p></section>
       <section id="resources" className="landing-shell cards-row compact"><article><strong>▣ Resources</strong><span>Guides, templates and sales playbooks.</span></article><article id="pricing"><strong>₹ Simple Pricing</strong><span>Start free and upgrade when your team grows.</span></article><article id="about"><strong>★ About SalesFlow</strong><span>Fast CRM for lead follow-up and sales teams.</span></article></section>
-      <footer className="landing-footer"><div className="landing-shell footer-inner"><strong>SalesFlow CRM</strong><span>Built for faster follow-ups and cleaner sales operations.</span><button onClick={() => setModal('Contact Sales')}>✉ Contact Sales</button></div></footer>
+      <LandingFooter action={action} openModal={setModal} />
       <button className="chat-bubble" onClick={() => setModal('Chat')} aria-label="Open chat">💬</button>{notice && <div className="toast-message">{notice}</div>}{modal && <div className="modal-backdrop"><div className="action-modal"><button className="modal-close" onClick={() => setModal('')}>×</button><h2>{modal}</h2><p>This button is working. Full backend connection will be added with the CRM module.</p><input placeholder="Name" /><input placeholder="Email" /><button className="btn btn-primary" onClick={() => { action('Request saved'); setModal(''); }}><span className="btn-icon">✓</span>Submit</button></div></div>}
     </div>
   );
