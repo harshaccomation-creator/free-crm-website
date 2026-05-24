@@ -17,6 +17,7 @@ import './styles/crmChart.css';
 import './styles/emergencyFix.css';
 import './styles/finalCrmLayoutRepair.css';
 import './styles/sidebarFixedRepair.css';
+import './styles/loginDarkFinalFix.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
