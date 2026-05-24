@@ -6,13 +6,12 @@ import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
 import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
 import LeadListPage from './pages/leads/LeadListPage.jsx';
 import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
-import './styles/dashboardPolish.css';
 import './styles/dashboardBase.css';
 import './styles/loginPage.css';
 import './styles/loginDarkHero.css';
-import './styles/stableCrmShell.css';
 import './styles/loginHeroStableFix.css';
-import './styles/dashboardStableFinal.css';
+import './styles/referenceDashboardExact.css';
+import './styles/referenceDashboardWidthFix.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
