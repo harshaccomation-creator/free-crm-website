@@ -47,31 +47,33 @@ const routes = {
   },
 };
 
-function navigateTo(path) {
+function navigateTo(path, role) {
   if (!path) return;
+  if (role) window.localStorage.setItem('salesflowRole', role);
   window.history.pushState({}, '', path);
   window.dispatchEvent(new Event('salesflow:navigate'));
 }
 
 export default function DashboardSidebar({ role = 'employee' }) {
-  const items = menuByRole[role] || menuByRole.employee;
-  const upgradeText = role === 'superAdmin' ? 'Upgrade to Enterprise' : 'Upgrade to Premium';
-  const upgradeSub = role === 'superAdmin' ? 'Unlock advanced controls, SSO, audit logs and more.' : 'Unlock advanced features, automations and analytics.';
+  const safeRole = menuByRole[role] ? role : 'employee';
+  const items = menuByRole[safeRole] || menuByRole.employee;
+  const upgradeText = safeRole === 'superAdmin' ? 'Upgrade to Enterprise' : 'Upgrade to Premium';
+  const upgradeSub = safeRole === 'superAdmin' ? 'Unlock advanced controls, SSO, audit logs and more.' : 'Unlock advanced features, automations and analytics.';
   const currentPath = window.location.pathname;
 
   return (
     <aside className="sf-sidebar">
-      <button className="sf-sidebar-brand" onClick={() => navigateTo('/')}>
+      <button className="sf-sidebar-brand" onClick={() => navigateTo('/', safeRole)}>
         <span className="sf-logo-cube orange-logo">S</span>
         <strong>Sales<span>Flow</span></strong>
       </button>
 
       <nav className="sf-side-nav">
         {items.map((item, index) => {
-          const itemPath = routes[role]?.[item];
-          const isActive = itemPath ? currentPath === itemPath || (itemPath === '/leads' && currentPath.startsWith('/leads')) : index === 0;
+          const itemPath = routes[safeRole]?.[item];
+          const isActive = itemPath ? currentPath === itemPath || (itemPath === '/leads' && currentPath === '/leads') || (itemPath?.startsWith('/leads/') && currentPath.startsWith('/leads/')) : index === 0 && currentPath.includes('/dashboard');
           return (
-            <button className={isActive ? 'active' : ''} key={item} type="button" onClick={() => navigateTo(itemPath)}>
+            <button className={isActive ? 'active' : ''} key={item} type="button" onClick={() => navigateTo(itemPath, safeRole)}>
               <span>{icons[item] || '•'}</span>
               {item}
             </button>
