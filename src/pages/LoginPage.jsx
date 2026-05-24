@@ -46,7 +46,7 @@ export default function LoginPage() {
           </div>
 
           <div className="crm-illustration clean-svg-illustration">
-            <img src="/login-crm-illustration.svg" alt="SalesFlow CRM dashboard illustration" />
+            <img src="/login-hero-embedded.svg" alt="SalesFlow CRM dashboard illustration" />
           </div>
 
           <div className="login-visual-copy">
