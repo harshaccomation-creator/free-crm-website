@@ -12,7 +12,7 @@ const bottomModules = [
   { icon: '★', title: 'About SalesFlow', text: 'A fast CRM made for lead follow-up and sales operations.' },
 ];
 
-export default function LandingModules({ action, openModal }) {
+export default function LandingModules({ openModal }) {
   return (
     <section id="products" className="landing-shell modules-section">
       <div className="modules-heading">
@@ -31,7 +31,7 @@ export default function LandingModules({ action, openModal }) {
             </div>
             <div className="module-footer-row">
               <span>{item.stat}</span>
-              <button onClick={() => action(`${item.title} module opened`)}>Open →</button>
+              <button onClick={() => openModal(`${item.title} Module`)}>Open →</button>
             </div>
           </article>
         ))}
@@ -60,7 +60,7 @@ export default function LandingModules({ action, openModal }) {
             <div className="module-icon small">{item.icon}</div>
             <h3>{item.title}</h3>
             <p>{item.text}</p>
-            <button onClick={() => action(`${item.title} opened`)}>Explore</button>
+            <button onClick={() => openModal(item.title)}>Explore</button>
           </article>
         ))}
       </div>
