@@ -8,6 +8,7 @@ import './styles/dashboardPolish.css';
 import './styles/dashboardLayoutFix.css';
 import './styles/dashboardCompactFit.css';
 import './styles/superExactDashboard.css';
+import './styles/finalVisualFix.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
