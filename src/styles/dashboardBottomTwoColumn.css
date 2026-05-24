@@ -1,0 +1,43 @@
+/* Put calendar and recent activity side by side on dashboard bottom area */
+.sf-dashboard.reference-dashboard .reference-bottom,
+.sf-dashboard.reference-dashboard .reference-lower,
+.sf-dashboard.reference-dashboard .reference-extra-grid,
+.sf-dashboard.reference-dashboard .reference-secondary-grid,
+.sf-dashboard.reference-dashboard .dashboard-bottom-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1.55fr) minmax(320px,.95fr)!important;
+  gap:22px!important;
+  align-items:start!important;
+}
+
+.sf-dashboard.reference-dashboard .reference-bottom > *,
+.sf-dashboard.reference-dashboard .reference-lower > *,
+.sf-dashboard.reference-dashboard .reference-extra-grid > *,
+.sf-dashboard.reference-dashboard .reference-secondary-grid > *,
+.sf-dashboard.reference-dashboard .dashboard-bottom-grid > *{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+}
+
+.sf-dashboard.reference-dashboard .calendar-card,
+.sf-dashboard.reference-dashboard .recent-activity-card,
+.sf-dashboard.reference-dashboard [class*="calendar"],
+.sf-dashboard.reference-dashboard [class*="activity"]{
+  min-width:0!important;
+}
+
+.sf-dashboard.reference-dashboard .calendar-card,
+.sf-dashboard.reference-dashboard .recent-activity-card{
+  height:auto!important;
+}
+
+@media(max-width:1180px){
+  .sf-dashboard.reference-dashboard .reference-bottom,
+  .sf-dashboard.reference-dashboard .reference-lower,
+  .sf-dashboard.reference-dashboard .reference-extra-grid,
+  .sf-dashboard.reference-dashboard .reference-secondary-grid,
+  .sf-dashboard.reference-dashboard .dashboard-bottom-grid{
+    grid-template-columns:1fr!important;
+  }
+}
