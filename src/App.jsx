@@ -15,6 +15,7 @@ import './styles/referenceDashboardWidthFix.css';
 import './styles/sidebarLogoMenuFinal.css';
 import './styles/loginFinalClean.css';
 import './styles/finalUnifiedLayoutFix.css';
+import './styles/leadOneRowFinal.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
