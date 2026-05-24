@@ -12,6 +12,7 @@ import './styles/loginDarkHero.css';
 import './styles/loginHeroStableFix.css';
 import './styles/referenceDashboardExact.css';
 import './styles/referenceDashboardWidthFix.css';
+import './styles/sidebarLogoMenuFinal.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
