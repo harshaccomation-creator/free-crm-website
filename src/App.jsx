@@ -18,6 +18,7 @@ import './styles/finalUnifiedLayoutFix.css';
 import './styles/leadOneRowFinal.css';
 import './styles/leadActionsFinal.css';
 import './styles/leadPremiumPolish.css';
+import './styles/sidebarPremiumPolish.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
