@@ -14,6 +14,7 @@ const stats = [
 const sideItems = [
   ['Dashboard', '⌂'], ['Leads', '◉'], ['Deals', '◆'], ['Contacts', '☷'], ['Tasks', '✓'], ['Reports', '▣'], ['Settings', '⚙']
 ];
+const formModals = new Set(['Book a Demo', 'Start Free Trial', 'Contact Sales', 'Customer Support', 'Support', 'Login', 'Chat']);
 
 const modalDetails = {
   'Lead Inbox': 'All new leads will appear here with source, owner, status and next follow-up action.',
@@ -51,6 +52,7 @@ export default function LandingPage() {
   const goTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   const action = (text) => setNotice(text);
   const modalText = modalDetails[modal] || 'This button is working. Full backend connection will be added with the CRM module.';
+  const shouldShowForm = formModals.has(modal) || modal.includes('Module');
 
   return (
     <div className="landing-page">
@@ -60,7 +62,9 @@ export default function LandingPage() {
       <LandingExtraSections action={action} />
       <LandingModules action={action} openModal={setModal} />
       <LandingFooter openModal={setModal} />
-      <button className="chat-bubble" onClick={() => setModal('Chat')} aria-label="Open chat">💬</button>{notice && <div className="toast-message">{notice}</div>}{modal && <div className="modal-backdrop"><div className="action-modal"><button className="modal-close" onClick={() => setModal('')}>×</button><h2>{modal}</h2><p>{modalText}</p><input placeholder="Name" /><input placeholder="Email" /><button className="btn btn-primary" onClick={() => { action('Request saved'); setModal(''); }}><span className="btn-icon">✓</span>Submit</button></div></div>}
+      <button className="chat-bubble" onClick={() => setModal('Chat')} aria-label="Open chat">💬</button>
+      {notice && <div className="toast-message">{notice}</div>}
+      {modal && <div className="modal-backdrop"><div className={`action-modal ${!shouldShowForm ? 'info-modal' : ''}`}><button className="modal-close" onClick={() => setModal('')}>×</button><h2>{modal}</h2><p>{modalText}</p>{shouldShowForm ? <><input placeholder="Name" /><input placeholder="Email" /><button className="btn btn-primary" onClick={() => { action('Request saved'); setModal(''); }}><span className="btn-icon">✓</span>Submit</button></> : <button className="btn btn-primary info-close-btn" onClick={() => setModal('')}>Okay, Got it</button>}</div></div>}
     </div>
   );
 }
