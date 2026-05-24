@@ -21,6 +21,7 @@ import './styles/leadPremiumPolish.css';
 import './styles/sidebarPremiumPolish.css';
 import './styles/leadDetailPremiumFix.css';
 import './styles/leadHeaderButtonsCompact.css';
+import './styles/dashboardBottomTwoColumn.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
