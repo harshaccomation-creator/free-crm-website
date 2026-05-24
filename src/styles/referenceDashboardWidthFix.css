@@ -1,0 +1,104 @@
+/* Width repair for rebuilt dashboard pages only */
+.sf-dashboard.reference-dashboard{
+  width:100%!important;
+  max-width:none!important;
+  display:grid!important;
+  grid-template-columns:270px minmax(0,1fr)!important;
+  align-items:stretch!important;
+  background:#f5f8ff!important;
+}
+
+.sf-dashboard.reference-dashboard .reference-main{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  padding:26px 30px 34px!important;
+  min-width:0!important;
+}
+
+.sf-dashboard.reference-dashboard .reference-topbar,
+.sf-dashboard.reference-dashboard .reference-stats,
+.sf-dashboard.reference-dashboard .reference-row,
+.sf-dashboard.reference-dashboard .reference-card{
+  width:100%!important;
+  max-width:none!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+
+.sf-dashboard.reference-dashboard .employee-row-one{
+  grid-template-columns:minmax(0,1fr) 380px!important;
+}
+
+.sf-dashboard.reference-dashboard .employee-row-two{
+  grid-template-columns:minmax(0,1.35fr) 300px 330px!important;
+}
+
+.sf-dashboard.reference-dashboard .admin-row-one{
+  grid-template-columns:minmax(0,1fr) 360px!important;
+}
+
+.sf-dashboard.reference-dashboard .admin-row-two{
+  grid-template-columns:minmax(0,1fr) minmax(0,.85fr)!important;
+}
+
+.sf-dashboard.reference-dashboard .super-row-one{
+  grid-template-columns:minmax(0,1fr) 380px!important;
+}
+
+.sf-dashboard.reference-dashboard .super-row-two{
+  grid-template-columns:minmax(0,1fr) 350px!important;
+}
+
+.sf-dashboard.reference-dashboard .reference-card{
+  justify-self:stretch!important;
+}
+
+.sf-dashboard.reference-dashboard .reference-chart svg{
+  width:100%!important;
+  max-width:none!important;
+}
+
+.sf-dashboard.reference-dashboard .reference-table{
+  width:100%!important;
+}
+
+.sf-dashboard.reference-dashboard .reference-dashboard .sf-sidebar,
+.sf-dashboard.reference-dashboard .sf-sidebar{
+  flex-shrink:0!important;
+}
+
+@media(max-width:1450px){
+  .sf-dashboard.reference-dashboard{
+    grid-template-columns:245px minmax(0,1fr)!important;
+  }
+
+  .sf-dashboard.reference-dashboard .employee-row-one,
+  .sf-dashboard.reference-dashboard .admin-row-one,
+  .sf-dashboard.reference-dashboard .super-row-one{
+    grid-template-columns:minmax(0,1fr) 340px!important;
+  }
+
+  .sf-dashboard.reference-dashboard .employee-row-two,
+  .sf-dashboard.reference-dashboard .admin-row-two,
+  .sf-dashboard.reference-dashboard .super-row-two{
+    grid-template-columns:1fr!important;
+  }
+}
+
+@media(max-width:1050px){
+  .sf-dashboard.reference-dashboard{
+    grid-template-columns:1fr!important;
+  }
+
+  .sf-dashboard.reference-dashboard .reference-stats,
+  .sf-dashboard.reference-dashboard .reference-stats.six{
+    grid-template-columns:1fr 1fr!important;
+  }
+
+  .sf-dashboard.reference-dashboard .employee-row-one,
+  .sf-dashboard.reference-dashboard .admin-row-one,
+  .sf-dashboard.reference-dashboard .super-row-one{
+    grid-template-columns:1fr!important;
+  }
+}
