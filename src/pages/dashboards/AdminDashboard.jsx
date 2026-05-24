@@ -1,43 +1,60 @@
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
-import DashboardTopbar from '../../components/dashboard/DashboardTopbar.jsx';
-import StatCard from '../../components/dashboard/StatCard.jsx';
-import MiniChart from '../../components/dashboard/MiniChart.jsx';
-import DataTable from '../../components/dashboard/DataTable.jsx';
 import '../../styles/dashboardBase.css';
 import '../../styles/adminDashboard.css';
+import '../../styles/roleDashboards.css';
 
 export default function AdminDashboard() {
-  const rows = [
-    ['Enterprise CRM Setup', 'Acme Inc.', 'Proposal', '1250000'],
-    ['SaaS Platform Upgrade', 'Globex', 'Negotiation', '875000'],
-    ['Marketing Suite', 'TechNova', 'Qualified', '560000'],
-    ['Support Solution', 'Bright Future', 'Demo', '420000']
+  const leadRows = [
+    ['Rohan Mehta', 'Tech Solutions', 'New', 'Today, 10:30 AM'],
+    ['Priya Sharma', 'Consulting Ltd.', 'Contacted', 'Today, 01:15 PM'],
+    ['Amit Verma', 'Retail Estate', 'Qualified', 'Yesterday, 04:20 PM'],
+    ['Neha Singh', 'Education', 'New', 'Yesterday, 11:45 AM'],
   ];
+  const tasks = ['Follow up with Rohan Mehta', 'Send proposal to Priya Sharma', 'Call Amit Verma', 'Prepare quotation for Neha Singh'];
 
   return (
-    <div className="sf-dashboard admin-dashboard">
+    <div className="sf-dashboard admin-dashboard exact-dashboard">
       <DashboardSidebar role="admin" />
-      <main className="sf-main">
-        <DashboardTopbar title="Company Admin Dashboard" subtitle="Manage your team, leads, deals and company performance." userName="Priya Mehta" roleLabel="Company Admin" searchPlaceholder="Search employees, leads, deals..." />
-        <section className="sf-stats five">
-          <StatCard icon="E" label="Employees" value="124" change="12 percent" />
-          <StatCard icon="L" label="Active Leads" value="632" change="18 percent" />
-          <StatCard icon="D" label="Open Deals" value="87" change="15 percent" />
-          <StatCard icon="R" label="Revenue" value="24.8L" change="22 percent" />
-          <StatCard icon="A" label="Attendance" value="92%" change="5 percent" />
-        </section>
-        <section className="sf-dashboard-layout admin-layout">
-          <div className="sf-main-stack">
-            <div className="sf-two-col">
-              <MiniChart title="Sales Performance" />
-              <div className="sf-right-card admin-team-card"><div className="sf-card-head compact"><h2>Top Employees</h2><button>View All</button></div><div className="sf-right-list"><div className="sf-right-item"><span className="sf-right-icon">R</span><div><strong>Rohan Sharma</strong><small>18 closed deals</small></div><em>98%</em></div><div className="sf-right-item"><span className="sf-right-icon">N</span><div><strong>Neha Patel</strong><small>14 closed deals</small></div><em>94%</em></div><div className="sf-right-item"><span className="sf-right-icon">A</span><div><strong>Amit Kumar</strong><small>11 closed deals</small></div><em>91%</em></div></div></div>
-            </div>
-            <DataTable title="Recent Deals" columns={['Deal', 'Account', 'Stage', 'Value']} rows={rows} />
+      <main className="exact-main admin-exact-main">
+        <header className="exact-topbar">
+          <div>
+            <h1>Dashboard</h1>
+            <p>Welcome back, Admin! Here is what is happening with your business today.</p>
           </div>
-          <aside className="sf-right-stack">
-            <div className="sf-right-card"><div className="sf-card-head compact"><h2>Today Meetings</h2><button>Calendar</button></div><div className="sf-right-list"><div className="sf-right-item"><span className="sf-right-icon">M</span><div><strong>Leadership Standup</strong><small>10:00 AM</small></div></div><div className="sf-right-item"><span className="sf-right-icon">S</span><div><strong>Sales Review</strong><small>11:30 AM</small></div></div><div className="sf-right-item"><span className="sf-right-icon">P</span><div><strong>Product Demo</strong><small>02:00 PM</small></div></div></div></div>
-            <div className="sf-right-card"><div className="sf-card-head compact"><h2>Department Overview</h2><button>Report</button></div><div className="sf-right-list"><div className="sf-right-item"><span className="sf-right-icon">S</span><div><strong>Sales</strong><small>42 employees</small></div><em>92%</em></div><div className="sf-right-item"><span className="sf-right-icon">M</span><div><strong>Marketing</strong><small>18 employees</small></div><em>88%</em></div><div className="sf-right-item"><span className="sf-right-icon">C</span><div><strong>Customer Success</strong><small>16 employees</small></div><em>95%</em></div></div></div>
-          </aside>
+          <div className="exact-actions">
+            <label className="exact-search"><span>⌕</span><input placeholder="Search leads, deals, users..." /></label>
+            <button className="exact-bell">🔔<i>5</i></button>
+            <button className="exact-profile"><span>A</span><strong>Admin</strong></button>
+          </div>
+        </header>
+
+        <section className="exact-stats admin-stats">
+          <article><span>📊</span><p>Total Leads</p><h2>1,245</h2><small>↑ 12.5%</small></article>
+          <article><span>◆</span><p>Total Deals</p><h2>320</h2><small>↑ 8.4%</small></article>
+          <article><span>₹</span><p>Total Revenue</p><h2>₹2,45,000</h2><small>↑ 15.3%</small></article>
+          <article><span>☑</span><p>Open Tasks</p><h2>56</h2><small className="danger">↓ 4.6%</small></article>
+        </section>
+
+        <section className="admin-grid-one">
+          <article className="exact-card admin-sales-card">
+            <div className="exact-card-head"><h2>Sales Overview</h2><button>This Month ▾</button></div>
+            <div className="admin-line-chart"><i /><b /><span className="a1" /><span className="a2" /><span className="a3" /><span className="a4" /><span className="a5" /></div>
+          </article>
+          <article className="exact-card admin-tasks-card">
+            <div className="exact-card-head"><h2>Tasks</h2><button>View All</button></div>
+            {tasks.map((task, index) => <div className="task-row" key={task}><em /> <div><strong>{task}</strong><small>May {20 + index}, 2025</small></div></div>)}
+          </article>
+        </section>
+
+        <section className="admin-grid-two">
+          <article className="exact-card admin-leads-card">
+            <div className="exact-card-head"><h2>Recent Leads</h2><button>View All Leads</button></div>
+            <table><thead><tr><th>Lead</th><th>Company</th><th>Status</th><th>Time</th></tr></thead><tbody>{leadRows.map((row) => <tr key={row[0]}>{row.map((cell, index) => <td key={cell}><span className={index === 2 ? 'status-pill' : ''}>{cell}</span></td>)}</tr>)}</tbody></table>
+          </article>
+          <article className="exact-card deals-pipeline-card">
+            <div className="exact-card-head"><h2>Deals Pipeline</h2><button>View Deals</button></div>
+            <div className="pipeline-grid">{['New Lead','Qualified','Proposal','Negotiation','Won'].map((stage, index) => <div key={stage}><strong>{stage}</strong><h3>{12 - index}</h3><small>₹{(index + 1) * 25000}</small></div>)}</div>
+          </article>
         </section>
       </main>
     </div>
