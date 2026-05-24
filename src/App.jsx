@@ -7,17 +7,10 @@ import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
 import LeadListPage from './pages/leads/LeadListPage.jsx';
 import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
 import './styles/dashboardPolish.css';
-import './styles/dashboardLayoutFix.css';
-import './styles/dashboardCompactFit.css';
-import './styles/superExactDashboard.css';
-import './styles/finalVisualFix.css';
-import './styles/dashboardFullWidthFix.css';
-import './styles/referenceFitFix.css';
-import './styles/crmChart.css';
-import './styles/emergencyFix.css';
-import './styles/finalCrmLayoutRepair.css';
-import './styles/sidebarFixedRepair.css';
-import './styles/loginDarkFinalFix.css';
+import './styles/dashboardBase.css';
+import './styles/loginPage.css';
+import './styles/loginDarkHero.css';
+import './styles/stableCrmShell.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
