@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage.jsx';
 import EmployeeDashboard from './pages/dashboards/EmployeeDashboard.jsx';
 import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
 import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
+import './styles/dashboardPolish.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
