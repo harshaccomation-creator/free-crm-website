@@ -19,7 +19,7 @@ const footerGroups = [
   },
 ];
 
-export default function LandingFooter({ action, openModal }) {
+export default function LandingFooter({ openModal }) {
   return (
     <footer className="salesflow-footer" id="footer">
       <section className="salesflow-cta-panel">
@@ -52,7 +52,7 @@ export default function LandingFooter({ action, openModal }) {
             <div className="footer-col" key={group.title}>
               <h3>{group.title}</h3>
               {group.links.map((link) => (
-                <button key={link} onClick={() => action(`${link} opened`)}>{link}</button>
+                <button key={link} onClick={() => openModal(link)}>{link}</button>
               ))}
             </div>
           ))}
@@ -61,9 +61,9 @@ export default function LandingFooter({ action, openModal }) {
         <div className="landing-shell footer-bottom">
           <span>© 2026 SalesFlow. All rights reserved.</span>
           <div>
-            <button onClick={() => action('Privacy opened')}>Privacy</button>
-            <button onClick={() => action('Terms opened')}>Terms</button>
-            <button onClick={() => action('Status opened')}>Status</button>
+            <button onClick={() => openModal('Privacy')}>Privacy</button>
+            <button onClick={() => openModal('Terms')}>Terms</button>
+            <button onClick={() => openModal('Status')}>Status</button>
           </div>
         </div>
       </section>
