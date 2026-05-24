@@ -1,42 +1,74 @@
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
-import DashboardTopbar from '../../components/dashboard/DashboardTopbar.jsx';
-import StatCard from '../../components/dashboard/StatCard.jsx';
-import MiniChart from '../../components/dashboard/MiniChart.jsx';
-import DataTable from '../../components/dashboard/DataTable.jsx';
 import '../../styles/dashboardBase.css';
 import '../../styles/platformDashboard.css';
+import '../../styles/roleDashboards.css';
 
 export default function SuperAdminDashboard() {
-  const rows = [
-    ['Acme Inc.', 'Business', 'Active', '248000'],
-    ['Globex Corp.', 'Starter', 'Trial', '99000'],
-    ['TechNova Pvt Ltd', 'Business', 'Active', '186000'],
-    ['Bright Future Ltd', 'Starter', 'Overdue', '49000']
+  const orgRows = [
+    ['Tech Solutions', '325', '₹2,45,000', 'Active'],
+    ['Digital Agency', '210', '₹1,85,000', 'Active'],
+    ['Business Corp', '180', '₹1,25,000', 'Active'],
+    ['Innovate LLC', '150', '₹95,000', 'Inactive'],
+    ['Creative Minds', '130', '₹75,000', 'Active'],
+  ];
+  const modules = [
+    ['Leads', 'Enabled', 'Manage leads and conversions'],
+    ['Deals', 'Enabled', 'Manage deals and pipeline'],
+    ['Tasks', 'Enabled', 'Task management and reminders'],
+    ['Invoices', 'Disabled', 'Create and manage invoices'],
+    ['Reports', 'Enabled', 'Reports and analytics'],
   ];
 
   return (
-    <div className="sf-dashboard super-admin-dashboard">
+    <div className="sf-dashboard super-admin-dashboard exact-dashboard">
       <DashboardSidebar role="superAdmin" />
-      <main className="sf-main">
-        <DashboardTopbar title="Super Admin Dashboard" subtitle="Monitor companies, users, subscriptions and platform health." userName="Harsh Goyal" roleLabel="Super Admin" searchPlaceholder="Search companies, users, tickets..." />
-        <section className="sf-stats six">
-          <StatCard icon="C" label="Companies" value="248" change="16 percent" />
-          <StatCard icon="U" label="Active Users" value="12.8k" change="24 percent" />
-          <StatCard icon="R" label="MRR" value="42.5L" change="18 percent" />
-          <StatCard icon="T" label="Trial Accounts" value="37" change="8 new" />
-          <StatCard icon="S" label="Tickets" value="12" change="4 urgent" danger />
-          <StatCard icon="H" label="Uptime" value="99.9%" change="Healthy" />
-        </section>
-        <section className="sf-dashboard-layout super-layout">
-          <div className="sf-main-stack">
-            <MiniChart title="Platform Growth and Revenue" />
-            <DataTable title="Company Overview" columns={['Company', 'Plan', 'Status', 'MRR']} rows={rows} />
+      <main className="exact-main super-exact-main">
+        <header className="exact-topbar">
+          <div>
+            <h1>Dashboard</h1>
+            <p>System overview and key metrics for the entire SalesFlow platform.</p>
           </div>
-          <aside className="sf-right-stack">
-            <div className="sf-right-card"><div className="sf-card-head compact"><h2>System Health</h2><button>Live</button></div><div className="sf-right-list"><div className="sf-right-item"><span className="sf-right-icon">A</span><div><strong>API Status</strong><small>Operational</small></div><em>99.9%</em></div><div className="sf-right-item"><span className="sf-right-icon">D</span><div><strong>Database</strong><small>Healthy</small></div><em>23ms</em></div><div className="sf-right-item"><span className="sf-right-icon">Q</span><div><strong>Queue Jobs</strong><small>Normal</small></div><em>128</em></div></div></div>
-            <div className="sf-right-card"><div className="sf-card-head compact"><h2>Recent Signups</h2><button>View</button></div><div className="sf-right-list"><div className="sf-right-item"><span className="sf-right-icon">A</span><div><strong>Acme Inc.</strong><small>Business plan</small></div><em>2h</em></div><div className="sf-right-item"><span className="sf-right-icon">G</span><div><strong>Globex Corp.</strong><small>Trial started</small></div><em>4h</em></div><div className="sf-right-item"><span className="sf-right-icon">T</span><div><strong>TechNova</strong><small>Starter plan</small></div><em>1d</em></div></div></div>
-            <div className="sf-right-card"><div className="sf-card-head compact"><h2>Platform Alerts</h2><button>All</button></div><div className="sf-right-list"><div className="sf-right-item"><span className="sf-right-icon">!</span><div><strong>Payment retry needed</strong><small>Bright Future Ltd</small></div></div><div className="sf-right-item"><span className="sf-right-icon">S</span><div><strong>Support SLA warning</strong><small>4 tickets pending</small></div></div></div></div>
-          </aside>
+          <div className="exact-actions">
+            <label className="exact-search"><span>⌕</span><input placeholder="Search anything..." /></label>
+            <button className="exact-bell">🔔<i>4</i></button>
+            <button className="exact-profile"><span>S</span><strong>Super Admin</strong></button>
+          </div>
+        </header>
+
+        <section className="exact-stats super-stats">
+          <article><span>👥</span><p>Total Users</p><h2>2,543</h2><small>↑ 18.6%</small></article>
+          <article><span>🏢</span><p>Organizations</p><h2>156</h2><small>↑ 12.4%</small></article>
+          <article><span>₹</span><p>Total Revenue</p><h2>₹12,45,000</h2><small>↑ 20.5%</small></article>
+          <article><span>◇</span><p>Active Modules</p><h2>24</h2><small>↑ 4.3%</small></article>
+        </section>
+
+        <section className="super-grid-one">
+          <article className="exact-card users-overview-card">
+            <div className="exact-card-head"><h2>Users Overview</h2><button>This Month ▾</button></div>
+            <div className="donut-wrap"><div className="donut-chart"><span>2,543<small>Total Users</small></span></div><div className="legend-list"><p><i className="blue" /> Admins <b>120</b></p><p><i className="cyan" /> Managers <b>320</b></p><p><i className="green" /> Users <b>1,893</b></p><p><i className="orange" /> Inactive <b>210</b></p></div></div>
+          </article>
+          <article className="exact-card system-activity-card">
+            <div className="exact-card-head"><h2>System Activity</h2><button>View All</button></div>
+            {['New user registered','New organization added','Plan upgraded','Module setting updated'].map((item, index) => <div className="activity-row-exact" key={item}><span>✓</span><div><strong>{item}</strong><small>{index + 2} min ago</small></div></div>)}
+          </article>
+        </section>
+
+        <section className="super-grid-two">
+          <article className="exact-card org-card">
+            <div className="exact-card-head"><h2>Top Organizations</h2><button>View All Organizations</button></div>
+            <table><thead><tr><th>Organization</th><th>Users</th><th>Revenue</th><th>Status</th></tr></thead><tbody>{orgRows.map((row) => <tr key={row[0]}>{row.map((cell, index) => <td key={cell}><span className={index === 3 ? 'status-pill' : ''}>{cell}</span></td>)}</tr>)}</tbody></table>
+          </article>
+          <article className="exact-card health-card">
+            <div className="exact-card-head"><h2>System Health</h2><button>View Logs</button></div>
+            {['Server Status','Database','Storage','Backup'].map((item) => <div className="health-row" key={item}><strong>{item}</strong><span>Operational</span></div>)}
+          </article>
+        </section>
+
+        <section className="super-grid-three">
+          <article className="exact-card module-card">
+            <div className="exact-card-head"><h2>Module Management</h2><button>Manage</button></div>
+            <table><thead><tr><th>Module</th><th>Status</th><th>Description</th><th>Action</th></tr></thead><tbody>{modules.map((row, index) => <tr key={row[0]}><td>{row[0]}</td><td><span className={row[1] === 'Enabled' ? 'status-pill' : 'status-pill disabled'}>{row[1]}</span></td><td>{row[2]}</td><td><button className={index === 3 ? 'toggle off' : 'toggle'} /></td></tr>)}</tbody></table>
+          </article>
         </section>
       </main>
     </div>
