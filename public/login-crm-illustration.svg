@@ -1,0 +1,65 @@
+<svg width="760" height="500" viewBox="0 0 760 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="760" height="500" fill="none"/>
+  <circle cx="90" cy="360" r="130" fill="#DCEBFF" opacity="0.8"/>
+  <g opacity="0.65">
+    <circle cx="622" cy="98" r="3" fill="#9CBDF5"/><circle cx="648" cy="98" r="3" fill="#9CBDF5"/><circle cx="674" cy="98" r="3" fill="#9CBDF5"/><circle cx="700" cy="98" r="3" fill="#9CBDF5"/>
+    <circle cx="622" cy="124" r="3" fill="#9CBDF5"/><circle cx="648" cy="124" r="3" fill="#9CBDF5"/><circle cx="674" cy="124" r="3" fill="#9CBDF5"/><circle cx="700" cy="124" r="3" fill="#9CBDF5"/>
+    <circle cx="622" cy="150" r="3" fill="#9CBDF5"/><circle cx="648" cy="150" r="3" fill="#9CBDF5"/><circle cx="674" cy="150" r="3" fill="#9CBDF5"/><circle cx="700" cy="150" r="3" fill="#9CBDF5"/>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="140" y="92" width="520" height="278" rx="18" fill="white"/>
+    <rect x="140" y="92" width="72" height="278" rx="18" fill="#163F8F"/>
+    <rect x="176" y="92" width="36" height="278" fill="#163F8F"/>
+    <rect x="164" y="118" width="40" height="10" rx="5" fill="white"/>
+    <rect x="164" y="152" width="44" height="10" rx="5" fill="#85A9E9"/>
+    <rect x="164" y="185" width="44" height="10" rx="5" fill="#85A9E9"/>
+    <rect x="164" y="218" width="44" height="10" rx="5" fill="#85A9E9"/>
+    <rect x="164" y="251" width="44" height="10" rx="5" fill="#85A9E9"/>
+    <rect x="246" y="125" width="155" height="82" rx="14" fill="#FFFFFF" stroke="#E3ECF8"/>
+    <rect x="420" y="125" width="155" height="82" rx="14" fill="#FFFFFF" stroke="#E3ECF8"/>
+    <rect x="594" y="125" width="155" height="82" rx="14" fill="#FFFFFF" stroke="#E3ECF8"/>
+    <text x="270" y="158" font-family="Inter, Arial" font-size="26" font-weight="800" fill="#0F172A">1,250</text>
+    <text x="270" y="187" font-family="Inter, Arial" font-size="18" fill="#667085">Leads</text>
+    <text x="444" y="158" font-family="Inter, Arial" font-size="26" font-weight="800" fill="#0F172A">850</text>
+    <text x="444" y="187" font-family="Inter, Arial" font-size="18" fill="#667085">Deals</text>
+    <text x="618" y="158" font-family="Inter, Arial" font-size="26" font-weight="800" fill="#0F172A">$24.5k</text>
+    <text x="618" y="187" font-family="Inter, Arial" font-size="18" fill="#667085">Revenue</text>
+    <rect x="246" y="232" width="310" height="118" rx="15" fill="#FFFFFF" stroke="#E3ECF8"/>
+    <text x="268" y="264" font-family="Inter, Arial" font-size="17" fill="#475467">Sales Overview</text>
+    <line x1="270" y1="318" x2="405" y2="292" stroke="#5B9CFF" stroke-width="5" stroke-linecap="round"/>
+    <line x1="405" y1="292" x2="525" y2="328" stroke="#1E63E9" stroke-width="5" stroke-linecap="round"/>
+    <rect x="574" y="232" width="156" height="118" rx="15" fill="#FFFFFF" stroke="#E3ECF8"/>
+    <text x="596" y="264" font-family="Inter, Arial" font-size="17" fill="#475467">Recent Activities</text>
+    <circle cx="610" cy="294" r="18" fill="#DCEBFF"/><rect x="642" y="284" width="78" height="10" rx="5" fill="#C9DAF6"/><rect x="642" y="304" width="58" height="9" rx="4.5" fill="#D5E4FB"/>
+    <circle cx="610" cy="332" r="18" fill="#DCEBFF"/><rect x="642" y="322" width="78" height="10" rx="5" fill="#C9DAF6"/><rect x="642" y="342" width="58" height="9" rx="4.5" fill="#D5E4FB"/>
+  </g>
+  <g>
+    <path d="M92 408C64 380 42 361 15 360C24 395 46 421 88 434L92 408Z" fill="#5A91F2"/>
+    <path d="M116 407C125 356 104 329 86 310C61 348 69 392 107 428L116 407Z" fill="#8EBBFF"/>
+    <path d="M125 421C155 386 178 372 202 381C196 412 173 435 132 449L125 421Z" fill="#5A91F2"/>
+    <rect x="76" y="425" width="78" height="54" rx="15" fill="white"/>
+  </g>
+  <g>
+    <rect x="340" y="410" width="270" height="15" rx="7.5" fill="#B7D2FF"/>
+    <rect x="404" y="340" width="8" height="104" rx="4" fill="#173B78" transform="rotate(8 404 340)"/>
+    <rect x="525" y="340" width="8" height="104" rx="4" fill="#173B78" transform="rotate(-8 525 340)"/>
+    <rect x="455" y="330" width="106" height="70" rx="8" fill="#EFF5FF" stroke="#173B78" stroke-width="3"/>
+    <rect x="472" y="348" width="70" height="8" rx="4" fill="#C7DAF7"/>
+    <rect x="472" y="368" width="60" height="8" rx="4" fill="#C7DAF7"/>
+    <rect x="472" y="388" width="48" height="8" rx="4" fill="#C7DAF7"/>
+    <circle cx="592" cy="252" r="34" fill="#0C2D5D"/>
+    <path d="M548 304C548 272 574 246 606 246H612C644 246 670 272 670 304V386H548V304Z" fill="url(#body)"/>
+    <rect x="635" y="334" width="86" height="92" rx="20" fill="#255FCB"/>
+    <rect x="592" y="444" width="24" height="88" rx="12" fill="#123264" transform="rotate(12 592 444)"/>
+    <rect x="646" y="444" width="24" height="88" rx="12" fill="#123264" transform="rotate(-12 646 444)"/>
+    <rect x="510" y="328" width="120" height="22" rx="11" fill="#4D89F6" transform="rotate(-18 510 328)"/>
+  </g>
+  <defs>
+    <filter id="shadow" x="120" y="72" width="650" height="330" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="20" stdDeviation="18" flood-color="#2A5CA8" flood-opacity="0.12"/>
+    </filter>
+    <linearGradient id="body" x1="548" y1="246" x2="670" y2="386" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#4F8CFF"/><stop offset="1" stop-color="#1C5EE4"/>
+    </linearGradient>
+  </defs>
+</svg>
