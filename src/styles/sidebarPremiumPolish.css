@@ -1,0 +1,163 @@
+/* Premium sidebar polish for all dashboard and lead pages */
+.sf-dashboard .sf-sidebar{
+  background:
+    radial-gradient(circle at 18% 8%,rgba(43,136,255,.24),transparent 32%),
+    linear-gradient(180deg,#0f57ad 0%,#0a3d83 42%,#06275e 100%)!important;
+  border-right:1px solid rgba(255,255,255,.08)!important;
+  box-shadow:18px 0 45px rgba(9,35,79,.10)!important;
+  scrollbar-width:none!important;
+}
+
+.sf-dashboard .sf-sidebar::-webkit-scrollbar{
+  width:0!important;
+  height:0!important;
+}
+
+.sf-dashboard .sf-sidebar-brand{
+  margin-bottom:38px!important;
+}
+
+.sf-dashboard .sf-logo-cube,
+.sf-dashboard .sf-logo-cube.orange-logo{
+  background:linear-gradient(135deg,#ff8a1f 0%,#ff5b14 100%)!important;
+  box-shadow:0 16px 34px rgba(255,91,20,.28),inset 0 1px 0 rgba(255,255,255,.32)!important;
+}
+
+.sf-dashboard .sf-sidebar-brand strong{
+  text-shadow:0 10px 26px rgba(0,0,0,.16)!important;
+}
+
+.sf-dashboard .sf-side-nav{
+  gap:9px!important;
+}
+
+.sf-dashboard .sf-side-nav button{
+  position:relative!important;
+  min-height:50px!important;
+  padding:12px 16px!important;
+  border-radius:16px!important;
+  color:#dbeaff!important;
+  background:transparent!important;
+  transition:transform .18s ease,background .18s ease,box-shadow .18s ease,color .18s ease!important;
+}
+
+.sf-dashboard .sf-side-nav button::before{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  border-radius:16px!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.02))!important;
+  opacity:0!important;
+  transition:opacity .18s ease!important;
+}
+
+.sf-dashboard .sf-side-nav button:hover{
+  color:#fff!important;
+  transform:translateX(2px)!important;
+}
+
+.sf-dashboard .sf-side-nav button:hover::before{
+  opacity:1!important;
+}
+
+.sf-dashboard .sf-side-nav button span,
+.sf-dashboard .sf-side-nav button:not(.active) span{
+  position:relative!important;
+  z-index:1!important;
+  width:26px!important;
+  height:26px!important;
+  border-radius:9px!important;
+  display:grid!important;
+  place-items:center!important;
+  background:rgba(255,255,255,.06)!important;
+  color:#dff0ff!important;
+  font-size:14px!important;
+}
+
+.sf-dashboard .sf-side-nav button:not(.active){
+  position:relative!important;
+  z-index:1!important;
+}
+
+.sf-dashboard .sf-side-nav button.active{
+  background:linear-gradient(135deg,#2f77ee 0%,#1b62d6 100%)!important;
+  color:#fff!important;
+  box-shadow:0 16px 30px rgba(8,35,80,.24),inset 0 1px 0 rgba(255,255,255,.20)!important;
+  transform:none!important;
+}
+
+.sf-dashboard .sf-side-nav button.active::before{
+  opacity:0!important;
+}
+
+.sf-dashboard .sf-side-nav button.active::after{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;
+  top:12px!important;
+  bottom:12px!important;
+  width:4px!important;
+  border-radius:0 999px 999px 0!important;
+  background:#67e8f9!important;
+  box-shadow:0 0 18px rgba(103,232,249,.72)!important;
+}
+
+.sf-dashboard .sf-side-nav button.active span{
+  background:rgba(255,255,255,.14)!important;
+  color:#fff!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22)!important;
+}
+
+.sf-dashboard .sf-side-nav button span + *{
+  position:relative!important;
+  z-index:1!important;
+}
+
+.sf-dashboard .sf-help-box{
+  margin-top:22px!important;
+  padding:16px!important;
+  border-radius:18px!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.06))!important;
+  border:1px solid rgba(255,255,255,.16)!important;
+  box-shadow:0 16px 34px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.15)!important;
+  backdrop-filter:blur(12px)!important;
+}
+
+.sf-dashboard .sf-help-box>span{
+  width:44px!important;
+  height:44px!important;
+  min-width:44px!important;
+  border-radius:14px!important;
+  background:linear-gradient(135deg,#1d7dff,#125de8)!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#fff!important;
+  box-shadow:0 12px 22px rgba(18,93,232,.26),inset 0 1px 0 rgba(255,255,255,.24)!important;
+}
+
+.sf-dashboard .sf-help-box strong{
+  color:#fff!important;
+  font-size:15px!important;
+  letter-spacing:-.2px!important;
+}
+
+.sf-dashboard .sf-help-box small{
+  color:#cfe2ff!important;
+  font-size:12px!important;
+}
+
+.sf-dashboard .sf-upgrade-card{
+  display:none!important;
+}
+
+@media(max-width:1450px){
+  .sf-dashboard .sf-sidebar-brand{
+    margin-bottom:30px!important;
+  }
+
+  .sf-dashboard .sf-side-nav button{
+    min-height:48px!important;
+    border-radius:14px!important;
+    font-size:14px!important;
+  }
+}
