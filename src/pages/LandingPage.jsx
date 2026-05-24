@@ -1,124 +1,29 @@
+import { useState } from 'react';
 import '../styles/landingPage.css';
 
-const navItems = ['Products', 'Solutions', 'Resources', 'Pricing', 'About'];
+const menuItems = ['Products', 'Solutions', 'Resources', 'Pricing', 'About'];
 const stats = [
   { label: 'Total Leads', value: '1,250', trend: '+12.5%' },
   { label: 'Qualified', value: '540', trend: '+8.2%' },
   { label: 'Deals Won', value: '320', trend: '+15.7%' },
 ];
-const actions = ['Call with new lead', 'Follow-up with Raj', 'Send proposal'];
 
 export default function LandingPage() {
+  const [modal, setModal] = useState('');
+  const [notice, setNotice] = useState('');
+  const goTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  const action = (text) => setNotice(text);
+
   return (
     <div className="landing-page">
-      <header className="landing-top-strip">
-        <div className="landing-container top-strip-inner">
-          <div className="top-links">
-            <span>English</span>
-            <span>High Contrast</span>
-          </div>
-          <div className="top-links right">
-            <span>Customer Support</span>
-            <span>Contact Sales</span>
-            <span>Log in</span>
-          </div>
-        </div>
-      </header>
-
-      <nav className="landing-navbar">
-        <div className="landing-container navbar-inner">
-          <a className="brand" href="#top" aria-label="SalesFlow home">
-            <span className="brand-icon">S</span>
-            <span>Sales<span>Flow</span></span>
-          </a>
-
-          <div className="nav-links" aria-label="Main navigation">
-            {navItems.map((item) => (
-              <a href={`#${item.toLowerCase()}`} key={item}>{item}</a>
-            ))}
-          </div>
-
-          <div className="nav-actions">
-            <a className="btn ghost" href="#demo">Book a Demo</a>
-            <a className="btn solid" href="#trial">Start Free Trial <small>7 Days Free Trial</small></a>
-          </div>
-        </div>
-      </nav>
-
-      <main id="top" className="hero-section">
-        <div className="landing-container hero-grid">
-          <section className="hero-copy">
-            <p className="eyebrow">All-in-one CRM platform</p>
-            <h1>Where Sales Teams <span>Close More.</span> Faster.</h1>
-            <p className="hero-text">Manage leads, automate follow-ups, close deals and grow your revenue with SalesFlow CRM.</p>
-
-            <div className="hero-features" aria-label="Key benefits">
-              <div><strong>Capture More Leads</strong><span>From every channel</span></div>
-              <div><strong>Automate Follow-ups</strong><span>Never miss a lead</span></div>
-              <div><strong>Close More Deals</strong><span>With smart insights</span></div>
-            </div>
-
-            <div className="hero-buttons">
-              <a className="btn solid large" href="#trial">Start 7 Days Free Trial</a>
-              <a className="btn outline large" href="#demo">View Live Demo</a>
-            </div>
-          </section>
-
-          <section className="crm-preview" aria-label="CRM dashboard preview">
-            <aside className="preview-sidebar">
-              <strong>SalesFlow</strong>
-              {['Dashboard', 'Leads', 'Deals', 'Contacts', 'Tasks', 'Reports', 'Settings'].map((item) => (
-                <span className={item === 'Dashboard' ? 'active' : ''} key={item}>{item}</span>
-              ))}
-            </aside>
-
-            <div className="preview-panel">
-              <div className="preview-header">
-                <div>
-                  <small>Good morning, Aman</small>
-                  <h3>Sales Overview</h3>
-                </div>
-                <span>May 1 - May 31</span>
-              </div>
-
-              <div className="stat-grid">
-                {stats.map((stat) => (
-                  <article className="stat-card" key={stat.label}>
-                    <span>{stat.label}</span>
-                    <strong>{stat.value}</strong>
-                    <small>{stat.trend}</small>
-                  </article>
-                ))}
-              </div>
-
-              <div className="chart-card">
-                <span>Sales Overview</span>
-                <div className="line-chart" />
-              </div>
-            </div>
-
-            <div className="task-card">
-              <strong>Upcoming Tasks</strong>
-              {actions.map((item) => <span key={item}>{item}</span>)}
-            </div>
-          </section>
-        </div>
-      </main>
-
-      <section className="landing-container feature-row" id="products">
-        <article><strong>Lead Management</strong><span>Clean lead pipeline with smart status tracking.</span></article>
-        <article><strong>Activity Tracking</strong><span>Calls, meetings, notes and follow-ups in one place.</span></article>
-        <article><strong>Team Control</strong><span>Admin and super admin modules stay separate.</span></article>
-      </section>
-
-      <footer className="landing-footer">
-        <div className="landing-container footer-inner">
-          <strong>SalesFlow CRM</strong>
-          <span>Built for faster follow-ups and cleaner sales operations.</span>
-        </div>
-      </footer>
-
-      <button className="chat-bubble" type="button" aria-label="Open chat">●</button>
+      <div className="top-mini-bar"><div className="landing-shell mini-inner"><button onClick={() => action('English selected')}>English</button><button onClick={() => action('High contrast ready')}>High Contrast</button><span /><button onClick={() => setModal('Support')}>Customer Support</button><button onClick={() => setModal('Contact Sales')}>Contact Sales</button><button onClick={() => setModal('Login')}>Log in</button></div></div>
+      <header className="main-header"><div className="landing-shell header-inner"><button className="brand-wrap" onClick={() => goTo('hero')}><span className="brand-mark">S</span><span className="brand-name">Sales<span>Flow</span></span></button><nav className="desktop-menu">{menuItems.map((item) => <button key={item} onClick={() => goTo(item.toLowerCase())}>{item}</button>)}</nav><div className="header-actions"><button className="btn btn-soft" onClick={() => setModal('Book a Demo')}>Book a Demo</button><button className="btn btn-primary" onClick={() => setModal('Start Free Trial')}>Start Free Trial <small>7 Days Free</small></button></div></div></header>
+      <main id="hero" className="hero-section"><div className="landing-shell hero-layout"><section className="hero-content"><span className="pill">All-in-one CRM platform</span><h1>Where Sales Teams <span>Close More.</span> Faster.</h1><p>Manage leads, automate follow-ups, close deals and grow your revenue with a clean CRM built for speed.</p><div className="value-grid"><button onClick={() => action('Lead capture selected')}><strong>Capture More Leads</strong><span>Collect leads from every channel in one clean pipeline.</span></button><button onClick={() => action('Follow-up automation selected')}><strong>Automate Follow-ups</strong><span>Never miss calls, reminders, meetings or next actions.</span></button><button onClick={() => action('Deals insight selected')}><strong>Close More Deals</strong><span>Track activity, stages and team performance faster.</span></button></div><div className="hero-cta"><button className="btn btn-primary btn-big" onClick={() => setModal('Start Free Trial')}>Start 7 Days Free Trial</button><button className="btn btn-outline btn-big" onClick={() => setModal('View Live Demo')}>View Live Demo</button></div></section><section className="dashboard-mock"><div className="mock-sidebar"><strong>SalesFlow</strong>{['Dashboard','Leads','Deals','Contacts','Tasks','Reports','Settings'].map((item) => <button key={item} className={item === 'Dashboard' ? 'active' : ''} onClick={() => action(item + ' preview opened')}>{item}</button>)}</div><div className="mock-main"><div className="mock-top"><div><span>Good morning, Aman</span><h3>Sales Overview</h3></div><button onClick={() => action('Date filter opened')}>May 1 - May 31</button></div><div className="mock-stats">{stats.map((item) => <button key={item.label} onClick={() => action(item.label + ': ' + item.value)}><span>{item.label}</span><strong>{item.value}</strong><small>{item.trend}</small></button>)}</div><div className="mock-card chart-card"><div className="card-head"><span>Sales Overview</span><button onClick={() => action('Report opened')}>View Report</button></div><div className="chart-line"><i /></div></div></div><div className="floating-task"><strong>Upcoming Tasks</strong><button onClick={() => action('Call task opened')}>Call with new lead</button><button onClick={() => action('Follow-up opened')}>Follow-up with Raj</button><button onClick={() => action('Proposal opened')}>Send proposal</button></div></section></div></main>
+      <section id="products" className="landing-shell cards-row"><article><strong>Lead Management</strong><span>Clean lead pipeline with smart status tracking.</span></article><article><strong>Activity Tracking</strong><span>Calls, meetings, notes and follow-ups in one place.</span></article><article><strong>Team Control</strong><span>Admin and super admin modules stay separate.</span></article></section>
+      <section id="solutions" className="landing-shell split-section"><div><span className="section-tag">Built for growing teams</span><h2>Professional CRM that fits every screen.</h2></div><p>No horizontal overflow, no broken header, no dead buttons. Each module will stay separate so fixes remain simple.</p></section>
+      <section id="resources" className="landing-shell cards-row compact"><article><strong>Resources</strong><span>Guides, templates and sales playbooks.</span></article><article id="pricing"><strong>Simple Pricing</strong><span>Start free and upgrade when your team grows.</span></article><article id="about"><strong>About SalesFlow</strong><span>Fast CRM for lead follow-up and sales teams.</span></article></section>
+      <footer className="landing-footer"><div className="landing-shell footer-inner"><strong>SalesFlow CRM</strong><span>Built for faster follow-ups and cleaner sales operations.</span><button onClick={() => setModal('Contact Sales')}>Contact Sales</button></div></footer>
+      <button className="chat-bubble" onClick={() => setModal('Chat')} aria-label="Open chat">●</button>{notice && <div className="toast-message">{notice}</div>}{modal && <div className="modal-backdrop"><div className="action-modal"><button className="modal-close" onClick={() => setModal('')}>×</button><h2>{modal}</h2><p>This button is working. Full backend connection will be added with the CRM module.</p><input placeholder="Name" /><input placeholder="Email" /><button className="btn btn-primary" onClick={() => { action('Request saved'); setModal(''); }}>Submit</button></div></div>}
     </div>
   );
 }
