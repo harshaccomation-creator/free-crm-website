@@ -6,7 +6,7 @@ const pricingPlans = [
     name: 'Free Trial',
     price: '₹0',
     label: '7 days free',
-    text: 'Best for testing SalesFlow with landing, leads and follow-up workflow.',
+    text: 'A simple way to explore SalesFlow before setting up your full CRM workflow.',
     features: ['Lead capture preview', 'Follow-up reminders', 'Basic sales dashboard'],
     action: 'Start Free Trial',
     highlight: false,
@@ -15,7 +15,7 @@ const pricingPlans = [
     name: 'Starter',
     price: '₹999',
     label: 'per month',
-    text: 'For small teams who need a clean CRM to manage daily leads.',
+    text: 'For small teams that need a clean CRM to manage leads, tasks and daily follow-ups.',
     features: ['Lead pipeline', 'Activity notes', 'Task board', 'Reports preview'],
     action: 'Choose Starter Plan',
     highlight: true,
@@ -24,7 +24,7 @@ const pricingPlans = [
     name: 'Business',
     price: 'Custom',
     label: 'team plan',
-    text: 'For growing teams that need admin, super admin and custom CRM modules.',
+    text: 'For growing teams that need admin control, custom modules and priority setup support.',
     features: ['Admin controls', 'Super admin module', 'Custom workflows', 'Priority support'],
     action: 'Contact Sales',
     highlight: false,
@@ -33,24 +33,24 @@ const pricingPlans = [
 
 const faqs = [
   {
-    question: 'SalesFlow CRM kya hai?',
-    answer: 'SalesFlow ek SaaS CRM workspace hai jisme leads, follow-ups, deals, tasks aur reporting ko clean modules me manage kiya ja sakta hai.',
+    question: 'What is SalesFlow CRM?',
+    answer: 'SalesFlow is a SaaS CRM workspace designed to help sales teams manage leads, follow-ups, deals, tasks and reporting from one clean, organized system.',
   },
   {
-    question: 'Free trial kitne din ka hai?',
-    answer: 'Landing page par 7 days free trial show kiya gaya hai. Final pricing aur trial rules backend/subscription setup ke time lock honge.',
+    question: 'How long is the free trial?',
+    answer: 'SalesFlow includes a 7-day free trial so teams can explore the CRM experience before moving to a paid plan. Final subscription rules can be connected with billing later.',
   },
   {
-    question: 'Lead follow-up kaise track hoga?',
-    answer: 'Lead ke saath calls, notes, reminders aur activity timeline connect rahegi, jisse sales team ko next action clearly dikhega.',
+    question: 'How does lead follow-up tracking work?',
+    answer: 'Every lead can be connected with calls, notes, reminders, tasks and activity history, so your team always knows the next step and nothing gets missed.',
   },
   {
-    question: 'Admin aur Super Admin me kya difference hai?',
-    answer: 'Admin team/users aur CRM settings manage karega. Super Admin company-level plans, tenants, billing aur high-level controls manage karega.',
+    question: 'What is the difference between Admin and Super Admin?',
+    answer: 'Admins manage team users, CRM settings and daily operations. Super Admins manage company-level controls such as plans, tenants, billing and global permissions.',
   },
   {
-    question: 'Kya data secure rahega?',
-    answer: 'Design me role-based access, protected records aur secure customer history ka structure rakha gaya hai. Final security backend setup ke saath implement hogi.',
+    question: 'Is customer data secure?',
+    answer: 'SalesFlow is structured for role-based access, protected customer records and secure activity history. Final security rules will be implemented with the backend setup.',
   },
 ];
 
@@ -82,12 +82,12 @@ export default function LandingPricingFAQ({ openModal }) {
         </div>
       </div>
 
-      <div id="faq" className="faq-block">
+      <div id="faq" className="faq-block pro-faq-block">
         <div className="faq-copy">
           <span>FAQ</span>
-          <h2>Common questions before launch.</h2>
-          <p>Ye section visitors ko quickly clear karta hai ki SalesFlow kya karega aur kaise kaam karega.</p>
-          <button className="btn btn-primary" onClick={() => openModal('Contact Sales')}>Still have questions?</button>
+          <h2>Questions before you get started.</h2>
+          <p>Clear answers for teams evaluating SalesFlow for lead management, follow-ups and sales operations.</p>
+          <button className="btn btn-primary" onClick={() => openModal('Contact Sales')}>Talk to Sales</button>
         </div>
 
         <div className="faq-list">
