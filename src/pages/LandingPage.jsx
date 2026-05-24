@@ -3,6 +3,7 @@ import LandingExtraSections from '../components/landing/LandingExtraSections.jsx
 import LandingFooter from '../components/landing/LandingFooter.jsx';
 import LandingInfoPage from '../components/landing/LandingInfoPage.jsx';
 import LandingModules from '../components/landing/LandingModules.jsx';
+import PageLoader from '../components/landing/PageLoader.jsx';
 import { pageFromPathname, slugifyInfoPage } from '../components/landing/infoRoutes.js';
 import '../styles/landingPage.css';
 import '../styles/landingFit.css';
@@ -22,12 +23,22 @@ export default function LandingPage() {
   const [modal, setModal] = useState('');
   const [notice, setNotice] = useState('');
   const [infoPage, setInfoPage] = useState(() => pageFromPathname(window.location.pathname));
+  const [isRouteLoading, setIsRouteLoading] = useState(false);
+  const [loadingLabel, setLoadingLabel] = useState('Loading SalesFlow page...');
   const goTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   const action = (text) => setNotice(text);
   const shouldShowForm = formModals.has(modal) || modal.includes('Module');
 
   useEffect(() => {
-    const syncRoute = () => setInfoPage(pageFromPathname(window.location.pathname));
+    const syncRoute = () => {
+      const nextPage = pageFromPathname(window.location.pathname);
+      setLoadingLabel(nextPage ? `Opening ${nextPage}...` : 'Loading SalesFlow home...');
+      setIsRouteLoading(true);
+      window.setTimeout(() => {
+        setInfoPage(nextPage);
+        setIsRouteLoading(false);
+      }, 520);
+    };
     window.addEventListener('popstate', syncRoute);
     return () => window.removeEventListener('popstate', syncRoute);
   }, []);
@@ -35,15 +46,29 @@ export default function LandingPage() {
   const openInfoPage = (page) => {
     const slug = slugifyInfoPage(page);
     window.history.pushState({}, '', `/${slug}`);
-    setInfoPage(page);
+    setLoadingLabel(`Opening ${page}...`);
+    setIsRouteLoading(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.setTimeout(() => {
+      setInfoPage(page);
+      setIsRouteLoading(false);
+    }, 620);
   };
 
   const goHome = () => {
     window.history.pushState({}, '', '/');
-    setInfoPage('');
+    setLoadingLabel('Loading SalesFlow home...');
+    setIsRouteLoading(true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.setTimeout(() => {
+      setInfoPage('');
+      setIsRouteLoading(false);
+    }, 520);
   };
+
+  if (isRouteLoading) {
+    return <PageLoader label={loadingLabel} />;
+  }
 
   if (infoPage) {
     return <LandingInfoPage page={infoPage} onBack={goHome} openModal={setModal} />;
