@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../styles/landingPage.css';
+import '../styles/landingFit.css';
 
 const menuItems = ['Products', 'Solutions', 'Resources', 'Pricing', 'About'];
 const stats = [
