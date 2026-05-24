@@ -15,6 +15,7 @@ import './styles/dashboardFullWidthFix.css';
 import './styles/referenceFitFix.css';
 import './styles/crmChart.css';
 import './styles/emergencyFix.css';
+import './styles/finalCrmLayoutRepair.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
