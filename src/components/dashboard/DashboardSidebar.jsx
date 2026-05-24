@@ -35,12 +35,10 @@ const routes = {
   employee: {
     Dashboard: '/employee/dashboard',
     'My Leads': '/leads',
-    Activities: '/leads/rohan-mehta',
   },
   admin: {
     Dashboard: '/admin/dashboard',
     Leads: '/leads',
-    Activities: '/leads/rohan-mehta',
   },
   superAdmin: {
     Dashboard: '/super-admin/dashboard',
@@ -52,6 +50,15 @@ function navigateTo(path, role) {
   if (role) window.localStorage.setItem('salesflowRole', role);
   window.history.pushState({}, '', path);
   window.dispatchEvent(new Event('salesflow:navigate'));
+}
+
+function getActiveState({ item, itemPath, currentPath, index }) {
+  if (currentPath.startsWith('/leads')) {
+    return item === 'Leads' || item === 'My Leads';
+  }
+
+  if (itemPath) return currentPath === itemPath;
+  return index === 0 && currentPath.includes('/dashboard');
 }
 
 export default function DashboardSidebar({ role = 'employee' }) {
@@ -71,7 +78,7 @@ export default function DashboardSidebar({ role = 'employee' }) {
       <nav className="sf-side-nav">
         {items.map((item, index) => {
           const itemPath = routes[safeRole]?.[item];
-          const isActive = itemPath ? currentPath === itemPath || (itemPath === '/leads' && currentPath === '/leads') || (itemPath?.startsWith('/leads/') && currentPath.startsWith('/leads/')) : index === 0 && currentPath.includes('/dashboard');
+          const isActive = getActiveState({ item, itemPath, currentPath, index });
           return (
             <button className={isActive ? 'active' : ''} key={item} type="button" onClick={() => navigateTo(itemPath, safeRole)}>
               <span>{icons[item] || '•'}</span>
