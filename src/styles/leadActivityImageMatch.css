@@ -1,19 +1,36 @@
-/* Lead Activity page: image-match SaaS premium layout - fixed for actual /leads page */
+/* Lead Activity page: final compact SaaS reference layout */
 .sf-dashboard.lead-list-reference{
   width:100vw!important;
   max-width:100vw!important;
-  grid-template-columns:280px minmax(0,calc(100vw - 280px))!important;
-  background:#f3f7ff!important;
+  grid-template-columns:230px minmax(0,calc(100vw - 230px))!important;
+  background:#f4f8ff!important;
   overflow-x:hidden!important;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
 }
 
+.sf-dashboard.lead-list-reference .sf-sidebar-v2{
+  width:230px!important;
+  min-width:230px!important;
+  max-width:230px!important;
+  background:radial-gradient(circle at 35% 0%,rgba(29,78,216,.12),transparent 24%),linear-gradient(180deg,#020817 0%,#06172d 52%,#020712 100%)!important;
+  padding:18px 14px!important;
+}
+
+.sf-dashboard.lead-list-reference .sf-v2-logo{width:30px!important;height:30px!important;min-width:30px!important;font-size:15px!important;border-radius:8px!important}
+.sf-dashboard.lead-list-reference .sf-v2-brand strong{font-size:15px!important;font-weight:760!important;letter-spacing:-.25px!important}
+.sf-dashboard.lead-list-reference .sf-v2-brand-row{margin-bottom:26px!important}
+.sf-dashboard.lead-list-reference .sf-v2-nav{gap:9px!important}
+.sf-dashboard.lead-list-reference .sf-v2-nav button{min-height:42px!important;padding:6px 11px!important;border-radius:9px!important;font-size:13px!important;font-weight:540!important;gap:11px!important}
+.sf-dashboard.lead-list-reference .sf-v2-icon{width:24px!important;height:24px!important;min-width:24px!important}
+.sf-dashboard.lead-list-reference .sf-v2-icon-svg{width:15px!important;height:15px!important;stroke-width:1.85!important}
+
 .sf-dashboard.lead-list-reference .lead-ref-main{
-  width:calc(100vw - 280px)!important;
-  max-width:calc(100vw - 280px)!important;
+  width:calc(100vw - 230px)!important;
+  max-width:calc(100vw - 230px)!important;
   min-width:0!important;
   overflow-x:hidden!important;
-  background:radial-gradient(circle at 85% 4%,rgba(11,99,246,.08),transparent 25%),linear-gradient(180deg,#f8fbff 0%,#eef5ff 100%)!important;
-  padding:24px 18px 90px!important;
+  background:radial-gradient(circle at 85% 4%,rgba(11,99,246,.065),transparent 24%),linear-gradient(180deg,#fbfdff 0%,#eef5ff 100%)!important;
+  padding:22px 22px 82px!important;
   box-sizing:border-box!important;
 }
 
@@ -25,75 +42,76 @@
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-header h1{
-  font-size:34px!important;
-  line-height:1.05!important;
-  letter-spacing:-1px!important;
+  font-size:30px!important;
+  line-height:1.06!important;
+  letter-spacing:-.72px!important;
   margin:0 0 8px!important;
+  font-weight:760!important;
+  color:#071633!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-header p{
-  font-size:14px!important;
+  font-size:13px!important;
   color:#61708d!important;
+  font-weight:430!important;
 }
 
-.sf-dashboard.lead-list-reference .lead-ref-actions{
-  flex-shrink:0!important;
-}
+.sf-dashboard.lead-list-reference .lead-ref-actions{flex-shrink:0!important;gap:10px!important}
 
 .sf-dashboard.lead-list-reference .lead-ref-actions button{
-  height:44px!important;
-  min-height:44px!important;
-  padding:0 18px!important;
-  border-radius:12px!important;
-  font-size:14px!important;
+  height:38px!important;
+  min-height:38px!important;
+  padding:0 15px!important;
+  border-radius:10px!important;
+  font-size:13px!important;
+  font-weight:700!important;
   background:#fff!important;
   border:1px solid #d7e3f5!important;
-  box-shadow:0 10px 24px rgba(28,57,105,.08)!important;
+  box-shadow:0 8px 18px rgba(28,57,105,.06)!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:8px!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-actions .primary{
   background:linear-gradient(135deg,#0b63f6,#1976ff)!important;
   color:#fff!important;
   border-color:#0b63f6!important;
-  box-shadow:0 16px 30px rgba(11,99,246,.25)!important;
+  box-shadow:0 12px 22px rgba(11,99,246,.22)!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-metrics{
   display:grid!important;
   grid-template-columns:repeat(6,minmax(0,1fr))!important;
-  gap:8px!important;
+  gap:10px!important;
   width:100%!important;
   max-width:100%!important;
-  margin-bottom:26px!important;
+  margin-bottom:22px!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-metric{
   min-width:0!important;
-  min-height:98px!important;
-  padding:12px 10px!important;
-  border-radius:14px!important;
+  min-height:82px!important;
+  padding:12px!important;
+  border-radius:13px!important;
   background:linear-gradient(145deg,#fff 0%,#fbfdff 100%)!important;
   border:1px solid #d9e4f3!important;
-  box-shadow:0 16px 36px rgba(28,57,105,.08)!important;
+  box-shadow:0 10px 24px rgba(28,57,105,.055)!important;
   display:grid!important;
-  grid-template-columns:38px minmax(0,1fr)!important;
+  grid-template-columns:40px minmax(0,1fr)!important;
   align-items:center!important;
-  gap:8px!important;
+  gap:10px!important;
   overflow:hidden!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-metric::before,
-.sf-dashboard.lead-list-reference .lead-ref-metric::after{
-  display:none!important;
-}
+.sf-dashboard.lead-list-reference .lead-ref-metric::after{display:none!important}
 
 .sf-dashboard.lead-list-reference .lead-ref-metric .icon{
-  width:38px!important;
-  height:38px!important;
-  min-width:38px!important;
+  width:40px!important;
+  height:40px!important;
+  min-width:40px!important;
   border-radius:12px!important;
-  font-size:18px!important;
-  font-weight:900!important;
   background:#eef5ff!important;
   display:grid!important;
   place-items:center!important;
@@ -106,10 +124,10 @@
 
 .sf-dashboard.lead-list-reference .lead-ref-metric p{
   max-width:100%!important;
-  font-size:11px!important;
+  font-size:11.5px!important;
   line-height:1.1!important;
   color:#5d6d89!important;
-  font-weight:800!important;
+  font-weight:650!important;
   margin:0 0 5px!important;
   white-space:normal!important;
   overflow:visible!important;
@@ -117,29 +135,30 @@
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-metric h2{
-  font-size:20px!important;
+  font-size:18px!important;
   line-height:1!important;
   color:#071633!important;
   margin:0 0 6px!important;
   white-space:nowrap!important;
+  font-weight:760!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-metric small{
   font-size:10px!important;
-  font-weight:900!important;
+  font-weight:700!important;
   white-space:nowrap!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-filters{
   display:grid!important;
-  grid-template-columns:1.35fr .95fr .95fr .85fr 1fr .58fr!important;
+  grid-template-columns:1.35fr .95fr .95fr .85fr 1fr .62fr!important;
   gap:8px!important;
   padding:12px!important;
-  border-radius:18px!important;
-  margin-bottom:26px!important;
+  border-radius:16px!important;
+  margin-bottom:22px!important;
   background:#fff!important;
   border:1px solid #d9e4f3!important;
-  box-shadow:0 16px 36px rgba(28,57,105,.08)!important;
+  box-shadow:0 10px 24px rgba(28,57,105,.055)!important;
   width:100%!important;
   max-width:100%!important;
   min-width:0!important;
@@ -150,51 +169,49 @@
 .sf-dashboard.lead-list-reference .lead-ref-search,
 .sf-dashboard.lead-list-reference .lead-ref-filter-btn{
   min-width:0!important;
-  height:50px!important;
-  border-radius:10px!important;
+  height:46px!important;
+  border-radius:9px!important;
   border:1px solid #d8e4f4!important;
   background:#fff!important;
   box-shadow:none!important;
 }
 
-.sf-dashboard.lead-list-reference .lead-ref-field{
-  padding:7px 10px!important;
-}
+.sf-dashboard.lead-list-reference .lead-ref-field{padding:7px 10px!important}
 
 .sf-dashboard.lead-list-reference .lead-ref-field span{
-  font-size:10px!important;
+  font-size:10.5px!important;
   color:#6a7891!important;
-  font-weight:700!important;
+  font-weight:600!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-field strong{
   max-width:100%!important;
-  font-size:11px!important;
+  font-size:11.5px!important;
   color:#071633!important;
-  font-weight:900!important;
+  font-weight:700!important;
   white-space:nowrap!important;
   overflow:hidden!important;
   text-overflow:ellipsis!important;
 }
 
-.sf-dashboard.lead-list-reference .lead-ref-search input{
-  font-size:12px!important;
-}
+.sf-dashboard.lead-list-reference .lead-ref-search{gap:10px!important;padding:0 13px!important}
+.sf-dashboard.lead-list-reference .lead-ref-search input{font-size:12.5px!important;font-weight:430!important;color:#071633!important}
 
 .sf-dashboard.lead-list-reference .lead-ref-filter-btn{
   color:#0b63f6!important;
-  font-size:12px!important;
-  font-weight:900!important;
+  font-size:13px!important;
+  font-weight:700!important;
+  gap:8px!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table-card{
   width:100%!important;
   max-width:100%!important;
   min-width:0!important;
-  border-radius:18px!important;
+  border-radius:16px!important;
   background:#fff!important;
   border:1px solid #d9e4f3!important;
-  box-shadow:0 18px 42px rgba(28,57,105,.10)!important;
+  box-shadow:0 12px 28px rgba(28,57,105,.07)!important;
   overflow:hidden!important;
 }
 
@@ -215,20 +232,21 @@
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table th{
-  height:48px!important;
+  height:44px!important;
   background:#fbfdff!important;
   color:#60708f!important;
-  font-size:12px!important;
-  font-weight:900!important;
+  font-size:11.5px!important;
+  font-weight:650!important;
   border-bottom:1px solid #e6edf7!important;
   white-space:nowrap!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table td{
-  height:66px!important;
-  font-size:13px!important;
+  height:60px!important;
+  font-size:12.5px!important;
   border-bottom:1px solid #eef2f7!important;
   color:#17284a!important;
+  font-weight:430!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(1),
@@ -250,95 +268,85 @@
 .sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(9),
 .sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(9){width:44px!important;text-align:center!important}
 
-.sf-dashboard.lead-list-reference .lead-ref-table tbody tr:hover{
-  background:#f8fbff!important;
-}
+.sf-dashboard.lead-list-reference .lead-ref-table tbody tr:hover{background:#f8fbff!important}
 
 .sf-dashboard.lead-list-reference .lead-ref-avatar{
-  width:34px!important;
-  height:34px!important;
-  min-width:34px!important;
-  font-size:12px!important;
+  width:32px!important;
+  height:32px!important;
+  min-width:32px!important;
+  font-size:11.5px!important;
+  font-weight:700!important;
 }
 
-.sf-dashboard.lead-list-reference .lead-ref-person{
-  min-width:0!important;
-  gap:10px!important;
-}
-
-.sf-dashboard.lead-list-reference .lead-ref-person div,
-.sf-dashboard.lead-list-reference .lead-ref-owner{
-  min-width:0!important;
-}
+.sf-dashboard.lead-list-reference .lead-ref-person{min-width:0!important;gap:10px!important}
+.sf-dashboard.lead-list-reference .lead-ref-person div,.sf-dashboard.lead-list-reference .lead-ref-owner{min-width:0!important}
 
 .sf-dashboard.lead-list-reference .lead-ref-person strong{
   display:block!important;
-  font-size:13px!important;
+  font-size:12.5px!important;
+  font-weight:700!important;
   white-space:nowrap!important;
   overflow:hidden!important;
   text-overflow:ellipsis!important;
 }
 
-.sf-dashboard.lead-list-reference .lead-ref-person small{
-  color:#657896!important;
-  font-size:12px!important;
-}
+.sf-dashboard.lead-list-reference .lead-ref-person small{color:#657896!important;font-size:11.5px!important;font-weight:430!important}
 
 .sf-dashboard.lead-list-reference .lead-ref-pill{
   border-radius:8px!important;
-  padding:6px 10px!important;
-  font-size:11px!important;
-  font-weight:900!important;
+  padding:5px 9px!important;
+  font-size:10.8px!important;
+  font-weight:700!important;
   white-space:nowrap!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table-footer{
-  min-height:58px!important;
+  min-height:54px!important;
   background:#fff!important;
   border-top:1px solid #eef2f7!important;
 }
 
-/* FINAL FIX: lock SVG icons so they never render giant */
 .sf-dashboard.lead-list-reference svg.lead-svg,
 .sf-dashboard.lead-list-reference .lead-svg{
-  width:16px!important;
-  height:16px!important;
-  min-width:16px!important;
-  max-width:16px!important;
-  min-height:16px!important;
-  max-height:16px!important;
-  display:inline-block!important;
-  flex:0 0 16px!important;
-  stroke-width:1.9!important;
-}
-
-.sf-dashboard.lead-list-reference .lead-ref-metric .icon svg.lead-svg,
-.sf-dashboard.lead-list-reference .lead-ref-metric .icon .lead-svg{
-  width:20px!important;
-  height:20px!important;
-  min-width:20px!important;
-  max-width:20px!important;
-  min-height:20px!important;
-  max-height:20px!important;
-  flex-basis:20px!important;
-}
-
-.sf-dashboard.lead-list-reference .lead-ref-actions svg.lead-svg,
-.sf-dashboard.lead-list-reference .lead-ref-search svg.lead-svg,
-.sf-dashboard.lead-list-reference .lead-ref-filter-btn svg.lead-svg,
-.sf-dashboard.lead-list-reference .lead-table-icon-text svg.lead-svg{
   width:15px!important;
   height:15px!important;
   min-width:15px!important;
   max-width:15px!important;
   min-height:15px!important;
   max-height:15px!important;
-  flex-basis:15px!important;
+  display:inline-block!important;
+  flex:0 0 15px!important;
+  stroke-width:1.85!important;
+}
+
+.sf-dashboard.lead-list-reference .lead-ref-metric .icon svg.lead-svg,
+.sf-dashboard.lead-list-reference .lead-ref-metric .icon .lead-svg{
+  width:19px!important;
+  height:19px!important;
+  min-width:19px!important;
+  max-width:19px!important;
+  min-height:19px!important;
+  max-height:19px!important;
+  flex-basis:19px!important;
+}
+
+.sf-dashboard.lead-list-reference .lead-ref-actions svg.lead-svg,
+.sf-dashboard.lead-list-reference .lead-ref-search svg.lead-svg,
+.sf-dashboard.lead-list-reference .lead-ref-filter-btn svg.lead-svg,
+.sf-dashboard.lead-list-reference .lead-table-icon-text svg.lead-svg{
+  width:14px!important;
+  height:14px!important;
+  min-width:14px!important;
+  max-width:14px!important;
+  min-height:14px!important;
+  max-height:14px!important;
+  flex-basis:14px!important;
 }
 
 @media(max-width:1200px){
   .sf-dashboard.lead-list-reference{grid-template-columns:1fr!important}
   .sf-dashboard.lead-list-reference .lead-ref-main{width:100vw!important;max-width:100vw!important}
+  .sf-dashboard.lead-list-reference .sf-sidebar-v2{width:100%!important;min-width:0!important;max-width:none!important}
 }
 
 @media(max-width:900px){
