@@ -4,17 +4,34 @@ import { leads as initialLeads } from './leadsData.js';
 import '../../styles/leadsReferenceExact.css';
 
 const metrics = [
-  ['Total Leads','1,245','↑ 12.5%','♟','blue'],
-  ['New Leads','320','↑ 8.4%','＋','blue'],
-  ['Contacted','452','↑ 15.3%','☎','green'],
-  ['In Progress','268','↓ 4.6%','◷','orange down'],
-  ['Converted','205','↑ 10.2%','♕','green'],
-  ['Lost','78','↓ 8.1%','⊘','red down'],
+  ['Total Leads','1,245','↑ 12.5%','user','blue'],
+  ['New Leads','320','↑ 8.4%','plus','blue'],
+  ['Contacted','452','↑ 15.3%','phone','green'],
+  ['In Progress','268','↓ 4.6%','clock','orange down'],
+  ['Converted','205','↑ 10.2%','crown','green'],
+  ['Lost','78','↓ 8.1%','ban','red down'],
 ];
 
 const sourceClass = { Website: 'blue', Referral: 'green', LinkedIn: 'purple', 'Cold Call': 'orange', 'Email Campaign': 'purple', WhatsApp: 'green', Other: 'blue' };
 const statusClass = { New: 'blue', Contacted: 'orange', 'In Progress': 'blue', Converted: 'green', Lost: 'red' };
 const defaultForm = { name: '', email: '', phone: '', company: '', source: 'Website', status: 'New', nextFollowUpDate: '', nextFollowUpTime: '', priority: 'Warm', jobTitle: '', notes: '' };
+
+function LeadSvg({ type }) {
+  const icons = {
+    user: <path d="M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" />,
+    plus: <path d="M12 5v14M5 12h14" />,
+    phone: <path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 3.1 5.2 2 2 0 0 1 5.1 3h3a2 2 0 0 1 2 1.7c.1.9.3 1.7.6 2.5a2 2 0 0 1-.5 2.1L9 10.5a16 16 0 0 0 4.5 4.5l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.6.5 2.5.6a2 2 0 0 1 1.7 2Z" />,
+    clock: <path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9Zm0-14v5l4 2" />,
+    crown: <path d="m3 8 4 3 5-7 5 7 4-3-2 10H5L3 8Zm2 13h14" />,
+    ban: <path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9ZM5.7 5.7l12.6 12.6" />,
+    download: <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" />,
+    filter: <path d="M4 5h16l-6 7v5l-4 2v-7L4 5Z" />,
+    search: <path d="m21 21-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />,
+    calendar: <path d="M7 3v4m10-4v4M4 9h16M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z" />,
+    dots: <path d="M12 8h.01M12 12h.01M12 16h.01" />,
+  };
+  return <svg className="lead-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[type]}</svg>;
+}
 
 function getCurrentRole() {
   const saved = window.localStorage.getItem('salesflowRole');
@@ -100,21 +117,21 @@ export default function LeadListPage() {
       <main className="lead-ref-main">
         <header className="lead-ref-header">
           <div><h1>Lead Activity</h1><p>Home › Leads › Lead Activity</p></div>
-          <div className="lead-ref-actions"><button type="button" onClick={exportLeads}>⇩ Export</button><button type="button" className="primary" onClick={openAddLead}>＋ Add Lead</button></div>
+          <div className="lead-ref-actions"><button type="button" onClick={exportLeads}><LeadSvg type="download" />Export</button><button type="button" className="primary" onClick={openAddLead}>+ Add Lead</button></div>
         </header>
         <section className="lead-ref-metrics">
-          {metrics.map(([title, value, change, icon, tone]) => <article className={`lead-ref-metric ${tone}`} key={title}><span className="icon">{icon}</span><div><p>{title}</p><h2>{value}</h2><small>{change}</small></div></article>)}
+          {metrics.map(([title, value, change, icon, tone]) => <article className={`lead-ref-metric ${tone}`} key={title}><span className="icon"><LeadSvg type={icon} /></span><div><p>{title}</p><h2>{value}</h2><small>{change}</small></div></article>)}
         </section>
         <section className="lead-ref-filters">
           <div className="lead-ref-field"><span>Date Range</span><strong>01 May 2025 - 31 May 2025</strong><i>⌄</i></div>
           <div className="lead-ref-field"><span>Lead Source</span><strong>All Sources</strong><i>⌄</i></div>
           <div className="lead-ref-field"><span>Lead Owner</span><strong>All Users</strong><i>⌄</i></div>
           <div className="lead-ref-field"><span>Status</span><strong>All Statuses</strong><i>⌄</i></div>
-          <label className="lead-ref-search"><span>⌕</span><input placeholder="Search leads..." /></label>
-          <button className="lead-ref-filter-btn">▽ Filter</button>
+          <label className="lead-ref-search"><LeadSvg type="search" /><input placeholder="Search leads..." /></label>
+          <button className="lead-ref-filter-btn"><LeadSvg type="filter" />Filter</button>
         </section>
         <section className="lead-ref-table-card">
-          <table className="lead-ref-table"><thead><tr><th><input className="lead-ref-check" type="checkbox" /></th><th>Lead Name</th><th>Company</th><th>Lead Source</th><th>Status</th><th>Last Activity</th><th>Next Follow Up</th><th>Lead Owner</th><th>Actions</th></tr></thead><tbody>{leadRows.map((lead) => <tr key={lead.id} onClick={() => openLead(lead.id)}><td><input className="lead-ref-check" type="checkbox" onClick={(event) => event.stopPropagation()} /></td><td><div className="lead-ref-person"><span className="lead-ref-avatar">{lead.initials}</span><div><strong>{lead.name}</strong><small>{lead.phone}</small></div></div></td><td>{lead.company}</td><td><span className={`lead-ref-pill ${sourceClass[lead.source] || 'blue'}`}>{lead.source}</span></td><td><span className={`lead-ref-pill ${statusClass[lead.status] || 'blue'}`}>{lead.status}</span></td><td>☎ {lead.lastActivity}</td><td>▣ {lead.nextFollowUp}</td><td><span className="lead-ref-owner"><span className="lead-ref-avatar">R</span>{lead.owner}</span></td><td>⋮</td></tr>)}</tbody></table>
+          <table className="lead-ref-table"><thead><tr><th><input className="lead-ref-check" type="checkbox" /></th><th>Lead Name</th><th>Company</th><th>Lead Source</th><th>Status</th><th>Last Activity</th><th>Next Follow Up</th><th>Lead Owner</th><th>Actions</th></tr></thead><tbody>{leadRows.map((lead) => <tr key={lead.id} onClick={() => openLead(lead.id)}><td><input className="lead-ref-check" type="checkbox" onClick={(event) => event.stopPropagation()} /></td><td><div className="lead-ref-person"><span className="lead-ref-avatar">{lead.initials}</span><div><strong>{lead.name}</strong><small>{lead.phone}</small></div></div></td><td>{lead.company}</td><td><span className={`lead-ref-pill ${sourceClass[lead.source] || 'blue'}`}>{lead.source}</span></td><td><span className={`lead-ref-pill ${statusClass[lead.status] || 'blue'}`}>{lead.status}</span></td><td><span className="lead-table-icon-text"><LeadSvg type="phone" />{lead.lastActivity}</span></td><td><span className="lead-table-icon-text"><LeadSvg type="calendar" />{lead.nextFollowUp}</span></td><td><span className="lead-ref-owner"><span className="lead-ref-avatar">R</span>{lead.owner}</span></td><td><LeadSvg type="dots" /></td></tr>)}</tbody></table>
           <footer className="lead-ref-table-footer"><span>{totalText}</span><div className="lead-ref-pagination"><button>‹</button><button className="active">1</button><button>2</button><button>3</button><span>...</span><button>8</button><button>›</button><select><option>10 / page</option></select></div></footer>
         </section>
       </main>
