@@ -1,4 +1,76 @@
 /* Final responsive correction: keep desktop layout intact */
+
+/* Top breadcrumb + action buttons premium compact fix */
+.ld-topbar {
+  align-items: center !important;
+  margin-bottom: 14px !important;
+  padding: 0 !important;
+}
+
+.ld-breadcrumb {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 750 !important;
+  color: #64748b !important;
+}
+
+.ld-breadcrumb strong {
+  color: #071633 !important;
+  font-size: 14px !important;
+  font-weight: 850 !important;
+}
+
+.ld-breadcrumb span {
+  margin: 0 !important;
+  color: #94a3b8 !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+}
+
+.ld-actions {
+  gap: 10px !important;
+}
+
+.ld-actions button {
+  height: 38px !important;
+  min-width: auto !important;
+  padding: 0 15px !important;
+  border-radius: 10px !important;
+  border: 1px solid #d5e2f3 !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  color: #071633 !important;
+  font-size: 12.5px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.15px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  box-shadow: 0 8px 18px rgba(30, 64, 120, 0.045), inset 0 1px 0 rgba(255,255,255,0.95) !important;
+}
+
+.ld-actions button.primary {
+  height: 38px !important;
+  padding: 0 18px !important;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
+  box-shadow: 0 11px 22px rgba(37, 99, 235, 0.22) !important;
+}
+
+.ld-actions button.dots {
+  width: 42px !important;
+  min-width: 42px !important;
+  height: 38px !important;
+  padding: 0 !important;
+  font-size: 18px !important;
+  letter-spacing: 1px !important;
+}
+
 @media (min-width: 1051px) {
   .ld-summary-metrics {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
