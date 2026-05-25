@@ -10,12 +10,11 @@ function getCurrentRole() {
 }
 
 const tabs = ['Overview', 'Activity', 'Tasks', 'Notes', 'Documents', 'Email History', 'WhatsApp History'];
-const timelineItems = [
-  { icon: '✓', title: 'Lead Created', text: 'Lead captured from website form', time: '20 May 2025 • 10:30 AM', tone: 'purple' },
-  { icon: '✉', title: 'Email Opened', text: 'Product brochure was opened', time: '20 May 2025 • 11:15 AM', tone: 'blue' },
-  { icon: '☎', title: 'Phone Call', text: 'Connected with customer', time: '20 May 2025 • 12:30 PM', tone: 'green' },
-  { icon: '✉', title: 'Email Sent', text: 'Pricing details shared', time: '20 May 2025 • 01:45 PM', tone: 'blue' },
-  { icon: '✎', title: 'Note Added', text: 'Interested in enterprise plan', time: '20 May 2025 • 02:10 PM', tone: 'orange' },
+const activityItems = [
+  { icon: '☎', title: 'Called Rohan Mehta', text: 'Discussed requirements and solution overview.', time: 'Today, 10:30 AM', user: 'Amit Kumar', tone: 'green' },
+  { icon: '✉', title: 'Sent Proposal', text: 'Proposal for CRM Software Implementation sent.', time: 'Yesterday, 04:15 PM', user: 'Amit Kumar', tone: 'blue' },
+  { icon: '▣', title: 'Follow-up Scheduled', text: 'Next follow-up scheduled on 24 May 2025.', time: 'Yesterday, 04:10 PM', user: 'Amit Kumar', tone: 'orange' },
+  { icon: '♚', title: 'Lead Created', text: 'Lead captured from website contact form.', time: '20 May 2025, 10:30 AM', user: 'System', tone: 'purple' },
 ];
 
 export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
@@ -96,56 +95,35 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
           {tabs.map((tab, index) => <button className={index === 0 ? 'active' : ''} key={tab} type="button">{tab}</button>)}
         </nav>
 
-        <section className="ld-content-grid no-tags-sidebar">
-          <div className="ld-left-col">
-            <section className="ld-main-row">
-              <article className="ld-card ld-info-card">
-                <header><h2>Lead Information</h2><p>Customer profile and qualification details</p></header>
-                <div className="ld-info-grid">
-                  <Info label="Full Name" value={lead.name} icon="♙" />
-                  <Info label="Lead Source" value={lead.source} icon="◇" />
-                  <Info label="Company" value={lead.company} icon="▥" />
-                  <Info label="Lead Owner" value={lead.owner} icon="♙" />
-                  <Info label="Email" value={lead.email} icon="✉" />
-                  <Info label="Status" value={lead.status} icon="☑" />
-                  <Info label="Phone" value={lead.phone} icon="☎" />
-                  <Info label="Priority" value={lead.priority} icon="⚑" />
-                  <Info label="Job Title" value={lead.jobTitle} icon="♧" />
-                  <Info label="Expected Close Date" value={lead.expectedClose} icon="▣" />
-                </div>
-              </article>
+        <section className="ld-activity-layout">
+          <article className="ld-card ld-activity-panel">
+            <header>
+              <h2>Activity Timeline</h2>
+              <select><option>All Activities</option></select>
+            </header>
+            <div className="ld-activity-list">
+              {activityItems.map((item) => <ActivityRow item={item} key={item.title} />)}
+            </div>
+          </article>
 
-              <article className="ld-card ld-score-card">
-                <header><h2>Lead Score</h2><p>Conversion probability</p></header>
-                <div className="ld-score-ring"><span>{lead.score}<small>/100</small></span></div>
-                <p className="ld-score-note"><b>High</b></p>
-                <button type="button">View Score Details</button>
-              </article>
-            </section>
+          <aside className="ld-activity-side">
+            <article className="ld-card ld-about-card">
+              <h2>About Lead</h2>
+              <InfoRow label="Industry" value="IT Services" />
+              <InfoRow label="Company Size" value="51-200 Employees" />
+              <InfoRow label="Annual Revenue" value="₹ 10Cr - ₹ 50Cr" />
+              <InfoRow label="Interested In" value="CRM Software" />
+              <button type="button">View Full Details <span>›</span></button>
+            </article>
 
-            <section className="ld-bottom-row">
-              <article className="ld-card ld-summary-card">
-                <h2>Lead Summary</h2>
-                <p>{lead.name.split(' ')[0]} is looking for a CRM solution for a team of 20 users.</p>
-                <p>Interested in automation, reports and lead management.</p>
-                <p>Requested pricing details and a demo.</p>
-              </article>
-              <article className="ld-card ld-follow-card">
-                <h2>Next Follow Up</h2>
-                <div className="ld-follow-main"><span>◷</span><strong>{lead.nextFollowUp}</strong></div>
-                <p>☎ Follow up call</p>
-                <footer><span>Assigned to</span><b className="ld-avatar">R</b><strong>{lead.owner}</strong><button type="button">Mark as Done</button></footer>
-              </article>
-            </section>
-          </div>
-
-          <aside className="ld-side-col">
-            <article className="ld-card ld-timeline-card">
-              <header><h2>Activity Timeline</h2><select><option>All Activities</option></select></header>
-              <div className="ld-timeline-list">
-                {timelineItems.map((item) => <TimelineItem item={item} key={item.title} />)}
+            <article className="ld-card ld-files-card">
+              <h2>Files & Documents</h2>
+              <div className="ld-file-row">
+                <span>PDF</span>
+                <div><strong>Proposal_Rohan_Mehta.pdf</strong><small>PDF · 1.2 MB</small></div>
+                <button type="button">⇩</button>
               </div>
-              <button type="button" className="ld-view-all">View All Activities</button>
+              <button type="button" className="ld-file-link">View All Files <span>›</span></button>
             </article>
           </aside>
         </section>
@@ -167,10 +145,22 @@ function MetricCard({ icon, label, value, badge, helper, progress, tone }) {
   );
 }
 
-function Info({ icon, label, value }) {
-  return <div className="ld-info-item"><span>{icon}</span><div><small>{label}</small><strong>{value}</strong></div></div>;
+function ActivityRow({ item }) {
+  return (
+    <div className={`ld-activity-row ${item.tone}`}>
+      <span className="ld-activity-icon">{item.icon}</span>
+      <div className="ld-activity-text">
+        <strong>{item.title}</strong>
+        <p>{item.text}</p>
+      </div>
+      <div className="ld-activity-meta">
+        <span>{item.time}</span>
+        <small>{item.user}</small>
+      </div>
+    </div>
+  );
 }
 
-function TimelineItem({ item }) {
-  return <div className={`ld-timeline-item ${item.tone}`}><span>{item.icon}</span><div><strong>{item.title}</strong><p>{item.text}</p><small>{item.time}</small></div></div>;
+function InfoRow({ label, value }) {
+  return <div className="ld-about-row"><span>{label}</span><strong>{value}</strong></div>;
 }
