@@ -1,10 +1,12 @@
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { getLead } from './leadsData.js';
-import './LeadDetailImageExact.css';
-import './LeadDetailProfileExactFix.css';
-import './LeadDetailPremiumSection.css';
-import './LeadDetailResponsiveFix.css';
-import './LeadDetailProfessionalFix.css';
+import './LeadDetailsLayout.css';
+import './LeadDetailsTopbar.css';
+import './LeadDetailsProfile.css';
+import './LeadDetailsMetrics.css';
+import './LeadDetailsTags.css';
+import './LeadDetailsTabs.css';
+import './LeadDetailsActivity.css';
 
 function getCurrentRole() {
   const saved = window.localStorage.getItem('salesflowRole');
@@ -52,15 +54,9 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
 
         <section className="ld-profile-card">
           <div className="ld-profile-left">
-            <div className="ld-avatar-large">
-              RM
-              <span />
-            </div>
+            <div className="ld-avatar-large">RM<span /></div>
             <div className="ld-profile-main">
-              <div className="ld-profile-title">
-                <h1>{lead.name}</h1>
-                <b>Hot Lead</b>
-              </div>
+              <div className="ld-profile-title"><h1>{lead.name}</h1><b>Hot Lead</b></div>
               <p>Marketing Manager at TechNova Solutions</p>
               <div className="ld-contact-list">
                 <span><SvgIcon type="mail" />rohan.mehta@technova.com</span>
@@ -70,21 +66,13 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
             </div>
           </div>
 
-          <div className="ld-profile-divider" />
-
           <div className="ld-profile-facts">
             <div className="ld-fact owner">
               <small>Lead Owner</small>
               <div><span className="ld-owner-avatar">AK</span><strong>Amit Kumar<em>Sales Executive</em></strong></div>
             </div>
-            <div className="ld-fact">
-              <small>Source</small>
-              <strong>{lead.source}</strong>
-            </div>
-            <div className="ld-fact">
-              <small>Created On</small>
-              <strong>20 May 2025, 10:30 AM</strong>
-            </div>
+            <div className="ld-fact"><small>Source</small><strong>{lead.source}</strong></div>
+            <div className="ld-fact"><small>Created On</small><strong>20 May 2025, 10:30 AM</strong></div>
           </div>
         </section>
 
@@ -112,15 +100,11 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
 
         <section className="ld-activity-layout">
           <article className="ld-card ld-activity-panel">
-            <header>
-              <h2>Activity Timeline</h2>
-              <select><option>All Activities</option></select>
-            </header>
+            <header><h2>Activity Timeline</h2><select><option>All Activities</option></select></header>
             <div className="ld-activity-list">
               {activityItems.map((item) => <ActivityRow item={item} key={item.title} />)}
             </div>
           </article>
-
           <aside className="ld-activity-side">
             <article className="ld-card ld-about-card">
               <h2>About Lead</h2>
@@ -130,14 +114,9 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
               <InfoRow label="Interested In" value="CRM Software" />
               <button type="button">View Full Details <span>›</span></button>
             </article>
-
             <article className="ld-card ld-files-card">
               <h2>Files & Documents</h2>
-              <div className="ld-file-row">
-                <span>PDF</span>
-                <div><strong>Proposal_Rohan_Mehta.pdf</strong><small>PDF · 1.2 MB</small></div>
-                <button type="button">⇩</button>
-              </div>
+              <div className="ld-file-row"><span>PDF</span><div><strong>Proposal_Rohan_Mehta.pdf</strong><small>PDF · 1.2 MB</small></div><button type="button">⇩</button></div>
               <button type="button" className="ld-file-link">View All Files <span>›</span></button>
             </article>
           </aside>
@@ -148,32 +127,11 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
 }
 
 function MetricCard({ icon, label, value, badge, helper, progress, tone }) {
-  return (
-    <article className={`ld-metric-card ${tone}`}>
-      <span className="ld-metric-icon">{icon}</span>
-      <div className="ld-metric-body">
-        <small>{label}</small>
-        <div className="ld-metric-value"><strong>{value}</strong>{badge && <b>{badge}</b>}</div>
-        {progress ? <div className="ld-progress"><i /><em>{helper}</em></div> : <p>{helper}</p>}
-      </div>
-    </article>
-  );
+  return <article className={`ld-metric-card ${tone}`}><span className="ld-metric-icon">{icon}</span><div className="ld-metric-body"><small>{label}</small><div className="ld-metric-value"><strong>{value}</strong>{badge && <b>{badge}</b>}</div>{progress ? <div className="ld-progress"><i /><em>{helper}</em></div> : <p>{helper}</p>}</div></article>;
 }
 
 function ActivityRow({ item }) {
-  return (
-    <div className={`ld-activity-row ${item.tone}`}>
-      <span className="ld-activity-icon">{item.icon}</span>
-      <div className="ld-activity-text">
-        <strong>{item.title}</strong>
-        <p>{item.text}</p>
-      </div>
-      <div className="ld-activity-meta">
-        <span>{item.time}</span>
-        <small>{item.user}</small>
-      </div>
-    </div>
-  );
+  return <div className={`ld-activity-row ${item.tone}`}><span className="ld-activity-icon">{item.icon}</span><div className="ld-activity-text"><strong>{item.title}</strong><p>{item.text}</p></div><div className="ld-activity-meta"><span>{item.time}</span><small>{item.user}</small></div></div>;
 }
 
 function InfoRow({ label, value }) {
