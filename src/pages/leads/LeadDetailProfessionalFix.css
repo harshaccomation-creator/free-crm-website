@@ -39,37 +39,123 @@
 
 @media (min-width:1051px){
   .ld-profile-card{
-    grid-template-columns:minmax(430px, .95fr) 1px minmax(640px, 1.45fr)!important;
+    grid-template-columns:minmax(500px,1.05fr) minmax(520px,.95fr)!important;
+    gap:28px!important;
+    min-height:168px!important;
+    padding:22px 30px!important;
+    overflow:visible!important;
+    align-items:center!important;
+  }
+
+  .ld-profile-divider{
+    display:none!important;
+  }
+
+  .ld-profile-left{
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:20px!important;
+  }
+
+  .ld-avatar-large{
+    width:82px!important;
+    height:82px!important;
+    min-width:82px!important;
+    font-size:29px!important;
+  }
+
+  .ld-profile-main{
+    min-width:0!important;
+  }
+
+  .ld-profile-main h1{
+    font-size:25px!important;
+    line-height:1.1!important;
+    letter-spacing:-.45px!important;
+  }
+
+  .ld-profile-title{
+    margin-bottom:7px!important;
+  }
+
+  .ld-profile-title b{
+    font-size:11px!important;
+    padding:7px 12px!important;
+  }
+
+  .ld-profile-main>p{
+    font-size:13px!important;
+    margin-bottom:9px!important;
+    white-space:nowrap!important;
     overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    max-width:420px!important;
+  }
+
+  .ld-contact-list{
+    gap:7px!important;
+  }
+
+  .ld-contact-list span{
+    font-size:12px!important;
+    line-height:1.25!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    max-width:420px!important;
   }
 
   .ld-profile-facts{
-    grid-template-columns:minmax(190px,1fr) minmax(130px,.7fr) minmax(230px,1.25fr)!important;
-    gap:28px!important;
+    display:grid!important;
+    grid-template-columns:minmax(170px,1fr) minmax(110px,.7fr) minmax(190px,1fr)!important;
+    gap:22px!important;
     min-width:0!important;
+    align-items:center!important;
+    margin-top:0!important;
+    padding-left:26px!important;
+    border-left:1px solid #dbe7f7!important;
   }
 
   .ld-fact{
     min-width:0!important;
   }
 
+  .ld-fact small{
+    font-size:11px!important;
+    line-height:1!important;
+    margin-bottom:8px!important;
+    color:#64748b!important;
+  }
+
   .ld-fact strong{
+    display:block!important;
+    font-size:13px!important;
+    line-height:1.25!important;
     white-space:normal!important;
     overflow:visible!important;
     text-overflow:clip!important;
+    word-break:normal!important;
   }
 
   .ld-fact:last-child strong{
-    white-space:nowrap!important;
+    white-space:normal!important;
+    max-width:190px!important;
   }
 
-  .ld-profile-main h1{
-    font-size:23px!important;
+  .ld-fact.owner div{
+    align-items:center!important;
+    gap:9px!important;
+  }
+
+  .ld-fact.owner span{
+    width:30px!important;
+    height:30px!important;
+    min-width:30px!important;
+  }
+
+  .ld-fact.owner em{
+    font-size:10px!important;
     line-height:1.1!important;
-  }
-
-  .ld-profile-title b{
-    font-size:11px!important;
-    padding:7px 12px!important;
   }
 }
