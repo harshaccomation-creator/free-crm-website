@@ -5,7 +5,7 @@
   min-height:100vh!important;
   grid-template-columns:var(--sf-sidebar-width,230px) minmax(0,1fr)!important;
   background:#f4f8ff!important;
-  overflow-x:hidden!important;
+  overflow:hidden!important;
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
 }
 
@@ -15,7 +15,7 @@
   min-width:0!important;
   overflow-x:hidden!important;
   background:radial-gradient(circle at 85% 4%,rgba(11,99,246,.065),transparent 24%),linear-gradient(180deg,#fbfdff 0%,#eef5ff 100%)!important;
-  padding:22px 22px 82px!important;
+  padding:22px 18px 82px!important;
   box-sizing:border-box!important;
 }
 
@@ -24,6 +24,8 @@
   margin-bottom:22px!important;
   width:100%!important;
   max-width:100%!important;
+  min-width:0!important;
+  overflow:hidden!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-header h1{
@@ -56,6 +58,7 @@
   display:inline-flex!important;
   align-items:center!important;
   gap:8px!important;
+  white-space:nowrap!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-actions .primary{
@@ -71,7 +74,9 @@
   gap:10px!important;
   width:100%!important;
   max-width:100%!important;
+  min-width:0!important;
   margin-bottom:22px!important;
+  overflow:hidden!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-metric{
@@ -136,7 +141,7 @@
 
 .sf-dashboard.lead-list-reference .lead-ref-filters{
   display:grid!important;
-  grid-template-columns:minmax(190px,1.35fr) minmax(145px,.95fr) minmax(145px,.95fr) minmax(135px,.85fr) minmax(170px,1fr) minmax(100px,.62fr)!important;
+  grid-template-columns:minmax(150px,1.35fr) minmax(120px,.95fr) minmax(120px,.95fr) minmax(115px,.85fr) minmax(150px,1fr) minmax(86px,.55fr)!important;
   gap:8px!important;
   padding:12px!important;
   border-radius:16px!important;
@@ -148,6 +153,7 @@
   max-width:100%!important;
   min-width:0!important;
   box-sizing:border-box!important;
+  overflow:hidden!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-field,
@@ -180,13 +186,14 @@
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-search{gap:10px!important;padding:0 13px!important}
-.sf-dashboard.lead-list-reference .lead-ref-search input{font-size:12.5px!important;font-weight:430!important;color:#071633!important}
+.sf-dashboard.lead-list-reference .lead-ref-search input{font-size:12.5px!important;font-weight:430!important;color:#071633!important;min-width:0!important}
 
 .sf-dashboard.lead-list-reference .lead-ref-filter-btn{
   color:#0b63f6!important;
   font-size:13px!important;
   font-weight:700!important;
   gap:8px!important;
+  white-space:nowrap!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table-card{
@@ -197,13 +204,14 @@
   background:#fff!important;
   border:1px solid #d9e4f3!important;
   box-shadow:0 12px 28px rgba(28,57,105,.07)!important;
-  overflow:hidden!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table{
   width:100%!important;
-  max-width:100%!important;
-  min-width:0!important;
+  min-width:1060px!important;
+  max-width:none!important;
   table-layout:fixed!important;
   border-collapse:separate!important;
   border-spacing:0!important;
@@ -237,21 +245,21 @@
 .sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(1),
 .sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(1){width:42px!important;text-align:center!important}
 .sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(2),
-.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(2){width:20%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(2){width:190px!important}
 .sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(3),
-.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(3){width:17%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(3){width:170px!important}
 .sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(4),
-.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(4){width:12%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(4){width:120px!important}
 .sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(5),
-.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(5){width:11%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(5){width:120px!important}
 .sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(6),
-.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(6){width:17%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(6){width:180px!important}
 .sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(7),
-.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(7){width:18%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(7){width:190px!important}
 .sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(8),
 .sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(8){display:none!important;width:0!important;padding:0!important}
 .sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(9),
-.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(9){width:44px!important;text-align:center!important}
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(9){width:48px!important;text-align:center!important}
 
 .sf-dashboard.lead-list-reference .lead-ref-table tbody tr:hover{background:#f8fbff!important}
 
@@ -328,9 +336,15 @@
   flex-basis:14px!important;
 }
 
+@media(max-width:1450px){
+  .sf-dashboard.lead-list-reference .lead-ref-metrics{grid-template-columns:repeat(5,minmax(0,1fr))!important}
+}
+
 @media(max-width:1200px){
-  .sf-dashboard.lead-list-reference{grid-template-columns:1fr!important}
+  .sf-dashboard.lead-list-reference{grid-template-columns:1fr!important;overflow-x:hidden!important}
   .sf-dashboard.lead-list-reference .lead-ref-main{width:100%!important;max-width:100%!important}
+  .sf-dashboard.lead-list-reference .lead-ref-metrics{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .sf-dashboard.lead-list-reference .lead-ref-filters{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
 
 @media(max-width:900px){
