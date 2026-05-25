@@ -14,12 +14,21 @@ function getCurrentRole() {
   return 'employee';
 }
 
-const tabs = ['Overview', 'Activity', 'Tasks', 'Notes', 'Documents', 'Email History', 'WhatsApp History'];
+const tabs = [
+  { label: 'Overview', icon: 'grid' },
+  { label: 'Activity', icon: 'activity' },
+  { label: 'Tasks', icon: 'checklist' },
+  { label: 'Notes', icon: 'note' },
+  { label: 'Documents', icon: 'file' },
+  { label: 'Email History', icon: 'mail' },
+  { label: 'WhatsApp History', icon: 'whatsapp' },
+];
+
 const activityItems = [
-  { icon: '☎', title: 'Called Rohan Mehta', text: 'Discussed requirements and solution overview.', time: 'Today, 10:30 AM', user: 'Amit Kumar', tone: 'green' },
-  { icon: '✉', title: 'Sent Proposal', text: 'Proposal for CRM Software Implementation sent.', time: 'Yesterday, 04:15 PM', user: 'Amit Kumar', tone: 'blue' },
-  { icon: '▣', title: 'Follow-up Scheduled', text: 'Next follow-up scheduled on 24 May 2025.', time: 'Yesterday, 04:10 PM', user: 'Amit Kumar', tone: 'orange' },
-  { icon: '♚', title: 'Lead Created', text: 'Lead captured from website contact form.', time: '20 May 2025, 10:30 AM', user: 'System', tone: 'purple' },
+  { icon: 'phone', title: 'Called Rohan Mehta', text: 'Discussed requirements and solution overview.', time: 'Today, 10:30 AM', user: 'Amit Kumar', tone: 'green' },
+  { icon: 'mail', title: 'Sent Proposal', text: 'Proposal for CRM Software Implementation sent.', time: 'Yesterday, 04:15 PM', user: 'Amit Kumar', tone: 'blue' },
+  { icon: 'calendar', title: 'Follow-up Scheduled', text: 'Next follow-up scheduled on 24 May 2025.', time: 'Yesterday, 04:10 PM', user: 'Amit Kumar', tone: 'orange' },
+  { icon: 'userPlus', title: 'Lead Created', text: 'Lead captured from website contact form.', time: '20 May 2025, 10:30 AM', user: 'System', tone: 'purple' },
 ];
 
 function SvgIcon({ type }) {
@@ -30,6 +39,18 @@ function SvgIcon({ type }) {
     mail: <path d="M4 6h16v12H4zM4 7l8 6 8-6" />,
     map: <path d="M12 21s7-5.2 7-12a7 7 0 0 0-14 0c0 6.8 7 12 7 12Z" />,
     dots: <path d="M12 8h.01M12 12h.01M12 16h.01" />,
+    target: <path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9Zm0-4a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0-4a1 1 0 1 0-1-1 1 1 0 0 0 1 1Zm5-6 3-3m-3 3h3V4" />,
+    filter: <path d="M4 5h16l-6 7v5l-4 2v-7L4 5Z" />,
+    calendar: <path d="M7 3v4m10-4v4M4 9h16M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z" />,
+    rupee: <path d="M6 4h12M6 8h12M7 4c6 0 7 8 0 8h-1l8 8" />,
+    grid: <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />,
+    activity: <path d="M3 12h4l3-7 4 14 3-7h4" />,
+    checklist: <path d="M9 6h11M9 12h11M9 18h11M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2" />,
+    note: <path d="M6 3h9l3 3v15H6zM14 3v4h4M9 12h6M9 16h6" />,
+    file: <path d="M6 3h9l3 3v15H6zM14 3v4h4M9 13h6" />,
+    whatsapp: <path d="M12 21a9 9 0 0 0 7.6-13.8A9 9 0 0 0 4.4 17.5L3 21l3.7-1.2A9 9 0 0 0 12 21Zm-3-12c.7 3 3 5.2 6 6l1.2-1.2-2.2-1.1-.9.9a5.8 5.8 0 0 1-2.7-2.7l.9-.9-1.1-2.2L9 9Z" />,
+    userPlus: <path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M9.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM19 8v6m3-3h-6" />,
+    download: <path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14" />,
   };
   return <svg className="ld-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[type]}</svg>;
 }
@@ -77,10 +98,10 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
         </section>
 
         <section className="ld-summary-metrics">
-          <MetricCard icon="🎯" label="Lead Score" value="85" badge="High" helper="Great potential" tone="purple" />
-          <MetricCard icon="▾" label="Pipeline Stage" value="Proposal" helper="75%" progress tone="blue" />
-          <MetricCard icon="▣" label="Next Follow-up" value="24 May 2025" helper="In 3 days" tone="orange" />
-          <MetricCard icon="₹" label="Potential Deal Value" value="₹ 2,45,000" helper="High Value" tone="green" />
+          <MetricCard iconType="target" label="Lead Score" value="85" badge="High" helper="Great potential" tone="purple" />
+          <MetricCard iconType="filter" label="Pipeline Stage" value="Proposal" helper="75%" progress tone="blue" />
+          <MetricCard iconType="calendar" label="Next Follow-up" value="24 May 2025" helper="In 3 days" tone="orange" />
+          <MetricCard iconType="rupee" label="Potential Deal Value" value="₹ 2,45,000" helper="High Value" tone="green" />
         </section>
 
         <section className="ld-tag-strip">
@@ -95,7 +116,7 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
         </section>
 
         <nav className="ld-tabs">
-          {tabs.map((tab, index) => <button className={index === 0 ? 'active' : ''} key={tab} type="button">{tab}</button>)}
+          {tabs.map((tab, index) => <button className={index === 0 ? 'active' : ''} key={tab.label} type="button"><SvgIcon type={tab.icon} />{tab.label}</button>)}
         </nav>
 
         <section className="ld-activity-layout">
@@ -116,7 +137,7 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
             </article>
             <article className="ld-card ld-files-card">
               <h2>Files & Documents</h2>
-              <div className="ld-file-row"><span>PDF</span><div><strong>Proposal_Rohan_Mehta.pdf</strong><small>PDF · 1.2 MB</small></div><button type="button">⇩</button></div>
+              <div className="ld-file-row"><span>PDF</span><div><strong>Proposal_Rohan_Mehta.pdf</strong><small>PDF · 1.2 MB</small></div><button type="button"><SvgIcon type="download" /></button></div>
               <button type="button" className="ld-file-link">View All Files <span>›</span></button>
             </article>
           </aside>
@@ -126,12 +147,12 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
   );
 }
 
-function MetricCard({ icon, label, value, badge, helper, progress, tone }) {
-  return <article className={`ld-metric-card ${tone}`}><span className="ld-metric-icon">{icon}</span><div className="ld-metric-body"><small>{label}</small><div className="ld-metric-value"><strong>{value}</strong>{badge && <b>{badge}</b>}</div>{progress ? <div className="ld-progress"><i /><em>{helper}</em></div> : <p>{helper}</p>}</div></article>;
+function MetricCard({ iconType, label, value, badge, helper, progress, tone }) {
+  return <article className={`ld-metric-card ${tone}`}><span className="ld-metric-icon"><SvgIcon type={iconType} /></span><div className="ld-metric-body"><small>{label}</small><div className="ld-metric-value"><strong>{value}</strong>{badge && <b>{badge}</b>}</div>{progress ? <div className="ld-progress"><i /><em>{helper}</em></div> : <p>{helper}</p>}</div></article>;
 }
 
 function ActivityRow({ item }) {
-  return <div className={`ld-activity-row ${item.tone}`}><span className="ld-activity-icon">{item.icon}</span><div className="ld-activity-text"><strong>{item.title}</strong><p>{item.text}</p></div><div className="ld-activity-meta"><span>{item.time}</span><small>{item.user}</small></div></div>;
+  return <div className={`ld-activity-row ${item.tone}`}><span className="ld-activity-icon"><SvgIcon type={item.icon} /></span><div className="ld-activity-text"><strong>{item.title}</strong><p>{item.text}</p></div><div className="ld-activity-meta"><span>{item.time}</span><small>{item.user}</small></div></div>;
 }
 
 function InfoRow({ label, value }) {
