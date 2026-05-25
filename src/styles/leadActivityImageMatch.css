@@ -1,16 +1,22 @@
-/* Lead Activity page: image-match SaaS premium layout */
+/* Lead Activity page: image-match SaaS premium layout - fixed for actual /leads page */
 .sf-dashboard.lead-list-reference{
   background:#f3f7ff!important;
+  overflow-x:hidden!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-main{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  overflow-x:hidden!important;
   background:radial-gradient(circle at 85% 4%,rgba(11,99,246,.08),transparent 25%),linear-gradient(180deg,#f8fbff 0%,#eef5ff 100%)!important;
-  padding:28px 32px 90px!important;
+  padding:24px 24px 90px!important;
+  box-sizing:border-box!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-header{
   align-items:flex-start!important;
-  margin-bottom:24px!important;
+  margin-bottom:22px!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-header h1{
@@ -25,9 +31,14 @@
   color:#61708d!important;
 }
 
+.sf-dashboard.lead-list-reference .lead-ref-actions{
+  flex-shrink:0!important;
+}
+
 .sf-dashboard.lead-list-reference .lead-ref-actions button{
-  height:46px!important;
-  padding:0 20px!important;
+  height:44px!important;
+  min-height:44px!important;
+  padding:0 18px!important;
   border-radius:12px!important;
   font-size:14px!important;
   background:#fff!important;
@@ -45,32 +56,38 @@
 .sf-dashboard.lead-list-reference .lead-ref-metrics{
   display:grid!important;
   grid-template-columns:repeat(6,minmax(0,1fr))!important;
-  gap:14px!important;
-  margin-bottom:28px!important;
+  gap:12px!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin-bottom:26px!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-metric{
-  min-height:124px!important;
-  padding:22px 18px!important;
+  min-width:0!important;
+  min-height:112px!important;
+  padding:16px 14px!important;
   border-radius:16px!important;
   background:linear-gradient(145deg,#fff 0%,#fbfdff 100%)!important;
   border:1px solid #d9e4f3!important;
   box-shadow:0 16px 36px rgba(28,57,105,.08)!important;
   display:grid!important;
-  grid-template-columns:52px 1fr!important;
+  grid-template-columns:46px minmax(0,1fr)!important;
   align-items:center!important;
-  gap:16px!important;
+  gap:12px!important;
+  overflow:hidden!important;
 }
 
-.sf-dashboard.lead-list-reference .lead-ref-metric::before{
+.sf-dashboard.lead-list-reference .lead-ref-metric::before,
+.sf-dashboard.lead-list-reference .lead-ref-metric::after{
   display:none!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-metric .icon{
-  width:52px!important;
-  height:52px!important;
+  width:46px!important;
+  height:46px!important;
+  min-width:46px!important;
   border-radius:14px!important;
-  font-size:24px!important;
+  font-size:21px!important;
   font-weight:900!important;
   background:#eef5ff!important;
   display:grid!important;
@@ -83,40 +100,51 @@
 .sf-dashboard.lead-list-reference .lead-ref-metric.red .icon{color:#ef4444!important;background:#ffecef!important}
 
 .sf-dashboard.lead-list-reference .lead-ref-metric p{
-  font-size:13px!important;
+  max-width:100%!important;
+  font-size:12px!important;
+  line-height:1.15!important;
   color:#5d6d89!important;
-  font-weight:700!important;
+  font-weight:800!important;
   margin:0 0 6px!important;
+  white-space:normal!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-metric h2{
-  font-size:24px!important;
+  font-size:23px!important;
   line-height:1!important;
   color:#071633!important;
   margin:0 0 8px!important;
+  white-space:nowrap!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-metric small{
-  font-size:12px!important;
+  font-size:11px!important;
   font-weight:900!important;
+  white-space:nowrap!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-filters{
   display:grid!important;
-  grid-template-columns:1.18fr .86fr .86fr .78fr 1.08fr .56fr!important;
+  grid-template-columns:minmax(210px,1.15fr) minmax(150px,.82fr) minmax(150px,.82fr) minmax(145px,.74fr) minmax(190px,1fr) minmax(110px,.48fr)!important;
   gap:12px!important;
-  padding:16px!important;
+  padding:14px!important;
   border-radius:18px!important;
   margin-bottom:26px!important;
   background:#fff!important;
   border:1px solid #d9e4f3!important;
   box-shadow:0 16px 36px rgba(28,57,105,.08)!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-field,
 .sf-dashboard.lead-list-reference .lead-ref-search,
 .sf-dashboard.lead-list-reference .lead-ref-filter-btn{
-  height:56px!important;
+  min-width:0!important;
+  height:54px!important;
   border-radius:10px!important;
   border:1px solid #d8e4f4!important;
   background:#fff!important;
@@ -124,7 +152,7 @@
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-field{
-  padding:9px 14px!important;
+  padding:8px 12px!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-field span{
@@ -134,9 +162,13 @@
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-field strong{
-  font-size:13px!important;
+  max-width:100%!important;
+  font-size:12px!important;
   color:#071633!important;
   font-weight:900!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-search input{
@@ -150,6 +182,9 @@
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table-card{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
   border-radius:18px!important;
   background:#fff!important;
   border:1px solid #d9e4f3!important;
@@ -158,8 +193,18 @@
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table{
+  width:100%!important;
+  min-width:0!important;
+  table-layout:fixed!important;
   border-collapse:separate!important;
   border-spacing:0!important;
+}
+
+.sf-dashboard.lead-list-reference .lead-ref-table th,
+.sf-dashboard.lead-list-reference .lead-ref-table td{
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  vertical-align:middle!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table th{
@@ -169,6 +214,7 @@
   font-size:12px!important;
   font-weight:900!important;
   border-bottom:1px solid #e6edf7!important;
+  white-space:nowrap!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table td{
@@ -177,6 +223,25 @@
   border-bottom:1px solid #eef2f7!important;
   color:#17284a!important;
 }
+
+.sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(1),
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(1){width:42px!important;text-align:center!important}
+.sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(2),
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(2){width:18%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(3),
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(3){width:15%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(4),
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(4){width:11%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(5),
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(5){width:10%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(6),
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(6){width:15%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(7),
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(7){width:15%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(8),
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(8){width:12%!important}
+.sf-dashboard.lead-list-reference .lead-ref-table th:nth-child(9),
+.sf-dashboard.lead-list-reference .lead-ref-table td:nth-child(9){width:44px!important;text-align:center!important}
 
 .sf-dashboard.lead-list-reference .lead-ref-table tbody tr:hover{
   background:#f8fbff!important;
@@ -189,8 +254,22 @@
   font-size:12px!important;
 }
 
+.sf-dashboard.lead-list-reference .lead-ref-person{
+  min-width:0!important;
+  gap:10px!important;
+}
+
+.sf-dashboard.lead-list-reference .lead-ref-person div,
+.sf-dashboard.lead-list-reference .lead-ref-owner{
+  min-width:0!important;
+}
+
 .sf-dashboard.lead-list-reference .lead-ref-person strong{
+  display:block!important;
   font-size:13px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-person small{
@@ -203,6 +282,15 @@
   padding:6px 10px!important;
   font-size:11px!important;
   font-weight:900!important;
+  white-space:nowrap!important;
+}
+
+.sf-dashboard.lead-list-reference .lead-ref-owner{
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  white-space:normal!important;
+  line-height:1.2!important;
 }
 
 .sf-dashboard.lead-list-reference .lead-ref-table-footer{
@@ -212,11 +300,16 @@
 }
 
 @media(max-width:1250px){
-  .sf-dashboard.lead-list-reference .lead-ref-metrics{grid-template-columns:repeat(3,1fr)!important}
+  .sf-dashboard.lead-list-reference .lead-ref-metrics{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:8px!important}
+  .sf-dashboard.lead-list-reference .lead-ref-metric{grid-template-columns:38px minmax(0,1fr)!important;padding:12px 9px!important;gap:8px!important;min-height:100px!important}
+  .sf-dashboard.lead-list-reference .lead-ref-metric .icon{width:38px!important;height:38px!important;min-width:38px!important;font-size:18px!important}
+  .sf-dashboard.lead-list-reference .lead-ref-metric h2{font-size:20px!important}
+  .sf-dashboard.lead-list-reference .lead-ref-metric p{font-size:11px!important}
+  .sf-dashboard.lead-list-reference .lead-ref-metric small{font-size:10px!important}
   .sf-dashboard.lead-list-reference .lead-ref-filters{grid-template-columns:repeat(3,1fr)!important}
 }
 
-@media(max-width:760px){
-  .sf-dashboard.lead-list-reference .lead-ref-metrics{grid-template-columns:1fr!important}
+@media(max-width:900px){
+  .sf-dashboard.lead-list-reference .lead-ref-metrics{grid-template-columns:repeat(2,1fr)!important}
   .sf-dashboard.lead-list-reference .lead-ref-filters{grid-template-columns:1fr!important}
 }
