@@ -1,4 +1,5 @@
 import '../../styles/dashboardBase.css';
+import './DashboardSidebar.css';
 
 const menuByRole = {
   employee: ['Dashboard', 'My Leads', 'Follow-ups', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Profile'],
