@@ -1,0 +1,75 @@
+/* Professional icon + profile alignment fix */
+.ld-svg{
+  width:15px!important;
+  height:15px!important;
+  min-width:15px!important;
+  display:inline-block!important;
+  vertical-align:middle!important;
+}
+
+.ld-actions .ld-svg{
+  width:14px!important;
+  height:14px!important;
+}
+
+.ld-actions .dots .ld-svg{
+  width:18px!important;
+  height:18px!important;
+}
+
+.ld-contact-list .ld-svg{
+  width:14px!important;
+  height:14px!important;
+  color:#526581!important;
+}
+
+.ld-owner-avatar{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  border-radius:50%!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  background:linear-gradient(135deg,#eaf2ff,#f3e8ff)!important;
+  color:#2563eb!important;
+  font-size:11px!important;
+  font-weight:900!important;
+}
+
+@media (min-width:1051px){
+  .ld-profile-card{
+    grid-template-columns:minmax(430px, .95fr) 1px minmax(640px, 1.45fr)!important;
+    overflow:hidden!important;
+  }
+
+  .ld-profile-facts{
+    grid-template-columns:minmax(190px,1fr) minmax(130px,.7fr) minmax(230px,1.25fr)!important;
+    gap:28px!important;
+    min-width:0!important;
+  }
+
+  .ld-fact{
+    min-width:0!important;
+  }
+
+  .ld-fact strong{
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  .ld-fact:last-child strong{
+    white-space:nowrap!important;
+  }
+
+  .ld-profile-main h1{
+    font-size:23px!important;
+    line-height:1.1!important;
+  }
+
+  .ld-profile-title b{
+    font-size:11px!important;
+    padding:7px 12px!important;
+  }
+}
