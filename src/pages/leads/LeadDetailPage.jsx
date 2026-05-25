@@ -4,6 +4,7 @@ import './LeadDetailImageExact.css';
 import './LeadDetailProfileExactFix.css';
 import './LeadDetailPremiumSection.css';
 import './LeadDetailResponsiveFix.css';
+import './LeadDetailProfessionalFix.css';
 
 function getCurrentRole() {
   const saved = window.localStorage.getItem('salesflowRole');
@@ -19,6 +20,18 @@ const activityItems = [
   { icon: '♚', title: 'Lead Created', text: 'Lead captured from website contact form.', time: '20 May 2025, 10:30 AM', user: 'System', tone: 'purple' },
 ];
 
+function SvgIcon({ type }) {
+  const icons = {
+    share: <path d="M7.5 11.5 16.5 6m-9 6 9 5.5M17 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0ZM7 12a2 2 0 1 0-4 0 2 2 0 0 0 4 0Zm10 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0Z" />,
+    edit: <path d="M12 20h9M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4L16.5 3.5Z" />,
+    phone: <path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 3.1 5.2 2 2 0 0 1 5.1 3h3a2 2 0 0 1 2 1.7c.1.9.3 1.7.6 2.5a2 2 0 0 1-.5 2.1L9 10.5a16 16 0 0 0 4.5 4.5l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.6.5 2.5.6a2 2 0 0 1 1.7 2Z" />,
+    mail: <path d="M4 6h16v12H4zM4 7l8 6 8-6" />,
+    map: <path d="M12 21s7-5.2 7-12a7 7 0 0 0-14 0c0 6.8 7 12 7 12Z" />,
+    dots: <path d="M12 8h.01M12 12h.01M12 16h.01" />,
+  };
+  return <svg className="ld-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[type]}</svg>;
+}
+
 export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
   const lead = getLead(leadId);
   const role = getCurrentRole();
@@ -30,10 +43,10 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
         <div className="ld-topbar">
           <div className="ld-breadcrumb">Leads <span>›</span> <strong>Lead Details</strong></div>
           <div className="ld-actions">
-            <button type="button">↗ Share</button>
-            <button type="button">✎ Edit Lead</button>
-            <button type="button" className="primary">☎ Follow Up</button>
-            <button type="button" className="dots">⋯</button>
+            <button type="button"><SvgIcon type="share" />Share</button>
+            <button type="button"><SvgIcon type="edit" />Edit Lead</button>
+            <button type="button" className="primary"><SvgIcon type="phone" />Follow Up</button>
+            <button type="button" className="dots" aria-label="More actions"><SvgIcon type="dots" /></button>
           </div>
         </div>
 
@@ -50,9 +63,9 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
               </div>
               <p>Marketing Manager at TechNova Solutions</p>
               <div className="ld-contact-list">
-                <span>✉ rohan.mehta@technova.com</span>
-                <span>☎ {lead.phone}</span>
-                <span>⌖ Mumbai, Maharashtra, India</span>
+                <span><SvgIcon type="mail" />rohan.mehta@technova.com</span>
+                <span><SvgIcon type="phone" />{lead.phone}</span>
+                <span><SvgIcon type="map" />Mumbai, Maharashtra, India</span>
               </div>
             </div>
           </div>
@@ -62,7 +75,7 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
           <div className="ld-profile-facts">
             <div className="ld-fact owner">
               <small>Lead Owner</small>
-              <div><span>👨🏻</span><strong>Amit Kumar<em>Sales Executive</em></strong></div>
+              <div><span className="ld-owner-avatar">AK</span><strong>Amit Kumar<em>Sales Executive</em></strong></div>
             </div>
             <div className="ld-fact">
               <small>Source</small>
