@@ -74,17 +74,26 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
           </div>
         </section>
 
-        <div className="ld-pills below-profile">
-          <span className="ld-pill source">{lead.source}</span>
-          <span className="ld-pill hot">{lead.priority}</span>
-          <span className="ld-pill owner">{lead.owner}</span>
-        </div>
+        <section className="ld-summary-metrics">
+          <MetricCard icon="🎯" label="Lead Score" value="85" badge="High" helper="Great potential" tone="purple" />
+          <MetricCard icon="▾" label="Pipeline Stage" value="Proposal" helper="75%" progress tone="blue" />
+          <MetricCard icon="▣" label="Next Follow-up" value="24 May 2025" badge="In 3 days" tone="orange" />
+          <MetricCard icon="₹" label="Potential Deal Value" value="₹ 2,45,000" badge="High Value" tone="green" />
+        </section>
+
+        <section className="ld-tag-strip">
+          <span className="green">● Interested</span>
+          <span className="blue">● Budget Available</span>
+          <span className="purple">● Quick Decision Maker</span>
+          <span className="orange">● SaaS</span>
+          <button type="button">＋ Add Tag</button>
+        </section>
 
         <nav className="ld-tabs">
           {tabs.map((tab, index) => <button className={index === 0 ? 'active' : ''} key={tab} type="button">{tab}</button>)}
         </nav>
 
-        <section className="ld-content-grid">
+        <section className="ld-content-grid no-tags-sidebar">
           <div className="ld-left-col">
             <section className="ld-main-row">
               <article className="ld-card ld-info-card">
@@ -105,8 +114,8 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
 
               <article className="ld-card ld-score-card">
                 <header><h2>Lead Score</h2><p>Conversion probability</p></header>
-                <div className="ld-score-ring"><span>{lead.score}<small>High</small></span></div>
-                <p className="ld-score-note">Lead is very likely to convert.</p>
+                <div className="ld-score-ring"><span>{lead.score}<small>/100</small></span></div>
+                <p className="ld-score-note"><b>High</b></p>
                 <button type="button">View Score Details</button>
               </article>
             </section>
@@ -128,16 +137,6 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
           </div>
 
           <aside className="ld-side-col">
-            <article className="ld-card ld-tags-card">
-              <h2>Smart Tags</h2>
-              <div className="ld-tags">
-                <span className="green">Interested</span>
-                <span className="blue">Budget Available</span>
-                <span className="purple">Decision Maker</span>
-                <button type="button">+ Add Tag</button>
-              </div>
-            </article>
-
             <article className="ld-card ld-timeline-card">
               <header><h2>Activity Timeline</h2><select><option>All Activities</option></select></header>
               <div className="ld-timeline-list">
@@ -149,6 +148,19 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
         </section>
       </main>
     </div>
+  );
+}
+
+function MetricCard({ icon, label, value, badge, helper, progress, tone }) {
+  return (
+    <article className={`ld-metric-card ${tone}`}>
+      <span className="ld-metric-icon">{icon}</span>
+      <div className="ld-metric-body">
+        <small>{label}</small>
+        <div className="ld-metric-value"><strong>{value}</strong>{badge && <b>{badge}</b>}</div>
+        {progress ? <div className="ld-progress"><i /><em>{helper}</em></div> : <p>{helper || badge}</p>}
+      </div>
+    </article>
   );
 }
 
