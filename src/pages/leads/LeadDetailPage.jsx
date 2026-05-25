@@ -25,38 +25,59 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
     <div className="sf-dashboard ld-shell">
       <DashboardSidebar role={role} />
       <main className="ld-main">
-        <section className="ld-hero">
-          <div className="ld-hero-left">
-            <div className="ld-breadcrumb">Leads › <strong>Lead Details</strong></div>
-            <div className="ld-title-row">
-              <h1>{lead.name}</h1>
-              <span className="ld-status">{lead.status}</span>
+        <div className="ld-topbar">
+          <div className="ld-breadcrumb">Leads <span>›</span> <strong>Lead Details</strong></div>
+          <div className="ld-actions">
+            <button type="button">↗ Share</button>
+            <button type="button">✎ Edit Lead</button>
+            <button type="button" className="primary">☎ Follow Up</button>
+            <button type="button" className="dots">⋯</button>
+          </div>
+        </div>
+
+        <section className="ld-profile-card">
+          <div className="ld-profile-left">
+            <div className="ld-avatar-large">
+              RM
+              <span />
             </div>
-            <div className="ld-meta">
-              <span>Lead ID : LEAD-2025-000123</span>
-              <i />
-              <span>Added on : {lead.lastActivity}</span>
-            </div>
-            <div className="ld-pills">
-              <span className="ld-pill source">{lead.source}</span>
-              <span className="ld-pill hot">{lead.priority}</span>
-              <span className="ld-pill owner">{lead.owner}</span>
+            <div className="ld-profile-main">
+              <div className="ld-profile-title">
+                <h1>{lead.name}</h1>
+                <b>Hot Lead</b>
+              </div>
+              <p>Marketing Manager at TechNova Solutions</p>
+              <div className="ld-contact-list">
+                <span>✉ rohan.mehta@technova.com</span>
+                <span>☎ {lead.phone}</span>
+                <span>⌖ Mumbai, Maharashtra, India</span>
+              </div>
             </div>
           </div>
-          <div className="ld-actions">
-            <button type="button">✎ Edit</button>
-            <button type="button">↔ Convert</button>
-            <button type="button" className="primary">⚱ Follow Up</button>
-            <button type="button" className="dots">⋮</button>
+
+          <div className="ld-profile-divider" />
+
+          <div className="ld-profile-facts">
+            <div className="ld-fact owner">
+              <small>Lead Owner</small>
+              <div><span>👨🏻</span><strong>Amit Kumar<em>Sales Executive</em></strong></div>
+            </div>
+            <div className="ld-fact">
+              <small>Source</small>
+              <strong>{lead.source}</strong>
+            </div>
+            <div className="ld-fact">
+              <small>Created On</small>
+              <strong>20 May 2025, 10:30 AM</strong>
+            </div>
           </div>
         </section>
 
-        <section className="ld-kpis">
-          <Kpi icon="◎" label="Lead Score" value={`${lead.score}/100`} tone="blue" />
-          <Kpi icon="◆" label="Pipeline Stage" value={lead.status} tone="purple" />
-          <Kpi icon="◷" label="Next Follow-up" value={lead.nextFollowUp} tone="orange" />
-          <Kpi icon="₹" label="Potential Deal" value="₹2,45,000" tone="green" />
-        </section>
+        <div className="ld-pills below-profile">
+          <span className="ld-pill source">{lead.source}</span>
+          <span className="ld-pill hot">{lead.priority}</span>
+          <span className="ld-pill owner">{lead.owner}</span>
+        </div>
 
         <nav className="ld-tabs">
           {tabs.map((tab, index) => <button className={index === 0 ? 'active' : ''} key={tab} type="button">{tab}</button>)}
@@ -128,10 +149,6 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
       </main>
     </div>
   );
-}
-
-function Kpi({ icon, label, value, tone }) {
-  return <article className={`ld-kpi ${tone}`}><span>{icon}</span><div><small>{label}</small><strong>{value}</strong></div></article>;
 }
 
 function Info({ icon, label, value }) {
