@@ -30,9 +30,7 @@
   font-weight: 700 !important;
 }
 
-.ld-actions {
-  gap: 10px !important;
-}
+.ld-actions { gap: 10px !important; }
 
 .ld-actions button {
   height: 38px !important;
@@ -71,7 +69,78 @@
   letter-spacing: 1px !important;
 }
 
+/* Profile top card: keep facts on right, not at bottom */
 @media (min-width: 1051px) {
+  .ld-profile-card {
+    grid-template-columns: minmax(390px, 1.05fr) 1px minmax(560px, 1.45fr) !important;
+    min-height: 150px !important;
+    padding: 22px 28px !important;
+    gap: 28px !important;
+    align-items: center !important;
+  }
+
+  .ld-profile-left {
+    align-items: center !important;
+    gap: 18px !important;
+  }
+
+  .ld-avatar-large {
+    width: 78px !important;
+    height: 78px !important;
+    min-width: 78px !important;
+    font-size: 27px !important;
+  }
+
+  .ld-profile-main h1 {
+    font-size: 24px !important;
+  }
+
+  .ld-profile-main > p {
+    font-size: 13px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .ld-contact-list {
+    gap: 6px !important;
+  }
+
+  .ld-contact-list span {
+    font-size: 12px !important;
+  }
+
+  .ld-profile-divider {
+    display: block !important;
+    height: 96px !important;
+  }
+
+  .ld-profile-facts {
+    display: grid !important;
+    grid-template-columns: 1.05fr 0.8fr 1.25fr !important;
+    gap: 34px !important;
+    align-items: center !important;
+    margin-top: 0 !important;
+  }
+
+  .ld-fact small {
+    font-size: 11px !important;
+    margin-bottom: 8px !important;
+  }
+
+  .ld-fact strong {
+    font-size: 13px !important;
+    line-height: 1.25 !important;
+  }
+
+  .ld-fact.owner span {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 14px !important;
+  }
+
+  .ld-fact.owner em {
+    font-size: 10px !important;
+  }
+
   .ld-summary-metrics {
     grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
     gap: 12px !important;
@@ -92,24 +161,10 @@
     font-size: 21px !important;
   }
 
-  .ld-metric-body small {
-    font-size: 11px !important;
-    margin-bottom: 4px !important;
-  }
-
-  .ld-metric-value strong {
-    font-size: 15px !important;
-  }
-
-  .ld-metric-body p,
-  .ld-progress em {
-    font-size: 11px !important;
-  }
-
-  .ld-progress i {
-    width: 82px !important;
-    height: 6px !important;
-  }
+  .ld-metric-body small { font-size: 11px !important; margin-bottom: 4px !important; }
+  .ld-metric-value strong { font-size: 15px !important; }
+  .ld-metric-body p, .ld-progress em { font-size: 11px !important; }
+  .ld-progress i { width: 82px !important; height: 6px !important; }
 
   .ld-activity-layout {
     grid-template-columns: minmax(0, 1.48fr) 360px !important;
@@ -117,53 +172,17 @@
     width: 100% !important;
   }
 
-  .ld-activity-panel {
-    min-height: 420px !important;
-    padding: 24px 26px !important;
-  }
+  .ld-activity-panel { min-height: 420px !important; padding: 24px 26px !important; }
+  .ld-activity-row { min-height: 82px !important; grid-template-columns: 58px minmax(0, 1fr) 150px !important; gap: 14px !important; }
+  .ld-activity-icon { width: 46px !important; height: 46px !important; font-size: 17px !important; }
+  .ld-activity-list:before { left: 23px !important; top: 48px !important; bottom: 48px !important; }
+  .ld-activity-text strong { font-size: 13px !important; }
+  .ld-activity-text p, .ld-activity-meta { font-size: 11px !important; }
 
-  .ld-activity-row {
-    min-height: 82px !important;
-    grid-template-columns: 58px minmax(0, 1fr) 150px !important;
-    gap: 14px !important;
-  }
-
-  .ld-activity-icon {
-    width: 46px !important;
-    height: 46px !important;
-    font-size: 17px !important;
-  }
-
-  .ld-activity-list:before {
-    left: 23px !important;
-    top: 48px !important;
-    bottom: 48px !important;
-  }
-
-  .ld-activity-text strong {
-    font-size: 13px !important;
-  }
-
-  .ld-activity-text p,
-  .ld-activity-meta {
-    font-size: 11px !important;
-  }
-
-  .ld-about-card,
-  .ld-files-card {
-    padding: 22px !important;
-  }
-
-  .ld-about-card {
-    min-height: 220px !important;
-  }
-
-  .ld-files-card {
-    min-height: 178px !important;
-  }
-
-  .ld-about-card>button,
-  .ld-file-link {
+  .ld-about-card, .ld-files-card { padding: 22px !important; }
+  .ld-about-card { min-height: 220px !important; }
+  .ld-files-card { min-height: 178px !important; }
+  .ld-about-card>button, .ld-file-link {
     margin-left: -22px !important;
     margin-right: -22px !important;
     margin-bottom: -22px !important;
@@ -174,17 +193,10 @@
 }
 
 @media (max-width: 1050px) {
-  .ld-summary-metrics {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .ld-activity-layout {
-    grid-template-columns: 1fr !important;
-  }
+  .ld-summary-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+  .ld-activity-layout { grid-template-columns: 1fr !important; }
 }
 
 @media (max-width: 680px) {
-  .ld-summary-metrics {
-    grid-template-columns: 1fr !important;
-  }
+  .ld-summary-metrics { grid-template-columns: 1fr !important; }
 }
