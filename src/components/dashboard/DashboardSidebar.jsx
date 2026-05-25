@@ -65,6 +65,7 @@ function SidebarIcon({ type }) {
     rupee: <path d="M6 4h12M6 8h12M7 4c6 0 7 8 0 8h-1l8 8" />,
     logs: <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" />,
     plug: <path d="M9 7V2m6 5V2M7 7h10v4a5 5 0 0 1-5 5v6m-4 0h8" />,
+    menu: <path d="M5 7h14M5 12h14M5 17h14" />,
   };
 
   return (
@@ -99,10 +100,15 @@ export default function DashboardSidebar({ role = 'employee' }) {
 
   return (
     <aside className="sf-sidebar">
-      <button className="sf-sidebar-brand" onClick={() => navigateTo('/', safeRole)}>
-        <span className="sf-logo-cube orange-logo">S</span>
-        <strong>Sales<span>Flow</span></strong>
-      </button>
+      <div className="sf-sidebar-brand-row">
+        <button className="sf-sidebar-brand" onClick={() => navigateTo('/', safeRole)}>
+          <span className="sf-logo-cube orange-logo">S</span>
+          <strong>Sales<span>Flow</span></strong>
+        </button>
+        <button className="sf-sidebar-menu" type="button" aria-label="Toggle menu">
+          <SidebarIcon type="menu" />
+        </button>
+      </div>
 
       <nav className="sf-side-nav">
         {items.map((item, index) => {
