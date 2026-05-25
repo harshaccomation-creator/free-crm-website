@@ -1,0 +1,118 @@
+/* Final responsive correction: keep desktop layout intact */
+@media (min-width: 1051px) {
+  .ld-summary-metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+
+  .ld-metric-card {
+    min-height: 92px !important;
+    padding: 15px 16px !important;
+    border-radius: 16px !important;
+    gap: 13px !important;
+  }
+
+  .ld-metric-icon {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border-radius: 14px !important;
+    font-size: 21px !important;
+  }
+
+  .ld-metric-body small {
+    font-size: 11px !important;
+    margin-bottom: 4px !important;
+  }
+
+  .ld-metric-value strong {
+    font-size: 15px !important;
+  }
+
+  .ld-metric-body p,
+  .ld-progress em {
+    font-size: 11px !important;
+  }
+
+  .ld-progress i {
+    width: 82px !important;
+    height: 6px !important;
+  }
+
+  .ld-activity-layout {
+    grid-template-columns: minmax(0, 1.48fr) 360px !important;
+    gap: 18px !important;
+    width: 100% !important;
+  }
+
+  .ld-activity-panel {
+    min-height: 420px !important;
+    padding: 24px 26px !important;
+  }
+
+  .ld-activity-row {
+    min-height: 82px !important;
+    grid-template-columns: 58px minmax(0, 1fr) 150px !important;
+    gap: 14px !important;
+  }
+
+  .ld-activity-icon {
+    width: 46px !important;
+    height: 46px !important;
+    font-size: 17px !important;
+  }
+
+  .ld-activity-list:before {
+    left: 23px !important;
+    top: 48px !important;
+    bottom: 48px !important;
+  }
+
+  .ld-activity-text strong {
+    font-size: 13px !important;
+  }
+
+  .ld-activity-text p,
+  .ld-activity-meta {
+    font-size: 11px !important;
+  }
+
+  .ld-about-card,
+  .ld-files-card {
+    padding: 22px !important;
+  }
+
+  .ld-about-card {
+    min-height: 220px !important;
+  }
+
+  .ld-files-card {
+    min-height: 178px !important;
+  }
+
+  .ld-about-card>button,
+  .ld-file-link {
+    margin-left: -22px !important;
+    margin-right: -22px !important;
+    margin-bottom: -22px !important;
+    width: calc(100% + 44px) !important;
+    padding: 14px 22px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 1050px) {
+  .ld-summary-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .ld-activity-layout {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .ld-summary-metrics {
+    grid-template-columns: 1fr !important;
+  }
+}
