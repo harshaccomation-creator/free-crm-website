@@ -298,6 +298,44 @@
   border-top:1px solid #eef2f7!important;
 }
 
+/* FINAL FIX: lock SVG icons so they never render giant */
+.sf-dashboard.lead-list-reference svg.lead-svg,
+.sf-dashboard.lead-list-reference .lead-svg{
+  width:16px!important;
+  height:16px!important;
+  min-width:16px!important;
+  max-width:16px!important;
+  min-height:16px!important;
+  max-height:16px!important;
+  display:inline-block!important;
+  flex:0 0 16px!important;
+  stroke-width:1.9!important;
+}
+
+.sf-dashboard.lead-list-reference .lead-ref-metric .icon svg.lead-svg,
+.sf-dashboard.lead-list-reference .lead-ref-metric .icon .lead-svg{
+  width:20px!important;
+  height:20px!important;
+  min-width:20px!important;
+  max-width:20px!important;
+  min-height:20px!important;
+  max-height:20px!important;
+  flex-basis:20px!important;
+}
+
+.sf-dashboard.lead-list-reference .lead-ref-actions svg.lead-svg,
+.sf-dashboard.lead-list-reference .lead-ref-search svg.lead-svg,
+.sf-dashboard.lead-list-reference .lead-ref-filter-btn svg.lead-svg,
+.sf-dashboard.lead-list-reference .lead-table-icon-text svg.lead-svg{
+  width:15px!important;
+  height:15px!important;
+  min-width:15px!important;
+  max-width:15px!important;
+  min-height:15px!important;
+  max-height:15px!important;
+  flex-basis:15px!important;
+}
+
 @media(max-width:1200px){
   .sf-dashboard.lead-list-reference{grid-template-columns:1fr!important}
   .sf-dashboard.lead-list-reference .lead-ref-main{width:100vw!important;max-width:100vw!important}
