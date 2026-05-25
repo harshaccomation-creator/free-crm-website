@@ -3,6 +3,7 @@ import { getLead } from './leadsData.js';
 import './LeadDetailImageExact.css';
 import './LeadDetailProfileExactFix.css';
 import './LeadDetailPremiumSection.css';
+import './LeadDetailResponsiveFix.css';
 
 function getCurrentRole() {
   const saved = window.localStorage.getItem('salesflowRole');
