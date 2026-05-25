@@ -4,12 +4,12 @@ import { leads as initialLeads } from './leadsData.js';
 import '../../styles/leadsReferenceExact.css';
 
 const metrics = [
-  ['Total Leads','1,245','↑ 12.5%','👥','blue'],
-  ['New Leads','320','↑ 8.4%','👥','blue'],
+  ['Total Leads','1,245','↑ 12.5%','♟','blue'],
+  ['New Leads','320','↑ 8.4%','＋','blue'],
   ['Contacted','452','↑ 15.3%','☎','green'],
-  ['In Progress','268','↓ 4.6%','⌛','orange down'],
-  ['Converted','205','↑ 10.2%','✓','green'],
-  ['Lost','78','↓ 8.1%','✕','red down'],
+  ['In Progress','268','↓ 4.6%','◷','orange down'],
+  ['Converted','205','↑ 10.2%','♕','green'],
+  ['Lost','78','↓ 8.1%','⊘','red down'],
 ];
 
 const sourceClass = { Website: 'blue', Referral: 'green', LinkedIn: 'purple', 'Cold Call': 'orange', 'Email Campaign': 'purple', WhatsApp: 'green', Other: 'blue' };
