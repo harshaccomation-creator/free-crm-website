@@ -16,7 +16,7 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
     <div className="sf-dashboard lead-reference lead-detail-reference">
       <DashboardSidebar role={role} />
       <main className="lead-detail-ref-main">
-        <section className="lead-detail-ref-hero">
+        <section className="lead-detail-ref-hero saas-lead-hero">
           <div className="lead-detail-ref-title">
             <p className="lead-detail-ref-breadcrumb">Leads › <strong>Lead Details</strong></p>
             <h1>{lead.name} <span>{lead.status}</span></h1>
@@ -25,6 +25,14 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
           </div>
           <div className="lead-detail-ref-actions"><button>✎ Edit</button><button>↔ Convert</button><button className="primary">⚱ Follow Up</button><button>⋮</button></div>
         </section>
+
+        <section className="lead-saas-kpis">
+          <article><span>◉</span><div><small>Lead Score</small><strong>{lead.score}/100</strong></div></article>
+          <article><span>◆</span><div><small>Pipeline Stage</small><strong>{lead.status}</strong></div></article>
+          <article><span>◷</span><div><small>Next Follow-up</small><strong>{lead.nextFollowUp}</strong></div></article>
+          <article><span>₹</span><div><small>Potential Deal</small><strong>₹2,45,000</strong></div></article>
+        </section>
+
         <nav className="lead-detail-ref-tabs">{['Overview','Activity','Tasks','Notes','Documents','Email History','WhatsApp History'].map((tab, index) => <button className={index === 0 ? 'active' : ''} key={tab}>{tab}</button>)}</nav>
         <section className="lead-detail-ref-grid">
           <div className="lead-detail-ref-left">
@@ -34,7 +42,7 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
             </div>
             <div className="lead-detail-ref-mid"><article className="lead-detail-ref-card summary-card"><h2>Lead Summary</h2><p>{lead.name.split(' ')[0]} is looking for a CRM solution for his team of 20 users.</p><p>He is interested in automation, reports and lead management.</p><p>He requested pricing details and a demo.</p></article><article className="lead-detail-ref-card follow-card"><h2>Next Follow Up</h2><p>▣ {lead.nextFollowUp}</p><p>☎ Follow up call</p><footer>Assigned to <span className="lead-ref-avatar">R</span> {lead.owner}<button>Mark as Done</button></footer></article></div>
           </div>
-          <aside className="lead-detail-ref-right"><article className="lead-detail-ref-card timeline-card"><header><h2>Lead Timeline</h2><select><option>All Activities</option></select></header>{['Lead created','Email opened','Phone call','Email sent','Note added','Task created'].map((item, index) => <div className="timeline-item" key={item}><span>{['♙','✉','☎','✉','☑','▣'][index]}</span><div><strong>{item}</strong><small>{index === 0 ? 'by ' + lead.owner : ['Product Brochure','Connected','Pricing Details','Interested in enterprise plan.','Follow up call'][index - 1]}<br />20 May 2025 {10 + index}:30 AM</small></div></div>)}<button>View All Activities</button></article><article className="lead-detail-ref-card tag-card"><h2>Tags</h2><div><span className="lead-ref-pill green">Interested</span><span className="lead-ref-pill blue">Budget Available</span><span className="lead-ref-pill purple">Quick Decision Maker</span><button>+ Add Tag</button></div></article></aside>
+          <aside className="lead-detail-ref-right"><article className="lead-detail-ref-card tag-card"><h2>Tags</h2><div><span className="lead-ref-pill green">Interested</span><span className="lead-ref-pill blue">Budget Available</span><span className="lead-ref-pill purple">Quick Decision Maker</span><button>+ Add Tag</button></div></article><article className="lead-detail-ref-card timeline-card"><header><h2>Activity Timeline</h2><select><option>All Activities</option></select></header>{['Lead created','Email opened','Phone call','Email sent','Note added','Task created'].map((item, index) => <div className="timeline-item" key={item}><span>{['♙','✉','☎','✉','☑','▣'][index]}</span><div><strong>{item}</strong><small>{index === 0 ? 'by ' + lead.owner : ['Product Brochure','Connected','Pricing Details','Interested in enterprise plan.','Follow up call'][index - 1]}<br />20 May 2025 {10 + index}:30 AM</small></div></div>)}<button>View All Activities</button></article></aside>
         </section>
       </main>
     </div>
