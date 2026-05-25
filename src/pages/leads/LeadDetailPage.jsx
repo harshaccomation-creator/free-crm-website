@@ -77,16 +77,19 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
         <section className="ld-summary-metrics">
           <MetricCard icon="🎯" label="Lead Score" value="85" badge="High" helper="Great potential" tone="purple" />
           <MetricCard icon="▾" label="Pipeline Stage" value="Proposal" helper="75%" progress tone="blue" />
-          <MetricCard icon="▣" label="Next Follow-up" value="24 May 2025" badge="In 3 days" tone="orange" />
-          <MetricCard icon="₹" label="Potential Deal Value" value="₹ 2,45,000" badge="High Value" tone="green" />
+          <MetricCard icon="▣" label="Next Follow-up" value="24 May 2025" helper="In 3 days" tone="orange" />
+          <MetricCard icon="₹" label="Potential Deal Value" value="₹ 2,45,000" helper="High Value" tone="green" />
         </section>
 
         <section className="ld-tag-strip">
-          <span className="green">● Interested</span>
-          <span className="blue">● Budget Available</span>
-          <span className="purple">● Quick Decision Maker</span>
-          <span className="orange">● SaaS</span>
-          <button type="button">＋ Add Tag</button>
+          <h2>Tags</h2>
+          <div>
+            <span className="green">Interested</span>
+            <span className="blue">Budget Available</span>
+            <span className="purple">Quick Decision Maker</span>
+            <span className="orange">SaaS</span>
+            <button type="button">+ Add Tag</button>
+          </div>
         </section>
 
         <nav className="ld-tabs">
@@ -158,7 +161,7 @@ function MetricCard({ icon, label, value, badge, helper, progress, tone }) {
       <div className="ld-metric-body">
         <small>{label}</small>
         <div className="ld-metric-value"><strong>{value}</strong>{badge && <b>{badge}</b>}</div>
-        {progress ? <div className="ld-progress"><i /><em>{helper}</em></div> : <p>{helper || badge}</p>}
+        {progress ? <div className="ld-progress"><i /><em>{helper}</em></div> : <p>{helper}</p>}
       </div>
     </article>
   );
