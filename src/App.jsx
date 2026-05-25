@@ -23,6 +23,7 @@ import './styles/leadDetailPremiumFix.css';
 import './styles/leadHeaderButtonsCompact.css';
 import './styles/dashboardBottomTwoColumn.css';
 import './styles/leadSaasProductLook.css';
+import './styles/leadActivityImageMatch.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
