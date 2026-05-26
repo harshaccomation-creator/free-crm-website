@@ -1,0 +1,135 @@
+/* My Leads: softer professional SaaS typography and spacing polish */
+.la-main {
+  background: linear-gradient(180deg, #fbfdff 0%, #f3f7ff 100%) !important;
+  color: #0f172a !important;
+  -webkit-font-smoothing: antialiased !important;
+  text-rendering: geometricPrecision !important;
+}
+
+.la-header h1 {
+  font-size: 25px !important;
+  font-weight: 680 !important;
+  letter-spacing: -0.55px !important;
+  color: #0b1730 !important;
+}
+
+.la-header p {
+  font-size: 12.5px !important;
+  font-weight: 450 !important;
+  color: #60708a !important;
+}
+
+.la-actions button,
+.la-filter-btn {
+  font-weight: 620 !important;
+  letter-spacing: -0.08px !important;
+}
+
+.la-metric,
+.la-filters,
+.la-table-card {
+  border-color: #dce7f6 !important;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.045) !important;
+}
+
+.la-metric p {
+  font-size: 11px !important;
+  font-weight: 560 !important;
+  color: #64748b !important;
+}
+
+.la-metric h2 {
+  font-size: 17px !important;
+  font-weight: 680 !important;
+  letter-spacing: -0.25px !important;
+  color: #0b1730 !important;
+}
+
+.la-metric small {
+  font-size: 9.5px !important;
+  font-weight: 650 !important;
+}
+
+.la-field span {
+  font-size: 10px !important;
+  font-weight: 560 !important;
+  color: #64748b !important;
+}
+
+.la-field strong {
+  font-size: 11.2px !important;
+  font-weight: 620 !important;
+  color: #0f172a !important;
+}
+
+.la-search input {
+  font-size: 12.5px !important;
+  font-weight: 450 !important;
+}
+
+.la-table th {
+  font-size: 11.5px !important;
+  font-weight: 580 !important;
+  color: #667085 !important;
+  letter-spacing: -0.05px !important;
+}
+
+.la-table td {
+  font-size: 12.5px !important;
+  font-weight: 430 !important;
+  color: #10213f !important;
+}
+
+.la-person strong {
+  font-size: 12.8px !important;
+  font-weight: 640 !important;
+  color: #0b1730 !important;
+  letter-spacing: -0.08px !important;
+}
+
+.la-person small {
+  font-size: 11.5px !important;
+  font-weight: 430 !important;
+  color: #667795 !important;
+}
+
+.la-avatar {
+  font-weight: 650 !important;
+  box-shadow: 0 8px 16px rgba(124, 58, 237, 0.12) !important;
+}
+
+.la-pill {
+  font-size: 10.8px !important;
+  font-weight: 620 !important;
+  border-radius: 8px !important;
+  padding: 5px 9px !important;
+}
+
+.la-icon-text {
+  color: #13223f !important;
+  font-weight: 430 !important;
+}
+
+.la-footer,
+.la-pagination button,
+.la-pagination select {
+  font-size: 12px !important;
+  font-weight: 450 !important;
+}
+
+.sfx-nav button {
+  font-weight: 560 !important;
+}
+
+.sfx-brand strong {
+  font-weight: 700 !important;
+}
+
+.sfx-upgrade h3 {
+  font-weight: 650 !important;
+}
+
+.sfx-upgrade p,
+.sfx-help small {
+  font-weight: 430 !important;
+}
