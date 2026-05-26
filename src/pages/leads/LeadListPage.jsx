@@ -3,6 +3,7 @@ import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { leads as initialLeads } from './leadsData.js';
 import '../../styles/leadActivityStable.css';
 import '../../styles/leadListFontFix.css';
+import '../../styles/leadListSoftProfessional.css';
 
 const metrics = [
   ['Total Leads', '1,245', '↑ 12.5%', 'user', 'blue'],
