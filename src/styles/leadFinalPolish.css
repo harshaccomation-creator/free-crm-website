@@ -1,0 +1,86 @@
+/* Final lead detail polish */
+.ld-contact-list {
+  gap: 7px !important;
+}
+
+.ld-contact-list span {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: 22px !important;
+  color: #475569 !important;
+  font-size: 12.2px !important;
+  font-weight: 500 !important;
+  line-height: 1.2 !important;
+}
+
+.ld-tag-strip .ld-custom-tag button {
+  opacity: 0 !important;
+  transform: scale(0.88) !important;
+  transition: opacity 160ms ease, transform 160ms ease, background 160ms ease !important;
+}
+
+.ld-tag-strip .ld-custom-tag:hover button {
+  opacity: 0.72 !important;
+  transform: scale(1) !important;
+}
+
+.ld-tag-strip .ld-custom-tag button:hover {
+  opacity: 1 !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+.ld-title-helper {
+  grid-column: 1 / -1 !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-top: -5px !important;
+  margin-bottom: 3px !important;
+}
+
+.ld-title-helper button {
+  height: 28px !important;
+  padding: 0 10px !important;
+  border: 1px solid #dbe7f6 !important;
+  border-radius: 999px !important;
+  background: #f8fbff !important;
+  color: #334155 !important;
+  font-size: 10.8px !important;
+  font-weight: 650 !important;
+  cursor: pointer !important;
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.035) !important;
+}
+
+.ld-title-helper button:hover {
+  border-color: #0b63f6 !important;
+  background: #eef5ff !important;
+  color: #0b63f6 !important;
+}
+
+.ld-field.has-error input,
+.ld-field.has-error textarea {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.10) !important;
+}
+
+.ld-field .ld-error-text {
+  margin-top: 5px !important;
+  font-size: 10.5px !important;
+  color: #ef4444 !important;
+  font-weight: 650 !important;
+}
+
+.ld-activity-row {
+  align-items: center !important;
+}
+
+.ld-activity-text strong {
+  font-size: 13px !important;
+  font-weight: 680 !important;
+}
+
+.ld-activity-text p {
+  font-size: 11.8px !important;
+  color: #52627a !important;
+}
