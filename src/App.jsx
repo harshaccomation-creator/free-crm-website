@@ -8,7 +8,6 @@ import LeadListPage from './pages/leads/LeadListPage.jsx';
 import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
 import EmployeeReportsPage from './pages/employee/EmployeeReportsPage.jsx';
 import { WonPage, TasksPage, CalendarPage, ActivitiesPage, ProfilePage } from './pages/employee/EmployeeWorkPages.jsx';
-import './utils/leadActivitySmartTitles.js';
 import './styles/dashboardBase.css';
 import './styles/loginPage.css';
 import './styles/loginDarkHero.css';
