@@ -33,6 +33,7 @@ import './styles/sidebarUnified.css';
 import './styles/leadDetailFinalLock.css';
 import './styles/leadDetailTagTabsAlignment.css';
 import './styles/leadDetailPremiumTabs.css';
+import './styles/leadDetailTabContent.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
