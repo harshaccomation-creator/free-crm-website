@@ -1,0 +1,31 @@
+/* Final click + modal lock for Add Activity */
+.ld-add-activity-btn,
+.ld-panel-header .ld-add-activity-btn,
+.ld-activity-panel button.ld-add-activity-btn {
+  pointer-events: auto !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 50 !important;
+  user-select: none !important;
+}
+
+.ld-add-activity-btn:active {
+  transform: translateY(1px) !important;
+}
+
+.ld-modal-backdrop {
+  pointer-events: auto !important;
+  z-index: 99999 !important;
+}
+
+.ld-modal {
+  pointer-events: auto !important;
+  z-index: 100000 !important;
+}
+
+.ld-modal input,
+.ld-modal select,
+.ld-modal textarea,
+.ld-modal button {
+  pointer-events: auto !important;
+}
