@@ -1,5 +1,6 @@
 import '../../styles/dashboardBase.css';
 import './DashboardSidebar.css';
+import '../../styles/zzzSidebarBlackFix.css';
 
 const menuByRole = {
   employee: ['Dashboard', 'My Leads', 'Follow-ups', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Profile'],
@@ -95,7 +96,8 @@ const sidebarHardLockCss = `
   .reference-dashboard .sf-sidebar-v2,
   .ld-shell .sf-sidebar-v2 {
     background: #020617 !important;
-    background-image: linear-gradient(180deg, #020617 0%, #020817 45%, #01040d 100%) !important;
+    background-color: #020617 !important;
+    background-image: none !important;
   }
   .sf-v2-brand-row,
   .reference-dashboard .sf-v2-brand-row,
