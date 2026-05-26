@@ -1,13 +1,13 @@
 import './DashboardSidebar.css';
 
 const menuByRole = {
-  employee: ['Dashboard', 'My Leads', 'Follow-ups', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Profile'],
+  employee: ['Dashboard', 'My Leads', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Profile'],
   admin: ['Dashboard', 'Leads', 'Deals', 'Contacts', 'Companies', 'Tasks', 'Activities', 'Reports', 'Calendar', 'Users', 'Settings'],
   superAdmin: ['Dashboard', 'Users', 'Roles & Permissions', 'Organizations', 'Modules', 'Plans & Billing', 'Settings', 'Activity Logs', 'System Logs', 'Integrations', 'Backup & Restore'],
 };
 
 const routes = {
-  employee: { Dashboard: '/employee/dashboard', 'My Leads': '/leads' },
+  employee: { Dashboard: '/employee/dashboard', 'My Leads': '/leads', Won: '/leads?status=won' },
   admin: { Dashboard: '/admin/dashboard', Leads: '/leads' },
   superAdmin: { Dashboard: '/super-admin/dashboard' },
 };
@@ -16,7 +16,7 @@ const iconByItem = {
   Dashboard: 'grid',
   'My Leads': 'users',
   Leads: 'users',
-  'Follow-ups': 'refresh',
+  Won: 'won',
   Tasks: 'check',
   Calendar: 'calendar',
   Activities: 'list',
@@ -42,6 +42,7 @@ function Icon({ name }) {
     grid: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
     users: 'M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M9.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM21 21v-2a4 4 0 0 0-3-3.8M16 3.2a4 4 0 0 1 0 7.6',
     refresh: 'M21 12a9 9 0 0 1-15.5 6.3L3 16m0 0v5h5M3 12A9 9 0 0 1 18.5 5.7L21 8m0 0V3h-5',
+    won: 'M20 6 9 17l-5-5',
     check: 'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11',
     calendar: 'M7 3v4m10-4v4M4 9h16M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z',
     list: 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01',
@@ -68,6 +69,8 @@ function navigateTo(path, role) {
 }
 
 function isActive(item, path, currentPath, index) {
+  const currentSearch = window.location.search;
+  if (item === 'Won') return currentPath === '/leads' && currentSearch.includes('status=won');
   if (currentPath.startsWith('/leads')) return item === 'Leads' || item === 'My Leads';
   if (path) return currentPath === path;
   return index === 0 && currentPath.includes('/dashboard');
