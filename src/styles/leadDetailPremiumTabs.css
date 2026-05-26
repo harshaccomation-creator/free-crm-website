@@ -75,6 +75,39 @@
   opacity: 1 !important;
 }
 
+/* Activity / Task modal select premium polish */
+.ld-modal .ld-field select {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  background-image: linear-gradient(45deg, transparent 50%, #64748b 50%), linear-gradient(135deg, #64748b 50%, transparent 50%) !important;
+  background-position: calc(100% - 18px) 18px, calc(100% - 12px) 18px !important;
+  background-size: 6px 6px, 6px 6px !important;
+  background-repeat: no-repeat !important;
+  background-color: #ffffff !important;
+  border: 1px solid #dbe7f6 !important;
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04) !important;
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+.ld-modal .ld-field select:focus,
+.ld-modal .ld-field input:focus,
+.ld-modal .ld-field textarea:focus {
+  border-color: #0b63f6 !important;
+  box-shadow: 0 0 0 4px rgba(11, 99, 246, 0.10) !important;
+}
+
+.ld-modal .ld-field option[value="website"] {
+  display: none !important;
+}
+
+.ld-modal .ld-field option {
+  font-size: 14px !important;
+  padding: 10px 12px !important;
+  color: #0f172a !important;
+  background: #ffffff !important;
+}
+
 @media (max-width: 1300px) {
   .ld-tabs {
     gap: 4px !important;
