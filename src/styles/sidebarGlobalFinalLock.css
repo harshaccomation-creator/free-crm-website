@@ -1,16 +1,19 @@
 /* FINAL LOCK: one identical dark sidebar across the full CRM. Keep this import last. */
 :root{
   --sf-sidebar-width:230px;
-  --sf-sidebar-bg:radial-gradient(circle at 26% 0%,rgba(59,130,246,.10),transparent 24%),linear-gradient(180deg,#07172c 0%,#041123 48%,#020b18 100%);
+  --sf-sidebar-bg:radial-gradient(circle at 26% 0%,rgba(59,130,246,.10),transparent 24%),linear-gradient(180deg,#020b19 0%,#020617 48%,#01040d 100%);
 }
 
-.sf-dashboard{
+.sf-dashboard,
+.reference-dashboard{
   grid-template-columns:var(--sf-sidebar-width) minmax(0,1fr)!important;
 }
 
 .sf-sidebar,
 .sf-sidebar-v2,
-.ld-shell .sf-sidebar-v2{
+.ld-shell .sf-sidebar-v2,
+.reference-dashboard .sf-sidebar,
+.reference-dashboard .sf-sidebar-v2{
   width:var(--sf-sidebar-width)!important;
   min-width:var(--sf-sidebar-width)!important;
   max-width:var(--sf-sidebar-width)!important;
@@ -26,14 +29,15 @@
   gap:12px!important;
   background:var(--sf-sidebar-bg)!important;
   color:#fff!important;
-  box-shadow:inset -1px 0 0 rgba(255,255,255,.06),12px 0 32px rgba(2,8,23,.20)!important;
+  box-shadow:inset -1px 0 0 rgba(255,255,255,.055),14px 0 42px rgba(2,8,23,.22)!important;
   overflow-x:hidden!important;
   overflow-y:auto!important;
   box-sizing:border-box!important;
 }
 
 .sf-v2-brand-row,
-.ld-shell .sf-v2-brand-row{
+.ld-shell .sf-v2-brand-row,
+.reference-dashboard .sf-v2-brand-row{
   height:auto!important;
   padding:0!important;
   margin:0 0 34px!important;
@@ -44,13 +48,15 @@
 }
 
 .sf-v2-brand,
-.ld-shell .sf-v2-brand{
+.ld-shell .sf-v2-brand,
+.reference-dashboard .sf-v2-brand{
   padding:0 8px!important;
   gap:10px!important;
 }
 
 .sf-v2-logo,
-.ld-shell .sf-v2-logo{
+.ld-shell .sf-v2-logo,
+.reference-dashboard .sf-v2-logo{
   width:24px!important;
   height:24px!important;
   min-width:24px!important;
@@ -69,13 +75,16 @@
 .sf-v2-logo:before,
 .sf-v2-logo:after,
 .ld-shell .sf-v2-logo:before,
-.ld-shell .sf-v2-logo:after{
+.ld-shell .sf-v2-logo:after,
+.reference-dashboard .sf-v2-logo:before,
+.reference-dashboard .sf-v2-logo:after{
   display:none!important;
   content:none!important;
 }
 
 .sf-v2-brand strong,
-.ld-shell .sf-v2-brand strong{
+.ld-shell .sf-v2-brand strong,
+.reference-dashboard .sf-v2-brand strong{
   font-size:17px!important;
   line-height:1!important;
   font-weight:780!important;
@@ -84,19 +93,22 @@
 }
 
 .sf-v2-brand strong:after,
-.ld-shell .sf-v2-brand strong:after{
+.ld-shell .sf-v2-brand strong:after,
+.reference-dashboard .sf-v2-brand strong:after{
   display:none!important;
   content:none!important;
 }
 
 .sf-v2-brand strong span,
-.ld-shell .sf-v2-brand strong span{
+.ld-shell .sf-v2-brand strong span,
+.reference-dashboard .sf-v2-brand strong span{
   display:inline!important;
   color:#72adff!important;
 }
 
 .sf-v2-menu,
-.ld-shell .sf-v2-menu{
+.ld-shell .sf-v2-menu,
+.reference-dashboard .sf-v2-menu{
   width:22px!important;
   height:22px!important;
   min-width:22px!important;
@@ -104,13 +116,15 @@
 }
 
 .sf-v2-menu .sf-v2-icon-svg,
-.ld-shell .sf-v2-menu .sf-v2-icon-svg{
+.ld-shell .sf-v2-menu .sf-v2-icon-svg,
+.reference-dashboard .sf-v2-menu .sf-v2-icon-svg{
   width:13px!important;
   height:13px!important;
 }
 
 .sf-v2-nav,
-.ld-shell .sf-v2-nav{
+.ld-shell .sf-v2-nav,
+.reference-dashboard .sf-v2-nav{
   padding:0!important;
   gap:8px!important;
   display:flex!important;
@@ -118,7 +132,8 @@
 }
 
 .sf-v2-nav button,
-.ld-shell .sf-v2-nav button{
+.ld-shell .sf-v2-nav button,
+.reference-dashboard .sf-v2-nav button{
   min-height:39px!important;
   height:39px!important;
   padding:5px 12px!important;
@@ -133,7 +148,8 @@
 }
 
 .sf-v2-nav button.active,
-.ld-shell .sf-v2-nav button.active{
+.ld-shell .sf-v2-nav button.active,
+.reference-dashboard .sf-v2-nav button.active{
   background:linear-gradient(135deg,#6645ff 0%,#137cff 100%)!important;
   color:#fff!important;
   border-color:rgba(255,255,255,.13)!important;
@@ -141,7 +157,8 @@
 }
 
 .sf-v2-icon,
-.ld-shell .sf-v2-icon{
+.ld-shell .sf-v2-icon,
+.reference-dashboard .sf-v2-icon{
   width:23px!important;
   height:23px!important;
   min-width:23px!important;
@@ -150,14 +167,16 @@
 }
 
 .sf-v2-icon-svg,
-.ld-shell .sf-v2-icon-svg{
+.ld-shell .sf-v2-icon-svg,
+.reference-dashboard .sf-v2-icon-svg{
   width:14px!important;
   height:14px!important;
   stroke-width:1.8!important;
 }
 
 .sf-v2-upgrade,
-.ld-shell .sf-v2-upgrade{
+.ld-shell .sf-v2-upgrade,
+.reference-dashboard .sf-v2-upgrade{
   position:static!important;
   margin-top:auto!important;
   left:auto!important;
@@ -171,19 +190,22 @@
 }
 
 .sf-v2-upgrade h3,
-.ld-shell .sf-v2-upgrade h3{
+.ld-shell .sf-v2-upgrade h3,
+.reference-dashboard .sf-v2-upgrade h3{
   font-size:13px!important;
   font-weight:720!important;
 }
 
 .sf-v2-upgrade p,
-.ld-shell .sf-v2-upgrade p{
+.ld-shell .sf-v2-upgrade p,
+.reference-dashboard .sf-v2-upgrade p{
   font-size:11.5px!important;
   line-height:1.35!important;
 }
 
 .sf-v2-upgrade button,
-.ld-shell .sf-v2-upgrade button{
+.ld-shell .sf-v2-upgrade button,
+.reference-dashboard .sf-v2-upgrade button{
   height:auto!important;
   padding:9px 10px!important;
   font-size:12px!important;
@@ -191,16 +213,17 @@
 }
 
 .sf-v2-help,
-.ld-shell .sf-v2-help{
+.ld-shell .sf-v2-help,
+.reference-dashboard .sf-v2-help{
   height:auto!important;
   padding:12px 6px 2px!important;
 }
 
-/* Match content gutter beside the sidebar across dashboard and lead pages */
 .sf-dashboard > main,
 .sf-main,
 .ld-main,
-.lead-ref-main{
+.lead-ref-main,
+.reference-main{
   margin-left:0!important;
   box-sizing:border-box!important;
 }
@@ -212,18 +235,23 @@
 
 @media(max-height:760px){
   .sf-v2-brand-row,
-  .ld-shell .sf-v2-brand-row{margin-bottom:20px!important;}
+  .ld-shell .sf-v2-brand-row,
+  .reference-dashboard .sf-v2-brand-row{margin-bottom:20px!important;}
   .sf-v2-nav,
-  .ld-shell .sf-v2-nav{gap:6px!important;}
+  .ld-shell .sf-v2-nav,
+  .reference-dashboard .sf-v2-nav{gap:6px!important;}
   .sf-v2-nav button,
-  .ld-shell .sf-v2-nav button{min-height:36px!important;height:36px!important;}
+  .ld-shell .sf-v2-nav button,
+  .reference-dashboard .sf-v2-nav button{min-height:36px!important;height:36px!important;}
 }
 
 @media(max-width:1200px){
-  .sf-dashboard{grid-template-columns:1fr!important;}
+  .sf-dashboard,.reference-dashboard{grid-template-columns:1fr!important;}
   .sf-sidebar,
   .sf-sidebar-v2,
-  .ld-shell .sf-sidebar-v2{
+  .ld-shell .sf-sidebar-v2,
+  .reference-dashboard .sf-sidebar,
+  .reference-dashboard .sf-sidebar-v2{
     position:relative!important;
     width:100%!important;
     min-width:0!important;
