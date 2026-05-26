@@ -4,6 +4,7 @@ import { getLead } from './leadsData.js';
 import './LeadDetailStable.css';
 import './LeadDetailProfessionalFix.css';
 import '../../styles/leadDetailFinalLock.css';
+import '../../styles/leadDetailTabContent.css';
 
 function getCurrentRole() {
   const saved = window.localStorage.getItem('salesflowRole');
@@ -78,17 +79,17 @@ function goToLeads() {
   window.dispatchEvent(new Event('salesflow:navigate'));
 }
 
-function ActivityTimeline() {
-  return <article className="ld-card ld-activity-panel"><header><h2>Activity Timeline</h2><select><option>All Activities</option></select></header><div className="ld-activity-list">{activityItems.map((item) => <div className={`ld-activity-row ${item.tone}`} key={item.title}><span className="ld-activity-icon"><SvgIcon type={item.icon} /></span><div className="ld-activity-text"><strong>{item.title}</strong><p>{item.text}</p></div><div className="ld-activity-meta">{item.time}<small>{item.user}</small></div></div>)}</div></article>;
+function ActivityTimeline({ items, onAdd }) {
+  return <article className="ld-card ld-activity-panel"><header><h2>Activity Timeline</h2><div className="ld-activity-actions"><button type="button" className="ld-add-activity-btn" onClick={onAdd}>+ Add Activity</button><select><option>All Activities</option></select></div></header><div className="ld-activity-list">{items.map((item) => <div className={`ld-activity-row ${item.tone}`} key={`${item.title}-${item.time}`}><span className="ld-activity-icon"><SvgIcon type={item.icon} /></span><div className="ld-activity-text"><strong>{item.title}</strong><p>{item.text}</p></div><div className="ld-activity-meta">{item.time}<small>{item.user}</small></div></div>)}</div></article>;
 }
 
 function LeadSideInfo() {
   return <aside className="ld-activity-side"><article className="ld-card ld-about-card"><h2>About Lead</h2>{[['Industry','IT Services'],['Company Size','51-200 Employees'],['Annual Revenue','₹ 10Cr - ₹ 50Cr'],['Interested In','CRM Software']].map(([a,b]) => <div className="ld-about-row" key={a}><span>{a}</span><strong>{b}</strong></div>)}<button>View Full Details <span>›</span></button></article><article className="ld-card ld-files-card"><h2>Files & Documents</h2><div className="ld-file-row"><span>PDF</span><div><strong>Proposal_Rohan_Mehta.pdf</strong><small>PDF • 1.2 MB</small></div><button><SvgIcon type="download" /></button></div><a className="ld-file-link">View All Files <span>›</span></a></article></aside>;
 }
 
-function TabContent({ activeTab }) {
-  if (activeTab === 'overview') return <section className="ld-activity-layout"><ActivityTimeline /><LeadSideInfo /></section>;
-  if (activeTab === 'activity') return <section className="ld-tab-single"><ActivityTimeline /></section>;
+function TabContent({ activeTab, activities, onAddActivity }) {
+  if (activeTab === 'overview') return <section className="ld-activity-layout"><ActivityTimeline items={activities} onAdd={onAddActivity} /><LeadSideInfo /></section>;
+  if (activeTab === 'activity') return <section className="ld-tab-single"><ActivityTimeline items={activities} onAdd={onAddActivity} /></section>;
   if (activeTab === 'tasks') return <section className="ld-card ld-tab-panel"><header><h2>Tasks</h2><button>+ Add Task</button></header>{leadTasks.map((task) => <div className="ld-tab-row" key={task.title}><span className={`ld-tab-dot ${task.tone}`}><SvgIcon type="checklist" /></span><div><strong>{task.title}</strong><p>{task.date}</p></div><b>{task.status}</b></div>)}</section>;
   if (activeTab === 'notes') return <section className="ld-card ld-tab-panel"><header><h2>Notes</h2><button>+ Add Note</button></header>{notes.map((note) => <div className="ld-tab-note" key={note.title}><strong>{note.title}</strong><p>{note.text}</p><small>{note.time}</small></div>)}</section>;
   if (activeTab === 'documents') return <section className="ld-card ld-tab-panel"><header><h2>Documents</h2><button>Upload File</button></header>{[['Proposal_Rohan_Mehta.pdf','PDF • 1.2 MB'],['CRM_Demo_Requirements.docx','DOCX • 860 KB'],['Quotation_v2.xlsx','XLSX • 420 KB']].map(([name, meta]) => <div className="ld-file-row wide" key={name}><span>FILE</span><div><strong>{name}</strong><small>{meta}</small></div><button><SvgIcon type="download" /></button></div>)}</section>;
@@ -101,6 +102,13 @@ export default function LeadDetailPage({ leadId }) {
   const lead = getLead(leadId);
   const score = lead.score || 85;
   const [activeTab, setActiveTab] = useState('overview');
+  const [activities, setActivities] = useState(activityItems);
+  const addActivity = () => {
+    const title = window.prompt('Activity title');
+    if (!title) return;
+    const text = window.prompt('Activity note') || 'New activity added for this lead.';
+    setActivities([{ icon: 'phone', title, text, time: 'Just now', user: 'Amit Kumar', tone: 'green' }, ...activities]);
+  };
   return (
     <div className="ld-shell">
       <DashboardSidebar role={role} />
@@ -116,7 +124,7 @@ export default function LeadDetailPage({ leadId }) {
         <section className="ld-summary-metrics"><article className="ld-metric-card purple"><span className="ld-metric-icon"><SvgIcon type="target" /></span><div className="ld-metric-body"><small>Lead Score</small><div className="ld-metric-value"><strong>{score}</strong><b>High</b></div><p>Great potential</p></div></article><article className="ld-metric-card"><span className="ld-metric-icon"><SvgIcon type="funnel" /></span><div className="ld-metric-body"><small>Pipeline Stage</small><div className="ld-metric-value"><strong>Proposal</strong></div><div className="ld-progress"><i /><em>75%</em></div></div></article><article className="ld-metric-card orange"><span className="ld-metric-icon"><SvgIcon type="calendar" /></span><div className="ld-metric-body"><small>Next Follow-up</small><div className="ld-metric-value"><strong>24 May 2025</strong></div><p>In 3 days</p></div></article><article className="ld-metric-card green"><span className="ld-metric-icon"><SvgIcon type="rupee" /></span><div className="ld-metric-body"><small>Potential Deal Value</small><div className="ld-metric-value"><strong>₹ 2,45,000</strong></div><p>High Value</p></div></article></section>
         <section className="ld-tag-strip"><h2>Tags</h2><div><span className="green">Interested</span><span className="blue">Budget Available</span><span className="purple">Quick Decision Maker</span><span className="orange">SaaS</span><button>+ Add Tag</button></div></section>
         <nav className="ld-tabs">{tabs.map((tab) => <button key={tab.key} type="button" className={activeTab === tab.key ? 'active' : ''} onClick={() => setActiveTab(tab.key)}><SvgIcon type={tab.icon} />{tab.label}</button>)}</nav>
-        <TabContent activeTab={activeTab} />
+        <TabContent activeTab={activeTab} activities={activities} onAddActivity={addActivity} />
       </main>
     </div>
   );
