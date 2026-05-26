@@ -1,6 +1,7 @@
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import '../../styles/dashboardBase.css';
 import '../../styles/referenceDashboardExact.css';
+import '../../styles/sidebarGlobalFinalLock.css';
 
 function AdminChart() {
   return (
