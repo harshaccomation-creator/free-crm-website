@@ -124,6 +124,41 @@
   height: 15px !important;
 }
 
+.la-footer {
+  gap: 18px !important;
+  flex-wrap: wrap !important;
+}
+
+.la-pagination {
+  flex-wrap: wrap !important;
+  justify-content: flex-end !important;
+}
+
+.la-page-wrap {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.la-page-wrap em {
+  font-style: normal !important;
+  color: #64748b !important;
+  font-weight: 700 !important;
+  padding: 0 2px !important;
+}
+
+.la-pagination button:disabled {
+  opacity: .42 !important;
+  cursor: not-allowed !important;
+  background: #f8fafc !important;
+}
+
+.la-pagination select {
+  min-width: 108px !important;
+  padding: 0 9px !important;
+  font-weight: 650 !important;
+}
+
 .la-main {
   padding-bottom: 112px !important;
 }
