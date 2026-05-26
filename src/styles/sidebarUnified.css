@@ -1,0 +1,456 @@
+/* UNIFIED SIDEBAR CSS - Apply to entire CRM */
+/* This file should be imported last to override all other sidebar styles */
+
+:root {
+  --sf-sidebar-width: 230px;
+  --sf-sidebar-bg: #020617;
+  --sf-text-primary: #ffffff;
+  --sf-text-secondary: #94a3b8;
+  --sf-active-gradient: linear-gradient(90deg, #6d38ff 0%, #1677ff 100%);
+  --sf-button-height: 38px;
+  --sf-button-gap: 7px;
+  --sf-font-size: 14px;
+  --sf-font-weight: 500;
+}
+
+/* ========== DASHBOARD GRID ========== */
+.sf-dashboard,
+.reference-dashboard,
+.ld-shell {
+  grid-template-columns: var(--sf-sidebar-width) minmax(0, 1fr) !important;
+}
+
+/* ========== SIDEBAR CONTAINER ========== */
+.sf-sidebar,
+.sf-sidebar-v2,
+.reference-dashboard .sf-sidebar,
+.reference-dashboard .sf-sidebar-v2,
+.ld-shell .sf-sidebar,
+.ld-shell .sf-sidebar-v2,
+aside.sf-sidebar,
+aside.sf-sidebar-v2 {
+  width: var(--sf-sidebar-width) !important;
+  min-width: var(--sf-sidebar-width) !important;
+  background: var(--sf-sidebar-bg) !important;
+  background-image: linear-gradient(180deg, #020617 0%, #020817 45%, #01040d 100%) !important;
+  background-color: var(--sf-sidebar-bg) !important;
+  border: none !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Remove pseudo elements */
+.sf-sidebar::before,
+.sf-sidebar::after,
+.sf-sidebar-v2::before,
+.sf-sidebar-v2::after,
+.reference-dashboard .sf-sidebar::before,
+.reference-dashboard .sf-sidebar::after,
+.reference-dashboard .sf-sidebar-v2::before,
+.reference-dashboard .sf-sidebar-v2::after,
+.ld-shell .sf-sidebar::before,
+.ld-shell .sf-sidebar::after,
+.ld-shell .sf-sidebar-v2::before,
+.ld-shell .sf-sidebar-v2::after {
+  display: none !important;
+  background: transparent !important;
+  content: none !important;
+}
+
+/* ========== BRAND ROW (LOGO AREA) ========== */
+.sf-v2-brand-row,
+.reference-dashboard .sf-v2-brand-row,
+.ld-shell .sf-v2-brand-row {
+  height: auto !important;
+  padding: 16px 12px !important;
+  margin: 0 0 26px 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-shrink: 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Brand Button */
+.sf-v2-brand,
+.reference-dashboard .sf-v2-brand,
+.ld-shell .sf-v2-brand {
+  padding: 0 8px !important;
+  gap: 10px !important;
+  background: transparent !important;
+  border: none !important;
+  color: var(--sf-text-primary) !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  flex: 1 !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+}
+
+/* Logo */
+.sf-v2-logo,
+.reference-dashboard .sf-v2-logo,
+.ld-shell .sf-v2-logo {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  border-radius: 6px !important;
+  display: grid !important;
+  place-items: center !important;
+  background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%) !important;
+  color: var(--sf-text-primary) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Brand Text */
+.sf-v2-brand strong,
+.reference-dashboard .sf-v2-brand strong,
+.ld-shell .sf-v2-brand strong {
+  font-size: 17px !important;
+  line-height: 1 !important;
+  font-weight: 780 !important;
+  letter-spacing: -0.35px !important;
+  color: var(--sf-text-primary) !important;
+}
+
+.sf-v2-brand strong span,
+.reference-dashboard .sf-v2-brand strong span,
+.ld-shell .sf-v2-brand strong span {
+  font-weight: 500 !important;
+  color: var(--sf-text-secondary) !important;
+}
+
+/* Menu Button */
+.sf-v2-menu,
+.reference-dashboard .sf-v2-menu,
+.ld-shell .sf-v2-menu {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  color: var(--sf-text-secondary) !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-shrink: 0 !important;
+}
+
+.sf-v2-menu:hover,
+.reference-dashboard .sf-v2-menu:hover,
+.ld-shell .sf-v2-menu:hover {
+  color: var(--sf-text-primary) !important;
+}
+
+/* ========== NAVIGATION MENU ========== */
+.sf-v2-nav,
+.reference-dashboard .sf-v2-nav,
+.ld-shell .sf-v2-nav {
+  padding: 0 10px !important;
+  gap: var(--sf-button-gap) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+/* Navigation Buttons */
+.sf-v2-nav button,
+.reference-dashboard .sf-v2-nav button,
+.ld-shell .sf-v2-nav button {
+  min-height: var(--sf-button-height) !important;
+  height: var(--sf-button-height) !important;
+  padding: 0 12px !important;
+  gap: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  border-radius: 8px !important;
+  color: var(--sf-text-primary) !important;
+  cursor: pointer !important;
+  font-size: var(--sf-font-size) !important;
+  font-weight: var(--sf-font-weight) !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.sf-v2-nav button:hover:not(.active),
+.reference-dashboard .sf-v2-nav button:hover:not(.active),
+.ld-shell .sf-v2-nav button:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Active Button */
+.sf-v2-nav button.active,
+.reference-dashboard .sf-v2-nav button.active,
+.ld-shell .sf-v2-nav button.active {
+  background: var(--sf-active-gradient) !important;
+  background-image: var(--sf-active-gradient) !important;
+  color: var(--sf-text-primary) !important;
+  border-color: rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+/* Icon Container */
+.sf-v2-icon,
+.reference-dashboard .sf-v2-icon,
+.ld-shell .sf-v2-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Active Button Icon */
+.sf-v2-nav button.active .sf-v2-icon,
+.reference-dashboard .sf-v2-nav button.active .sf-v2-icon,
+.ld-shell .sf-v2-nav button.active .sf-v2-icon {
+  background: rgba(255, 255, 255, 0.13) !important;
+  color: var(--sf-text-primary) !important;
+}
+
+/* Icon SVG */
+.sf-v2-icon-svg {
+  width: 100% !important;
+  height: 100% !important;
+  stroke: currentColor !important;
+}
+
+/* Text */
+.sf-v2-nav button em,
+.reference-dashboard .sf-v2-nav button em,
+.ld-shell .sf-v2-nav button em {
+  font-style: normal !important;
+  flex: 1 !important;
+  text-align: left !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* ========== UPGRADE SECTION ========== */
+.sf-v2-upgrade,
+.reference-dashboard .sf-v2-upgrade,
+.ld-shell .sf-v2-upgrade {
+  position: static !important;
+  margin-top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  padding: 16px 10px !important;
+  background: #0b1220 !important;
+  background-image: none !important;
+  border: none !important;
+  border-radius: 8px !important;
+  margin-left: 10px !important;
+  margin-right: 10px !important;
+  margin-bottom: 10px !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-shrink: 0 !important;
+}
+
+.sf-v2-upgrade span,
+.reference-dashboard .sf-v2-upgrade span,
+.ld-shell .sf-v2-upgrade span {
+  font-size: 24px !important;
+  line-height: 1 !important;
+}
+
+.sf-v2-upgrade h3,
+.reference-dashboard .sf-v2-upgrade h3,
+.ld-shell .sf-v2-upgrade h3 {
+  margin: 0 !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: var(--sf-text-primary) !important;
+  line-height: 1.3 !important;
+}
+
+.sf-v2-upgrade p,
+.reference-dashboard .sf-v2-upgrade p,
+.ld-shell .sf-v2-upgrade p {
+  margin: 0 !important;
+  font-size: 12px !important;
+  color: var(--sf-text-secondary) !important;
+  line-height: 1.4 !important;
+}
+
+.sf-v2-upgrade button,
+.reference-dashboard .sf-v2-upgrade button,
+.ld-shell .sf-v2-upgrade button {
+  width: 100% !important;
+  padding: 10px 16px !important;
+  background: var(--sf-active-gradient) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  color: var(--sf-text-primary) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+.sf-v2-upgrade button:hover,
+.reference-dashboard .sf-v2-upgrade button:hover,
+.ld-shell .sf-v2-upgrade button:hover {
+  box-shadow: 0 8px 20px rgba(109, 56, 255, 0.4) !important;
+}
+
+/* ========== HELP SECTION ========== */
+.sf-v2-help,
+.reference-dashboard .sf-v2-help,
+.ld-shell .sf-v2-help {
+  padding: 12px 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.05) !important;
+  flex-shrink: 0 !important;
+}
+
+.sf-v2-help span,
+.reference-dashboard .sf-v2-help span,
+.ld-shell .sf-v2-help span {
+  font-size: 20px !important;
+}
+
+.sf-v2-help strong,
+.reference-dashboard .sf-v2-help strong,
+.ld-shell .sf-v2-help strong {
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: var(--sf-text-primary) !important;
+  display: block !important;
+  text-align: left !important;
+}
+
+.sf-v2-help small,
+.reference-dashboard .sf-v2-help small,
+.ld-shell .sf-v2-help small {
+  font-size: 11px !important;
+  color: var(--sf-text-secondary) !important;
+  display: block !important;
+  text-align: left !important;
+}
+
+/* ========== MAIN CONTENT AREA ========== */
+.reference-main,
+.sf-main,
+.ld-main,
+.lead-ref-main {
+  margin-left: 0 !important;
+  box-sizing: border-box !important;
+}
+
+.reference-main {
+  padding-left: 18px !important;
+  padding-right: 22px !important;
+}
+
+.sf-main {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+.ld-main {
+  padding-left: 14px !important;
+  padding-right: 16px !important;
+}
+
+/* ========== SPACING FIX ========== */
+.ld-topbar,
+.ld-profile-card,
+.ld-summary-metrics,
+.ld-tag-strip,
+.ld-tabs {
+  margin-bottom: 12px !important;
+}
+
+/* ========== MOBILE RESPONSIVE ========== */
+@media (max-height: 760px) {
+  .sf-v2-brand-row,
+  .reference-dashboard .sf-v2-brand-row,
+  .ld-shell .sf-v2-brand-row {
+    margin-bottom: 18px !important;
+  }
+
+  .sf-v2-nav,
+  .reference-dashboard .sf-v2-nav,
+  .ld-shell .sf-v2-nav {
+    gap: 4px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .sf-dashboard,
+  .reference-dashboard,
+  .ld-shell {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sf-sidebar,
+  .sf-sidebar-v2,
+  .reference-dashboard .sf-sidebar,
+  .reference-dashboard .sf-sidebar-v2,
+  .ld-shell .sf-sidebar,
+  .ld-shell .sf-sidebar-v2 {
+    position: fixed !important;
+    left: -250px !important;
+    top: 0 !important;
+    height: 100vh !important;
+    z-index: 1000 !important;
+    transition: left 0.3s ease !important;
+  }
+
+  .sf-sidebar.open,
+  .sf-sidebar-v2.open,
+  .reference-dashboard .sf-sidebar.open,
+  .reference-dashboard .sf-sidebar-v2.open,
+  .ld-shell .sf-sidebar.open,
+  .ld-shell .sf-sidebar-v2.open {
+    left: 0 !important;
+  }
+}
+
+/* ========== SCROLLBAR STYLING ========== */
+.sf-sidebar::-webkit-scrollbar,
+.sf-sidebar-v2::-webkit-scrollbar,
+.sf-v2-nav::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.sf-sidebar::-webkit-scrollbar-track,
+.sf-sidebar-v2::-webkit-scrollbar-track,
+.sf-v2-nav::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+.sf-sidebar::-webkit-scrollbar-thumb,
+.sf-sidebar-v2::-webkit-scrollbar-thumb,
+.sf-v2-nav::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 3px !important;
+}
+
+.sf-sidebar::-webkit-scrollbar-thumb:hover,
+.sf-sidebar-v2::-webkit-scrollbar-thumb:hover,
+.sf-v2-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+}
