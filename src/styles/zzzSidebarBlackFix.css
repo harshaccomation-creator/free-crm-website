@@ -1,0 +1,47 @@
+/* Absolute final sidebar black fix. This file must be imported last. */
+:root { --sf-sidebar-width: 230px; }
+
+html body .sf-sidebar,
+html body .sf-sidebar-v2,
+html body .reference-dashboard .sf-sidebar,
+html body .reference-dashboard .sf-sidebar-v2,
+html body .ld-shell .sf-sidebar,
+html body .ld-shell .sf-sidebar-v2,
+html body aside.sf-sidebar,
+html body aside.sf-sidebar-v2 {
+  background: #020617 !important;
+  background-color: #020617 !important;
+  background-image: none !important;
+  background-blend-mode: normal !important;
+  filter: none !important;
+}
+
+html body .sf-sidebar::before,
+html body .sf-sidebar::after,
+html body .sf-sidebar-v2::before,
+html body .sf-sidebar-v2::after,
+html body .reference-dashboard .sf-sidebar::before,
+html body .reference-dashboard .sf-sidebar::after,
+html body .reference-dashboard .sf-sidebar-v2::before,
+html body .reference-dashboard .sf-sidebar-v2::after {
+  background: transparent !important;
+  background-image: none !important;
+  display: none !important;
+  content: none !important;
+}
+
+html body .sf-v2-nav button.active,
+html body .reference-dashboard .sf-v2-nav button.active,
+html body .ld-shell .sf-v2-nav button.active {
+  background: linear-gradient(90deg, #6d38ff 0%, #1677ff 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(255,255,255,.14) !important;
+  box-shadow: 0 12px 24px rgba(37,99,235,.30), inset 0 1px 0 rgba(255,255,255,.16) !important;
+}
+
+html body .sf-v2-upgrade,
+html body .reference-dashboard .sf-v2-upgrade,
+html body .ld-shell .sf-v2-upgrade {
+  background: #0b1220 !important;
+  background-image: none !important;
+}
