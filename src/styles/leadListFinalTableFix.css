@@ -1,0 +1,141 @@
+/* My Leads final polish: remove owner filter gap, table cut, row action */
+.la-filters {
+  grid-template-columns: minmax(190px, 1.25fr) minmax(150px, .95fr) minmax(150px, .9fr) minmax(190px, 1fr) minmax(105px, .58fr) !important;
+  gap: 10px !important;
+}
+
+.la-table-card {
+  overflow-x: auto !important;
+  padding-bottom: 4px !important;
+}
+
+.la-table {
+  min-width: 1120px !important;
+  table-layout: fixed !important;
+}
+
+.la-table th,
+.la-table td {
+  box-sizing: border-box !important;
+}
+
+.la-table th:nth-child(1),
+.la-table td:nth-child(1) {
+  width: 52px !important;
+  min-width: 52px !important;
+  max-width: 52px !important;
+  text-align: center !important;
+  overflow: visible !important;
+}
+
+.la-table th:nth-child(2),
+.la-table td:nth-child(2) { width: 215px !important; }
+.la-table th:nth-child(3),
+.la-table td:nth-child(3) { width: 200px !important; }
+.la-table th:nth-child(4),
+.la-table td:nth-child(4) { width: 135px !important; }
+.la-table th:nth-child(5),
+.la-table td:nth-child(5) { width: 135px !important; }
+.la-table th:nth-child(6),
+.la-table td:nth-child(6) { width: 210px !important; }
+.la-table th:nth-child(7),
+.la-table td:nth-child(7) { width: 225px !important; }
+
+.la-table th:nth-child(8),
+.la-table td:nth-child(8) {
+  display: none !important;
+}
+
+.la-table th:nth-child(9),
+.la-table td:nth-child(9) {
+  width: 74px !important;
+  min-width: 74px !important;
+  text-align: center !important;
+  overflow: visible !important;
+}
+
+.la-table tr {
+  cursor: pointer !important;
+}
+
+.la-table tbody tr:hover {
+  background: #fbfdff !important;
+}
+
+.la-table td:first-child::before,
+.la-table td:first-child::after,
+.la-table th:first-child::before,
+.la-table th:first-child::after {
+  content: none !important;
+  display: none !important;
+}
+
+.la-table td:first-child {
+  font-size: 0 !important;
+  color: transparent !important;
+}
+
+.la-check {
+  display: inline-block !important;
+  margin: 0 !important;
+  vertical-align: middle !important;
+  accent-color: #0b63f6 !important;
+}
+
+.la-icon-text {
+  width: 100% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.la-icon-text .la-svg {
+  width: 15px !important;
+  height: 15px !important;
+  min-width: 15px !important;
+  color: #0f2748 !important;
+}
+
+.la-row-action {
+  width: 34px !important;
+  height: 34px !important;
+  padding: 0 !important;
+  border-radius: 11px !important;
+  border: 1px solid #dbe6f5 !important;
+  background: #ffffff !important;
+  color: #0b63f6 !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 18px rgba(11, 99, 246, 0.08) !important;
+}
+
+.la-row-action:hover {
+  background: #eef5ff !important;
+  border-color: #bfdbfe !important;
+  transform: translateY(-1px) !important;
+}
+
+.la-row-action .la-svg {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+.la-main {
+  padding-bottom: 112px !important;
+}
+
+@media (max-width: 1200px) {
+  .la-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .la-filters {
+    grid-template-columns: 1fr !important;
+  }
+}
