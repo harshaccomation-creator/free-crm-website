@@ -1,16 +1,33 @@
 /* Lead Details: pixel-clean SaaS reference layout */
 .ld-shell {
-  display: grid !important;
-  grid-template-columns: 230px minmax(0, 1fr) !important;
+  display: block !important;
   min-height: 100vh !important;
+  padding-left: 230px !important;
   background: #f5f8ff !important;
   overflow-x: hidden !important;
 }
 
+.ld-shell .sfx-sidebar {
+  display: flex !important;
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 230px !important;
+  min-width: 230px !important;
+  max-width: 230px !important;
+  height: 100vh !important;
+  min-height: 100vh !important;
+  z-index: 200 !important;
+}
+
 .ld-main {
-  grid-column: 2 !important;
+  display: block !important;
+  grid-column: auto !important;
   min-width: 0 !important;
   width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
   padding: 14px 22px 48px !important;
   background: #f5f8ff !important;
   -webkit-font-smoothing: antialiased !important;
@@ -89,11 +106,11 @@
 .ld-profile-card {
   width: 100% !important;
   display: grid !important;
-  grid-template-columns: minmax(420px, 1.1fr) minmax(460px, .9fr) !important;
-  gap: 24px !important;
+  grid-template-columns: minmax(360px, 1.05fr) minmax(420px, .95fr) !important;
+  gap: 22px !important;
   align-items: center !important;
-  min-height: 156px !important;
-  padding: 22px 26px !important;
+  min-height: 146px !important;
+  padding: 20px 24px !important;
   margin: 0 0 12px !important;
   overflow: hidden !important;
 }
@@ -103,14 +120,14 @@
 .ld-profile-left { display: flex !important; align-items: center !important; gap: 18px !important; min-width: 0 !important; }
 
 .ld-avatar-large {
-  width: 72px !important;
-  height: 72px !important;
-  min-width: 72px !important;
+  width: 68px !important;
+  height: 68px !important;
+  min-width: 68px !important;
   border-radius: 50% !important;
   background: #f3ecff !important;
   border: 2px solid #c7b2ff !important;
   color: #7c3aed !important;
-  font-size: 25px !important;
+  font-size: 24px !important;
   font-weight: 700 !important;
 }
 
@@ -126,7 +143,7 @@
 .ld-profile-title { gap: 9px !important; margin-bottom: 5px !important; }
 
 .ld-profile-title h1 {
-  font-size: 21px !important;
+  font-size: 20px !important;
   line-height: 1.12 !important;
   font-weight: 680 !important;
   letter-spacing: -0.35px !important;
@@ -161,9 +178,9 @@
 
 .ld-profile-facts {
   display: grid !important;
-  grid-template-columns: minmax(160px, 1fr) minmax(100px, .65fr) minmax(175px, .95fr) !important;
+  grid-template-columns: minmax(150px, 1fr) minmax(96px, .65fr) minmax(168px, .95fr) !important;
   gap: 18px !important;
-  padding-left: 24px !important;
+  padding-left: 22px !important;
   border-left: 1px solid #dfe8f4 !important;
   align-items: center !important;
   min-width: 0 !important;
@@ -338,8 +355,19 @@
 .ld-file-row strong { font-weight: 620 !important; }
 
 @media (max-width: 1200px) {
-  .ld-shell { grid-template-columns: 1fr !important; }
-  .ld-main { grid-column: 1 !important; }
+  .ld-shell {
+    display: block !important;
+    padding-left: 230px !important;
+  }
+  .ld-shell .sfx-sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    width: 230px !important;
+    min-width: 230px !important;
+    max-width: 230px !important;
+    height: 100vh !important;
+  }
+  .ld-main { grid-column: auto !important; }
   .ld-profile-card { grid-template-columns: 1fr !important; }
   .ld-profile-facts {
     border-left: 0 !important;
