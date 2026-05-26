@@ -1,12 +1,6 @@
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { getLead } from './leadsData.js';
-import './LeadDetailsLayout.css';
-import './LeadDetailsTopbar.css';
-import './LeadDetailsProfile.css';
-import './LeadDetailsMetrics.css';
-import './LeadDetailsTags.css';
-import './LeadDetailsTabs.css';
-import './LeadDetailsActivity.css';
+import './LeadDetailStable.css';
 
 function getCurrentRole() {
   const saved = window.localStorage.getItem('salesflowRole');
@@ -72,76 +66,14 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
             <button type="button" className="dots" aria-label="More actions"><SvgIcon type="dots" /></button>
           </div>
         </div>
-
         <section className="ld-profile-card">
-          <div className="ld-profile-left">
-            <div className="ld-avatar-large">RM<span /></div>
-            <div className="ld-profile-main">
-              <div className="ld-profile-title"><h1>{lead.name}</h1><b>Hot Lead</b></div>
-              <p>Marketing Manager at TechNova Solutions</p>
-              <div className="ld-contact-list">
-                <span><SvgIcon type="mail" />rohan.mehta@technova.com</span>
-                <span><SvgIcon type="phone" />{lead.phone}</span>
-                <span><SvgIcon type="map" />Mumbai, Maharashtra, India</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="ld-profile-facts">
-            <div className="ld-fact owner">
-              <small>Lead Owner</small>
-              <div><span className="ld-owner-avatar">AK</span><strong>Amit Kumar<em>Sales Executive</em></strong></div>
-            </div>
-            <div className="ld-fact"><small>Source</small><strong>{lead.source}</strong></div>
-            <div className="ld-fact"><small>Created On</small><strong>20 May 2025, 10:30 AM</strong></div>
-          </div>
+          <div className="ld-profile-left"><div className="ld-avatar-large">RM<span /></div><div className="ld-profile-main"><div className="ld-profile-title"><h1>{lead.name}</h1><b>Hot Lead</b></div><p>Marketing Manager at TechNova Solutions</p><div className="ld-contact-list"><span><SvgIcon type="mail" />rohan.mehta@technova.com</span><span><SvgIcon type="phone" />{lead.phone}</span><span><SvgIcon type="map" />Mumbai, Maharashtra, India</span></div></div></div>
+          <div className="ld-profile-facts"><div className="ld-fact owner"><small>Lead Owner</small><div><span className="ld-owner-avatar">AK</span><strong>Amit Kumar<em>Sales Executive</em></strong></div></div><div className="ld-fact"><small>Source</small><strong>{lead.source}</strong></div><div className="ld-fact"><small>Created On</small><strong>20 May 2025, 10:30 AM</strong></div></div>
         </section>
-
-        <section className="ld-summary-metrics">
-          <MetricCard iconType="target" label="Lead Score" value="85" badge="High" helper="Great potential" tone="purple" />
-          <MetricCard iconType="filter" label="Pipeline Stage" value="Proposal" helper="75%" progress tone="blue" />
-          <MetricCard iconType="calendar" label="Next Follow-up" value="24 May 2025" helper="In 3 days" tone="orange" />
-          <MetricCard iconType="rupee" label="Potential Deal Value" value="₹ 2,45,000" helper="High Value" tone="green" />
-        </section>
-
-        <section className="ld-tag-strip">
-          <h2>Tags</h2>
-          <div>
-            <span className="green">Interested</span>
-            <span className="blue">Budget Available</span>
-            <span className="purple">Quick Decision Maker</span>
-            <span className="orange">SaaS</span>
-            <button type="button">+ Add Tag</button>
-          </div>
-        </section>
-
-        <nav className="ld-tabs">
-          {tabs.map((tab, index) => <button className={index === 0 ? 'active' : ''} key={tab.label} type="button"><SvgIcon type={tab.icon} />{tab.label}</button>)}
-        </nav>
-
-        <section className="ld-activity-layout">
-          <article className="ld-card ld-activity-panel">
-            <header><h2>Activity Timeline</h2><select><option>All Activities</option></select></header>
-            <div className="ld-activity-list">
-              {activityItems.map((item) => <ActivityRow item={item} key={item.title} />)}
-            </div>
-          </article>
-          <aside className="ld-activity-side">
-            <article className="ld-card ld-about-card">
-              <h2>About Lead</h2>
-              <InfoRow label="Industry" value="IT Services" />
-              <InfoRow label="Company Size" value="51-200 Employees" />
-              <InfoRow label="Annual Revenue" value="₹ 10Cr - ₹ 50Cr" />
-              <InfoRow label="Interested In" value="CRM Software" />
-              <button type="button">View Full Details <span>›</span></button>
-            </article>
-            <article className="ld-card ld-files-card">
-              <h2>Files & Documents</h2>
-              <div className="ld-file-row"><span>PDF</span><div><strong>Proposal_Rohan_Mehta.pdf</strong><small>PDF · 1.2 MB</small></div><button type="button"><SvgIcon type="download" /></button></div>
-              <button type="button" className="ld-file-link">View All Files <span>›</span></button>
-            </article>
-          </aside>
-        </section>
+        <section className="ld-summary-metrics"><MetricCard iconType="target" label="Lead Score" value="85" badge="High" helper="Great potential" tone="purple" /><MetricCard iconType="filter" label="Pipeline Stage" value="Proposal" helper="75%" progress tone="blue" /><MetricCard iconType="calendar" label="Next Follow-up" value="24 May 2025" helper="In 3 days" tone="orange" /><MetricCard iconType="rupee" label="Potential Deal Value" value="₹ 2,45,000" helper="High Value" tone="green" /></section>
+        <section className="ld-tag-strip"><h2>Tags</h2><div><span className="green">Interested</span><span className="blue">Budget Available</span><span className="purple">Quick Decision Maker</span><span className="orange">SaaS</span><button type="button">+ Add Tag</button></div></section>
+        <nav className="ld-tabs">{tabs.map((tab, index) => <button className={index === 0 ? 'active' : ''} key={tab.label} type="button"><SvgIcon type={tab.icon} />{tab.label}</button>)}</nav>
+        <section className="ld-activity-layout"><article className="ld-card ld-activity-panel"><header><h2>Activity Timeline</h2><select><option>All Activities</option></select></header><div className="ld-activity-list">{activityItems.map((item) => <ActivityRow item={item} key={item.title} />)}</div></article><aside className="ld-activity-side"><article className="ld-card ld-about-card"><h2>About Lead</h2><InfoRow label="Industry" value="IT Services" /><InfoRow label="Company Size" value="51-200 Employees" /><InfoRow label="Annual Revenue" value="₹ 10Cr - ₹ 50Cr" /><InfoRow label="Interested In" value="CRM Software" /><button type="button">View Full Details <span>›</span></button></article><article className="ld-card ld-files-card"><h2>Files & Documents</h2><div className="ld-file-row"><span>PDF</span><div><strong>Proposal_Rohan_Mehta.pdf</strong><small>PDF · 1.2 MB</small></div><button type="button"><SvgIcon type="download" /></button></div><button type="button" className="ld-file-link">View All Files <span>›</span></button></article></aside></section>
       </main>
     </div>
   );
@@ -150,11 +82,9 @@ export default function LeadDetailPage({ leadId = 'rohan-mehta' }) {
 function MetricCard({ iconType, label, value, badge, helper, progress, tone }) {
   return <article className={`ld-metric-card ${tone}`}><span className="ld-metric-icon"><SvgIcon type={iconType} /></span><div className="ld-metric-body"><small>{label}</small><div className="ld-metric-value"><strong>{value}</strong>{badge && <b>{badge}</b>}</div>{progress ? <div className="ld-progress"><i /><em>{helper}</em></div> : <p>{helper}</p>}</div></article>;
 }
-
 function ActivityRow({ item }) {
   return <div className={`ld-activity-row ${item.tone}`}><span className="ld-activity-icon"><SvgIcon type={item.icon} /></span><div className="ld-activity-text"><strong>{item.title}</strong><p>{item.text}</p></div><div className="ld-activity-meta"><span>{item.time}</span><small>{item.user}</small></div></div>;
 }
-
 function InfoRow({ label, value }) {
   return <div className="ld-about-row"><span>{label}</span><strong>{value}</strong></div>;
 }
