@@ -56,12 +56,23 @@
   background: #0b63f6 !important;
 }
 
-.ld-tabs .ld-svg {
-  width: 13px !important;
-  height: 13px !important;
-  min-width: 13px !important;
+.ld-tabs .ld-svg,
+.ld-tabs .ld-tab-icon,
+.ld-tabs svg {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  max-width: 14px !important;
+  display: block !important;
   stroke-width: 1.9 !important;
-  opacity: .9 !important;
+  opacity: .92 !important;
+  color: currentColor !important;
+  stroke: currentColor !important;
+}
+
+.ld-tabs button.active .ld-tab-icon,
+.ld-tabs button.active svg {
+  opacity: 1 !important;
 }
 
 @media (max-width: 1300px) {
