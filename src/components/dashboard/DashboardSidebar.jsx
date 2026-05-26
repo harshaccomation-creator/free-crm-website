@@ -97,6 +97,22 @@ const sidebarHardLockCss = `
     background: #020617 !important;
     background-image: linear-gradient(180deg, #020617 0%, #020817 45%, #01040d 100%) !important;
   }
+  .sf-v2-brand-row,
+  .reference-dashboard .sf-v2-brand-row,
+  .ld-shell .sf-v2-brand-row {
+    margin-bottom: 26px !important;
+  }
+  .sf-v2-nav,
+  .reference-dashboard .sf-v2-nav,
+  .ld-shell .sf-v2-nav {
+    gap: 7px !important;
+  }
+  .sf-v2-nav button,
+  .reference-dashboard .sf-v2-nav button,
+  .ld-shell .sf-v2-nav button {
+    min-height: 38px !important;
+    height: 38px !important;
+  }
   .sf-v2-nav button.active,
   .reference-dashboard .sf-v2-nav button.active,
   .ld-shell .sf-v2-nav button.active {
@@ -104,6 +120,21 @@ const sidebarHardLockCss = `
     background-image: linear-gradient(90deg, #6d38ff 0%, #1677ff 100%) !important;
     color: #ffffff !important;
     box-shadow: 0 12px 24px rgba(37,99,235,.30), inset 0 1px 0 rgba(255,255,255,.16) !important;
+  }
+  .reference-main {
+    padding-left: 18px !important;
+    padding-right: 22px !important;
+  }
+  .ld-main {
+    padding-left: 14px !important;
+    padding-right: 16px !important;
+  }
+  .ld-topbar,
+  .ld-profile-card,
+  .ld-summary-metrics,
+  .ld-tag-strip,
+  .ld-tabs {
+    margin-bottom: 12px !important;
   }
 `;
 
