@@ -1,0 +1,167 @@
+/* Strong visible dashboard polish */
+.employee-reference-dashboard {
+  background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%) !important;
+}
+.employee-reference-dashboard .reference-main {
+  padding: 18px 24px 46px !important;
+  background: transparent !important;
+}
+.employee-reference-dashboard .reference-topbar {
+  align-items: center !important;
+  margin-bottom: 16px !important;
+}
+.employee-reference-dashboard .reference-title h1 {
+  font-size: 27px !important;
+  font-weight: 760 !important;
+  letter-spacing: -0.9px !important;
+  color: #061733 !important;
+}
+.employee-reference-dashboard .reference-title p {
+  margin-top: 7px !important;
+  font-size: 13.2px !important;
+  color: #62718a !important;
+}
+.employee-reference-dashboard .reference-actions {
+  gap: 9px !important;
+  padding: 5px !important;
+  border-radius: 18px !important;
+  background: rgba(255, 255, 255, 0.54) !important;
+}
+.employee-reference-dashboard .reference-search {
+  height: 46px !important;
+  width: 365px !important;
+  border-radius: 16px !important;
+  background: rgba(255,255,255,.94) !important;
+  border-color: #d8e5f6 !important;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.065) !important;
+}
+.employee-reference-dashboard .reference-search input { font-size: 12.8px !important; }
+.employee-reference-dashboard .dash-svg {
+  width: 18px !important;
+  height: 18px !important;
+  stroke-width: 2.15 !important;
+}
+.employee-reference-dashboard .reference-icon-btn,
+.employee-reference-dashboard .reference-profile {
+  height: 46px !important;
+  border: 1px solid #e1eaf7 !important;
+  border-radius: 15px !important;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.065) !important;
+}
+.employee-reference-dashboard .reference-icon-btn { width: 52px !important; }
+.employee-reference-dashboard .reference-profile { min-width: 150px !important; padding: 0 12px !important; }
+.employee-reference-dashboard .reference-avatar {
+  width: 34px !important;
+  height: 34px !important;
+  background: linear-gradient(135deg, #dcecff, #eef5ff) !important;
+}
+.employee-reference-dashboard .reference-profile strong { font-size: 13.5px !important; }
+.employee-reference-dashboard .reference-profile small { font-size: 11.1px !important; }
+.employee-reference-dashboard .reference-stats {
+  gap: 14px !important;
+  margin-bottom: 16px !important;
+}
+.employee-reference-dashboard .reference-stat {
+  min-height: 92px !important;
+  padding: 14px 16px !important;
+  grid-template-columns: 48px 1fr !important;
+  column-gap: 14px !important;
+  border-radius: 19px !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.86)) !important;
+  border-color: #dce8f8 !important;
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.07) !important;
+}
+.employee-reference-dashboard .reference-stat.target {
+  background: linear-gradient(135deg, #fffaf1 0%, #ffffff 72%) !important;
+}
+.employee-reference-dashboard .reference-stat .stat-icon {
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(135deg, #eef5ff, #e6f0ff) !important;
+}
+.employee-reference-dashboard .reference-stat p {
+  font-size: 12.4px !important;
+  font-weight: 700 !important;
+  color: #334155 !important;
+}
+.employee-reference-dashboard .reference-stat h2 {
+  font-size: 25px !important;
+  font-weight: 780 !important;
+  letter-spacing: -0.7px !important;
+}
+.employee-reference-dashboard .reference-stat small {
+  font-size: 11.2px !important;
+  font-weight: 760 !important;
+}
+.employee-reference-dashboard .reference-card {
+  border-radius: 20px !important;
+  border-color: #dce8f8 !important;
+  background: rgba(255,255,255,.94) !important;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.07) !important;
+}
+.employee-reference-dashboard .reference-card-head {
+  height: 52px !important;
+  padding: 0 17px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%) !important;
+}
+.employee-reference-dashboard .reference-card-head h2 {
+  font-size: 16px !important;
+  font-weight: 740 !important;
+  letter-spacing: -0.35px !important;
+}
+.employee-reference-dashboard .reference-card-head h2 small {
+  font-size: 11.6px !important;
+  font-weight: 650 !important;
+  color: #334155 !important;
+}
+.employee-reference-dashboard .reference-card-head button {
+  height: 34px !important;
+  padding: 0 13px !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
+}
+.employee-reference-dashboard .employee-row-one {
+  grid-template-columns: minmax(0, 1.35fr) 360px !important;
+  gap: 16px !important;
+  margin-bottom: 16px !important;
+}
+.employee-reference-dashboard .performance-card .reference-chart { padding: 8px 18px 8px !important; }
+.employee-reference-dashboard .performance-card .reference-chart svg { height: 292px !important; }
+.employee-reference-dashboard .performance-card .chart-grid { stroke: #dfe8f5 !important; }
+.employee-reference-dashboard .performance-card .chart-axis { stroke: #cbd8ea !important; }
+.employee-reference-dashboard .performance-card .chart-line { stroke-width: 4.4px !important; }
+.employee-reference-dashboard .performance-card .chart-line.light { stroke-width: 3.2px !important; opacity: .9 !important; }
+.employee-reference-dashboard .performance-card .chart-fill { opacity: 0.18 !important; }
+.employee-reference-dashboard .schedule-card .task-list-row {
+  min-height: 56px !important;
+  padding: 9px 15px !important;
+}
+.employee-reference-dashboard .schedule-card .task-list-row strong {
+  font-size: 13.1px !important;
+  font-weight: 700 !important;
+}
+.employee-reference-dashboard .schedule-card .task-list-row small {
+  font-size: 11.3px !important;
+  color: #64748b !important;
+}
+.employee-reference-dashboard .schedule-card .task-list-row time {
+  min-width: 54px !important;
+  text-align: center !important;
+  border-radius: 12px !important;
+  font-size: 11.3px !important;
+  padding: 8px 10px !important;
+  font-weight: 760 !important;
+}
+.employee-reference-dashboard .schedule-card .task-list-row time.join { background: #eaf8ef !important; color: #039855 !important; }
+.employee-reference-dashboard .schedule-card .task-list-row time.view { background: #f0e7ff !important; color: #7c3aed !important; }
+.employee-reference-dashboard .task-list-row .check {
+  border-radius: 8px !important;
+  width: 17px !important;
+  height: 17px !important;
+  background: #fff !important;
+}
+@media (max-width: 1450px) {
+  .employee-reference-dashboard .reference-search { width: 320px !important; }
+  .employee-reference-dashboard .employee-row-one { grid-template-columns: minmax(0, 1fr) 340px !important; }
+}
