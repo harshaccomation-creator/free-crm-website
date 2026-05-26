@@ -57,12 +57,27 @@ function csvEscape(value) {
   return `"${String(value ?? '').replaceAll('"', '""')}"`;
 }
 
+function getPageNumbers(currentPage, totalPages) {
+  if (totalPages <= 5) return Array.from({ length: totalPages }, (_, index) => index + 1);
+  const pages = new Set([1, totalPages, currentPage, currentPage - 1, currentPage + 1]);
+  return [...pages].filter((page) => page >= 1 && page <= totalPages).sort((a, b) => a - b);
+}
+
 export default function LeadListPage() {
   const role = getCurrentRole();
   const [leadRows, setLeadRows] = useState(initialLeads);
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [form, setForm] = useState(defaultForm);
   const [createdAt, setCreatedAt] = useState(formatDateTime());
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+
+  const totalPages = Math.max(1, Math.ceil(leadRows.length / pageSize));
+  const safePage = Math.min(currentPage, totalPages);
+  const pageStart = (safePage - 1) * pageSize;
+  const pageEnd = Math.min(pageStart + pageSize, leadRows.length);
+  const visibleLeads = leadRows.slice(pageStart, pageEnd);
+  const pageNumbers = getPageNumbers(safePage, totalPages);
 
   const openLead = (id) => {
     window.localStorage.setItem('salesflowRole', role);
@@ -97,6 +112,7 @@ export default function LeadListPage() {
       notes: form.notes,
     };
     setLeadRows((rows) => [newLead, ...rows]);
+    setCurrentPage(1);
     setIsAddOpen(false);
   };
   const exportLeads = () => {
@@ -113,7 +129,10 @@ export default function LeadListPage() {
     link.remove();
     URL.revokeObjectURL(url);
   };
-  const totalText = useMemo(() => `Showing 1 to ${Math.min(leadRows.length, 10)} of ${leadRows.length} leads`, [leadRows.length]);
+  const totalText = useMemo(() => {
+    if (!leadRows.length) return 'Showing 0 leads';
+    return `Showing ${pageStart + 1} to ${pageEnd} of ${leadRows.length} leads`;
+  }, [leadRows.length, pageStart, pageEnd]);
 
   return (
     <div className="sf-dashboard la-page">
@@ -134,11 +153,11 @@ export default function LeadListPage() {
           <button className="la-filter-btn"><LeadSvg type="filter" />Filter</button>
         </section>
         <section className="la-table-card">
-          <table className="la-table"><thead><tr><th><input className="la-check" type="checkbox" /></th><th>Lead Name</th><th>Company</th><th>Lead Source</th><th>Status</th><th>Last Activity</th><th>Next Follow Up</th><th>Lead Owner</th><th>Actions</th></tr></thead><tbody>{leadRows.map((lead) => <tr key={lead.id} onClick={() => openLead(lead.id)}><td><input className="la-check" type="checkbox" onClick={(event) => event.stopPropagation()} /></td><td><div className="la-person"><span className="la-avatar">{lead.initials}</span><div><strong>{lead.name}</strong><small>{lead.phone}</small></div></div></td><td>{lead.company}</td><td><span className={`la-pill ${sourceClass[lead.source] || 'blue'}`}>{lead.source}</span></td><td><span className={`la-pill ${statusClass[lead.status] || 'blue'}`}>{lead.status}</span></td><td><span className="la-icon-text"><LeadSvg type="phone" />{lead.lastActivity}</span></td><td><span className="la-icon-text"><LeadSvg type="calendar" />{lead.nextFollowUp}</span></td><td><span className="la-owner"><span className="la-avatar">R</span>{lead.owner}</span></td><td><button type="button" className="la-row-action" onClick={(event) => { event.stopPropagation(); openLead(lead.id); }} aria-label={`Open ${lead.name}`}><LeadSvg type="eye" /></button></td></tr>)}</tbody></table>
-          <footer className="la-footer"><span>{totalText}</span><div className="la-pagination"><button>‹</button><button className="active">1</button><button>2</button><button>3</button><span>...</span><button>8</button><button>›</button><select><option>10 / page</option></select></div></footer>
+          <table className="la-table"><thead><tr><th><input className="la-check" type="checkbox" /></th><th>Lead Name</th><th>Company</th><th>Lead Source</th><th>Status</th><th>Last Activity</th><th>Next Follow Up</th><th>Lead Owner</th><th>Actions</th></tr></thead><tbody>{visibleLeads.map((lead) => <tr key={lead.id} onClick={() => openLead(lead.id)}><td><input className="la-check" type="checkbox" onClick={(event) => event.stopPropagation()} /></td><td><div className="la-person"><span className="la-avatar">{lead.initials}</span><div><strong>{lead.name}</strong><small>{lead.phone}</small></div></div></td><td>{lead.company}</td><td><span className={`la-pill ${sourceClass[lead.source] || 'blue'}`}>{lead.source}</span></td><td><span className={`la-pill ${statusClass[lead.status] || 'blue'}`}>{lead.status}</span></td><td><span className="la-icon-text"><LeadSvg type="phone" />{lead.lastActivity}</span></td><td><span className="la-icon-text"><LeadSvg type="calendar" />{lead.nextFollowUp}</span></td><td><span className="la-owner"><span className="la-avatar">R</span>{lead.owner}</span></td><td><button type="button" className="la-row-action" onClick={(event) => { event.stopPropagation(); openLead(lead.id); }} aria-label={`Open ${lead.name}`}><LeadSvg type="eye" /></button></td></tr>)}</tbody></table>
+          <footer className="la-footer"><span>{totalText}</span><div className="la-pagination"><button type="button" disabled={safePage === 1} onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}>‹</button>{pageNumbers.map((page, index) => <span className="la-page-wrap" key={page}>{index > 0 && page - pageNumbers[index - 1] > 1 ? <em>...</em> : null}<button type="button" className={safePage === page ? 'active' : ''} onClick={() => setCurrentPage(page)}>{page}</button></span>)}<button type="button" disabled={safePage === totalPages} onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}>›</button><select value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setCurrentPage(1); }}><option value="5">5 / page</option><option value="10">10 / page</option><option value="20">20 / page</option><option value="50">50 / page</option></select></div></footer>
         </section>
       </main>
-      {isAddOpen && <div className="la-modal-backdrop" role="presentation" onClick={() => setIsAddOpen(false)}><section className="la-modal" role="dialog" aria-modal="true" aria-labelledby="addLeadTitle" onClick={(event) => event.stopPropagation()}><header><div><h2 id="addLeadTitle">Add New Lead</h2><p>Created automatically on {createdAt}</p></div><button type="button" onClick={() => setIsAddOpen(false)}>×</button></header><form onSubmit={saveLead} className="la-form"><label>Customer Name<input required value={form.name} onChange={(event) => updateForm('name', event.target.value)} placeholder="Enter customer name" /></label><label>Email ID<input required type="email" value={form.email} onChange={(event) => updateForm('email', event.target.value)} placeholder="customer@example.com" /></label><label>Mobile Number<input required value={form.phone} onChange={(event) => updateForm('phone', event.target.value)} placeholder="+91 98765 43210" /></label><label>Company<input required value={form.company} onChange={(event) => updateForm('company', event.target.value)} placeholder="Company name" /></label><label>Lead Source<select value={form.source} onChange={(event) => updateForm('source', event.target.value)}><option>Website</option><option>Referral</option><option>LinkedIn</option><option>Cold Call</option><option>Email Campaign</option><option>WhatsApp</option><option>Other</option></select></label><label>Status<select value={form.status} onChange={(event) => updateForm('status', event.target.value)}><option>New</option><option>Contacted</option><option>In Progress</option><option>Converted</option><option>Lost</option></select></label><label>Next Follow-up Date<input type="date" value={form.nextFollowUpDate} onChange={(event) => updateForm('nextFollowUpDate', event.target.value)} /></label><label>Next Follow-up Time<input type="time" value={form.nextFollowUpTime} onChange={(event) => updateForm('nextFollowUpTime', event.target.value)} /></label><label>Priority<select value={form.priority} onChange={(event) => updateForm('priority', event.target.value)}><option>Hot</option><option>Warm</option><option>High</option><option>Medium</option><option>Low</option></select></label><label>Job Title<input value={form.jobTitle} onChange={(event) => updateForm('jobTitle', event.target.value)} placeholder="Founder / Manager / Customer" /></label><label className="full">Notes<textarea value={form.notes} onChange={(event) => updateForm('notes', event.target.value)} placeholder="Requirement, budget, interest, discussion notes..." /></label><footer><button type="button" onClick={() => setIsAddOpen(false)}>Cancel</button><button className="primary" type="submit">Save Lead</button></footer></form></section></div>}
+      {isAddOpen && <div className="la-modal-backdrop" role="presentation" onClick={() => setIsAddOpen(false)}><section className="la-modal" role="dialog" aria-modal="true" aria-labelledby="addLeadTitle" onClick={(event) => event.stopPropagation()}><header><div><h2 id="addLeadTitle">Add New Lead</h2><p>Created automatically on {createdAt}</p></div><button type="button" onClick={() => setIsAddOpen(false)}>×</button></header><form onSubmit={saveLead} className="la-form"><label>Customer Name<input required value={form.name} onChange={(event) => updateForm('name', event.target.value)} placeholder="Enter customer name" /></label><label>Email ID<input required type="email" value={form.email} onChange={(event) => updateForm('email', event.target.value)} placeholder="customer@example.com" /></label><label>Mobile Number<input required value={form.phone} onChange={(event) => updateForm('phone', event.target.value)} placeholder="+91 98765 43210" /></label><label>Company<input required value={form.company} onChange={(event) => updateForm('company', event.target.value)} placeholder="Company name" /></label><label>Lead Source<select value={form.source} onChange={(event) => updateForm('source', event.target.value)}><option>Website</option><option>Referral</option><option>LinkedIn</option><option>Cold Call</option><option>Email Campaign</option><option>WhatsApp</option><option>Other</option></select></label><label>Status<select value={form.status} onChange={(event) => updateForm('status', event.target.value)}><option>New</option><option>Contacted</option><option>In Progress</option><option>Converted</option><option>Lost</option></select></label><label>Next Follow-up Date<input type="date" value={form.nextFollowUpDate} onChange={(event) => updateForm('nextFollowUpDate', event.target.value)} /></label><label>Next Follow-up Time<input type="time" value={form.nextFollowUpTime} onChange={(event) => updateForm('nextFollowUpTime')} /></label><label>Priority<select value={form.priority} onChange={(event) => updateForm('priority', event.target.value)}><option>Hot</option><option>Warm</option><option>High</option><option>Medium</option><option>Low</option></select></label><label>Job Title<input value={form.jobTitle} onChange={(event) => updateForm('jobTitle', event.target.value)} placeholder="Founder / Manager / Customer" /></label><label className="full">Notes<textarea value={form.notes} onChange={(event) => updateForm('notes', event.target.value)} placeholder="Requirement, budget, interest, discussion notes..." /></label><footer><button type="button" onClick={() => setIsAddOpen(false)}>Cancel</button><button className="primary" type="submit">Save Lead</button></footer></form></section></div>}
     </div>
   );
 }
