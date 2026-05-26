@@ -1,0 +1,98 @@
+/* FINAL CRM OVERRIDE: one sidebar + correct Lead Activity placement */
+:root{
+  --sf-sidebar-width:230px;
+  --sf-sidebar-bg:radial-gradient(circle at 25% 0%,rgba(59,130,246,.10),transparent 26%),linear-gradient(180deg,#020617 0%,#020b19 46%,#01040d 100%);
+}
+
+html,body,#root{width:100%;max-width:100%;overflow-x:hidden!important;}
+
+.sf-sidebar-v2,
+.sf-sidebar{
+  width:var(--sf-sidebar-width)!important;
+  min-width:var(--sf-sidebar-width)!important;
+  max-width:var(--sf-sidebar-width)!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  max-height:100vh!important;
+  position:fixed!important;
+  left:0!important;
+  top:0!important;
+  bottom:0!important;
+  z-index:20!important;
+  background:var(--sf-sidebar-bg)!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+}
+
+.sf-dashboard{
+  display:grid!important;
+  grid-template-columns:var(--sf-sidebar-width) minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:hidden!important;
+}
+
+.sf-dashboard > main,
+.sf-main,
+.ld-main,
+.lead-ref-main{
+  min-width:0!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+
+.sf-dashboard.lead-list-reference{
+  display:grid!important;
+  grid-template-columns:var(--sf-sidebar-width) minmax(0,1fr)!important;
+  width:100%!important;
+  max-width:100%!important;
+  overflow-x:hidden!important;
+}
+
+.sf-dashboard.lead-list-reference .lead-ref-main{
+  grid-column:2!important;
+  margin-left:0!important;
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  display:block!important;
+  visibility:visible!important;
+  opacity:1!important;
+  overflow-x:hidden!important;
+}
+
+.sf-dashboard.lead-list-reference .lead-ref-metrics,
+.sf-dashboard.lead-list-reference .lead-ref-filters,
+.sf-dashboard.lead-list-reference .lead-ref-table-card{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+
+.sf-dashboard.lead-list-reference .lead-ref-table-card{
+  overflow-x:auto!important;
+}
+
+.sf-dashboard.lead-list-reference .lead-ref-table{
+  min-width:1040px!important;
+}
+
+@media(max-width:1200px){
+  .sf-sidebar-v2,.sf-sidebar{
+    position:relative!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:auto!important;
+    min-height:auto!important;
+    max-height:none!important;
+  }
+  .sf-dashboard,
+  .sf-dashboard.lead-list-reference{
+    grid-template-columns:1fr!important;
+  }
+  .sf-dashboard.lead-list-reference .lead-ref-main{
+    grid-column:1!important;
+  }
+}
