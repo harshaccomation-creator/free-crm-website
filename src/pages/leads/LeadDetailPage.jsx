@@ -22,7 +22,7 @@ const tagPalette = {
   red: { bg: '#fff1f2', color: '#ef4444', border: '#ffe0e5', label: 'Red' },
 };
 const activityTypes = {
-  call: { label: 'Call', icon: '☎', tone: 'green', title: 'Call Completed' }, demo_done: { label: 'Demo Done', icon: '◈', tone: 'blue', title: 'Demo Completed' }, lost: { label: 'Lost', icon: '✕', tone: 'red', title: 'Lead Marked as Lost' }, demo_scheduled: { label: 'Demo Scheduled', icon: '▣', tone: 'orange', title: 'Demo Scheduled' }, follow_up: { label: 'Follow-up', icon: '↻', tone: 'orange', title: 'Follow-up Scheduled' }, won: { label: 'Won', icon: '✓', tone: 'green', title: 'Lead Marked as Won' },
+  call: { label: 'Call', icon: '☎', tone: 'green', title: 'Call Completed' }, not_connected: { label: 'Not Connected', icon: '☎', tone: 'red', title: 'Call Not Connected' }, demo_done: { label: 'Demo Done', icon: '◈', tone: 'blue', title: 'Demo Completed' }, lost: { label: 'Lost', icon: '✕', tone: 'red', title: 'Lead Marked as Lost' }, demo_scheduled: { label: 'Demo Scheduled', icon: '▣', tone: 'orange', title: 'Demo Scheduled' }, follow_up: { label: 'Follow-up', icon: '↻', tone: 'orange', title: 'Follow-up Scheduled' }, won: { label: 'Won', icon: '✓', tone: 'green', title: 'Lead Marked as Won' },
 };
 const taskTypes = { call: { label: 'Call', icon: '☎' }, demo_scheduled: { label: 'Demo Scheduled', icon: '▣' }, follow_up: { label: 'Follow-up', icon: '↻' } };
 const baseActivities = [
