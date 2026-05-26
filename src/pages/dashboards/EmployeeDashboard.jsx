@@ -5,6 +5,7 @@ import '../../styles/sidebarGlobalFinalLock.css';
 import '../../styles/zzzSidebarBlackFix.css';
 import '../../styles/dashboardFontPolish.css';
 import '../../styles/employeeDashboardPremiumFix.css';
+import '../../styles/employeeDashboardVisibleFix.css';
 
 function DashIcon({ type }) {
   const icons = {
