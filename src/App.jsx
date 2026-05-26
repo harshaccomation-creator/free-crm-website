@@ -27,6 +27,7 @@ import './styles/leadActivityImageMatch.css';
 import './styles/finalCrmSidebarAndLeadFix.css';
 import './styles/sidebarGlobalFinalLock.css';
 import './styles/zzzSidebarBlackFix.css';
+import './styles/sidebarUnified.css'; // NEW: Master sidebar stylesheet (import LAST)
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
