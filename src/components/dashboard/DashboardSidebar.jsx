@@ -7,9 +7,23 @@ const menuByRole = {
 };
 
 const routes = {
-  employee: { Dashboard: '/employee/dashboard', 'My Leads': '/leads', Won: '/leads?status=won' },
-  admin: { Dashboard: '/admin/dashboard', Leads: '/leads' },
-  superAdmin: { Dashboard: '/super-admin/dashboard' },
+  employee: {
+    Dashboard: '/employee/dashboard',
+    'My Leads': '/leads',
+    Won: '/employee/won',
+    Tasks: '/employee/tasks',
+    Calendar: '/employee/calendar',
+    Activities: '/employee/activities',
+    Reports: '/employee/reports',
+    Profile: '/employee/profile',
+  },
+  admin: {
+    Dashboard: '/admin/dashboard',
+    Leads: '/leads',
+  },
+  superAdmin: {
+    Dashboard: '/super-admin/dashboard',
+  },
 };
 
 const iconByItem = {
@@ -69,10 +83,7 @@ function navigateTo(path, role) {
 }
 
 function isActive(item, path, currentPath, index) {
-  const currentSearch = window.location.search;
-  if (item === 'Won') return currentPath === '/leads' && currentSearch.includes('status=won');
-  if (currentPath.startsWith('/leads')) return item === 'Leads' || item === 'My Leads';
-  if (path) return currentPath === path;
+  if (path) return currentPath === path || (item === 'My Leads' && currentPath.startsWith('/leads'));
   return index === 0 && currentPath.includes('/dashboard');
 }
 
