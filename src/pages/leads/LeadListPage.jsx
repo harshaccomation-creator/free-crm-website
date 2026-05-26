@@ -5,6 +5,7 @@ import '../../styles/leadActivityStable.css';
 import '../../styles/leadListFontFix.css';
 import '../../styles/leadListSoftProfessional.css';
 import '../../styles/leadFilterFix.css';
+import '../../styles/leadListFinalTableFix.css';
 
 const metrics = [
   ['Total Leads', '1,245', '↑ 12.5%', 'user', 'blue'],
@@ -31,7 +32,7 @@ function LeadSvg({ type }) {
     filter: <path d="M4 5h16l-6 7v5l-4 2v-7L4 5Z" />,
     search: <path d="m21 21-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />,
     calendar: <path d="M7 3v4m10-4v4M4 9h16M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z" />,
-    dots: <path d="M12 8h.01M12 12h.01M12 16h.01" />,
+    eye: <><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></>,
   };
   return <svg className="la-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[type]}</svg>;
 }
@@ -128,13 +129,12 @@ export default function LeadListPage() {
         <section className="la-filters">
           <div className="la-field"><span>Date Range</span><strong>01 May 2025 - 31 May 2025</strong><i>⌄</i></div>
           <div className="la-field"><span>Lead Source</span><strong>All Sources</strong><i>⌄</i></div>
-          <div className="la-field"><span>Lead Owner</span><strong>All Users</strong><i>⌄</i></div>
           <div className="la-field"><span>Status</span><strong>All Statuses</strong><i>⌄</i></div>
           <label className="la-search"><LeadSvg type="search" /><input placeholder="Search leads..." /></label>
           <button className="la-filter-btn"><LeadSvg type="filter" />Filter</button>
         </section>
         <section className="la-table-card">
-          <table className="la-table"><thead><tr><th><input className="la-check" type="checkbox" /></th><th>Lead Name</th><th>Company</th><th>Lead Source</th><th>Status</th><th>Last Activity</th><th>Next Follow Up</th><th>Lead Owner</th><th>Actions</th></tr></thead><tbody>{leadRows.map((lead) => <tr key={lead.id} onClick={() => openLead(lead.id)}><td><input className="la-check" type="checkbox" onClick={(event) => event.stopPropagation()} /></td><td><div className="la-person"><span className="la-avatar">{lead.initials}</span><div><strong>{lead.name}</strong><small>{lead.phone}</small></div></div></td><td>{lead.company}</td><td><span className={`la-pill ${sourceClass[lead.source] || 'blue'}`}>{lead.source}</span></td><td><span className={`la-pill ${statusClass[lead.status] || 'blue'}`}>{lead.status}</span></td><td><span className="la-icon-text"><LeadSvg type="phone" />{lead.lastActivity}</span></td><td><span className="la-icon-text"><LeadSvg type="calendar" />{lead.nextFollowUp}</span></td><td><span className="la-owner"><span className="la-avatar">R</span>{lead.owner}</span></td><td><LeadSvg type="dots" /></td></tr>)}</tbody></table>
+          <table className="la-table"><thead><tr><th><input className="la-check" type="checkbox" /></th><th>Lead Name</th><th>Company</th><th>Lead Source</th><th>Status</th><th>Last Activity</th><th>Next Follow Up</th><th>Lead Owner</th><th>Actions</th></tr></thead><tbody>{leadRows.map((lead) => <tr key={lead.id} onClick={() => openLead(lead.id)}><td><input className="la-check" type="checkbox" onClick={(event) => event.stopPropagation()} /></td><td><div className="la-person"><span className="la-avatar">{lead.initials}</span><div><strong>{lead.name}</strong><small>{lead.phone}</small></div></div></td><td>{lead.company}</td><td><span className={`la-pill ${sourceClass[lead.source] || 'blue'}`}>{lead.source}</span></td><td><span className={`la-pill ${statusClass[lead.status] || 'blue'}`}>{lead.status}</span></td><td><span className="la-icon-text"><LeadSvg type="phone" />{lead.lastActivity}</span></td><td><span className="la-icon-text"><LeadSvg type="calendar" />{lead.nextFollowUp}</span></td><td><span className="la-owner"><span className="la-avatar">R</span>{lead.owner}</span></td><td><button type="button" className="la-row-action" onClick={(event) => { event.stopPropagation(); openLead(lead.id); }} aria-label={`Open ${lead.name}`}><LeadSvg type="eye" /></button></td></tr>)}</tbody></table>
           <footer className="la-footer"><span>{totalText}</span><div className="la-pagination"><button>‹</button><button className="active">1</button><button>2</button><button>3</button><span>...</span><button>8</button><button>›</button><select><option>10 / page</option></select></div></footer>
         </section>
       </main>
