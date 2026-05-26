@@ -10,26 +10,29 @@
   max-width: 100% !important;
 }
 
-.ld-tab-panel {
-  padding: 16px !important;
-  border-radius: 16px !important;
+.ld-tab-panel,
+.ld-activity-panel {
+  padding: 18px !important;
+  border-radius: 20px !important;
   background: #fff !important;
   border: 1px solid #dbe7f6 !important;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.045) !important;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.055) !important;
 }
 
-.ld-tab-panel header {
+.ld-tab-panel header,
+.ld-panel-header {
   display: flex !important;
   align-items: center !important;
   justify-content: space-between !important;
   gap: 12px !important;
-  margin-bottom: 12px !important;
+  margin-bottom: 14px !important;
 }
 
-.ld-tab-panel header h2 {
+.ld-tab-panel header h2,
+.ld-activity-panel h2 {
   margin: 0 !important;
   font-size: 15px !important;
-  font-weight: 670 !important;
+  font-weight: 700 !important;
   color: #0f172a !important;
 }
 
@@ -42,27 +45,33 @@
 
 .ld-tab-panel header button,
 .ld-add-activity-btn {
-  height: 34px !important;
-  padding: 0 13px !important;
-  border-radius: 10px !important;
+  height: 36px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
   border: 1px solid #dbe7f6 !important;
   background: #fff !important;
   color: #0b63f6 !important;
   font-size: 12px !important;
-  font-weight: 650 !important;
+  font-weight: 700 !important;
   white-space: nowrap !important;
 }
 
 .ld-add-activity-btn {
-  background: #0b63f6 !important;
+  background: linear-gradient(135deg, #6d4bff, #0b63f6) !important;
   color: #fff !important;
-  border-color: #0b63f6 !important;
+  border-color: transparent !important;
+  box-shadow: 0 10px 22px rgba(11, 99, 246, 0.22) !important;
 }
 
 .ld-activity-actions {
   display: flex !important;
   gap: 8px !important;
   align-items: center !important;
+}
+
+.ld-activity-panel select,
+.ld-activity-actions select {
+  display: none !important;
 }
 
 .ld-tab-row,
@@ -235,9 +244,145 @@
   background: #eaf8ef !important;
 }
 
+.ld-modal-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(15, 23, 42, 0.46) !important;
+  display: grid !important;
+  place-items: center !important;
+  z-index: 2000 !important;
+  padding: 16px !important;
+}
+
+.ld-modal {
+  width: min(540px, calc(100vw - 32px)) !important;
+  background: #fff !important;
+  border-radius: 20px !important;
+  border: 1px solid #dbe7f6 !important;
+  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.24) !important;
+  padding: 20px !important;
+}
+
+.ld-modal-top {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  margin-bottom: 16px !important;
+}
+
+.ld-modal-top h3 {
+  margin: 0 0 4px !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.ld-modal-top p {
+  margin: 0 !important;
+  font-size: 12px !important;
+  color: #64748b !important;
+}
+
+.ld-modal-close {
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 10px !important;
+  border: 1px solid #dbe7f6 !important;
+  background: #fff !important;
+  color: #0f172a !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+}
+
+.ld-form-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 14px !important;
+}
+
+.ld-field {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.ld-field.full {
+  grid-column: 1 / -1 !important;
+}
+
+.ld-field span {
+  margin-bottom: 6px !important;
+  font-size: 12px !important;
+  font-weight: 650 !important;
+  color: #475569 !important;
+}
+
+.ld-field input,
+.ld-field select,
+.ld-field textarea {
+  width: 100% !important;
+  border: 1px solid #dbe7f6 !important;
+  border-radius: 12px !important;
+  background: #fff !important;
+  color: #0f172a !important;
+  font-size: 13px !important;
+  outline: none !important;
+  box-sizing: border-box !important;
+}
+
+.ld-field input,
+.ld-field select {
+  height: 42px !important;
+  padding: 0 14px !important;
+}
+
+.ld-field textarea {
+  min-height: 104px !important;
+  padding: 12px 14px !important;
+  resize: vertical !important;
+  line-height: 1.45 !important;
+}
+
+.ld-modal-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 10px !important;
+  margin-top: 18px !important;
+}
+
+.ld-modal-actions .ghost,
+.ld-modal-actions .primary {
+  height: 38px !important;
+  padding: 0 16px !important;
+  border-radius: 12px !important;
+  font-weight: 700 !important;
+}
+
+.ld-modal-actions .ghost {
+  border: 1px solid #dbe7f6 !important;
+  background: #fff !important;
+  color: #475569 !important;
+}
+
+.ld-modal-actions .primary {
+  border: 0 !important;
+  background: linear-gradient(135deg, #6d4bff, #0b63f6) !important;
+  color: #fff !important;
+  box-shadow: 0 10px 22px rgba(11, 99, 246, 0.22) !important;
+}
+
+.ld-activity-row.red .ld-activity-icon {
+  background: #fff1f2 !important;
+  color: #ef4444 !important;
+}
+
 @media (max-width: 900px) {
   .ld-task-stats { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
   .ld-task-row { grid-template-columns: 38px minmax(0, 1fr) !important; }
   .ld-task-row > b,
   .ld-task-row button { justify-self: start !important; grid-column: 2 !important; }
+}
+
+@media (max-width: 640px) {
+  .ld-form-grid { grid-template-columns: 1fr !important; }
 }
