@@ -1,0 +1,18 @@
+/* Clean SVG icons for Lead Detail tabs */
+.ld-tabs .ld-tab-icon {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  display: block !important;
+  color: currentColor !important;
+  stroke: currentColor !important;
+  opacity: .92 !important;
+}
+
+.ld-tabs button.active .ld-tab-icon {
+  opacity: 1 !important;
+}
+
+.ld-tabs .ld-text-icon {
+  display: none !important;
+}
