@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import './DashboardSidebar.css';
 
 const menuByRole = {
@@ -88,14 +89,23 @@ function isActive(item, path, currentPath, index) {
 }
 
 export default function DashboardSidebar({ role = 'employee' }) {
+  const sidebarRef = useRef(null);
   const safeRole = menuByRole[role] ? role : 'employee';
   const items = menuByRole[safeRole];
   const currentPath = window.location.pathname;
   const upgradeTitle = safeRole === 'superAdmin' ? 'Upgrade to Enterprise' : 'Upgrade to Premium';
   const upgradeText = safeRole === 'superAdmin' ? 'Unlock advanced controls, SSO and audit logs.' : 'Unlock advanced features, automations and analytics.';
 
+  useEffect(() => {
+    const sidebar = sidebarRef.current;
+    if (!sidebar) return;
+    sidebar.scrollTop = 0;
+    const nav = sidebar.querySelector('.sfx-nav');
+    if (nav) nav.scrollTop = 0;
+  });
+
   return (
-    <aside className="sfx-sidebar">
+    <aside className="sfx-sidebar" ref={sidebarRef}>
       <div className="sfx-brand-row">
         <button className="sfx-brand" onClick={() => navigateTo('/', safeRole)} type="button">
           <span className="sfx-logo">S</span>
