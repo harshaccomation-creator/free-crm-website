@@ -116,7 +116,7 @@ export default function LeadListPage() {
       <DashboardSidebar role={role} />
       <main className="la-main">
         <header className="la-header">
-          <div><h1>Lead Activity</h1><p>Home › Leads › Lead Activity</p></div>
+          <div><h1>My Leads</h1><p>Home › Leads</p></div>
           <div className="la-actions"><button type="button" onClick={exportLeads}><LeadSvg type="download" />Export</button><button type="button" className="primary" onClick={openAddLead}>+ Add Lead</button></div>
         </header>
         <section className="la-metrics">
