@@ -4,6 +4,7 @@ import '../../styles/referenceDashboardExact.css';
 import '../../styles/sidebarGlobalFinalLock.css';
 import '../../styles/zzzSidebarBlackFix.css';
 import '../../styles/dashboardFontPolish.css';
+import '../../styles/employeeDashboardPremiumFix.css';
 
 function DashIcon({ type }) {
   const icons = {
@@ -41,6 +42,13 @@ export default function EmployeeDashboard() {
     ['Amit Kumar','Kumar Solutions','Proposal','May 26, 2025 02:00 PM'],
     ['Pooja Singh','Singh Enterprises','Follow-up','May 22, 2025 03:00 PM'],
   ];
+  const schedule = [
+    ['Call with Rohan Sharma', '10:00 AM', 'Call'],
+    ['Follow-up: Neha Patel', '11:30 AM', 'Follow'],
+    ['Demo Presentation', '02:00 PM', 'Join'],
+    ['Internal Team Sync', '04:00 PM', 'View'],
+    ['Call with Dinesh Gupta', '05:00 PM', 'Call'],
+  ];
   return (
     <div className="sf-dashboard reference-dashboard employee-reference-dashboard">
       <DashboardSidebar role="employee" />
@@ -56,8 +64,8 @@ export default function EmployeeDashboard() {
           <article className="reference-stat target"><span className="stat-icon"><DashIcon type="target" /></span><p>Monthly Target Progress</p><h2>68%</h2><small>₹6,80,000 / ₹10,00,000</small><div className="progress"><b style={{width:'68%'}} /></div></article>
         </section>
         <section className="reference-row employee-row-one">
-          <article className="reference-card"><div className="reference-card-head"><h2>My Performance <small>(This Week)</small></h2><button>This Week ▾</button></div><LineChart /></article>
-          <article className="reference-card"><div className="reference-card-head"><h2>Today's Schedule</h2><button>View</button></div>{['Call with Rohan Sharma','Follow-up: Neha Patel','Demo Presentation','Internal Team Sync','Call with Dinesh Gupta'].map((t,i)=><div className="task-list-row" key={t}><span className="check"/><div><strong>{t}</strong><small>{['10:00 AM','11:30 AM','02:00 PM','04:00 PM','05:00 PM'][i]}</small></div><time>Call</time></div>)}</article>
+          <article className="reference-card performance-card"><div className="reference-card-head"><h2>My Performance <small>(This Week)</small></h2><button>This Week ▾</button></div><LineChart /></article>
+          <article className="reference-card schedule-card"><div className="reference-card-head"><h2>Today's Schedule</h2><button>View</button></div>{schedule.map(([t, time, action])=><div className="task-list-row" key={t}><span className="check"/><div><strong>{t}</strong><small>{time}</small></div><time className={action === 'Join' ? 'join' : action === 'View' ? 'view' : ''}>{action}</time></div>)}</article>
         </section>
         <section className="reference-row employee-row-two">
           <article className="reference-card"><div className="reference-card-head"><h2>Recent Leads & Follow-ups</h2><button>View All Leads</button></div><table className="reference-table"><thead><tr><th>Lead Name</th><th>Company</th><th>Status</th><th>Next Follow-up</th></tr></thead><tbody>{leads.map(r=><tr key={r[0]}><td>{r[0]}</td><td>{r[1]}</td><td><span className="pill blue">{r[2]}</span></td><td>{r[3]}</td></tr>)}</tbody></table></article>
