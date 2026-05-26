@@ -1,0 +1,78 @@
+/* Working custom lead tags polish */
+.ld-tag-strip .ld-custom-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: 30px !important;
+  padding: 6px 10px 6px 12px !important;
+  border-radius: 10px !important;
+  font-size: 10.6px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, 0.035) !important;
+}
+
+.ld-tag-strip .ld-custom-tag button {
+  width: 17px !important;
+  height: 17px !important;
+  min-width: 17px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+  color: currentColor !important;
+  display: grid !important;
+  place-items: center !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+}
+
+.ld-tag-strip > div > button {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 5 !important;
+}
+
+.ld-color-palette {
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+.ld-color-palette button {
+  height: 40px !important;
+  padding: 0 10px !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--tag-border) !important;
+  background: var(--tag-bg) !important;
+  color: var(--tag-color) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 7px !important;
+  font-size: 11px !important;
+  font-weight: 750 !important;
+  cursor: pointer !important;
+}
+
+.ld-color-palette button i {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 999px !important;
+  background: var(--tag-color) !important;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.75) !important;
+}
+
+.ld-color-palette button.active {
+  outline: 3px solid rgba(11, 99, 246, 0.13) !important;
+  transform: translateY(-1px) !important;
+}
+
+@media (max-width: 640px) {
+  .ld-color-palette {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
