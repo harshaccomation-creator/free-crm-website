@@ -31,6 +31,7 @@ import './styles/sidebarGlobalFinalLock.css';
 import './styles/zzzSidebarBlackFix.css';
 import './styles/sidebarUnified.css';
 import './styles/leadDetailFinalLock.css';
+import './styles/leadDetailTagTabsAlignment.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
