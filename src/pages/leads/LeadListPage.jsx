@@ -1,15 +1,15 @@
 import { useMemo, useState } from 'react';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { leads as initialLeads } from './leadsData.js';
-import '../../styles/leadsReferenceExact.css';
+import '../../styles/leadActivityStable.css';
 
 const metrics = [
-  ['Total Leads','1,245','↑ 12.5%','user','blue'],
-  ['New Leads','320','↑ 8.4%','plus','blue'],
-  ['Contacted','452','↑ 15.3%','phone','green'],
-  ['In Progress','268','↓ 4.6%','clock','orange down'],
-  ['Converted','205','↑ 10.2%','crown','green'],
-  ['Lost','78','↓ 8.1%','ban','red down'],
+  ['Total Leads', '1,245', '↑ 12.5%', 'user', 'blue'],
+  ['New Leads', '320', '↑ 8.4%', 'plus', 'blue'],
+  ['Contacted', '452', '↑ 15.3%', 'phone', 'green'],
+  ['In Progress', '268', '↓ 4.6%', 'clock', 'orange down'],
+  ['Converted', '205', '↑ 10.2%', 'crown', 'green'],
+  ['Lost', '78', '↓ 8.1%', 'ban', 'red down'],
 ];
 
 const sourceClass = { Website: 'blue', Referral: 'green', LinkedIn: 'purple', 'Cold Call': 'orange', 'Email Campaign': 'purple', WhatsApp: 'green', Other: 'blue' };
@@ -30,7 +30,7 @@ function LeadSvg({ type }) {
     calendar: <path d="M7 3v4m10-4v4M4 9h16M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z" />,
     dots: <path d="M12 8h.01M12 12h.01M12 16h.01" />,
   };
-  return <svg className="lead-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[type]}</svg>;
+  return <svg className="la-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[type]}</svg>;
 }
 
 function getCurrentRole() {
@@ -112,30 +112,30 @@ export default function LeadListPage() {
   const totalText = useMemo(() => `Showing 1 to ${Math.min(leadRows.length, 10)} of ${leadRows.length} leads`, [leadRows.length]);
 
   return (
-    <div className="sf-dashboard lead-reference lead-list-reference">
+    <div className="sf-dashboard la-page">
       <DashboardSidebar role={role} />
-      <main className="lead-ref-main">
-        <header className="lead-ref-header">
+      <main className="la-main">
+        <header className="la-header">
           <div><h1>Lead Activity</h1><p>Home › Leads › Lead Activity</p></div>
-          <div className="lead-ref-actions"><button type="button" onClick={exportLeads}><LeadSvg type="download" />Export</button><button type="button" className="primary" onClick={openAddLead}>+ Add Lead</button></div>
+          <div className="la-actions"><button type="button" onClick={exportLeads}><LeadSvg type="download" />Export</button><button type="button" className="primary" onClick={openAddLead}>+ Add Lead</button></div>
         </header>
-        <section className="lead-ref-metrics">
-          {metrics.map(([title, value, change, icon, tone]) => <article className={`lead-ref-metric ${tone}`} key={title}><span className="icon"><LeadSvg type={icon} /></span><div><p>{title}</p><h2>{value}</h2><small>{change}</small></div></article>)}
+        <section className="la-metrics">
+          {metrics.map(([title, value, change, icon, tone]) => <article className={`la-metric ${tone}`} key={title}><span className="la-metric-icon"><LeadSvg type={icon} /></span><div><p>{title}</p><h2>{value}</h2><small>{change}</small></div></article>)}
         </section>
-        <section className="lead-ref-filters">
-          <div className="lead-ref-field"><span>Date Range</span><strong>01 May 2025 - 31 May 2025</strong><i>⌄</i></div>
-          <div className="lead-ref-field"><span>Lead Source</span><strong>All Sources</strong><i>⌄</i></div>
-          <div className="lead-ref-field"><span>Lead Owner</span><strong>All Users</strong><i>⌄</i></div>
-          <div className="lead-ref-field"><span>Status</span><strong>All Statuses</strong><i>⌄</i></div>
-          <label className="lead-ref-search"><LeadSvg type="search" /><input placeholder="Search leads..." /></label>
-          <button className="lead-ref-filter-btn"><LeadSvg type="filter" />Filter</button>
+        <section className="la-filters">
+          <div className="la-field"><span>Date Range</span><strong>01 May 2025 - 31 May 2025</strong><i>⌄</i></div>
+          <div className="la-field"><span>Lead Source</span><strong>All Sources</strong><i>⌄</i></div>
+          <div className="la-field"><span>Lead Owner</span><strong>All Users</strong><i>⌄</i></div>
+          <div className="la-field"><span>Status</span><strong>All Statuses</strong><i>⌄</i></div>
+          <label className="la-search"><LeadSvg type="search" /><input placeholder="Search leads..." /></label>
+          <button className="la-filter-btn"><LeadSvg type="filter" />Filter</button>
         </section>
-        <section className="lead-ref-table-card">
-          <table className="lead-ref-table"><thead><tr><th><input className="lead-ref-check" type="checkbox" /></th><th>Lead Name</th><th>Company</th><th>Lead Source</th><th>Status</th><th>Last Activity</th><th>Next Follow Up</th><th>Lead Owner</th><th>Actions</th></tr></thead><tbody>{leadRows.map((lead) => <tr key={lead.id} onClick={() => openLead(lead.id)}><td><input className="lead-ref-check" type="checkbox" onClick={(event) => event.stopPropagation()} /></td><td><div className="lead-ref-person"><span className="lead-ref-avatar">{lead.initials}</span><div><strong>{lead.name}</strong><small>{lead.phone}</small></div></div></td><td>{lead.company}</td><td><span className={`lead-ref-pill ${sourceClass[lead.source] || 'blue'}`}>{lead.source}</span></td><td><span className={`lead-ref-pill ${statusClass[lead.status] || 'blue'}`}>{lead.status}</span></td><td><span className="lead-table-icon-text"><LeadSvg type="phone" />{lead.lastActivity}</span></td><td><span className="lead-table-icon-text"><LeadSvg type="calendar" />{lead.nextFollowUp}</span></td><td><span className="lead-ref-owner"><span className="lead-ref-avatar">R</span>{lead.owner}</span></td><td><LeadSvg type="dots" /></td></tr>)}</tbody></table>
-          <footer className="lead-ref-table-footer"><span>{totalText}</span><div className="lead-ref-pagination"><button>‹</button><button className="active">1</button><button>2</button><button>3</button><span>...</span><button>8</button><button>›</button><select><option>10 / page</option></select></div></footer>
+        <section className="la-table-card">
+          <table className="la-table"><thead><tr><th><input className="la-check" type="checkbox" /></th><th>Lead Name</th><th>Company</th><th>Lead Source</th><th>Status</th><th>Last Activity</th><th>Next Follow Up</th><th>Lead Owner</th><th>Actions</th></tr></thead><tbody>{leadRows.map((lead) => <tr key={lead.id} onClick={() => openLead(lead.id)}><td><input className="la-check" type="checkbox" onClick={(event) => event.stopPropagation()} /></td><td><div className="la-person"><span className="la-avatar">{lead.initials}</span><div><strong>{lead.name}</strong><small>{lead.phone}</small></div></div></td><td>{lead.company}</td><td><span className={`la-pill ${sourceClass[lead.source] || 'blue'}`}>{lead.source}</span></td><td><span className={`la-pill ${statusClass[lead.status] || 'blue'}`}>{lead.status}</span></td><td><span className="la-icon-text"><LeadSvg type="phone" />{lead.lastActivity}</span></td><td><span className="la-icon-text"><LeadSvg type="calendar" />{lead.nextFollowUp}</span></td><td><span className="la-owner"><span className="la-avatar">R</span>{lead.owner}</span></td><td><LeadSvg type="dots" /></td></tr>)}</tbody></table>
+          <footer className="la-footer"><span>{totalText}</span><div className="la-pagination"><button>‹</button><button className="active">1</button><button>2</button><button>3</button><span>...</span><button>8</button><button>›</button><select><option>10 / page</option></select></div></footer>
         </section>
       </main>
-      {isAddOpen && <div className="lead-modal-backdrop" role="presentation" onClick={() => setIsAddOpen(false)}><section className="lead-add-modal" role="dialog" aria-modal="true" aria-labelledby="addLeadTitle" onClick={(event) => event.stopPropagation()}><header><div><h2 id="addLeadTitle">Add New Lead</h2><p>Created automatically on {createdAt}</p></div><button type="button" onClick={() => setIsAddOpen(false)}>×</button></header><form onSubmit={saveLead} className="lead-add-form"><label>Customer Name<input required value={form.name} onChange={(event) => updateForm('name', event.target.value)} placeholder="Enter customer name" /></label><label>Email ID<input required type="email" value={form.email} onChange={(event) => updateForm('email', event.target.value)} placeholder="customer@example.com" /></label><label>Mobile Number<input required value={form.phone} onChange={(event) => updateForm('phone', event.target.value)} placeholder="+91 98765 43210" /></label><label>Company<input required value={form.company} onChange={(event) => updateForm('company', event.target.value)} placeholder="Company name" /></label><label>Lead Source<select value={form.source} onChange={(event) => updateForm('source', event.target.value)}><option>Website</option><option>Referral</option><option>LinkedIn</option><option>Cold Call</option><option>Email Campaign</option><option>WhatsApp</option><option>Other</option></select></label><label>Status<select value={form.status} onChange={(event) => updateForm('status', event.target.value)}><option>New</option><option>Contacted</option><option>In Progress</option><option>Converted</option><option>Lost</option></select></label><label>Next Follow-up Date<input type="date" value={form.nextFollowUpDate} onChange={(event) => updateForm('nextFollowUpDate', event.target.value)} /></label><label>Next Follow-up Time<input type="time" value={form.nextFollowUpTime} onChange={(event) => updateForm('nextFollowUpTime', event.target.value)} /></label><label>Priority<select value={form.priority} onChange={(event) => updateForm('priority', event.target.value)}><option>Hot</option><option>Warm</option><option>High</option><option>Medium</option><option>Low</option></select></label><label>Job Title<input value={form.jobTitle} onChange={(event) => updateForm('jobTitle', event.target.value)} placeholder="Founder / Manager / Customer" /></label><label className="full">Notes<textarea value={form.notes} onChange={(event) => updateForm('notes', event.target.value)} placeholder="Requirement, budget, interest, discussion notes..." /></label><footer><button type="button" onClick={() => setIsAddOpen(false)}>Cancel</button><button className="primary" type="submit">Save Lead</button></footer></form></section></div>}
+      {isAddOpen && <div className="la-modal-backdrop" role="presentation" onClick={() => setIsAddOpen(false)}><section className="la-modal" role="dialog" aria-modal="true" aria-labelledby="addLeadTitle" onClick={(event) => event.stopPropagation()}><header><div><h2 id="addLeadTitle">Add New Lead</h2><p>Created automatically on {createdAt}</p></div><button type="button" onClick={() => setIsAddOpen(false)}>×</button></header><form onSubmit={saveLead} className="la-form"><label>Customer Name<input required value={form.name} onChange={(event) => updateForm('name', event.target.value)} placeholder="Enter customer name" /></label><label>Email ID<input required type="email" value={form.email} onChange={(event) => updateForm('email', event.target.value)} placeholder="customer@example.com" /></label><label>Mobile Number<input required value={form.phone} onChange={(event) => updateForm('phone', event.target.value)} placeholder="+91 98765 43210" /></label><label>Company<input required value={form.company} onChange={(event) => updateForm('company', event.target.value)} placeholder="Company name" /></label><label>Lead Source<select value={form.source} onChange={(event) => updateForm('source', event.target.value)}><option>Website</option><option>Referral</option><option>LinkedIn</option><option>Cold Call</option><option>Email Campaign</option><option>WhatsApp</option><option>Other</option></select></label><label>Status<select value={form.status} onChange={(event) => updateForm('status', event.target.value)}><option>New</option><option>Contacted</option><option>In Progress</option><option>Converted</option><option>Lost</option></select></label><label>Next Follow-up Date<input type="date" value={form.nextFollowUpDate} onChange={(event) => updateForm('nextFollowUpDate', event.target.value)} /></label><label>Next Follow-up Time<input type="time" value={form.nextFollowUpTime} onChange={(event) => updateForm('nextFollowUpTime', event.target.value)} /></label><label>Priority<select value={form.priority} onChange={(event) => updateForm('priority', event.target.value)}><option>Hot</option><option>Warm</option><option>High</option><option>Medium</option><option>Low</option></select></label><label>Job Title<input value={form.jobTitle} onChange={(event) => updateForm('jobTitle', event.target.value)} placeholder="Founder / Manager / Customer" /></label><label className="full">Notes<textarea value={form.notes} onChange={(event) => updateForm('notes', event.target.value)} placeholder="Requirement, budget, interest, discussion notes..." /></label><footer><button type="button" onClick={() => setIsAddOpen(false)}>Cancel</button><button className="primary" type="submit">Save Lead</button></footer></form></section></div>}
     </div>
   );
 }
