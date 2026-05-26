@@ -6,6 +6,7 @@ import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
 import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
 import LeadListPage from './pages/leads/LeadListPage.jsx';
 import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
+import { WonPage, TasksPage, CalendarPage, ActivitiesPage, ReportsPage, ProfilePage } from './pages/employee/EmployeeWorkPages.jsx';
 import './styles/dashboardBase.css';
 import './styles/loginPage.css';
 import './styles/loginDarkHero.css';
@@ -44,6 +45,12 @@ export default function App() {
 
   if (path === '/login') return <LoginPage />;
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
+  if (path === '/employee/won') return <WonPage />;
+  if (path === '/employee/tasks') return <TasksPage />;
+  if (path === '/employee/calendar') return <CalendarPage />;
+  if (path === '/employee/activities') return <ActivitiesPage />;
+  if (path === '/employee/reports') return <ReportsPage />;
+  if (path === '/employee/profile') return <ProfilePage />;
   if (path === '/admin/dashboard') return <AdminDashboard />;
   if (path === '/super-admin/dashboard') return <SuperAdminDashboard />;
   if (path === '/leads') return <LeadListPage />;
