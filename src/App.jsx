@@ -37,6 +37,7 @@ import './styles/leadDetailTabContent.css';
 import './styles/leadDetailActivityClickFix.css';
 import './styles/leadTagsWorking.css';
 import './styles/leadFinalPolish.css';
+import './styles/leadActivityTimelineFix.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
