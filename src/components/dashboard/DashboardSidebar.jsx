@@ -88,6 +88,25 @@ function getActiveState({ item, itemPath, currentPath, index }) {
   return index === 0 && currentPath.includes('/dashboard');
 }
 
+const sidebarHardLockCss = `
+  .sf-sidebar,
+  .sf-sidebar-v2,
+  .reference-dashboard .sf-sidebar,
+  .reference-dashboard .sf-sidebar-v2,
+  .ld-shell .sf-sidebar-v2 {
+    background: #020617 !important;
+    background-image: linear-gradient(180deg, #020617 0%, #020817 45%, #01040d 100%) !important;
+  }
+  .sf-v2-nav button.active,
+  .reference-dashboard .sf-v2-nav button.active,
+  .ld-shell .sf-v2-nav button.active {
+    background: #1d4ed8 !important;
+    background-image: linear-gradient(90deg, #6d38ff 0%, #1677ff 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 12px 24px rgba(37,99,235,.30), inset 0 1px 0 rgba(255,255,255,.16) !important;
+  }
+`;
+
 export default function DashboardSidebar({ role = 'employee' }) {
   const safeRole = menuByRole[role] ? role : 'employee';
   const items = menuByRole[safeRole] || menuByRole.employee;
@@ -96,44 +115,47 @@ export default function DashboardSidebar({ role = 'employee' }) {
   const currentPath = window.location.pathname;
 
   return (
-    <aside className="sf-sidebar sf-sidebar-v2">
-      <div className="sf-v2-brand-row">
-        <button className="sf-v2-brand" onClick={() => navigateTo('/', safeRole)}>
-          <span className="sf-v2-logo">S</span>
-          <strong>Sales<span>Flow</span></strong>
-        </button>
-        <button className="sf-v2-menu" type="button" aria-label="Toggle menu">
-          <SidebarIcon type="menu" />
-        </button>
-      </div>
-
-      <nav className="sf-v2-nav">
-        {items.map((item, index) => {
-          const itemPath = routes[safeRole]?.[item];
-          const isActive = getActiveState({ item, itemPath, currentPath, index });
-          return (
-            <button className={isActive ? 'active' : ''} key={item} type="button" onClick={() => navigateTo(itemPath, safeRole)}>
-              <span className="sf-v2-icon"><SidebarIcon type={iconByItem[item]} /></span>
-              <em>{item}</em>
-            </button>
-          );
-        })}
-      </nav>
-
-      <div className="sf-v2-upgrade">
-        <span>♕</span>
-        <h3>{upgradeText}</h3>
-        <p>{upgradeSub}</p>
-        <button type="button">Upgrade Now</button>
-      </div>
-
-      <div className="sf-v2-help">
-        <span>☊</span>
-        <div>
-          <strong>Need Help?</strong>
-          <small>Contact Support</small>
+    <>
+      <style>{sidebarHardLockCss}</style>
+      <aside className="sf-sidebar sf-sidebar-v2">
+        <div className="sf-v2-brand-row">
+          <button className="sf-v2-brand" onClick={() => navigateTo('/', safeRole)}>
+            <span className="sf-v2-logo">S</span>
+            <strong>Sales<span>Flow</span></strong>
+          </button>
+          <button className="sf-v2-menu" type="button" aria-label="Toggle menu">
+            <SidebarIcon type="menu" />
+          </button>
         </div>
-      </div>
-    </aside>
+
+        <nav className="sf-v2-nav">
+          {items.map((item, index) => {
+            const itemPath = routes[safeRole]?.[item];
+            const isActive = getActiveState({ item, itemPath, currentPath, index });
+            return (
+              <button className={isActive ? 'active' : ''} key={item} type="button" onClick={() => navigateTo(itemPath, safeRole)}>
+                <span className="sf-v2-icon"><SidebarIcon type={iconByItem[item]} /></span>
+                <em>{item}</em>
+              </button>
+            );
+          })}
+        </nav>
+
+        <div className="sf-v2-upgrade">
+          <span>♕</span>
+          <h3>{upgradeText}</h3>
+          <p>{upgradeSub}</p>
+          <button type="button">Upgrade Now</button>
+        </div>
+
+        <div className="sf-v2-help">
+          <span>☊</span>
+          <div>
+            <strong>Need Help?</strong>
+            <small>Contact Support</small>
+          </div>
+        </div>
+      </aside>
+    </>
   );
 }
