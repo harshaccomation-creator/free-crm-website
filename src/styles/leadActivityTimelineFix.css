@@ -1,0 +1,77 @@
+/* Activity timeline icon + connector line final fix */
+.ld-activity-list {
+  position: relative !important;
+  padding: 2px 0 !important;
+}
+
+.ld-activity-list::before {
+  content: "" !important;
+  position: absolute !important;
+  left: 19px !important;
+  top: 24px !important;
+  bottom: 24px !important;
+  width: 2px !important;
+  border-radius: 999px !important;
+  background: linear-gradient(180deg, rgba(219,231,246,0), #dbe7f6 12%, #dbe7f6 88%, rgba(219,231,246,0)) !important;
+  z-index: 0 !important;
+}
+
+.ld-activity-row {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 40px minmax(0, 1fr) 132px !important;
+  gap: 14px !important;
+  align-items: center !important;
+  padding: 14px 0 !important;
+  min-height: 72px !important;
+  border-bottom: 1px solid #edf2f7 !important;
+}
+
+.ld-activity-row::before,
+.ld-activity-row::after {
+  display: none !important;
+}
+
+.ld-activity-row:last-child {
+  border-bottom: 0 !important;
+}
+
+.ld-activity-icon {
+  position: relative !important;
+  z-index: 2 !important;
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  border-radius: 999px !important;
+  display: grid !important;
+  place-items: center !important;
+  box-shadow: 0 0 0 6px #ffffff, 0 8px 18px rgba(15, 23, 42, 0.045) !important;
+  font-size: 0 !important;
+  line-height: 1 !important;
+}
+
+.ld-activity-icon .ld-text-icon {
+  display: grid !important;
+  place-items: center !important;
+  width: 18px !important;
+  height: 18px !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+  font-weight: 800 !important;
+  color: currentColor !important;
+}
+
+.ld-activity-row.green .ld-activity-icon { background: #dcfce7 !important; color: #039855 !important; }
+.ld-activity-row.blue .ld-activity-icon { background: #dbeafe !important; color: #0b63f6 !important; }
+.ld-activity-row.orange .ld-activity-icon { background: #ffedd5 !important; color: #f59e0b !important; }
+.ld-activity-row.purple .ld-activity-icon { background: #f0e7ff !important; color: #7c3aed !important; }
+.ld-activity-row.red .ld-activity-icon { background: #fee2e2 !important; color: #ef4444 !important; }
+
+.ld-activity-meta {
+  align-self: stretch !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  text-align: right !important;
+}
