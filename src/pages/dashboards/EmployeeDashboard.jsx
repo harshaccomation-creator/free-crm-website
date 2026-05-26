@@ -5,6 +5,18 @@ import '../../styles/sidebarGlobalFinalLock.css';
 import '../../styles/zzzSidebarBlackFix.css';
 import '../../styles/dashboardFontPolish.css';
 
+function DashIcon({ type }) {
+  const icons = {
+    users: <path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M9.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8M21 21v-2a4 4 0 0 0-3-3.8M16 3.2a4 4 0 0 1 0 7.6" />,
+    check: <path d="M20 6 9 17l-5-5" />,
+    phone: <path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 3.1 5.2 2 2 0 0 1 5.1 3h3a2 2 0 0 1 2 1.7c.1.9.3 1.7.6 2.5a2 2 0 0 1-.5 2.1L9 10.5a16 16 0 0 0 4.5 4.5l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.6.5 2.5.6a2 2 0 0 1 1.7 2Z" />,
+    target: <path d="M12 21a9 9 0 1 0-9-9 9 9 0 0 0 9 9Zm0-4a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0-4a1 1 0 1 0-1-1 1 1 0 0 0 1 1Z" />,
+    search: <path d="m21 21-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" />,
+    bell: <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7M13.7 21a2 2 0 0 1-3.4 0" />,
+  };
+  return <svg className="dash-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">{icons[type]}</svg>;
+}
+
 function LineChart() {
   const points = [[52,178],[140,138],[230,98],[326,132],[420,88],[532,76],[640,44]];
   return (
@@ -34,14 +46,14 @@ export default function EmployeeDashboard() {
       <DashboardSidebar role="employee" />
       <main className="reference-main">
         <header className="reference-topbar">
-          <div className="reference-title"><h1>Welcome back, Alex! 👋</h1><p>Here’s what’s happening with your work today.</p></div>
-          <div className="reference-actions"><label className="reference-search"><span>⌕</span><input placeholder="Search leads, contacts, tasks..." /></label><button className="reference-icon-btn">🔔<i>5</i></button><button className="reference-profile"><span className="reference-avatar">A</span><span><strong>Alex Morgan</strong><small>Sales Executive</small></span></button></div>
+          <div className="reference-title"><h1>Welcome back, Alex!</h1><p>Here’s what’s happening with your work today.</p></div>
+          <div className="reference-actions"><label className="reference-search"><DashIcon type="search" /><input placeholder="Search leads, contacts, tasks..." /></label><button className="reference-icon-btn"><DashIcon type="bell" /><i>5</i></button><button className="reference-profile"><span className="reference-avatar">A</span><span><strong>Alex Morgan</strong><small>Sales Executive</small></span></button></div>
         </header>
         <section className="reference-stats">
-          <article className="reference-stat"><span className="stat-icon">👥</span><p>Assigned Leads</p><h2>128</h2><small>↑ 12% from last week</small></article>
-          <article className="reference-stat danger"><span className="stat-icon">✅</span><p>Tasks Due Today</p><h2>8</h2><small>3 overdue</small></article>
-          <article className="reference-stat"><span className="stat-icon">☎</span><p>Calls Scheduled</p><h2>6</h2><small>Today</small></article>
-          <article className="reference-stat target"><span className="stat-icon">◎</span><p>Monthly Target Progress</p><h2>68%</h2><small>₹6,80,000 / ₹10,00,000</small><div className="progress"><b style={{width:'68%'}} /></div></article>
+          <article className="reference-stat"><span className="stat-icon"><DashIcon type="users" /></span><p>Assigned Leads</p><h2>128</h2><small>↑ 12% from last week</small></article>
+          <article className="reference-stat danger"><span className="stat-icon"><DashIcon type="check" /></span><p>Tasks Due Today</p><h2>8</h2><small>3 overdue</small></article>
+          <article className="reference-stat"><span className="stat-icon"><DashIcon type="phone" /></span><p>Calls Scheduled</p><h2>6</h2><small>Today</small></article>
+          <article className="reference-stat target"><span className="stat-icon"><DashIcon type="target" /></span><p>Monthly Target Progress</p><h2>68%</h2><small>₹6,80,000 / ₹10,00,000</small><div className="progress"><b style={{width:'68%'}} /></div></article>
         </section>
         <section className="reference-row employee-row-one">
           <article className="reference-card"><div className="reference-card-head"><h2>My Performance <small>(This Week)</small></h2><button>This Week ▾</button></div><LineChart /></article>
