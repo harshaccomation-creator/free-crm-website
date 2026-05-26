@@ -1,0 +1,264 @@
+/* FINAL LOCK: one identical dark sidebar across the full CRM. Keep this import last. */
+:root{
+  --sf-sidebar-width:230px;
+  --sf-sidebar-bg:radial-gradient(circle at 26% 0%,rgba(59,130,246,.10),transparent 24%),linear-gradient(180deg,#020b19 0%,#020617 48%,#01040d 100%);
+}
+
+.sf-dashboard,
+.reference-dashboard{
+  grid-template-columns:var(--sf-sidebar-width) minmax(0,1fr)!important;
+}
+
+.sf-sidebar,
+.sf-sidebar-v2,
+.ld-shell .sf-sidebar-v2,
+.reference-dashboard .sf-sidebar,
+.reference-dashboard .sf-sidebar-v2{
+  width:var(--sf-sidebar-width)!important;
+  min-width:var(--sf-sidebar-width)!important;
+  max-width:var(--sf-sidebar-width)!important;
+  height:100vh!important;
+  min-height:100vh!important;
+  max-height:100vh!important;
+  position:fixed!important;
+  left:0!important;
+  top:0!important;
+  bottom:0!important;
+  z-index:20!important;
+  padding:18px 14px 16px!important;
+  gap:12px!important;
+  background:var(--sf-sidebar-bg)!important;
+  color:#fff!important;
+  box-shadow:inset -1px 0 0 rgba(255,255,255,.055),14px 0 42px rgba(2,8,23,.22)!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  box-sizing:border-box!important;
+}
+
+.sf-v2-brand-row,
+.ld-shell .sf-v2-brand-row,
+.reference-dashboard .sf-v2-brand-row{
+  height:auto!important;
+  padding:0!important;
+  margin:0 0 34px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+}
+
+.sf-v2-brand,
+.ld-shell .sf-v2-brand,
+.reference-dashboard .sf-v2-brand{
+  padding:0 8px!important;
+  gap:10px!important;
+}
+
+.sf-v2-logo,
+.ld-shell .sf-v2-logo,
+.reference-dashboard .sf-v2-logo{
+  width:24px!important;
+  height:24px!important;
+  min-width:24px!important;
+  border-radius:7px!important;
+  display:grid!important;
+  place-items:center!important;
+  background:linear-gradient(135deg,#6948ff,#1677ff)!important;
+  color:#fff!important;
+  font-size:13px!important;
+  font-weight:820!important;
+  line-height:1!important;
+  box-shadow:0 10px 20px rgba(99,102,241,.22)!important;
+  position:static!important;
+}
+
+.sf-v2-logo:before,
+.sf-v2-logo:after,
+.ld-shell .sf-v2-logo:before,
+.ld-shell .sf-v2-logo:after,
+.reference-dashboard .sf-v2-logo:before,
+.reference-dashboard .sf-v2-logo:after{
+  display:none!important;
+  content:none!important;
+}
+
+.sf-v2-brand strong,
+.ld-shell .sf-v2-brand strong,
+.reference-dashboard .sf-v2-brand strong{
+  font-size:17px!important;
+  line-height:1!important;
+  font-weight:780!important;
+  letter-spacing:-.35px!important;
+  color:#fff!important;
+}
+
+.sf-v2-brand strong:after,
+.ld-shell .sf-v2-brand strong:after,
+.reference-dashboard .sf-v2-brand strong:after{
+  display:none!important;
+  content:none!important;
+}
+
+.sf-v2-brand strong span,
+.ld-shell .sf-v2-brand strong span,
+.reference-dashboard .sf-v2-brand strong span{
+  display:inline!important;
+  color:#72adff!important;
+}
+
+.sf-v2-menu,
+.ld-shell .sf-v2-menu,
+.reference-dashboard .sf-v2-menu{
+  width:22px!important;
+  height:22px!important;
+  min-width:22px!important;
+  color:#d9e6f7!important;
+}
+
+.sf-v2-menu .sf-v2-icon-svg,
+.ld-shell .sf-v2-menu .sf-v2-icon-svg,
+.reference-dashboard .sf-v2-menu .sf-v2-icon-svg{
+  width:13px!important;
+  height:13px!important;
+}
+
+.sf-v2-nav,
+.ld-shell .sf-v2-nav,
+.reference-dashboard .sf-v2-nav{
+  padding:0!important;
+  gap:8px!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+
+.sf-v2-nav button,
+.ld-shell .sf-v2-nav button,
+.reference-dashboard .sf-v2-nav button{
+  min-height:39px!important;
+  height:39px!important;
+  padding:5px 12px!important;
+  border-radius:8px!important;
+  gap:13px!important;
+  font-size:13px!important;
+  font-weight:640!important;
+  color:#edf5ff!important;
+  background:transparent!important;
+  border:1px solid transparent!important;
+  box-shadow:none!important;
+}
+
+.sf-v2-nav button.active,
+.ld-shell .sf-v2-nav button.active,
+.reference-dashboard .sf-v2-nav button.active{
+  background:linear-gradient(135deg,#6645ff 0%,#137cff 100%)!important;
+  color:#fff!important;
+  border-color:rgba(255,255,255,.13)!important;
+  box-shadow:0 12px 24px rgba(26,103,255,.28)!important;
+}
+
+.sf-v2-icon,
+.ld-shell .sf-v2-icon,
+.reference-dashboard .sf-v2-icon{
+  width:23px!important;
+  height:23px!important;
+  min-width:23px!important;
+  border-radius:7px!important;
+  color:#e5efff!important;
+}
+
+.sf-v2-icon-svg,
+.ld-shell .sf-v2-icon-svg,
+.reference-dashboard .sf-v2-icon-svg{
+  width:14px!important;
+  height:14px!important;
+  stroke-width:1.8!important;
+}
+
+.sf-v2-upgrade,
+.ld-shell .sf-v2-upgrade,
+.reference-dashboard .sf-v2-upgrade{
+  position:static!important;
+  margin-top:auto!important;
+  left:auto!important;
+  right:auto!important;
+  bottom:auto!important;
+  padding:16px 12px 12px!important;
+  border-radius:9px!important;
+  background:linear-gradient(180deg,rgba(35,43,91,.98),rgba(24,34,73,.96))!important;
+  border:1px solid rgba(127,91,255,.55)!important;
+  box-shadow:none!important;
+}
+
+.sf-v2-upgrade h3,
+.ld-shell .sf-v2-upgrade h3,
+.reference-dashboard .sf-v2-upgrade h3{
+  font-size:13px!important;
+  font-weight:720!important;
+}
+
+.sf-v2-upgrade p,
+.ld-shell .sf-v2-upgrade p,
+.reference-dashboard .sf-v2-upgrade p{
+  font-size:11.5px!important;
+  line-height:1.35!important;
+}
+
+.sf-v2-upgrade button,
+.ld-shell .sf-v2-upgrade button,
+.reference-dashboard .sf-v2-upgrade button{
+  height:auto!important;
+  padding:9px 10px!important;
+  font-size:12px!important;
+  font-weight:720!important;
+}
+
+.sf-v2-help,
+.ld-shell .sf-v2-help,
+.reference-dashboard .sf-v2-help{
+  height:auto!important;
+  padding:12px 6px 2px!important;
+}
+
+.sf-dashboard > main,
+.sf-main,
+.ld-main,
+.lead-ref-main,
+.reference-main{
+  margin-left:0!important;
+  box-sizing:border-box!important;
+}
+
+.ld-main{
+  padding-left:14px!important;
+  padding-right:16px!important;
+}
+
+@media(max-height:760px){
+  .sf-v2-brand-row,
+  .ld-shell .sf-v2-brand-row,
+  .reference-dashboard .sf-v2-brand-row{margin-bottom:20px!important;}
+  .sf-v2-nav,
+  .ld-shell .sf-v2-nav,
+  .reference-dashboard .sf-v2-nav{gap:6px!important;}
+  .sf-v2-nav button,
+  .ld-shell .sf-v2-nav button,
+  .reference-dashboard .sf-v2-nav button{min-height:36px!important;height:36px!important;}
+}
+
+@media(max-width:1200px){
+  .sf-dashboard,.reference-dashboard{grid-template-columns:1fr!important;}
+  .sf-sidebar,
+  .sf-sidebar-v2,
+  .ld-shell .sf-sidebar-v2,
+  .reference-dashboard .sf-sidebar,
+  .reference-dashboard .sf-sidebar-v2{
+    position:relative!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:auto!important;
+    min-height:auto!important;
+    max-height:none!important;
+  }
+  .ld-main{padding-left:16px!important;padding-right:16px!important;}
+}

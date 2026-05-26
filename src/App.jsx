@@ -25,6 +25,9 @@ import './styles/dashboardBottomTwoColumn.css';
 import './styles/leadSaasProductLook.css';
 import './styles/leadActivityImageMatch.css';
 import './styles/finalCrmSidebarAndLeadFix.css';
+import './styles/leadDetailLeadProExact.css';
+import './styles/leadDetailFinalCorrections.css';
+import './styles/sidebarGlobalFinalLock.css';
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);

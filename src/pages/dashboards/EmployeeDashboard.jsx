@@ -1,6 +1,7 @@
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import '../../styles/dashboardBase.css';
 import '../../styles/referenceDashboardExact.css';
+import '../../styles/sidebarGlobalFinalLock.css';
 
 function LineChart() {
   const points = [[52,178],[140,138],[230,98],[326,132],[420,88],[532,76],[640,44]];
