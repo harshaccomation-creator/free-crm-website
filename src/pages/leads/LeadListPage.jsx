@@ -18,6 +18,14 @@ const metrics = [
 
 const sourceClass = { Website: 'blue', Referral: 'green', LinkedIn: 'purple', 'Cold Call': 'orange', 'Email Campaign': 'purple', WhatsApp: 'green', Other: 'blue' };
 const statusClass = { New: 'blue', Contacted: 'orange', 'In Progress': 'blue', Converted: 'green', Lost: 'red' };
+const sourceOptions = ['All Sources', 'Website', 'Referral', 'LinkedIn', 'Cold Call', 'Email Campaign', 'WhatsApp', 'Other'];
+const statusOptions = ['All Statuses', 'New', 'Contacted', 'In Progress', 'Converted', 'Lost'];
+const dateOptions = [
+  { label: 'All Dates', value: 'all' },
+  { label: '01 May 2025 - 31 May 2025', value: 'may-2025' },
+  { label: 'Last 7 Days', value: 'last-7' },
+  { label: 'Today', value: 'today' },
+];
 const defaultForm = { name: '', email: '', phone: '', company: '', source: 'Website', status: 'New', nextFollowUpDate: '', nextFollowUpTime: '', priority: 'Warm', jobTitle: '', notes: '' };
 
 function LeadSvg({ type }) {
@@ -56,11 +64,31 @@ function slugify(name = '') {
 function csvEscape(value) {
   return `"${String(value ?? '').replaceAll('"', '""')}"`;
 }
-
 function getPageNumbers(currentPage, totalPages) {
   if (totalPages <= 5) return Array.from({ length: totalPages }, (_, index) => index + 1);
   const pages = new Set([1, totalPages, currentPage, currentPage - 1, currentPage + 1]);
   return [...pages].filter((page) => page >= 1 && page <= totalPages).sort((a, b) => a - b);
+}
+function parseLeadDate(text = '') {
+  const cleaned = String(text).replace(',', '').trim();
+  const match = cleaned.match(/(\d{1,2})\s+([A-Za-z]{3})\s+(\d{4})/);
+  if (!match) return null;
+  const [, day, mon, year] = match;
+  const months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11 };
+  return new Date(Number(year), months[mon] ?? 0, Number(day));
+}
+function matchesDateRange(lead, range) {
+  if (range === 'all') return true;
+  const date = parseLeadDate(lead.lastActivity) || parseLeadDate(lead.nextFollowUp);
+  if (!date) return range === 'may-2025';
+  if (range === 'may-2025') return date.getFullYear() === 2025 && date.getMonth() === 4;
+  if (range === 'today') return date.toDateString() === new Date().toDateString();
+  if (range === 'last-7') {
+    const weekAgo = new Date();
+    weekAgo.setDate(weekAgo.getDate() - 7);
+    return date >= weekAgo;
+  }
+  return true;
 }
 
 export default function LeadListPage() {
@@ -71,14 +99,29 @@ export default function LeadListPage() {
   const [createdAt, setCreatedAt] = useState(formatDateTime());
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [dateRange, setDateRange] = useState('may-2025');
+  const [sourceFilter, setSourceFilter] = useState('All Sources');
+  const [statusFilter, setStatusFilter] = useState('All Statuses');
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const totalPages = Math.max(1, Math.ceil(leadRows.length / pageSize));
+  const filteredLeads = useMemo(() => leadRows.filter((lead) => {
+    const q = searchTerm.trim().toLowerCase();
+    const searchMatch = !q || [lead.name, lead.phone, lead.email, lead.company, lead.source, lead.status, lead.owner].some((value) => String(value || '').toLowerCase().includes(q));
+    const sourceMatch = sourceFilter === 'All Sources' || lead.source === sourceFilter;
+    const statusMatch = statusFilter === 'All Statuses' || lead.status === statusFilter;
+    const dateMatch = matchesDateRange(lead, dateRange);
+    return searchMatch && sourceMatch && statusMatch && dateMatch;
+  }), [leadRows, searchTerm, sourceFilter, statusFilter, dateRange]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredLeads.length / pageSize));
   const safePage = Math.min(currentPage, totalPages);
   const pageStart = (safePage - 1) * pageSize;
-  const pageEnd = Math.min(pageStart + pageSize, leadRows.length);
-  const visibleLeads = leadRows.slice(pageStart, pageEnd);
+  const pageEnd = Math.min(pageStart + pageSize, filteredLeads.length);
+  const visibleLeads = filteredLeads.slice(pageStart, pageEnd);
   const pageNumbers = getPageNumbers(safePage, totalPages);
+  const activeDateLabel = dateOptions.find((item) => item.value === dateRange)?.label || 'All Dates';
 
+  const resetToFirstPage = () => setCurrentPage(1);
   const openLead = (id) => {
     window.localStorage.setItem('salesflowRole', role);
     window.history.pushState({}, '', `/leads/${id}`);
@@ -117,7 +160,7 @@ export default function LeadListPage() {
   };
   const exportLeads = () => {
     const headers = ['Lead Name', 'Email', 'Mobile Number', 'Company', 'Lead Source', 'Status', 'Lead Owner', 'Created Date Time', 'Next Follow Up', 'Priority', 'Job Title'];
-    const rows = leadRows.map((lead) => [lead.name, lead.email, lead.phone, lead.company, lead.source, lead.status, lead.owner, lead.lastActivity, lead.nextFollowUp, lead.priority, lead.jobTitle]);
+    const rows = filteredLeads.map((lead) => [lead.name, lead.email, lead.phone, lead.company, lead.source, lead.status, lead.owner, lead.lastActivity, lead.nextFollowUp, lead.priority, lead.jobTitle]);
     const csv = [headers, ...rows].map((row) => row.map(csvEscape).join(',')).join('\n');
     const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -130,9 +173,9 @@ export default function LeadListPage() {
     URL.revokeObjectURL(url);
   };
   const totalText = useMemo(() => {
-    if (!leadRows.length) return 'Showing 0 leads';
-    return `Showing ${pageStart + 1} to ${pageEnd} of ${leadRows.length} leads`;
-  }, [leadRows.length, pageStart, pageEnd]);
+    if (!filteredLeads.length) return 'Showing 0 leads';
+    return `Showing ${pageStart + 1} to ${pageEnd} of ${filteredLeads.length} leads`;
+  }, [filteredLeads.length, pageStart, pageEnd]);
 
   return (
     <div className="sf-dashboard la-page">
@@ -146,18 +189,18 @@ export default function LeadListPage() {
           {metrics.map(([title, value, change, icon, tone]) => <article className={`la-metric ${tone}`} key={title}><span className="la-metric-icon"><LeadSvg type={icon} /></span><div><p>{title}</p><h2>{value}</h2><small>{change}</small></div></article>)}
         </section>
         <section className="la-filters">
-          <div className="la-field"><span>Date Range</span><strong>01 May 2025 - 31 May 2025</strong><i>⌄</i></div>
-          <div className="la-field"><span>Lead Source</span><strong>All Sources</strong><i>⌄</i></div>
-          <div className="la-field"><span>Status</span><strong>All Statuses</strong><i>⌄</i></div>
-          <label className="la-search"><LeadSvg type="search" /><input placeholder="Search leads..." /></label>
-          <button className="la-filter-btn"><LeadSvg type="filter" />Filter</button>
+          <label className="la-field la-filter-control"><span>Date Range</span><strong>{activeDateLabel}</strong><select value={dateRange} onChange={(event) => { setDateRange(event.target.value); resetToFirstPage(); }}>{dateOptions.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}</select><i>⌄</i></label>
+          <label className="la-field la-filter-control"><span>Lead Source</span><strong>{sourceFilter}</strong><select value={sourceFilter} onChange={(event) => { setSourceFilter(event.target.value); resetToFirstPage(); }}>{sourceOptions.map((item) => <option key={item}>{item}</option>)}</select><i>⌄</i></label>
+          <label className="la-field la-filter-control"><span>Status</span><strong>{statusFilter}</strong><select value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value); resetToFirstPage(); }}>{statusOptions.map((item) => <option key={item}>{item}</option>)}</select><i>⌄</i></label>
+          <label className="la-search"><LeadSvg type="search" /><input value={searchTerm} onChange={(event) => { setSearchTerm(event.target.value); resetToFirstPage(); }} placeholder="Search leads..." /></label>
+          <button className="la-filter-btn" type="button" onClick={() => { setDateRange('may-2025'); setSourceFilter('All Sources'); setStatusFilter('All Statuses'); setSearchTerm(''); setCurrentPage(1); }}><LeadSvg type="filter" />Reset</button>
         </section>
         <section className="la-table-card">
           <table className="la-table"><thead><tr><th><input className="la-check" type="checkbox" /></th><th>Lead Name</th><th>Company</th><th>Lead Source</th><th>Status</th><th>Last Activity</th><th>Next Follow Up</th><th>Lead Owner</th><th>Actions</th></tr></thead><tbody>{visibleLeads.map((lead) => <tr key={lead.id} onClick={() => openLead(lead.id)}><td><input className="la-check" type="checkbox" onClick={(event) => event.stopPropagation()} /></td><td><div className="la-person"><span className="la-avatar">{lead.initials}</span><div><strong>{lead.name}</strong><small>{lead.phone}</small></div></div></td><td>{lead.company}</td><td><span className={`la-pill ${sourceClass[lead.source] || 'blue'}`}>{lead.source}</span></td><td><span className={`la-pill ${statusClass[lead.status] || 'blue'}`}>{lead.status}</span></td><td><span className="la-icon-text"><LeadSvg type="phone" />{lead.lastActivity}</span></td><td><span className="la-icon-text"><LeadSvg type="calendar" />{lead.nextFollowUp}</span></td><td><span className="la-owner"><span className="la-avatar">R</span>{lead.owner}</span></td><td><button type="button" className="la-row-action" onClick={(event) => { event.stopPropagation(); openLead(lead.id); }} aria-label={`Open ${lead.name}`}><LeadSvg type="eye" /></button></td></tr>)}</tbody></table>
           <footer className="la-footer"><span>{totalText}</span><div className="la-pagination"><button type="button" disabled={safePage === 1} onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}>‹</button>{pageNumbers.map((page, index) => <span className="la-page-wrap" key={page}>{index > 0 && page - pageNumbers[index - 1] > 1 ? <em>...</em> : null}<button type="button" className={safePage === page ? 'active' : ''} onClick={() => setCurrentPage(page)}>{page}</button></span>)}<button type="button" disabled={safePage === totalPages} onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}>›</button><select value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setCurrentPage(1); }}><option value="5">5 / page</option><option value="10">10 / page</option><option value="20">20 / page</option><option value="50">50 / page</option></select></div></footer>
         </section>
       </main>
-      {isAddOpen && <div className="la-modal-backdrop" role="presentation" onClick={() => setIsAddOpen(false)}><section className="la-modal" role="dialog" aria-modal="true" aria-labelledby="addLeadTitle" onClick={(event) => event.stopPropagation()}><header><div><h2 id="addLeadTitle">Add New Lead</h2><p>Created automatically on {createdAt}</p></div><button type="button" onClick={() => setIsAddOpen(false)}>×</button></header><form onSubmit={saveLead} className="la-form"><label>Customer Name<input required value={form.name} onChange={(event) => updateForm('name', event.target.value)} placeholder="Enter customer name" /></label><label>Email ID<input required type="email" value={form.email} onChange={(event) => updateForm('email', event.target.value)} placeholder="customer@example.com" /></label><label>Mobile Number<input required value={form.phone} onChange={(event) => updateForm('phone', event.target.value)} placeholder="+91 98765 43210" /></label><label>Company<input required value={form.company} onChange={(event) => updateForm('company', event.target.value)} placeholder="Company name" /></label><label>Lead Source<select value={form.source} onChange={(event) => updateForm('source', event.target.value)}><option>Website</option><option>Referral</option><option>LinkedIn</option><option>Cold Call</option><option>Email Campaign</option><option>WhatsApp</option><option>Other</option></select></label><label>Status<select value={form.status} onChange={(event) => updateForm('status', event.target.value)}><option>New</option><option>Contacted</option><option>In Progress</option><option>Converted</option><option>Lost</option></select></label><label>Next Follow-up Date<input type="date" value={form.nextFollowUpDate} onChange={(event) => updateForm('nextFollowUpDate', event.target.value)} /></label><label>Next Follow-up Time<input type="time" value={form.nextFollowUpTime} onChange={(event) => updateForm('nextFollowUpTime')} /></label><label>Priority<select value={form.priority} onChange={(event) => updateForm('priority', event.target.value)}><option>Hot</option><option>Warm</option><option>High</option><option>Medium</option><option>Low</option></select></label><label>Job Title<input value={form.jobTitle} onChange={(event) => updateForm('jobTitle', event.target.value)} placeholder="Founder / Manager / Customer" /></label><label className="full">Notes<textarea value={form.notes} onChange={(event) => updateForm('notes', event.target.value)} placeholder="Requirement, budget, interest, discussion notes..." /></label><footer><button type="button" onClick={() => setIsAddOpen(false)}>Cancel</button><button className="primary" type="submit">Save Lead</button></footer></form></section></div>}
+      {isAddOpen && <div className="la-modal-backdrop" role="presentation" onClick={() => setIsAddOpen(false)}><section className="la-modal" role="dialog" aria-modal="true" aria-labelledby="addLeadTitle" onClick={(event) => event.stopPropagation()}><header><div><h2 id="addLeadTitle">Add New Lead</h2><p>Created automatically on {createdAt}</p></div><button type="button" onClick={() => setIsAddOpen(false)}>×</button></header><form onSubmit={saveLead} className="la-form"><label>Customer Name<input required value={form.name} onChange={(event) => updateForm('name', event.target.value)} placeholder="Enter customer name" /></label><label>Email ID<input required type="email" value={form.email} onChange={(event) => updateForm('email', event.target.value)} placeholder="customer@example.com" /></label><label>Mobile Number<input required value={form.phone} onChange={(event) => updateForm('phone', event.target.value)} placeholder="+91 98765 43210" /></label><label>Company<input required value={form.company} onChange={(event) => updateForm('company', event.target.value)} placeholder="Company name" /></label><label>Lead Source<select value={form.source} onChange={(event) => updateForm('source', event.target.value)}><option>Website</option><option>Referral</option><option>LinkedIn</option><option>Cold Call</option><option>Email Campaign</option><option>WhatsApp</option><option>Other</option></select></label><label>Status<select value={form.status} onChange={(event) => updateForm('status', event.target.value)}><option>New</option><option>Contacted</option><option>In Progress</option><option>Converted</option><option>Lost</option></select></label><label>Next Follow-up Date<input type="date" value={form.nextFollowUpDate} onChange={(event) => updateForm('nextFollowUpDate', event.target.value)} /></label><label>Next Follow-up Time<input type="time" value={form.nextFollowUpTime} onChange={(event) => updateForm('nextFollowUpTime', event.target.value)} /></label><label>Priority<select value={form.priority} onChange={(event) => updateForm('priority', event.target.value)}><option>Hot</option><option>Warm</option><option>High</option><option>Medium</option><option>Low</option></select></label><label>Job Title<input value={form.jobTitle} onChange={(event) => updateForm('jobTitle', event.target.value)} placeholder="Founder / Manager / Customer" /></label><label className="full">Notes<textarea value={form.notes} onChange={(event) => updateForm('notes', event.target.value)} placeholder="Requirement, budget, interest, discussion notes..." /></label><footer><button type="button" onClick={() => setIsAddOpen(false)}>Cancel</button><button className="primary" type="submit">Save Lead</button></footer></form></section></div>}
     </div>
   );
 }
