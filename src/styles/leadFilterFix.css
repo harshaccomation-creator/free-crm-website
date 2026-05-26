@@ -1,0 +1,54 @@
+/* My Leads filter bar: fix clipped text and make fields look clean */
+.la-filters {
+  align-items: center !important;
+  overflow: visible !important;
+}
+
+.la-field,
+.la-search,
+.la-filter-btn {
+  height: 48px !important;
+  min-height: 48px !important;
+  overflow: hidden !important;
+}
+
+.la-field {
+  padding: 8px 34px 8px 14px !important;
+  justify-content: center !important;
+}
+
+.la-field span {
+  display: block !important;
+  margin: 0 0 5px !important;
+  font-size: 10.5px !important;
+  line-height: 1.1 !important;
+}
+
+.la-field strong {
+  display: block !important;
+  font-size: 12px !important;
+  line-height: 1.15 !important;
+  font-weight: 640 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  padding-right: 0 !important;
+}
+
+.la-field i {
+  right: 14px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+.la-search {
+  padding: 0 16px !important;
+}
+
+.la-search input {
+  line-height: 1.2 !important;
+}
+
+.la-filter-btn {
+  white-space: nowrap !important;
+}
