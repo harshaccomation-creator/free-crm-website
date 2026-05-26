@@ -34,17 +34,23 @@
   min-width: 0 !important;
   max-width: 100% !important;
   margin: 0 !important;
-  padding: 12px 18px 48px !important;
+  padding: 10px 18px 42px !important;
   background: #f5f8ff !important;
   overflow-x: hidden !important;
+  -webkit-font-smoothing: antialiased !important;
+  text-rendering: geometricPrecision !important;
 }
 
-/* Top breadcrumb/actions: left breadcrumb, equal size buttons, no floating/uneven spacing */
+.ld-main * {
+  letter-spacing: -0.01em !important;
+}
+
+/* 1 + 3: compact topbar/action buttons */
 .ld-topbar {
   width: 100% !important;
-  height: 44px !important;
-  min-height: 44px !important;
-  margin: 0 0 12px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  margin: 0 0 10px !important;
   padding: 0 !important;
   display: flex !important;
   align-items: center !important;
@@ -58,6 +64,8 @@
   margin: 0 !important;
   padding: 0 !important;
   white-space: nowrap !important;
+  font-size: 12px !important;
+  font-weight: 560 !important;
 }
 
 .ld-actions {
@@ -65,71 +73,310 @@
   display: flex !important;
   align-items: center !important;
   justify-content: flex-end !important;
-  gap: 10px !important;
+  gap: 9px !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
 .ld-actions button {
-  height: 38px !important;
-  min-height: 38px !important;
-  width: 112px !important;
-  min-width: 112px !important;
-  max-width: 112px !important;
-  padding: 0 14px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  width: 106px !important;
+  min-width: 106px !important;
+  max-width: 106px !important;
+  padding: 0 12px !important;
   border-radius: 10px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 8px !important;
-  font-size: 13px !important;
+  gap: 7px !important;
+  font-size: 12.4px !important;
   line-height: 1 !important;
-  font-weight: 650 !important;
+  font-weight: 620 !important;
   white-space: nowrap !important;
   box-sizing: border-box !important;
+  box-shadow: 0 8px 16px rgba(15, 23, 42, .04) !important;
 }
 
 .ld-actions button.primary {
-  width: 122px !important;
-  min-width: 122px !important;
-  max-width: 122px !important;
+  width: 118px !important;
+  min-width: 118px !important;
+  max-width: 118px !important;
 }
 
 .ld-actions button.dots,
 .ld-actions .dots {
-  width: 42px !important;
-  min-width: 42px !important;
-  max-width: 42px !important;
+  width: 40px !important;
+  min-width: 40px !important;
+  max-width: 40px !important;
   padding: 0 !important;
 }
 
 .ld-actions .ld-svg {
-  width: 14px !important;
-  height: 14px !important;
-  min-width: 14px !important;
+  width: 13px !important;
+  height: 13px !important;
+  min-width: 13px !important;
 }
 
+/* 1 + 2: less zoom + balanced profile card */
 .ld-profile-card {
   margin-top: 0 !important;
-  min-height: 150px !important;
-  padding: 20px 24px !important;
+  min-height: 132px !important;
+  padding: 17px 22px !important;
+  grid-template-columns: minmax(360px, 1fr) minmax(430px, .86fr) !important;
+  gap: 20px !important;
 }
 
-.ld-summary-metrics,
-.ld-tag-strip,
-.ld-tabs,
-.ld-activity-layout {
+.ld-profile-left {
+  gap: 16px !important;
+}
+
+.ld-avatar-large {
+  width: 62px !important;
+  height: 62px !important;
+  min-width: 62px !important;
+  font-size: 22px !important;
+}
+
+.ld-avatar-large span {
+  width: 11px !important;
+  height: 11px !important;
+  bottom: 7px !important;
+}
+
+.ld-profile-title {
+  margin-bottom: 4px !important;
+  gap: 8px !important;
+}
+
+.ld-profile-title h1 {
+  font-size: 18.5px !important;
+  font-weight: 660 !important;
+  line-height: 1.12 !important;
+}
+
+.ld-profile-title b {
+  padding: 4px 9px !important;
+  font-size: 10.2px !important;
+  font-weight: 640 !important;
+}
+
+.ld-profile-main p {
+  font-size: 11.7px !important;
+  margin-bottom: 7px !important;
+  font-weight: 430 !important;
+}
+
+.ld-contact-list {
+  gap: 5px !important;
+  font-size: 11.3px !important;
+}
+
+.ld-contact-list .ld-svg {
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+}
+
+.ld-profile-facts {
+  grid-template-columns: minmax(150px, .9fr) minmax(105px, .6fr) minmax(170px, .85fr) !important;
+  gap: 16px !important;
+  padding-left: 20px !important;
+}
+
+.ld-fact small {
+  font-size: 10.2px !important;
+  font-weight: 590 !important;
+  margin-bottom: 7px !important;
+}
+
+.ld-fact strong {
+  font-size: 12px !important;
+  font-weight: 630 !important;
+  line-height: 1.22 !important;
+}
+
+.ld-fact em {
+  font-size: 10px !important;
+  font-weight: 420 !important;
+}
+
+.ld-owner-avatar {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  font-size: 9.6px !important;
+}
+
+/* 4: compact metric cards */
+.ld-summary-metrics {
   max-width: 100% !important;
+  gap: 10px !important;
+  margin-bottom: 10px !important;
 }
 
+.ld-metric-card {
+  min-height: 74px !important;
+  padding: 11px 13px !important;
+  grid-template-columns: 40px minmax(0, 1fr) !important;
+  gap: 11px !important;
+}
+
+.ld-metric-icon {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 11px !important;
+}
+
+.ld-metric-icon .ld-svg {
+  width: 17px !important;
+  height: 17px !important;
+}
+
+.ld-metric-body small {
+  font-size: 10.2px !important;
+  font-weight: 590 !important;
+  margin-bottom: 3px !important;
+}
+
+.ld-metric-value strong {
+  font-size: 13.6px !important;
+  font-weight: 660 !important;
+}
+
+.ld-metric-value b {
+  font-size: 9.6px !important;
+  padding: 3px 7px !important;
+}
+
+.ld-metric-body p {
+  font-size: 10.2px !important;
+  margin-top: 4px !important;
+}
+
+.ld-progress {
+  margin-top: 5px !important;
+}
+
+.ld-progress i {
+  height: 4px !important;
+}
+
+.ld-progress em {
+  font-size: 10px !important;
+}
+
+/* 5: tags section less empty */
+.ld-tag-strip {
+  max-width: 860px !important;
+  width: min(100%, 860px) !important;
+  margin: 0 auto 10px !important;
+  padding: 13px 16px !important;
+}
+
+.ld-tag-strip h2 {
+  font-size: 13.5px !important;
+  font-weight: 660 !important;
+  margin-bottom: 10px !important;
+}
+
+.ld-tag-strip div {
+  gap: 9px !important;
+}
+
+.ld-tag-strip span,
+.ld-tag-strip button {
+  padding: 6px 11px !important;
+  font-size: 10.2px !important;
+  font-weight: 640 !important;
+  border-radius: 9px !important;
+}
+
+/* 6: tabs lighter and compact */
+.ld-tabs {
+  max-width: 1120px !important;
+  width: min(100%, 1120px) !important;
+  margin: 0 auto 12px !important;
+  padding: 7px 10px !important;
+  gap: 9px !important;
+}
+
+.ld-tabs button {
+  height: 34px !important;
+  padding: 0 10px !important;
+  font-size: 11.6px !important;
+  font-weight: 590 !important;
+  gap: 6px !important;
+}
+
+.ld-tabs .ld-svg {
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+}
+
+/* 8: activity visible sooner */
 .ld-activity-layout {
+  max-width: 1120px !important;
+  width: min(100%, 1120px) !important;
   align-items: start !important;
-  margin-bottom: 24px !important;
+  margin: 0 auto 24px !important;
+  gap: 12px !important;
+  grid-template-columns: minmax(0, 1fr) 320px !important;
 }
 
 .ld-activity-panel,
 .ld-activity-side {
   align-self: start !important;
+}
+
+.ld-activity-panel,
+.ld-about-card,
+.ld-files-card {
+  padding: 15px !important;
+}
+
+.ld-activity-panel h2,
+.ld-about-card h2,
+.ld-files-card h2 {
+  font-size: 14px !important;
+  font-weight: 660 !important;
+}
+
+.ld-activity-panel select {
+  height: 32px !important;
+  font-size: 11.5px !important;
+  border-radius: 10px !important;
+}
+
+.ld-activity-row {
+  min-height: 62px !important;
+  grid-template-columns: 40px minmax(0, 1fr) 118px !important;
+  gap: 10px !important;
+}
+
+.ld-activity-icon {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+.ld-activity-icon .ld-svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.ld-activity-text strong {
+  font-size: 12px !important;
+  font-weight: 630 !important;
+}
+
+.ld-activity-text p,
+.ld-activity-meta,
+.ld-about-row span,
+.ld-about-row strong,
+.ld-file-row strong,
+.ld-file-row small {
+  font-size: 11.2px !important;
 }
 
 @media (max-width: 1200px) {
@@ -154,11 +401,26 @@
 
   .ld-main {
     grid-column: auto !important;
-    padding: 12px 16px 48px !important;
+    padding: 10px 16px 42px !important;
   }
 
   .ld-topbar {
-    height: 44px !important;
-    min-height: 44px !important;
+    height: 40px !important;
+    min-height: 40px !important;
+  }
+
+  .ld-profile-card {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ld-profile-facts {
+    border-left: 0 !important;
+    border-top: 1px solid #dbe6f5 !important;
+    padding-left: 0 !important;
+    padding-top: 14px !important;
+  }
+
+  .ld-activity-layout {
+    grid-template-columns: 1fr !important;
   }
 }
