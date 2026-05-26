@@ -2,6 +2,7 @@ import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { getLead } from './leadsData.js';
 import './LeadDetailStable.css';
 import './LeadDetailProfessionalFix.css';
+import '../../styles/leadDetailFinalLock.css';
 
 function getCurrentRole() {
   const saved = window.localStorage.getItem('salesflowRole');
