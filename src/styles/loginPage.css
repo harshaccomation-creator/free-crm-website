@@ -96,3 +96,148 @@
     transform: translateY(0);
   }
 }
+.login-dark-page {
+  min-height: 100vh;
+  overflow-y: auto;
+}
+
+.login-dark-card {
+  min-height: calc(100vh - 32px);
+  align-items: stretch;
+}
+
+.login-dark-form-panel {
+  overflow-y: auto;
+  max-height: 100vh;
+  padding-top: 34px;
+  padding-bottom: 34px;
+}
+
+.signup-enabled-box {
+  max-width: 520px;
+  width: 100%;
+}
+
+.signup-form-grid {
+  gap: 10px;
+}
+
+.signup-form-grid label {
+  gap: 7px;
+}
+
+.signup-form-grid .login-input-wrap {
+  min-height: 54px;
+  border-radius: 16px;
+}
+
+.signup-form-grid .login-input-wrap input {
+  font-size: 15px;
+}
+
+.auth-mode-tabs {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 5px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 16px;
+  background: #f6f8fc;
+}
+
+.auth-mode-tabs button {
+  border: 0;
+  padding: 11px 14px;
+  border-radius: 12px;
+  background: transparent;
+  color: #64748b;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.auth-mode-tabs button.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+}
+
+.password-strength {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: -2px;
+  padding: 9px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  background: #f8fafc;
+  color: #64748b;
+}
+
+.password-strength span {
+  width: 34px;
+  height: 7px;
+  border-radius: 999px;
+  background: #cbd5e1;
+}
+
+.password-strength.weak {
+  color: #dc2626;
+  background: #fff1f2;
+}
+
+.password-strength.weak span {
+  background: #ef4444;
+}
+
+.password-strength.medium {
+  color: #b45309;
+  background: #fffbeb;
+}
+
+.password-strength.medium span {
+  background: #f59e0b;
+}
+
+.password-strength.strong {
+  color: #15803d;
+  background: #f0fdf4;
+}
+
+.password-strength.strong span {
+  background: #22c55e;
+}
+
+.otp-field {
+  animation: otpFadeIn 0.25s ease;
+}
+
+@keyframes otpFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1100px) {
+  .login-dark-card {
+    grid-template-columns: 1fr;
+  }
+
+  .login-dark-left {
+    display: none;
+  }
+
+  .login-dark-form-panel {
+    max-height: none;
+  }
+}
