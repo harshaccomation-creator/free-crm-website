@@ -1,7 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { leads } from '../leads/leadsData.js';
 import './EmployeePages.css';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
 const seedTasks = [
   { title: 'Call with Rohan Sharma', lead: 'Rohan Sharma', time: '10:00 AM', date: '20 May 2025', status: 'Today', type: 'Call' },
@@ -77,8 +82,45 @@ export function ReportsPage() {
 }
 
 export function ProfilePage() {
-  const [profile, setProfile] = useState({ name: 'Alex Morgan', role: 'Sales Executive', email: 'alex@salesflow.com', phone: '+91 98765 43210', team: 'Sales', location: 'Mumbai, India' });
+  const [profile, setProfile] = useState({ name: 'Loading...', role: 'Employee', email: 'Loading...', phone: 'Loading...', team: 'Sales', location: 'India' });
   const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    let alive = true;
+    async function loadProfile() {
+      if (!supabase) {
+        if (alive) setProfile({ name: 'Employee User', role: 'Employee', email: 'Profile env missing', phone: '-', team: 'Sales', location: 'India' });
+        return;
+      }
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('full_name,email,phone,role,created_at')
+        .eq('role', 'employee')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (!alive) return;
+      if (error || !data) {
+        setProfile({ name: 'Employee User', role: 'Employee', email: 'No profile found', phone: '-', team: 'Sales', location: 'India' });
+        return;
+      }
+
+      setProfile({
+        name: data.full_name || 'Employee User',
+        role: data.role === 'employee' ? 'Sales Executive' : data.role || 'Employee',
+        email: data.email || '-',
+        phone: data.phone || '-',
+        team: 'Sales',
+        location: 'India',
+      });
+    }
+    loadProfile();
+    return () => { alive = false; };
+  }, []);
+
   const save = (event) => { event.preventDefault(); setShowModal(false); };
-  return <Shell title="Profile" subtitle="Employee profile and account details." actions={<button className="emp-btn primary" onClick={() => setShowModal(true)}>Edit Profile</button>}><section className="emp-card emp-section profile-box"><div className="profile-photo">A</div><div className="profile-info"><h2>{profile.name}</h2><p>{profile.role}</p><div className="profile-details"><div><span>Email</span><strong>{profile.email}</strong></div><div><span>Phone</span><strong>{profile.phone}</strong></div><div><span>Team</span><strong>{profile.team}</strong></div><div><span>Location</span><strong>{profile.location}</strong></div></div></div></section>{showModal && <Modal title="Edit Profile" subtitle="Employee details update karo." onClose={() => setShowModal(false)}><form onSubmit={save} className="emp-form"><label>Name<input value={profile.name} onChange={(e) => setProfile({ ...profile, name: e.target.value })} /></label><label>Role<input value={profile.role} onChange={(e) => setProfile({ ...profile, role: e.target.value })} /></label><label>Email<input value={profile.email} onChange={(e) => setProfile({ ...profile, email: e.target.value })} /></label><label>Phone<input value={profile.phone} onChange={(e) => setProfile({ ...profile, phone: e.target.value })} /></label><label>Team<input value={profile.team} onChange={(e) => setProfile({ ...profile, team: e.target.value })} /></label><label>Location<input value={profile.location} onChange={(e) => setProfile({ ...profile, location: e.target.value })} /></label><div className="emp-modal-actions"><button type="button" className="emp-btn" onClick={() => setShowModal(false)}>Cancel</button><button className="emp-btn primary">Save Profile</button></div></form></Modal>}</Shell>;
+  const initial = (profile.name || 'E').slice(0, 1).toUpperCase();
+
+  return <Shell title="Profile" subtitle="Employee profile and account details." actions={<button className="emp-btn primary" onClick={() => setShowModal(true)}>Edit Profile</button>}><section className="emp-card emp-section profile-box"><div className="profile-photo">{initial}</div><div className="profile-info"><h2>{profile.name}</h2><p>{profile.role}</p><div className="profile-details"><div><span>Email</span><strong>{profile.email}</strong></div><div><span>Phone</span><strong>{profile.phone}</strong></div><div><span>Team</span><strong>{profile.team}</strong></div><div><span>Location</span><strong>{profile.location}</strong></div></div></div></section>{showModal && <Modal title="Edit Profile" subtitle="Employee details update karo." onClose={() => setShowModal(false)}><form onSubmit={save} className="emp-form"><label>Name<input value={profile.name} onChange={(e) => setProfile({ ...profile, name: e.target.value })} /></label><label>Role<input value={profile.role} onChange={(e) => setProfile({ ...profile, role: e.target.value })} /></label><label>Email<input value={profile.email} onChange={(e) => setProfile({ ...profile, email: e.target.value })} /></label><label>Phone<input value={profile.phone} onChange={(e) => setProfile({ ...profile, phone: e.target.value })} /></label><label>Team<input value={profile.team} onChange={(e) => setProfile({ ...profile, team: e.target.value })} /></label><label>Location<input value={profile.location} onChange={(e) => setProfile({ ...profile, location: e.target.value })} /></label><div className="emp-modal-actions"><button type="button" className="emp-btn" onClick={() => setShowModal(false)}>Cancel</button><button className="emp-btn primary">Save Profile</button></div></form></Modal>}</Shell>;
 }
