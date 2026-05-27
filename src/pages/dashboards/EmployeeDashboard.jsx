@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import '../../styles/dashboardBase.css';
 import '../../styles/referenceDashboardExact.css';
@@ -6,6 +8,10 @@ import '../../styles/zzzSidebarBlackFix.css';
 import '../../styles/dashboardFontPolish.css';
 import '../../styles/employeeDashboardPremiumFix.css';
 import '../../styles/employeeDashboardVisibleFix.css';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : null;
 
 function DashIcon({ type }) {
   const icons = {
@@ -37,6 +43,33 @@ function LineChart() {
 }
 
 export default function EmployeeDashboard() {
+  const [employee, setEmployee] = useState({ name: 'Employee', role: 'Sales Executive', initial: 'E' });
+
+  useEffect(() => {
+    let alive = true;
+    async function loadEmployee() {
+      const userEmail = localStorage.getItem('salesflow_user_email') || '';
+      const userId = localStorage.getItem('salesflow_user_id') || '';
+      if (!supabase) return;
+
+      let query = supabase.from('profiles').select('full_name,email,role,created_at').limit(1);
+      if (userId) query = query.eq('id', userId);
+      else if (userEmail) query = query.eq('email', userEmail.toLowerCase());
+      else query = query.eq('role', 'employee').order('created_at', { ascending: false });
+
+      const { data, error } = await query.maybeSingle();
+      if (!alive || error || !data) return;
+      const name = data.full_name || data.email || 'Employee';
+      setEmployee({
+        name,
+        role: data.role === 'employee' ? 'Sales Executive' : data.role || 'Employee',
+        initial: name.slice(0, 1).toUpperCase(),
+      });
+    }
+    loadEmployee();
+    return () => { alive = false; };
+  }, []);
+
   const leads = [
     ['Rohan Sharma','Sharma Industries','New','May 24, 2025 10:00 AM'],
     ['Neha Patel','Patel Healthcare','Contacted','May 23, 2025 11:30 AM'],
@@ -55,8 +88,8 @@ export default function EmployeeDashboard() {
       <DashboardSidebar role="employee" />
       <main className="reference-main">
         <header className="reference-topbar">
-          <div className="reference-title"><h1>Welcome back, Alex!</h1><p>Here’s what’s happening with your work today.</p></div>
-          <div className="reference-actions"><label className="reference-search"><DashIcon type="search" /><input placeholder="Search leads, contacts, tasks..." /></label><button className="reference-icon-btn"><DashIcon type="bell" /><i>5</i></button><button className="reference-profile"><span className="reference-avatar">A</span><span><strong>Alex Morgan</strong><small>Sales Executive</small></span></button></div>
+          <div className="reference-title"><h1>Welcome back, {employee.name.split(' ')[0]}!</h1><p>Here’s what’s happening with your work today.</p></div>
+          <div className="reference-actions"><label className="reference-search"><DashIcon type="search" /><input placeholder="Search leads, contacts, tasks..." /></label><button className="reference-icon-btn"><DashIcon type="bell" /><i>5</i></button><button className="reference-profile"><span className="reference-avatar">{employee.initial}</span><span><strong>{employee.name}</strong><small>{employee.role}</small></span></button></div>
         </header>
         <section className="reference-stats">
           <article className="reference-stat"><span className="stat-icon"><DashIcon type="users" /></span><p>Assigned Leads</p><h2>128</h2><small>↑ 12% from last week</small></article>
