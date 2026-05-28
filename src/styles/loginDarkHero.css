@@ -1,4 +1,4 @@
-/* Final auth page layout: no zoom scaling, no top overlap, panel scrolls safely */
+/* Premium auth page polish: clean SaaS login/signup */
 .login-dark-page{
   min-height:100svh!important;
   height:auto!important;
@@ -8,7 +8,10 @@
   justify-content:center!important;
   overflow-y:auto!important;
   overflow-x:hidden!important;
-  background:#eaf2ff!important;
+  background:
+    radial-gradient(circle at 15% 10%,rgba(37,99,235,.18),transparent 30%),
+    radial-gradient(circle at 90% 76%,rgba(14,165,233,.16),transparent 28%),
+    linear-gradient(135deg,#eaf2ff 0%,#f8fbff 48%,#edf5ff 100%)!important;
 }
 
 .login-home-btn,.login-home-btn.dark-back{
@@ -26,12 +29,18 @@
   white-space:nowrap!important;
   overflow:hidden!important;
   border-radius:999px!important;
+  border:1px solid rgba(226,232,240,.92)!important;
+  background:rgba(255,255,255,.86)!important;
+  color:#23324d!important;
+  box-shadow:0 18px 44px rgba(15,23,42,.13)!important;
+  backdrop-filter:blur(14px)!important;
 }
 
 .login-home-btn::before,.login-home-btn.dark-back::before{
   content:'← Back';
   font-size:14px!important;
-  font-weight:900!important;
+  font-weight:950!important;
+  letter-spacing:.01em!important;
 }
 
 .login-dark-card{
@@ -43,17 +52,19 @@
   overflow:hidden!important;
   display:grid!important;
   grid-template-columns:minmax(430px,1fr) minmax(430px,.96fr)!important;
-  border-radius:30px!important;
+  border-radius:32px!important;
+  border:1px solid rgba(255,255,255,.86)!important;
   transform:none!important;
   transform-origin:center!important;
-  box-shadow:0 28px 70px rgba(20,45,90,.16)!important;
+  background:rgba(255,255,255,.88)!important;
+  box-shadow:0 40px 95px rgba(20,45,90,.18),0 1px 0 rgba(255,255,255,.9) inset!important;
 }
 
 .login-dark-left{
   height:100%!important;
   min-height:0!important;
   max-height:none!important;
-  border-radius:30px 0 0 30px!important;
+  border-radius:32px 0 0 32px!important;
   overflow:hidden!important;
 }
 
@@ -62,6 +73,18 @@
   min-height:0!important;
   padding:46px 44px 34px!important;
   overflow:hidden!important;
+  background:
+    radial-gradient(circle at 20% 12%,rgba(96,165,250,.20),transparent 24%),
+    radial-gradient(circle at 85% 55%,rgba(37,99,235,.26),transparent 33%),
+    linear-gradient(145deg,#061225 0%,#0a2b61 45%,#0e4eb2 100%)!important;
+}
+
+.dark-crm-hero::before{
+  content:''!important;
+  position:absolute!important;
+  inset:0!important;
+  background:linear-gradient(120deg,rgba(255,255,255,.11),transparent 34%),radial-gradient(circle at 90% 90%,rgba(59,130,246,.42),transparent 24%)!important;
+  pointer-events:none!important;
 }
 
 .login-dark-form-panel{
@@ -71,10 +94,11 @@
   overflow-y:auto!important;
   overflow-x:hidden!important;
   padding:30px 44px 26px!important;
-  border-radius:0 30px 30px 0!important;
+  border-radius:0 32px 32px 0!important;
   display:flex!important;
   align-items:center!important;
   justify-content:center!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(248,251,255,.95))!important;
 }
 
 .signup-enabled-box{
@@ -86,31 +110,82 @@
   margin:auto!important;
 }
 
-.auth-mode-tabs{order:0!important;position:static!important;transform:none!important;margin:0 0 14px!important}
-.login-form-box h2{order:1!important;margin:0 0 5px!important;font-size:32px!important;line-height:1.06!important}
-.login-form-box>p:not(.signup-copy){order:2!important;margin:0 0 14px!important}
-.login-message{order:3!important;position:static!important;width:100%!important;margin:0 0 12px!important;padding:10px 12px!important;border-radius:14px!important;background:#fff7ed!important;color:#9a3412!important;border:1px solid #fed7aa!important;box-shadow:none!important;font-size:13px!important;font-weight:900!important;line-height:1.3!important}
+.auth-mode-tabs{
+  order:0!important;
+  position:static!important;
+  transform:none!important;
+  margin:0 0 14px!important;
+  padding:5px!important;
+  border-radius:20px!important;
+  background:rgba(226,237,255,.86)!important;
+  border:1px solid #dbe8ff!important;
+  box-shadow:0 14px 30px rgba(15,23,42,.06) inset!important;
+}
+
+.auth-mode-tabs button{
+  border-radius:15px!important;
+  font-weight:950!important;
+  letter-spacing:-.01em!important;
+  color:#64748b!important;
+  transition:all .18s ease!important;
+}
+
+.auth-mode-tabs button.active{
+  background:#fff!important;
+  color:#0f172a!important;
+  box-shadow:0 12px 28px rgba(15,23,42,.10)!important;
+}
+
+.login-form-box h2{order:1!important;margin:0 0 5px!important;font-size:32px!important;line-height:1.06!important;color:#071633!important;letter-spacing:-.055em!important}
+.login-form-box>p:not(.signup-copy){order:2!important;margin:0 0 14px!important;color:#61718f!important;font-weight:650!important}
+.login-message{order:3!important;position:static!important;width:100%!important;margin:0 0 12px!important;padding:10px 12px!important;border-radius:15px!important;background:#fff7ed!important;color:#9a3412!important;border:1px solid #fed7aa!important;box-shadow:0 8px 24px rgba(251,146,60,.10)!important;font-size:13px!important;font-weight:900!important;line-height:1.3!important}
 .signup-stepper{order:4!important;margin-bottom:14px!important}
+.signup-stepper span{box-shadow:0 10px 26px rgba(37,99,235,.12)!important}
+.signup-stepper span.active{box-shadow:0 14px 30px rgba(37,99,235,.28)!important}
 .step-signup-form,.signup-form-grid,.login-form{order:5!important;gap:10px!important;padding-bottom:0!important}
 .login-divider{display:none!important}.login-divider+button{display:none!important}
-.signup-copy{order:8!important;margin:12px 0 0!important}
+.signup-copy{order:8!important;margin:12px 0 0!important;color:#64748b!important;font-weight:650!important}
+.signup-copy button{color:#0b63f6!important;font-weight:950!important}
 
-.login-input-wrap,.signup-form-grid .login-input-wrap{height:46px!important;min-height:46px!important}
-.sign-in-btn,.signup-form-grid .sign-in-btn,.google-login-btn,.signup-form-grid .google-login-btn{height:46px!important;min-height:46px!important}
+.login-form label,.signup-form-grid label{color:#071633!important;font-weight:950!important;letter-spacing:-.02em!important}
+.login-input-wrap,.signup-form-grid .login-input-wrap{
+  height:46px!important;
+  min-height:46px!important;
+  border-radius:16px!important;
+  border:1px solid #d7e4f8!important;
+  background:rgba(255,255,255,.96)!important;
+  box-shadow:0 10px 28px rgba(15,23,42,.045)!important;
+}
+.login-input-wrap:focus-within{
+  border-color:#2563eb!important;
+  box-shadow:0 0 0 4px rgba(37,99,235,.10),0 16px 34px rgba(15,23,42,.08)!important;
+}
+.sign-in-btn,.signup-form-grid .sign-in-btn,.google-login-btn,.signup-form-grid .google-login-btn{
+  height:46px!important;
+  min-height:46px!important;
+  border-radius:16px!important;
+}
+.sign-in-btn,.signup-form-grid .sign-in-btn{
+  background:linear-gradient(135deg,#0b63f6 0%,#155eef 48%,#0b45ce 100%)!important;
+  box-shadow:0 18px 36px rgba(37,99,235,.28)!important;
+  letter-spacing:-.02em!important;
+}
+.sign-in-btn:hover,.signup-form-grid .sign-in-btn:hover{filter:brightness(1.03)!important;transform:translateY(-1px)!important}
 .login-options-row{display:grid!important;grid-template-columns:1fr auto!important;gap:12px!important;align-items:center!important;font-size:13px!important}
 .login-options-row .remember-check{display:flex!important;flex-direction:row!important;align-items:center!important;gap:7px!important}
+.login-options-row button{color:#0b63f6!important;font-weight:950!important}
 
 .dark-hero-brand,.salesflow-orange-brand{margin-bottom:34px!important}
-.salesflow-orange-mark{width:52px!important;height:52px!important;font-size:28px!important}
-.dark-hero-brand strong{font-size:32px!important}
-.dark-hero-content h1{margin:38px 0 18px!important;font-size:44px!important;line-height:1.08!important}
-.dark-hero-copy{font-size:16px!important;line-height:1.5!important;margin-bottom:24px!important}
+.salesflow-orange-mark{width:52px!important;height:52px!important;font-size:28px!important;border-radius:17px!important;box-shadow:0 20px 44px rgba(255,91,20,.32)!important}
+.dark-hero-brand strong{font-size:32px!important;letter-spacing:-.05em!important}
+.dark-hero-content h1{margin:38px 0 18px!important;font-size:44px!important;line-height:1.08!important;letter-spacing:-.06em!important;text-shadow:0 14px 34px rgba(0,0,0,.16)!important}
+.dark-hero-copy{font-size:16px!important;line-height:1.5!important;margin-bottom:24px!important;color:rgba(239,246,255,.82)!important}
 .dark-feature-list{margin-top:20px!important;gap:14px!important}
 .dark-feature-list article{grid-template-columns:48px 1fr!important;gap:14px!important}
-.dark-feature-list article>span{width:48px!important;height:48px!important}
+.dark-feature-list article>span{width:48px!important;height:48px!important;border-radius:16px!important;background:rgba(255,255,255,.10)!important;border:1px solid rgba(255,255,255,.16)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.20),0 10px 24px rgba(0,0,0,.12)!important}
 .dark-feature-list strong{font-size:16px!important}
-.dark-feature-list p{font-size:13px!important;line-height:1.35!important;margin-top:4px!important}
-.dark-crm-hero::after{bottom:18px!important}
+.dark-feature-list p{font-size:13px!important;line-height:1.35!important;margin-top:4px!important;color:rgba(226,236,255,.80)!important}
+.dark-crm-hero::after{bottom:18px!important;background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.20)!important;box-shadow:0 12px 30px rgba(0,0,0,.12)!important}
 
 @media(max-height:760px) and (min-width:861px){
   .login-dark-page{padding:64px 14px 18px!important}
