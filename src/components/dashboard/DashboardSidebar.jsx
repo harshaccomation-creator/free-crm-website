@@ -10,7 +10,19 @@ const menuByRole = {
 const routes = {
   employee: { Dashboard: '/employee/dashboard', 'My Leads': '/leads', Won: '/employee/won', Tasks: '/employee/tasks', Calendar: '/employee/calendar', Activities: '/employee/activities', Reports: '/employee/reports', Profile: '/employee/profile' },
   admin: { Dashboard: '/admin/dashboard', Leads: '/leads' },
-  superAdmin: { Dashboard: '/super-admin/dashboard' },
+  superAdmin: {
+    Dashboard: '/super-admin/dashboard',
+    Users: '/super-admin/users',
+    'Roles & Permissions': '/super-admin/roles',
+    Organizations: '/super-admin/organizations',
+    Modules: '/super-admin/modules',
+    'Plans & Billing': '/super-admin/billing',
+    Settings: '/super-admin/settings',
+    'Activity Logs': '/super-admin/activity-logs',
+    'System Logs': '/super-admin/system-logs',
+    Integrations: '/super-admin/integrations',
+    'Backup & Restore': '/super-admin/backup',
+  },
 };
 
 const iconByItem = {
@@ -70,9 +82,8 @@ export default function DashboardSidebar({ role = 'employee' }) {
   useEffect(() => {
     const sidebar = sidebarRef.current;
     if (!sidebar) return;
-    sidebar.scrollTop = 0;
     const nav = sidebar.querySelector('.sfx-nav');
-    if (nav) nav.scrollTop = 0;
+    if (nav && nav.scrollTop < 4) nav.scrollTop = 0;
   });
 
   return (
