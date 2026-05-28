@@ -47,6 +47,14 @@ function isPublicSupportPage(pathname) {
   return pathname === '/' || pathname === '/login';
 }
 
+function getSavedRole() {
+  return String(window.localStorage.getItem('salesflow_user_role') || '').toLowerCase().replace(/[\s-]+/g, '_');
+}
+
+function isSuperAdminRole(role) {
+  return role === 'super_admin' || role === 'superadmin';
+}
+
 function applyTawkVisibility(pathname) {
   if (typeof window === 'undefined' || !window.Tawk_API) return;
   const showPublicBubble = isPublicSupportPage(pathname);
@@ -94,6 +102,15 @@ export default function App() {
   }, [path]);
 
   useEffect(() => {
+    const role = getSavedRole();
+    if (isSuperAdminRole(role) && path.startsWith('/employee')) {
+      window.history.replaceState({}, '', '/super-admin/dashboard');
+      setPath('/super-admin/dashboard');
+      window.dispatchEvent(new Event('salesflow:navigate'));
+    }
+  }, [path]);
+
+  useEffect(() => {
     const syncPath = () => setPath(window.location.pathname);
     window.addEventListener('popstate', syncPath);
     window.addEventListener('salesflow:navigate', syncPath);
@@ -102,6 +119,9 @@ export default function App() {
       window.removeEventListener('salesflow:navigate', syncPath);
     };
   }, []);
+
+  const savedRole = getSavedRole();
+  if (isSuperAdminRole(savedRole) && path.startsWith('/employee')) return <SuperAdminDashboard />;
 
   if (path === '/login') return <LoginPage />;
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
