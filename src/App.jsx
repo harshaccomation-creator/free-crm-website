@@ -42,12 +42,35 @@ import './styles/leadActivityTimelineFix.css';
 const TAWK_WIDGET_ID = '6a185c426034501c34c0b3b0';
 const TAWK_PROPERTY_ID = '1jpnigpq8';
 
-function loadTawkWidget() {
-  if (typeof window === 'undefined') return;
-  if (document.getElementById('salesflow-tawk-widget')) return;
+function isPublicSupportPage(pathname) {
+  return pathname === '/' || pathname === '/login';
+}
 
+function applyTawkVisibility(pathname) {
+  if (typeof window === 'undefined' || !window.Tawk_API) return;
+  const showPublicBubble = isPublicSupportPage(pathname);
+
+  try {
+    if (showPublicBubble) {
+      window.Tawk_API.showWidget?.();
+    } else {
+      window.Tawk_API.hideWidget?.();
+    }
+  } catch {
+    // Tawk can be blocked by browser extensions; keep app usable.
+  }
+}
+
+function loadTawkWidget(pathname) {
+  if (typeof window === 'undefined') return;
   window.Tawk_API = window.Tawk_API || {};
+  window.Tawk_API.onLoad = () => applyTawkVisibility(window.location.pathname || pathname);
   window.Tawk_LoadStart = new Date();
+
+  if (document.getElementById('salesflow-tawk-widget')) {
+    applyTawkVisibility(pathname);
+    return;
+  }
 
   const script = document.createElement('script');
   script.id = 'salesflow-tawk-widget';
@@ -62,8 +85,12 @@ export default function App() {
   const [path, setPath] = useState(window.location.pathname);
 
   useEffect(() => {
-    loadTawkWidget();
+    loadTawkWidget(path);
   }, []);
+
+  useEffect(() => {
+    applyTawkVisibility(path);
+  }, [path]);
 
   useEffect(() => {
     const syncPath = () => setPath(window.location.pathname);
