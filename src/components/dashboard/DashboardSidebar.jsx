@@ -8,48 +8,13 @@ const menuByRole = {
 };
 
 const routes = {
-  employee: {
-    Dashboard: '/employee/dashboard',
-    'My Leads': '/leads',
-    Won: '/employee/won',
-    Tasks: '/employee/tasks',
-    Calendar: '/employee/calendar',
-    Activities: '/employee/activities',
-    Reports: '/employee/reports',
-    Profile: '/employee/profile',
-  },
-  admin: {
-    Dashboard: '/admin/dashboard',
-    Leads: '/leads',
-  },
-  superAdmin: {
-    Dashboard: '/super-admin/dashboard',
-  },
+  employee: { Dashboard: '/employee/dashboard', 'My Leads': '/leads', Won: '/employee/won', Tasks: '/employee/tasks', Calendar: '/employee/calendar', Activities: '/employee/activities', Reports: '/employee/reports', Profile: '/employee/profile' },
+  admin: { Dashboard: '/admin/dashboard', Leads: '/leads' },
+  superAdmin: { Dashboard: '/super-admin/dashboard' },
 };
 
 const iconByItem = {
-  Dashboard: 'grid',
-  'My Leads': 'users',
-  Leads: 'users',
-  Won: 'won',
-  Tasks: 'check',
-  Calendar: 'calendar',
-  Activities: 'list',
-  Reports: 'chart',
-  Profile: 'user',
-  Deals: 'deal',
-  Contacts: 'users',
-  Companies: 'building',
-  Users: 'users',
-  Settings: 'settings',
-  'Roles & Permissions': 'shield',
-  Organizations: 'building',
-  Modules: 'box',
-  'Plans & Billing': 'rupee',
-  'Activity Logs': 'list',
-  'System Logs': 'list',
-  Integrations: 'plug',
-  'Backup & Restore': 'refresh',
+  Dashboard: 'grid', 'My Leads': 'users', Leads: 'users', Won: 'won', Tasks: 'check', Calendar: 'calendar', Activities: 'list', Reports: 'chart', Profile: 'user', Deals: 'deal', Contacts: 'users', Companies: 'building', Users: 'users', Settings: 'settings', 'Roles & Permissions': 'shield', Organizations: 'building', Modules: 'box', 'Plans & Billing': 'rupee', 'Activity Logs': 'list', 'System Logs': 'list', Integrations: 'plug', 'Backup & Restore': 'refresh',
 };
 
 function Icon({ name }) {
@@ -72,7 +37,6 @@ function Icon({ name }) {
     plug: 'M9 7V2m6 5V2M7 7h10v4a5 5 0 0 1-5 5v6m-4 0h8',
     menu: 'M5 7h14M5 12h14M5 17h14',
   }[name] || 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z';
-
   return <svg className="sfx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={path} /></svg>;
 }
 
@@ -81,6 +45,13 @@ function navigateTo(path, role) {
   if (role) window.localStorage.setItem('salesflowRole', role);
   window.history.pushState({}, '', path);
   window.dispatchEvent(new Event('salesflow:navigate'));
+}
+
+function openSupportChat() {
+  if (window.Tawk_API) {
+    window.Tawk_API.showWidget?.();
+    window.Tawk_API.maximize?.();
+  }
 }
 
 function isActive(item, path, currentPath, index) {
@@ -107,36 +78,17 @@ export default function DashboardSidebar({ role = 'employee' }) {
   return (
     <aside className="sfx-sidebar" ref={sidebarRef}>
       <div className="sfx-brand-row">
-        <button className="sfx-brand" onClick={() => navigateTo('/', safeRole)} type="button">
-          <span className="sfx-logo">S</span>
-          <strong>Sales<span>Flow</span></strong>
-        </button>
+        <button className="sfx-brand" onClick={() => navigateTo('/', safeRole)} type="button"><span className="sfx-logo">S</span><strong>Sales<span>Flow</span></strong></button>
         <button className="sfx-menu" type="button" aria-label="Toggle menu"><Icon name="menu" /></button>
       </div>
-
       <nav className="sfx-nav">
         {items.map((item, index) => {
           const path = routes[safeRole]?.[item];
-          return (
-            <button key={item} type="button" className={isActive(item, path, currentPath, index) ? 'active' : ''} onClick={() => navigateTo(path, safeRole)}>
-              <span className="sfx-nav-icon"><Icon name={iconByItem[item]} /></span>
-              <em>{item}</em>
-            </button>
-          );
+          return <button key={item} type="button" className={isActive(item, path, currentPath, index) ? 'active' : ''} onClick={() => navigateTo(path, safeRole)}><span className="sfx-nav-icon"><Icon name={iconByItem[item]} /></span><em>{item}</em></button>;
         })}
       </nav>
-
-      <div className="sfx-upgrade">
-        <span>♕</span>
-        <h3>{upgradeTitle}</h3>
-        <p>{upgradeText}</p>
-        <button type="button">Upgrade Now</button>
-      </div>
-
-      <div className="sfx-help">
-        <span>☊</span>
-        <div><strong>Need Help?</strong><small>Contact Support</small></div>
-      </div>
+      <div className="sfx-upgrade"><span>♕</span><h3>{upgradeTitle}</h3><p>{upgradeText}</p><button type="button">Upgrade Now</button></div>
+      <button className="sfx-help" type="button" onClick={openSupportChat}><span>☊</span><div><strong>Need Help?</strong><small>Open Support Chat</small></div></button>
     </aside>
   );
 }
