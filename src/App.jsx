@@ -39,8 +39,31 @@ import './styles/leadTagsWorking.css';
 import './styles/leadFinalPolish.css';
 import './styles/leadActivityTimelineFix.css';
 
+const TAWK_WIDGET_ID = '6a185c426034501c34c0b3b0';
+const TAWK_PROPERTY_ID = '1jpnigpq8';
+
+function loadTawkWidget() {
+  if (typeof window === 'undefined') return;
+  if (document.getElementById('salesflow-tawk-widget')) return;
+
+  window.Tawk_API = window.Tawk_API || {};
+  window.Tawk_LoadStart = new Date();
+
+  const script = document.createElement('script');
+  script.id = 'salesflow-tawk-widget';
+  script.async = true;
+  script.src = `https://embed.tawk.to/${TAWK_WIDGET_ID}/${TAWK_PROPERTY_ID}`;
+  script.charset = 'UTF-8';
+  script.setAttribute('crossorigin', '*');
+  document.body.appendChild(script);
+}
+
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    loadTawkWidget();
+  }, []);
 
   useEffect(() => {
     const syncPath = () => setPath(window.location.pathname);
