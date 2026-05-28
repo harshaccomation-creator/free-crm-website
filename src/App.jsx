@@ -121,7 +121,7 @@ export default function App() {
   }, []);
 
   const savedRole = getSavedRole();
-  if (isSuperAdminRole(savedRole) && path.startsWith('/employee')) return <SuperAdminDashboard />;
+  if (isSuperAdminRole(savedRole) && path.startsWith('/employee')) return <SuperAdminDashboard view="dashboard" />;
 
   if (path === '/login') return <LoginPage />;
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
@@ -132,7 +132,7 @@ export default function App() {
   if (path === '/employee/reports') return <EmployeeReportsPage />;
   if (path === '/employee/profile') return <PremiumProfilePage />;
   if (path === '/admin/dashboard') return <AdminDashboard />;
-  if (path === '/super-admin/dashboard') return <SuperAdminDashboard />;
+  if (path.startsWith('/super-admin')) return <SuperAdminDashboard view={path.split('/')[2] || 'dashboard'} />;
   if (path === '/leads') return <LeadListPage />;
   if (path.startsWith('/leads/')) return <LeadDetailPage leadId={path.split('/')[2]} />;
 
