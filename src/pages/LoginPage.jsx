@@ -27,16 +27,8 @@ function DarkCrmHero() {
         </div>
       </div>
       <div className="dark-dashboard-preview clean-preview-card">
-        <div className="dash-side">
-          <b><span className="mini-s">S</span> CRM</b>
-          <span className="active">⌂ Dashboard</span><span>♙ Leads</span><span>◇ Deals</span><span>☷ Contacts</span><span>☑ Tasks</span><span>▣ Calendar</span><span>◔ Reports</span>
-        </div>
-        <div className="dash-main">
-          <h3>Dashboard</h3>
-          <div className="dash-top-cards"><article><small>Total Leads</small><b>1,250</b><em>↑ 18.5%</em></article><article><small>Deals Won</small><b>320</b><em>↑ 12.7%</em></article></div>
-          <div className="dash-chart"><strong>Sales Overview</strong><svg viewBox="0 0 260 120"><path d="M18 92 C48 72 62 42 92 66 C114 84 134 26 160 48 C184 68 188 32 208 52 C228 74 236 32 250 44" fill="none" stroke="#1682ff" strokeWidth="4" strokeLinecap="round"/><g fill="#1682ff"><circle cx="18" cy="92" r="3"/><circle cx="92" cy="66" r="3"/><circle cx="160" cy="48" r="3"/><circle cx="250" cy="44" r="3"/></g></svg></div>
-          <div className="dash-source"><strong>Leads by Source</strong><div className="source-row"><i />Website <b>35%</b></div><div className="source-row"><i />Referral <b>25%</b></div><div className="source-row"><i />Social Media <b>20%</b></div></div>
-        </div>
+        <div className="dash-side"><b><span className="mini-s">S</span> CRM</b><span className="active">⌂ Dashboard</span><span>♙ Leads</span><span>◇ Deals</span><span>☷ Contacts</span><span>☑ Tasks</span><span>▣ Calendar</span><span>◔ Reports</span></div>
+        <div className="dash-main"><h3>Dashboard</h3><div className="dash-top-cards"><article><small>Total Leads</small><b>1,250</b><em>↑ 18.5%</em></article><article><small>Deals Won</small><b>320</b><em>↑ 12.7%</em></article></div><div className="dash-source"><strong>Leads by Source</strong><div className="source-row"><i />Website <b>35%</b></div><div className="source-row"><i />Referral <b>25%</b></div><div className="source-row"><i />Social Media <b>20%</b></div></div></div>
       </div>
       <div className="floating-revenue"><small>Revenue This Month</small><b>₹78,420</b><em>↑ 16.3% vs last month</em></div>
     </div>
@@ -66,6 +58,7 @@ async function postJson(url, body) {
 
 export default function LoginPage() {
   const [activeMode, setActiveMode] = useState('login');
+  const [signupStep, setSignupStep] = useState(1);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -89,19 +82,15 @@ export default function LoginPage() {
     const cleanEmail = email.trim().toLowerCase();
     if (cleanEmail.includes('superadmin')) return navigateTo('/super-admin/dashboard');
     if (!supabase) return setMessage('Supabase login env missing. Please check Vercel env variables.');
-
     try {
       setLoading(true);
       const { data, error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password });
       if (error) return setMessage(error.message || 'Invalid email or password. Please try again.');
-
       const userId = data?.user?.id || '';
       const { data: profile } = await supabase.from('profiles').select('role,email,full_name').eq('id', userId).maybeSingle();
-
       localStorage.setItem('salesflow_user_email', cleanEmail);
       localStorage.setItem('salesflow_user_id', userId);
       localStorage.setItem('salesflow_user_role', profile?.role || 'employee');
-
       if (profile?.role === 'company_admin' || profile?.role === 'admin') return navigateTo('/admin/dashboard');
       return navigateTo('/employee/dashboard');
     } catch (error) {
@@ -111,22 +100,30 @@ export default function LoginPage() {
     }
   };
 
+  const goSignupStep2 = () => {
+    setMessage('');
+    const cleanPhone = signup.phone.replace(/\D/g, '').slice(-10);
+    if (!signup.fullName.trim()) return setMessage('Please enter your full name.');
+    if (!/^\d{10}$/.test(cleanPhone)) return setMessage('Please enter valid 10 digit mobile number.');
+    setSignupStep(2);
+  };
+
   const requestSignupOtp = async (event) => {
     event.preventDefault();
     setMessage('');
     const cleanPhone = signup.phone.replace(/\D/g, '').slice(-10);
     if (!signup.fullName.trim()) return setMessage('Please enter your full name.');
+    if (!/^\d{10}$/.test(cleanPhone)) return setMessage('Please enter valid 10 digit mobile number.');
     if (!signup.email.trim()) return setMessage('Please enter your email.');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signup.email.trim())) return setMessage('Please enter a valid email address.');
-    if (!/^\d{10}$/.test(cleanPhone)) return setMessage('Please enter valid 10 digit mobile number.');
     if (signup.password.length < 8) return setMessage('Password must be minimum 8 characters.');
     if (strength.className === 'weak') return setMessage('Password is weak. Add uppercase, number and symbol.');
     if (signup.password !== signup.confirmPassword) return setMessage('Password and confirm password do not match.');
-
     try {
       setLoading(true);
       const data = await postJson('/api/signup-send-otp', { fullName: signup.fullName, email: signup.email, phone: signup.phone, companyName: signup.companyName || `${signup.fullName}'s Workspace`, password: signup.password });
       setOtpSent(true);
+      setSignupStep(3);
       setMessage(data.message || 'OTP sent to your email.');
     } catch (error) {
       setMessage(error.message);
@@ -153,8 +150,9 @@ export default function LoginPage() {
     }
   };
 
-  const openSignup = () => { setActiveMode('signup'); setMessage(''); };
+  const openSignup = () => { setActiveMode('signup'); setMessage(''); setSignupStep(1); };
   const openLogin = () => { setActiveMode('login'); setMessage(''); };
+  const stepText = signupStep === 1 ? 'Personal details' : signupStep === 2 ? 'Login security' : 'Email verification';
 
   return (
     <main className="login-dark-page">
@@ -185,19 +183,37 @@ export default function LoginPage() {
             ) : (
               <>
                 <h2>Create Account</h2>
-                <p>Email OTP verify hote hi employee dashboard open hoga.</p>
-                <form onSubmit={otpSent ? verifySignupOtp : requestSignupOtp} className="login-form signup-form-grid">
-                  <label>Full Name<div className="login-input-wrap"><span>👤</span><input placeholder="Enter full name" value={signup.fullName} onChange={(event) => updateSignup('fullName', event.target.value)} disabled={otpSent} /></div></label>
-                  <label>Email ID<div className="login-input-wrap"><span>✉</span><input type="email" placeholder="Enter email" value={signup.email} onChange={(event) => updateSignup('email', event.target.value)} disabled={otpSent} /></div></label>
-                  <label>Mobile Number<div className="login-input-wrap"><span>📱</span><input placeholder="10 digit mobile" value={signup.phone} onChange={(event) => updateSignup('phone', event.target.value)} disabled={otpSent} /></div></label>
-                  <label>Company Name<div className="login-input-wrap"><span>🏢</span><input placeholder="Company / Workspace name" value={signup.companyName} onChange={(event) => updateSignup('companyName', event.target.value)} disabled={otpSent} /></div></label>
-                  <label>Password<div className="login-input-wrap"><span>🔒</span><input type={showPassword ? 'text' : 'password'} placeholder="Minimum 8 characters" value={signup.password} onChange={(event) => updateSignup('password', event.target.value)} disabled={otpSent} /><button type="button" onClick={() => setShowPassword((value) => !value)}>{showPassword ? '🙈' : '👁'}</button></div></label>
-                  <label>Confirm Password<div className="login-input-wrap"><span>🔐</span><input type={showPassword ? 'text' : 'password'} placeholder="Confirm password" value={signup.confirmPassword} onChange={(event) => updateSignup('confirmPassword', event.target.value)} disabled={otpSent} /></div></label>
-                  <div className={`password-strength ${strength.className}`}><span />Password strength: <b>{strength.label}</b></div>
-                  {otpSent && <label className="otp-field">Email OTP<div className="login-input-wrap"><span>✅</span><input placeholder="Enter 6 digit OTP" value={signup.otp} onChange={(event) => updateSignup('otp', event.target.value)} maxLength={6} /></div></label>}
-                  <button className="sign-in-btn" type="submit" disabled={loading}>{loading ? 'Please wait...' : otpSent ? 'Verify & Create Account' : 'Send OTP'}</button>
-                  {otpSent && <button type="button" className="google-login-btn" onClick={() => { setOtpSent(false); updateSignup('otp', ''); setMessage('You can edit details and request OTP again.'); }}>Edit details</button>}
-                </form>
+                <p>{stepText} • Step {signupStep} of 3</p>
+                <div className="signup-stepper"><span className={signupStep >= 1 ? 'active' : ''}>1</span><i /><span className={signupStep >= 2 ? 'active' : ''}>2</span><i /><span className={signupStep >= 3 ? 'active' : ''}>3</span></div>
+
+                {signupStep === 1 && (
+                  <form onSubmit={(event) => { event.preventDefault(); goSignupStep2(); }} className="login-form signup-form-grid step-signup-form">
+                    <label>Full Name<div className="login-input-wrap"><span>👤</span><input placeholder="Enter full name" value={signup.fullName} onChange={(event) => updateSignup('fullName', event.target.value)} /></div></label>
+                    <label>Mobile Number<div className="login-input-wrap"><span>📱</span><input placeholder="10 digit mobile" value={signup.phone} onChange={(event) => updateSignup('phone', event.target.value)} /></div></label>
+                    <label>Company Name <small>(Optional)</small><div className="login-input-wrap"><span>🏢</span><input placeholder="Company / Workspace name" value={signup.companyName} onChange={(event) => updateSignup('companyName', event.target.value)} /></div></label>
+                    <button className="sign-in-btn" type="submit">Next: Email & Password</button>
+                  </form>
+                )}
+
+                {signupStep === 2 && (
+                  <form onSubmit={requestSignupOtp} className="login-form signup-form-grid step-signup-form">
+                    <label>Email ID<div className="login-input-wrap"><span>✉</span><input type="email" placeholder="Enter email" value={signup.email} onChange={(event) => updateSignup('email', event.target.value)} /></div></label>
+                    <label>Password<div className="login-input-wrap"><span>🔒</span><input type={showPassword ? 'text' : 'password'} placeholder="Minimum 8 characters" value={signup.password} onChange={(event) => updateSignup('password', event.target.value)} /><button type="button" onClick={() => setShowPassword((value) => !value)}>{showPassword ? '🙈' : '👁'}</button></div></label>
+                    <label>Confirm Password<div className="login-input-wrap"><span>🔐</span><input type={showPassword ? 'text' : 'password'} placeholder="Confirm password" value={signup.confirmPassword} onChange={(event) => updateSignup('confirmPassword', event.target.value)} /></div></label>
+                    <div className={`password-strength ${strength.className}`}><span />Password strength: <b>{strength.label}</b></div>
+                    <div className="signup-nav-row"><button type="button" className="google-login-btn" onClick={() => setSignupStep(1)}>Back</button><button className="sign-in-btn" type="submit" disabled={loading}>{loading ? 'Sending OTP...' : 'Send OTP'}</button></div>
+                  </form>
+                )}
+
+                {signupStep === 3 && (
+                  <form onSubmit={verifySignupOtp} className="login-form signup-form-grid step-signup-form">
+                    <div className="otp-summary"><strong>OTP sent to</strong><span>{signup.email}</span></div>
+                    <label>Email OTP<div className="login-input-wrap"><span>✅</span><input placeholder="Enter 6 digit OTP" value={signup.otp} onChange={(event) => updateSignup('otp', event.target.value)} maxLength={6} /></div></label>
+                    <button className="sign-in-btn" type="submit" disabled={loading}>{loading ? 'Please wait...' : 'Verify & Create Account'}</button>
+                    <button type="button" className="google-login-btn" onClick={() => { setSignupStep(2); setOtpSent(false); updateSignup('otp', ''); setMessage('You can edit details and request OTP again.'); }}>Edit Email / Password</button>
+                  </form>
+                )}
+
                 <p className="signup-copy">Already have an account? <button onClick={openLogin}>Sign in</button></p>
               </>
             )}
