@@ -1,53 +1,184 @@
+import { useEffect, useMemo, useState } from 'react';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import '../../styles/dashboardBase.css';
 import '../../styles/referenceDashboardExact.css';
 import '../../styles/sidebarGlobalFinalLock.css';
+import '../../styles/superAdminPremium.css';
 
-function GrowthChart() {
+const emptyData = {
+  stats: {},
+  recentUsers: [],
+  companies: [],
+  pendingSignups: [],
+  growth: [],
+  generatedAt: '',
+};
+
+function formatDate(value) {
+  if (!value) return '-';
+  return new Date(value).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function statusClass(status) {
+  const text = String(status || '').toLowerCase();
+  if (text.includes('active')) return 'green';
+  if (text.includes('trial') || text.includes('pending')) return 'orange';
+  if (text.includes('expired') || text.includes('inactive')) return 'red';
+  return 'blue';
+}
+
+function GrowthChart({ growth = [] }) {
+  const points = useMemo(() => {
+    const source = growth.length ? growth : [{ month: 'Now', users: 0 }];
+    const max = Math.max(...source.map((item) => Number(item.users) || 0), 1);
+    return source.map((item, index) => {
+      const x = source.length === 1 ? 80 : 50 + (index * 610) / Math.max(source.length - 1, 1);
+      const y = 205 - ((Number(item.users) || 0) / max) * 150;
+      return { ...item, x, y };
+    });
+  }, [growth]);
+
+  const line = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+  const fill = `${line} L ${points[points.length - 1]?.x || 50} 220 L ${points[0]?.x || 50} 220 Z`;
+
   return (
-    <div className="reference-chart">
-      <svg viewBox="0 0 700 270" aria-label="Platform growth chart">
-        {[45,85,125,165,205].map((y) => <line key={y} x1="44" y1={y} x2="660" y2={y} className="chart-grid" />)}
-        <line x1="44" y1="24" x2="44" y2="218" className="chart-axis" /><line x1="44" y1="218" x2="660" y2="218" className="chart-axis" />
-        <path d="M52 188 C120 150 164 132 230 108 C298 84 344 138 418 92 C492 52 548 72 640 30 L640 218 L52 218 Z" className="chart-fill" />
-        <path d="M52 188 C120 150 164 132 230 108 C298 84 344 138 418 92 C492 52 548 72 640 30" className="chart-line" />
-        {[[52,188],[164,132],[230,108],[344,138],[418,92],[548,72],[640,30]].map(([x,y]) => <circle key={`${x}-${y}`} cx={x} cy={y} r="6" className="chart-dot" />)}
-        {['May 1','May 6','May 11','May 16','May 21','May 26','May 31'].map((m,i) => <text key={m} x={58+i*96} y="250" className="chart-label">{m}</text>)}
+    <div className="super-chart">
+      <svg viewBox="0 0 720 260" aria-label="Real platform growth chart">
+        {[55,95,135,175,215].map((y) => <line key={y} x1="44" y1={y} x2="675" y2={y} className="chart-grid" />)}
+        <path d={fill} className="chart-fill" />
+        <path d={line} className="chart-line" />
+        {points.map((point) => <circle key={`${point.month}-${point.x}`} cx={point.x} cy={point.y} r="6" className="chart-dot" />)}
+        {points.map((point) => <text key={point.month} x={point.x - 12} y="246" className="chart-label">{point.month}</text>)}
       </svg>
     </div>
   );
 }
 
 export default function SuperAdminDashboard() {
-  const companies = [
-    ['Sharma Industries','Professional','24','Active','₹24,000/mo'],
-    ['Verma & Co.','Starter','6','Active','₹4,800/mo'],
-    ['Patel Healthcare','Professional','18','Active','₹18,000/mo'],
-    ['Kumar Solutions','Starter','5','Trial','Trial ends Jun 10'],
-  ];
+  const [data, setData] = useState(emptyData);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      setMessage('');
+      const response = await fetch('/api/super-admin-overview');
+      const result = await response.json();
+      if (!response.ok || result.ok === false) throw new Error(result.message || 'Unable to load dashboard data.');
+      setData(result);
+    } catch (error) {
+      setMessage(error.message || 'Unable to load dashboard data.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { loadData(); }, []);
+
+  const toggleUser = async (user) => {
+    try {
+      setMessage('');
+      const response = await fetch('/api/super-admin-overview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'toggleUser', userId: user.id, isActive: !user.isActive }),
+      });
+      const result = await response.json();
+      if (!response.ok || result.ok === false) throw new Error(result.message || 'Unable to update user.');
+      setMessage(result.message);
+      loadData();
+    } catch (error) {
+      setMessage(error.message || 'Unable to update user.');
+    }
+  };
+
+  const stats = data.stats || {};
+  const superName = localStorage.getItem('salesflow_user_email')?.split('@')[0] || 'Super Admin';
+
   return (
-    <div className="sf-dashboard reference-dashboard super-reference-dashboard">
+    <div className="sf-dashboard super-admin-premium-page">
       <DashboardSidebar role="superAdmin" />
-      <main className="reference-main">
-        <header className="reference-topbar">
-          <div className="reference-title"><h1>Welcome back, Harsh! 👋</h1><p>Super Admin · Manage and monitor your entire CRM platform.</p></div>
-          <div className="reference-actions"><label className="reference-search"><span>⌕</span><input placeholder="Search companies, users, tickets..." /></label><button className="reference-icon-btn">🔔<i>8</i></button><button className="reference-profile"><span className="reference-avatar">H</span><span><strong>Harsh Goyal</strong><small>Super Admin</small></span></button></div>
+      <main className="super-admin-main">
+        <header className="super-topbar">
+          <div>
+            <span className="super-kicker">SalesFlow Platform Control</span>
+            <h1>Welcome back, {superName}!</h1>
+            <p>Real-time CRM platform overview with users, companies, trials and system health.</p>
+          </div>
+          <div className="super-actions">
+            <label><span>⌕</span><input placeholder="Search users, companies, emails..." /></label>
+            <button type="button" onClick={loadData}>{loading ? 'Loading...' : 'Refresh'}</button>
+          </div>
         </header>
-        <section className="reference-stats six">
-          <article className="reference-stat"><span className="stat-icon">🏢</span><p>Total Companies</p><h2>256</h2><small>↑ 18% from last month</small></article>
-          <article className="reference-stat"><span className="stat-icon">♙</span><p>Active Users</p><h2>4,892</h2><small>↑ 23% from last month</small></article>
-          <article className="reference-stat"><span className="stat-icon">₹</span><p>Monthly Recurring Revenue</p><h2>₹48.72L</h2><small>↑ 16% from last month</small></article>
-          <article className="reference-stat"><span className="stat-icon">⌛</span><p>Trial Accounts</p><h2>38</h2><small>↑ 7 new</small></article>
-          <article className="reference-stat danger"><span className="stat-icon">◇</span><p>Open Support Tickets</p><h2>12</h2><small>14% from last month</small></article>
-          <article className="reference-stat"><span className="stat-icon">♢</span><p>System Uptime</p><h2>99.98%</h2><small>Healthy</small></article>
+
+        {message && <div className="super-message">{message}</div>}
+
+        <section className="super-stats-grid">
+          <article><span>🏢</span><small>Total Companies</small><strong>{stats.totalCompanies || 0}</strong><em>All registered workspaces</em></article>
+          <article><span>👥</span><small>Total Users</small><strong>{stats.totalUsers || 0}</strong><em>{stats.activeUsers || 0} active users</em></article>
+          <article><span>🟢</span><small>Active Users</small><strong>{stats.activeUsers || 0}</strong><em>{stats.inactiveUsers || 0} inactive</em></article>
+          <article><span>⏳</span><small>Trial Companies</small><strong>{stats.trialCompanies || 0}</strong><em>{stats.expiredTrials || 0} expired trials</em></article>
+          <article><span>📥</span><small>Pending Signups</small><strong>{stats.pendingSignups || 0}</strong><em>Waiting verification</em></article>
+          <article><span>🎫</span><small>Support Tickets</small><strong>{stats.openTickets || 0}</strong><em>Tawk live chat active</em></article>
         </section>
-        <section className="reference-row super-row-one">
-          <article className="reference-card"><div className="reference-card-head"><h2>Platform Growth & Revenue</h2><button>This Month ▾</button></div><GrowthChart /></article>
-          <article className="reference-card"><div className="reference-card-head"><h2>Recent Signups</h2><button>View All</button></div>{['Sharma Industries — Professional Plan','Verma & Co. — Starter Plan','Patel Healthcare — Professional Plan','Kumar Solutions — Starter Plan','Gupta Traders — Enterprise Plan'].map((t,i)=><div className="activity-list-row" key={t}><span className="reference-avatar">{t[0]}</span><div><strong>{t.split(' — ')[0]}</strong><small>{t.split(' — ')[1]}</small></div><small>{i+1}h ago</small></div>)}</article>
+
+        <section className="super-content-grid">
+          <article className="super-card super-chart-card">
+            <div className="super-card-head"><div><h2>Platform Growth</h2><p>Users added by month from real database.</p></div><span>{stats.uptime || '99.98%'} uptime</span></div>
+            <GrowthChart growth={data.growth} />
+          </article>
+
+          <article className="super-card">
+            <div className="super-card-head"><div><h2>Recent Users</h2><p>Latest profiles from Supabase.</p></div></div>
+            <div className="super-user-list">
+              {(data.recentUsers || []).map((user) => (
+                <div className="super-user-row" key={user.id || user.email}>
+                  <span>{(user.name || user.email || 'U').slice(0, 1).toUpperCase()}</span>
+                  <div><strong>{user.name}</strong><small>{user.email}</small></div>
+                  <button type="button" className={user.isActive ? 'danger' : 'success'} onClick={() => toggleUser(user)}>{user.isActive ? 'Deactivate' : 'Activate'}</button>
+                </div>
+              ))}
+              {!loading && !(data.recentUsers || []).length && <p className="super-empty">No users found.</p>}
+            </div>
+          </article>
         </section>
-        <section className="reference-row super-row-two">
-          <article className="reference-card"><div className="reference-card-head"><h2>Company Overview</h2><button>View All Companies</button></div><table className="reference-table"><thead><tr><th>Company Name</th><th>Plan</th><th>Users</th><th>Status</th><th>Billing</th></tr></thead><tbody>{companies.map(r=><tr key={r[0]}><td>{r[0]}</td><td><span className="pill blue">{r[1]}</span></td><td>{r[2]}</td><td><span className="pill">{r[3]}</span></td><td>{r[4]}</td></tr>)}</tbody></table></article>
-          <article className="reference-card"><div className="reference-card-head"><h2>System Health</h2><button>View Status</button></div>{['Web Server','API Server','Database','File Storage','Email Service','Backup Service'].map((t,i)=><div className="health-list-row" key={t}><strong>{t}</strong><small>{i===1?'99.99%':'100%'}</small><span>Operational</span></div>)}</article>
+
+        <section className="super-table-grid">
+          <article className="super-card">
+            <div className="super-card-head"><div><h2>Company Overview</h2><p>Real companies, plans, trial and user count.</p></div></div>
+            <div className="super-table-wrap">
+              <table>
+                <thead><tr><th>Company</th><th>Plan</th><th>Users</th><th>Status</th><th>Trial</th><th>Admin</th></tr></thead>
+                <tbody>
+                  {(data.companies || []).map((company) => (
+                    <tr key={company.id}>
+                      <td><strong>{company.name}</strong><small>{formatDate(company.createdAt)}</small></td>
+                      <td><span className="super-pill blue">{company.plan}</span></td>
+                      <td>{company.users}</td>
+                      <td><span className={`super-pill ${statusClass(company.status)}`}>{company.status}</span></td>
+                      <td>{company.trialDaysLeft === null ? '-' : company.trialDaysLeft >= 0 ? `${company.trialDaysLeft} days left` : 'Expired'}</td>
+                      <td>{company.adminEmail}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {!loading && !(data.companies || []).length && <p className="super-empty">No companies found.</p>}
+            </div>
+          </article>
+
+          <article className="super-card">
+            <div className="super-card-head"><div><h2>Pending Signups</h2><p>Signup requests and OTP verification status.</p></div></div>
+            <div className="super-pending-list">
+              {(data.pendingSignups || []).map((item) => (
+                <div key={item.id} className="super-pending-row">
+                  <div><strong>{item.name}</strong><small>{item.email}</small></div>
+                  <span className={`super-pill ${statusClass(item.status)}`}>{item.status}</span>
+                </div>
+              ))}
+              {!loading && !(data.pendingSignups || []).length && <p className="super-empty">No pending signups.</p>}
+            </div>
+          </article>
         </section>
       </main>
     </div>
