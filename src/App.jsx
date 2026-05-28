@@ -7,7 +7,8 @@ import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
 import LeadListPage from './pages/leads/LeadListPage.jsx';
 import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
 import EmployeeReportsPage from './pages/employee/EmployeeReportsPage.jsx';
-import { WonPage, TasksPage, CalendarPage, ActivitiesPage, ProfilePage } from './pages/employee/EmployeeWorkPages.jsx';
+import PremiumProfilePage from './pages/employee/ProfilePagePremium.jsx';
+import { WonPage, TasksPage, CalendarPage, ActivitiesPage } from './pages/employee/EmployeeWorkPages.jsx';
 import './styles/dashboardBase.css';
 import './styles/loginPage.css';
 import './styles/loginDarkHero.css';
@@ -109,7 +110,7 @@ export default function App() {
   if (path === '/employee/calendar') return <CalendarPage />;
   if (path === '/employee/activities') return <ActivitiesPage />;
   if (path === '/employee/reports') return <EmployeeReportsPage />;
-  if (path === '/employee/profile') return <ProfilePage />;
+  if (path === '/employee/profile') return <PremiumProfilePage />;
   if (path === '/admin/dashboard') return <AdminDashboard />;
   if (path === '/super-admin/dashboard') return <SuperAdminDashboard />;
   if (path === '/leads') return <LeadListPage />;
