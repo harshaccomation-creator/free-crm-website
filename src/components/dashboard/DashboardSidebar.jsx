@@ -41,7 +41,7 @@ function Icon({ name }) {
     chart: 'M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-9',
     user: 'M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z',
     deal: 'm12 3 9 9-9 9-9-9 9-9Z',
-    building: 'M4 21V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v16M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M2 21h20',
+    building: 'M4 21V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v16M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M2 21h20',
     settings: 'M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.8 1.8 0 0 0 .4 2l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.8 1.8 0 0 0-2-.4 1.8 1.8 0 0 0-1 1.6V21a2 2 0 1 1-4 0v-.1a1.8 1.8 0 0 0-1-1.6 1.8 1.8 0 0 0-2 .4l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.8 1.8 0 0 0 .4-2 1.8 1.8 0 0 0-1.6-1H3a2 2 0 1 1 0-4h.1a1.8 1.8 0 0 0 1.6-1 1.8 1.8 0 0 0-.4-2l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.8 1.8 0 0 0 2 .4 1.8 1.8 0 0 0 1-1.6V3a2 2 0 1 1 4 0v.1a1.8 1.8 0 0 0 1 1.6 1.8 1.8 0 0 0 2-.4l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.8 1.8 0 0 0-.4 2 1.8 1.8 0 0 0 1.6 1h.1a2 2 0 1 1 0 4h-.1a1.8 1.8 0 0 0-1.6 1Z',
     shield: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Zm-3-10 2 2 4-5',
     box: 'm21 8-9-5-9 5 9 5 9-5ZM3 8v8l9 5 9-5V8M12 13v8',
@@ -89,7 +89,7 @@ export default function DashboardSidebar({ role = 'employee' }) {
   return (
     <aside className="sfx-sidebar" ref={sidebarRef}>
       <div className="sfx-brand-row">
-        <button className="sfx-brand sfx-brand-image" onClick={() => navigateTo('/', safeRole)} type="button"><img src="/assets/salesflow-hub-logo.svg" alt="SalesFlow Hub" /></button>
+        <button className="sfx-brand sfx-brand-image" onClick={() => navigateTo('/', safeRole)} type="button"><img src="/assets/salesflow-hub-logo-transparent.png" alt="SalesFlow Hub" /></button>
         <button className="sfx-menu" type="button" aria-label="Toggle menu"><Icon name="menu" /></button>
       </div>
       <nav className="sfx-nav">
