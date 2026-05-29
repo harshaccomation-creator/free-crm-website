@@ -1,1 +1,22 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="360" height="92" viewBox="0 0 360 92"><rect width="360" height="92" fill="transparent"/><g fill="#ff6b1a"><rect x="18" y="31" width="48" height="24" rx="8"/><rect x="30" y="19" width="24" height="48" rx="8"/><rect x="24" y="25" width="36" height="36" rx="10" transform="rotate(45 42 43)"/></g><rect x="36" y="37" width="12" height="12" rx="3" fill="#fff" transform="rotate(45 42 43)"/><text x="76" y="55" font-family="Arial, Helvetica, sans-serif" font-size="33" font-weight="800" letter-spacing="-1.2" fill="#071633">Sales</text><text x="176" y="55" font-family="Arial, Helvetica, sans-serif" font-size="33" font-weight="800" letter-spacing="-1.2" fill="#ff6b1a">Flow</text><text x="270" y="74" font-family="Arial, Helvetica, sans-serif" font-size="9" font-weight="900" letter-spacing="6" fill="#071633">HUB</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="443" height="97" viewBox="0 0 443 97" fill="none">
+  <defs>
+    <linearGradient id="sfOrange" x1="0" y1="0" x2="100" y2="90" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff7a00"/>
+      <stop offset="1" stop-color="#ff5b00"/>
+    </linearGradient>
+    <mask id="linkCut1">
+      <rect width="443" height="97" fill="white"/>
+      <rect x="31" y="18" width="44" height="18" rx="9" transform="rotate(-42 31 18)" fill="black"/>
+      <rect x="30" y="52" width="44" height="18" rx="9" transform="rotate(-42 30 52)" fill="black"/>
+    </mask>
+  </defs>
+  <rect width="443" height="97" fill="transparent"/>
+  <g mask="url(#linkCut1)">
+    <rect x="9" y="39" width="64" height="28" rx="10" transform="rotate(-42 9 39)" fill="url(#sfOrange)"/>
+    <rect x="43" y="71" width="64" height="28" rx="10" transform="rotate(-42 43 71)" fill="url(#sfOrange)"/>
+  </g>
+  <rect x="34" y="44" width="31" height="13" rx="6.5" transform="rotate(42 34 44)" fill="url(#sfOrange)"/>
+  <text x="115" y="62" font-family="Inter, Arial, Helvetica, sans-serif" font-size="48" font-weight="800" letter-spacing="-2.2" fill="#071323">Sales</text>
+  <text x="265" y="62" font-family="Inter, Arial, Helvetica, sans-serif" font-size="48" font-weight="800" letter-spacing="-2.2" fill="#ff6b00">Flow</text>
+  <text x="365" y="84" font-family="Inter, Arial, Helvetica, sans-serif" font-size="18" font-weight="800" letter-spacing="7" fill="#071323">HUB</text>
+</svg>
