@@ -1,3 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="443" height="97" viewBox="0 0 443 97" fill="none">
-  <image width="443" height="97" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbsAAABhCAYAAABPuw/jAAB5bklEQVR42u2dd7wcVfn/3885M7t7S3oPoSX0KiAdJPQqKGIXC4hiR/3au18V2xc7KNWCgEoRBaRIk947JBBKIAkJ6Te37du4m0++acmXMHSgIQ4AlZLPN63ze98c1Ozu6ec785r3u/nvmttdGo1FoFAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFwjb6UM88dKACmk9R0YFKkRvyW8G6fvLBE++xx5/YZkq8h2mbXdV1c0eGmjrjsj74yysP7RvY0abD1nW0/cisydcpzv7IhxeM+97Z+gL79c2IyT05hUp6kcE7Kk2qy0wAiwMgAAgj9ygMJEUAAH3AJBCKVcM+xMjM7Nkl66pDCsBNjOf+O3rnueeeU0f/N6d3zn/bX91d/bw5s5pmu9bTuE6Sq1+rq9+/1swoBXZJ3fWpm9UTAxuZ3GZeLvXRDbO79L/j9Z339H69bgzsiRJiQkAAAAAAAAA//+tT30L1vjY3MAAAAASUVORK5CYII=" preserveAspectRatio="xMidYMid meet"/>
+  <rect width="443" height="97" fill="transparent"/>
+  <g transform="translate(34 15) rotate(-45 35 35)">
+    <rect x="6" y="0" width="28" height="66" rx="10" fill="#ff6508"/>
+    <rect x="36" y="0" width="28" height="66" rx="10" fill="#ff6508"/>
+    <rect x="18" y="24" width="34" height="18" rx="8" fill="white"/>
+  </g>
+  <text x="112" y="61" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="43" font-weight="900" letter-spacing="-2.5" fill="#071323">Sales</text>
+  <text x="249" y="61" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="43" font-weight="900" letter-spacing="-2.5" fill="#ff6508">Flow</text>
+  <text x="336" y="82" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="900" letter-spacing="7" fill="#071323">HUB</text>
 </svg>
