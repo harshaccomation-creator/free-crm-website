@@ -1,22 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="443" height="97" viewBox="0 0 443 97" fill="none">
-  <defs>
-    <linearGradient id="sfOrange" x1="0" y1="0" x2="100" y2="90" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#ff7a00"/>
-      <stop offset="1" stop-color="#ff5b00"/>
-    </linearGradient>
-    <mask id="linkCut1">
-      <rect width="443" height="97" fill="white"/>
-      <rect x="31" y="18" width="44" height="18" rx="9" transform="rotate(-42 31 18)" fill="black"/>
-      <rect x="30" y="52" width="44" height="18" rx="9" transform="rotate(-42 30 52)" fill="black"/>
-    </mask>
-  </defs>
-  <rect width="443" height="97" fill="transparent"/>
-  <g mask="url(#linkCut1)">
-    <rect x="9" y="39" width="64" height="28" rx="10" transform="rotate(-42 9 39)" fill="url(#sfOrange)"/>
-    <rect x="43" y="71" width="64" height="28" rx="10" transform="rotate(-42 43 71)" fill="url(#sfOrange)"/>
-  </g>
-  <rect x="34" y="44" width="31" height="13" rx="6.5" transform="rotate(42 34 44)" fill="url(#sfOrange)"/>
-  <text x="115" y="62" font-family="Inter, Arial, Helvetica, sans-serif" font-size="48" font-weight="800" letter-spacing="-2.2" fill="#071323">Sales</text>
-  <text x="265" y="62" font-family="Inter, Arial, Helvetica, sans-serif" font-size="48" font-weight="800" letter-spacing="-2.2" fill="#ff6b00">Flow</text>
-  <text x="365" y="84" font-family="Inter, Arial, Helvetica, sans-serif" font-size="18" font-weight="800" letter-spacing="7" fill="#071323">HUB</text>
+  <image width="443" height="97" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAbsAAABhCAYAAABPuw/jAAB5bklEQVR42u2dd7wcVfn/3885M7t7S3oPoSX0KiAdJPQqKGIXC4hiR/3au18V2xc7KNWCgEoRBaRIk947JBBKIAkJ6Te37du4m0++acmXMHSgIQ4AlZLPN63ze98c1Ozu6ec785r3u/nvmttdGo1FoFAoFAqFQqFQKBQKhUKhUCgUCoVCoVAoFAqFwjb6UM88dKACmk9R0YFKkRvyW8G6fvLBE++xx5/YZkq8h2mbXdV1c0eGmjrjsj74yysP7RvY0abD1nW0/cisydcpzv7IhxeM+97Z+gL79c2IyT05hUp6kcE7Kk2qy0wAiwMgAAgj9ygMJEUAAH3AJBCKVcM+xMjM7Nkl66pDCsBNjOf+O3rnueeeU0f/N6d3zn/bX91d/bw5s5pmu9bTuE6Sq1+rq9+/1swoBXZJ3fWpm9UTAxuZ3GZeLvXRDbO79L/j9Z339H69bgzsiRJiQkAAAAAAAAA//+tT30L1vjY3MAAAAASUVORK5CYII=" preserveAspectRatio="xMidYMid meet"/>
 </svg>
