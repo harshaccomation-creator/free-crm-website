@@ -49,7 +49,7 @@ const TAWK_WIDGET_ID = '6a185c426034501c34c0b3b0';
 const TAWK_PROPERTY_ID = '1jpnigpq8';
 
 function isPublicSupportPage(pathname) {
-  return pathname === '/' || pathname === '/login';
+  return pathname === '/login';
 }
 
 function getSavedRole() {
