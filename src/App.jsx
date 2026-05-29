@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
-import EmployeeDashboard from './pages/dashboards/EmployeeDashboard.jsx';
+import EmployeeDashboard from './pages/dashboards/EmployeeDashboardV2.jsx';
 import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
 import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
 import SuperAdminSectionPage from './pages/dashboards/SuperAdminSectionPage.jsx';
@@ -60,16 +60,10 @@ function isSuperAdminRole(role) {
 function applyTawkVisibility(pathname) {
   if (typeof window === 'undefined' || !window.Tawk_API) return;
   const showPublicBubble = isPublicSupportPage(pathname);
-
   try {
-    if (showPublicBubble) {
-      window.Tawk_API.showWidget?.();
-    } else {
-      window.Tawk_API.hideWidget?.();
-    }
-  } catch {
-    // Tawk can be blocked by browser extensions; keep app usable.
-  }
+    if (showPublicBubble) window.Tawk_API.showWidget?.();
+    else window.Tawk_API.hideWidget?.();
+  } catch {}
 }
 
 function loadTawkWidget(pathname) {
@@ -77,12 +71,10 @@ function loadTawkWidget(pathname) {
   window.Tawk_API = window.Tawk_API || {};
   window.Tawk_API.onLoad = () => applyTawkVisibility(window.location.pathname || pathname);
   window.Tawk_LoadStart = new Date();
-
   if (document.getElementById('salesflow-tawk-widget')) {
     applyTawkVisibility(pathname);
     return;
   }
-
   const script = document.createElement('script');
   script.id = 'salesflow-tawk-widget';
   script.async = true;
@@ -94,15 +86,8 @@ function loadTawkWidget(pathname) {
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
-
-  useEffect(() => {
-    loadTawkWidget(path);
-  }, []);
-
-  useEffect(() => {
-    applyTawkVisibility(path);
-  }, [path]);
-
+  useEffect(() => { loadTawkWidget(path); }, []);
+  useEffect(() => { applyTawkVisibility(path); }, [path]);
   useEffect(() => {
     const role = getSavedRole();
     if (isSuperAdminRole(role) && path.startsWith('/employee')) {
@@ -111,7 +96,6 @@ export default function App() {
       window.dispatchEvent(new Event('salesflow:navigate'));
     }
   }, [path]);
-
   useEffect(() => {
     const syncPath = () => setPath(window.location.pathname);
     window.addEventListener('popstate', syncPath);
@@ -124,7 +108,6 @@ export default function App() {
 
   const savedRole = getSavedRole();
   if (isSuperAdminRole(savedRole) && path.startsWith('/employee')) return <SuperAdminDashboard view="dashboard" />;
-
   if (path === '/login') return <LoginPage />;
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
   if (path === '/employee/won') return <WonPage />;
@@ -138,6 +121,5 @@ export default function App() {
   if (path.startsWith('/super-admin/')) return <SuperAdminSectionPage view={path.split('/')[2] || 'users'} />;
   if (path === '/leads') return <LeadListPage />;
   if (path.startsWith('/leads/')) return <LeadDetailPage leadId={path.split('/')[2]} />;
-
   return <LandingPage />;
 }
