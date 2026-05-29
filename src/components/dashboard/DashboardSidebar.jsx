@@ -89,7 +89,7 @@ export default function DashboardSidebar({ role = 'employee' }) {
   return (
     <aside className="sfx-sidebar" ref={sidebarRef}>
       <div className="sfx-brand-row">
-        <button className="sfx-brand" onClick={() => navigateTo('/', safeRole)} type="button"><span className="sfx-logo">S</span><strong>Sales<span>Flow</span></strong></button>
+        <button className="sfx-brand sfx-brand-image" onClick={() => navigateTo('/', safeRole)} type="button"><img src="/assets/salesflow-hub-logo.svg" alt="SalesFlow Hub" /></button>
         <button className="sfx-menu" type="button" aria-label="Toggle menu"><Icon name="menu" /></button>
       </div>
       <nav className="sfx-nav">
