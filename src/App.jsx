@@ -42,6 +42,7 @@ import './styles/leadFinalPolish.css';
 import './styles/leadActivityTimelineFix.css';
 import './styles/superAdminCompactFix.css';
 import './styles/brandUnifiedCrmTheme.css';
+import './styles/salesflowLogoEverywhere.css';
 
 const TAWK_WIDGET_ID = '6a185c426034501c34c0b3b0';
 const TAWK_PROPERTY_ID = '1jpnigpq8';
