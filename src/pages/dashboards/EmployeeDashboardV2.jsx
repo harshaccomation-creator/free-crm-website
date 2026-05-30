@@ -6,6 +6,7 @@ import '../../styles/zzzSidebarBlackFix.css';
 import '../../styles/employeeDashboardV2.css';
 import '../../styles/edc.css';
 import '../../styles/edc2.css';
+import '../../styles/employeeTopbarDarkFix.css';
 
 function go(path) {
   window.history.pushState({}, '', path);
