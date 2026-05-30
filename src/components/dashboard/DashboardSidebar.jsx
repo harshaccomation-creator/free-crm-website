@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import './DashboardSidebar.css';
+import './DashboardSidebarLogoFix.css';
 
 const menuByRole = {
   employee: ['Dashboard', 'My Leads', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Profile'],
@@ -10,19 +11,7 @@ const menuByRole = {
 const routes = {
   employee: { Dashboard: '/employee/dashboard', 'My Leads': '/leads', Won: '/employee/won', Tasks: '/employee/tasks', Calendar: '/employee/calendar', Activities: '/employee/activities', Reports: '/employee/reports', Profile: '/employee/profile' },
   admin: { Dashboard: '/admin/dashboard', Leads: '/leads' },
-  superAdmin: {
-    Dashboard: '/super-admin/dashboard',
-    Users: '/super-admin/users',
-    'Roles & Permissions': '/super-admin/roles',
-    Organizations: '/super-admin/organizations',
-    Modules: '/super-admin/modules',
-    'Plans & Billing': '/super-admin/billing',
-    Settings: '/super-admin/settings',
-    'Activity Logs': '/super-admin/activity-logs',
-    'System Logs': '/super-admin/system-logs',
-    Integrations: '/super-admin/integrations',
-    'Backup & Restore': '/super-admin/backup',
-  },
+  superAdmin: { Dashboard: '/super-admin/dashboard', Users: '/super-admin/users', 'Roles & Permissions': '/super-admin/roles', Organizations: '/super-admin/organizations', Modules: '/super-admin/modules', 'Plans & Billing': '/super-admin/billing', Settings: '/super-admin/settings', 'Activity Logs': '/super-admin/activity-logs', 'System Logs': '/super-admin/system-logs', Integrations: '/super-admin/integrations', 'Backup & Restore': '/super-admin/backup' },
 };
 
 const iconByItem = {
@@ -72,12 +61,7 @@ function isActive(item, path, currentPath, index) {
 }
 
 function SidebarBrand() {
-  return (
-    <span className="sfx-custom-logo" aria-label="SalesFlow Hub">
-      <span className="sfx-logo-mark">S</span>
-      <span className="sfx-logo-text"><strong>Sales<span>Flow</span></strong><em>HUB</em></span>
-    </span>
-  );
+  return <img className="sfx-real-logo" src="/assets/salesflow-hub-logo-transparent.png" alt="SalesFlow Hub" />;
 }
 
 export default function DashboardSidebar({ role = 'employee' }) {
