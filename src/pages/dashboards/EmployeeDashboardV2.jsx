@@ -7,6 +7,7 @@ import '../../styles/employeeDashboardV2.css';
 import '../../styles/edc.css';
 import '../../styles/edc2.css';
 import '../../styles/employeeTopbarDarkFix.css';
+import '../../styles/employeeHeaderFinal.css';
 
 function go(path) {
   window.history.pushState({}, '', path);
