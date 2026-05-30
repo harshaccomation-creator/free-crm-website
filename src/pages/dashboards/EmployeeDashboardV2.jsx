@@ -9,6 +9,7 @@ import '../../styles/edc2.css';
 import '../../styles/employeeTopbarDarkFix.css';
 import '../../styles/employeeHeaderFinal.css';
 import '../../styles/employeeDashboardVisualPolish.css';
+import '../../styles/employeePerformanceFinal.css';
 
 function go(path) {
   window.history.pushState({}, '', path);
