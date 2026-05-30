@@ -61,7 +61,13 @@ function isActive(item, path, currentPath, index) {
 }
 
 function SidebarBrand() {
-  return <img className="sfx-real-logo" src="/assets/salesflow-hub-logo.svg" alt="SalesFlow Hub" />;
+  return (
+    <span className="sfx-landing-logo" aria-label="SalesFlow Hub">
+      <span className="sfx-landing-mark">S</span>
+      <span className="sfx-landing-word">Sales<span>Flow</span></span>
+      <span className="sfx-landing-hub">HUB</span>
+    </span>
+  );
 }
 
 export default function DashboardSidebar({ role = 'employee' }) {
