@@ -69,6 +69,7 @@ export default function DashboardSidebar({ role = 'employee' }) {
   const safeRole = menuByRole[role] ? role : 'employee';
   const items = menuByRole[safeRole];
   const currentPath = window.location.pathname;
+  const homePath = routes[safeRole]?.Dashboard || '/employee/dashboard';
   const upgradeTitle = safeRole === 'superAdmin' ? 'Upgrade to Enterprise' : 'Upgrade to Premium';
   const upgradeText = safeRole === 'superAdmin' ? 'Unlock advanced controls, SSO and audit logs.' : 'Unlock advanced features, automations and analytics.';
 
@@ -82,7 +83,7 @@ export default function DashboardSidebar({ role = 'employee' }) {
   return (
     <aside className="sfx-sidebar" ref={sidebarRef}>
       <div className="sfx-brand-row">
-        <button className="sfx-brand sfx-brand-image sfx-brand-dark" onClick={() => navigateTo('/', safeRole)} type="button"><SidebarBrand /></button>
+        <button className="sfx-brand sfx-brand-image sfx-brand-dark" onClick={() => navigateTo(homePath, safeRole)} type="button"><SidebarBrand /></button>
         <button className="sfx-menu" type="button" aria-label="Toggle menu"><Icon name="menu" /></button>
       </div>
       <nav className="sfx-nav">
