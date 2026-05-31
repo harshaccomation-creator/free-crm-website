@@ -110,12 +110,18 @@ function installEmployeeLeftAlignFix() {
   const style = document.createElement('style');
   style.id = 'salesflow-employee-left-align-fix';
   style.textContent = `
-    .emp-page .emp-main{padding-left:18px!important;padding-right:22px!important;}
-    .emp-page .emp-container{width:100%!important;max-width:none!important;margin:0!important;}
-    .emp-page .emp-head{margin-left:0!important;margin-right:0!important;}
+    .emp-page{grid-template-columns:300px minmax(0,1fr)!important;}
+    .emp-page .emp-main{grid-column:2!important;padding:22px 22px 42px 0!important;margin-left:-72px!important;min-width:0!important;}
+    .emp-page .emp-container{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;}
+    .emp-page .emp-head{margin-left:0!important;margin-right:0!important;margin-bottom:16px!important;}
     .emp-page .emp-grid.cards,.emp-page .emp-two,.emp-page .calendar-wrap,.emp-page .reports-grid,.emp-page .report-main{margin-left:0!important;margin-right:0!important;}
-    .emp-page .emp-grid.cards{gap:14px!important;}
+    .emp-page .emp-grid.cards{gap:14px!important;margin-bottom:16px!important;}
     .emp-page .emp-two{gap:16px!important;}
+    .emp-page .calendar-wrap{gap:16px!important;grid-template-columns:minmax(0,1.45fr) minmax(350px,.85fr)!important;align-items:start!important;}
+    .emp-page .emp-section{padding:18px 20px!important;}
+    .emp-page .cal-day{min-height:76px!important;}
+    .emp-page .task-row{padding:12px 0!important;}
+    @media(max-width:1200px){.emp-page{grid-template-columns:1fr!important}.emp-page .emp-main{grid-column:1!important;margin-left:0!important;padding:18px 14px 42px!important}.emp-page .calendar-wrap{grid-template-columns:1fr!important}}
     @media(max-width:700px){.emp-page .emp-main{padding-left:12px!important;padding-right:12px!important;}}
   `;
   document.head.appendChild(style);
