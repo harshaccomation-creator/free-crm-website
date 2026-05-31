@@ -111,7 +111,7 @@ function installEmployeeLeftAlignFix() {
   style.id = 'salesflow-employee-left-align-fix';
   style.textContent = `
     .emp-page{grid-template-columns:300px minmax(0,1fr)!important;}
-    .emp-page .emp-main{grid-column:2!important;padding:22px 22px 42px 0!important;margin-left:-72px!important;min-width:0!important;}
+    .emp-page .emp-main{grid-column:2!important;padding:22px 22px 42px 18px!important;margin-left:-38px!important;min-width:0!important;}
     .emp-page .emp-container{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;}
     .emp-page .emp-head{margin-left:0!important;margin-right:0!important;margin-bottom:16px!important;}
     .emp-page .emp-grid.cards,.emp-page .emp-two,.emp-page .calendar-wrap,.emp-page .reports-grid,.emp-page .report-main{margin-left:0!important;margin-right:0!important;}
