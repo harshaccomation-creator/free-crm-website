@@ -60,6 +60,23 @@ function isSuperAdminRole(role) {
   return role === 'super_admin' || role === 'superadmin';
 }
 
+function hasActiveCrmSession() {
+  if (typeof window === 'undefined') return false;
+  return Boolean(
+    window.localStorage.getItem('salesflow_user_email') ||
+    window.localStorage.getItem('salesflow_auth_token') ||
+    window.localStorage.getItem('salesflow_session')
+  );
+}
+
+function isProtectedRoute(pathname) {
+  return pathname.startsWith('/employee') ||
+    pathname.startsWith('/admin') ||
+    pathname.startsWith('/super-admin') ||
+    pathname === '/leads' ||
+    pathname.startsWith('/leads/');
+}
+
 function applyTawkVisibility(pathname) {
   if (typeof window === 'undefined' || !window.Tawk_API) return;
   const showPublicBubble = isPublicSupportPage(pathname);
@@ -111,7 +128,7 @@ export default function App() {
   useEffect(() => { installEmployeeLeftAlignFix(); }, []);
   useEffect(() => {
     const role = getSavedRole();
-    if (isSuperAdminRole(role) && path.startsWith('/employee')) {
+    if (hasActiveCrmSession() && isSuperAdminRole(role) && path.startsWith('/employee')) {
       window.history.replaceState({}, '', '/super-admin/dashboard');
       setPath('/super-admin/dashboard');
       window.dispatchEvent(new Event('salesflow:navigate'));
@@ -128,7 +145,11 @@ export default function App() {
   }, []);
 
   const savedRole = getSavedRole();
-  if (isSuperAdminRole(savedRole) && path.startsWith('/employee')) return <SuperAdminDashboard view="dashboard" />;
+  const isProtected = isProtectedRoute(path);
+  const isLoggedIn = hasActiveCrmSession();
+
+  if (isProtected && !isLoggedIn) return <LoginPage />;
+  if (isLoggedIn && isSuperAdminRole(savedRole) && path.startsWith('/employee')) return <SuperAdminDashboard view="dashboard" />;
   if (path === '/login') return <LoginPage />;
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
   if (path === '/employee/won') return <WonPage />;
