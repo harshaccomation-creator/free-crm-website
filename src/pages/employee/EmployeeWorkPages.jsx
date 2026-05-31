@@ -27,7 +27,8 @@ const activities = [
 ];
 
 function Shell({ title, subtitle, children, actions }) {
-  return <div className="emp-page"><DashboardSidebar role="employee" /><main className="emp-main"><div className="emp-container"><header className="emp-head"><div><span className="emp-kicker">Employee Workspace</span><h1>{title}</h1><p>{subtitle}</p></div><div className="emp-actions">{actions}</div></header>{children}</div></main></div>;
+  const pageClass = title === 'Won Leads' ? ' won-page' : '';
+  return <div className={`emp-page${pageClass}`}><DashboardSidebar role="employee" /><main className="emp-main"><div className="emp-container"><header className="emp-head"><div><span className="emp-kicker">Employee Workspace</span><h1>{title}</h1><p>{subtitle}</p></div><div className="emp-actions">{actions}</div></header>{children}</div></main></div>;
 }
 
 function Stats({ items }) {
