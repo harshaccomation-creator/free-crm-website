@@ -29,6 +29,7 @@ const iconPaths = {
   whatsapp: 'M20.5 11.7a8.5 8.5 0 0 1-12.6 7.45L3 20.5l1.35-4.75A8.5 8.5 0 1 1 20.5 11.7ZM8.9 8.2c.2-.45.42-.46.74-.46h.55c.18 0 .42.06.64.5.23.45.78 1.9.85 2.04.06.15.1.32.02.5-.08.2-.12.32-.28.5-.15.18-.32.4-.45.53-.15.15-.3.32-.13.62.18.3.78 1.28 1.68 2.08 1.15 1.02 2.12 1.34 2.42 1.49.3.15.48.13.66-.08.2-.22.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.75.82 2.05.97.3.15.5.22.57.35.08.13.08.75-.17 1.47-.25.72-1.48 1.38-2.03 1.43-.52.05-1.18.08-1.9-.12-.44-.13-1-.32-1.72-.63-3.03-1.3-5-4.35-5.15-4.55-.15-.2-1.23-1.63-1.23-3.12 0-1.48.77-2.2 1.05-2.52.27-.3.6-.38.8-.38',
   lightning: 'M13 2 3 14h8l-1 8 11-13h-8l1-7Z',
   target: 'M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20ZM12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12ZM12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z',
+  logout: 'M10 17l5-5-5-5M15 12H3M21 3v18h-7',
 };
 
 function SvgIcon({ name, className = '' }) {
@@ -86,6 +87,15 @@ export default function EmployeeDashboardV2() {
     toast('Task updated');
   };
 
+  const logout = () => {
+    localStorage.removeItem('salesflow_user_email');
+    localStorage.removeItem('salesflow_user_role');
+    localStorage.removeItem('salesflow_auth_token');
+    localStorage.removeItem('salesflow_session');
+    toast('Logging out...');
+    setTimeout(() => go('/login'), 250);
+  };
+
   return (
     <div className="sf-dashboard employee-v2-page emp-mock-dashboard">
       <DashboardSidebar role="employee" />
@@ -93,7 +103,7 @@ export default function EmployeeDashboardV2() {
         <header className="employee-topbar">
           <button type="button" className="employee-menu-btn"><SvgIcon name="menu" /></button>
           <label className="employee-search"><span><SvgIcon name="search" /></span><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search leads, clients, follow-ups..." /><kbd>⌘ K</kbd></label>
-          <div className="employee-top-actions"><button type="button" className="employee-bell" onClick={() => toast('5 notifications')}><SvgIcon name="bell" /><i>5</i></button><button type="button" className="employee-profile" onClick={() => go('/employee/profile')}><b>{displayName[0] || 'R'}</b><span>{displayName || 'Rohan Mehta'}<small>Sales Executive</small></span><em>⌄</em></button></div>
+          <div className="employee-top-actions"><button type="button" className="employee-bell" onClick={() => toast('5 notifications')}><SvgIcon name="bell" /><i>5</i></button><div className="employee-profile-wrap"><button type="button" className="employee-profile" onClick={() => go('/employee/profile')}><b>{displayName[0] || 'R'}</b><span>{displayName || 'Rohan Mehta'}<small>Sales Executive</small></span></button><button type="button" className="employee-logout-btn" onClick={logout}><SvgIcon name="logout" /> Logout</button></div></div>
         </header>
         {notice && <div className="employee-v2-toast">{notice}</div>}
 
