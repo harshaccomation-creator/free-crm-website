@@ -87,10 +87,28 @@ function loadTawkWidget(pathname) {
   document.body.appendChild(script);
 }
 
+function installEmployeeLeftAlignFix() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById('salesflow-employee-left-align-fix')) return;
+  const style = document.createElement('style');
+  style.id = 'salesflow-employee-left-align-fix';
+  style.textContent = `
+    .emp-page .emp-main{padding-left:18px!important;padding-right:22px!important;}
+    .emp-page .emp-container{width:100%!important;max-width:none!important;margin:0!important;}
+    .emp-page .emp-head{margin-left:0!important;margin-right:0!important;}
+    .emp-page .emp-grid.cards,.emp-page .emp-two,.emp-page .calendar-wrap,.emp-page .reports-grid,.emp-page .report-main{margin-left:0!important;margin-right:0!important;}
+    .emp-page .emp-grid.cards{gap:14px!important;}
+    .emp-page .emp-two{gap:16px!important;}
+    @media(max-width:700px){.emp-page .emp-main{padding-left:12px!important;padding-right:12px!important;}}
+  `;
+  document.head.appendChild(style);
+}
+
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
   useEffect(() => { loadTawkWidget(path); }, []);
   useEffect(() => { applyTawkVisibility(path); }, [path]);
+  useEffect(() => { installEmployeeLeftAlignFix(); }, []);
   useEffect(() => {
     const role = getSavedRole();
     if (isSuperAdminRole(role) && path.startsWith('/employee')) {
