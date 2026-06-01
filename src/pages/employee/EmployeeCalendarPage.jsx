@@ -4,6 +4,7 @@ import { isBackendConfigured, listLeads, listTasks } from '../../services/crmApi
 import './EmployeePages.css';
 import './EmployeePagesLayoutFix.css';
 import './EmployeeReportsPremiumFix.css';
+import './EmployeeCalendarClickFix.css';
 
 function Shell({ title, subtitle, children, actions }) {
   return <div className="emp-page"><DashboardSidebar role="employee" /><main className="emp-main"><div className="emp-container"><header className="emp-head"><div><span className="emp-kicker">Employee Workspace</span><h1>{title}</h1><p>{subtitle}</p></div><div className="emp-actions">{actions}</div></header>{children}</div></main></div>;
