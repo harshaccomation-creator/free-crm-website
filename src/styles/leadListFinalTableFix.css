@@ -1,4 +1,12 @@
 /* My Leads final polish: remove owner filter gap, table cut, row action */
+.la-live-banner {
+  display: none !important;
+}
+
+.la-metric small {
+  display: none !important;
+}
+
 .la-filters {
   grid-template-columns: minmax(190px, 1.25fr) minmax(150px, .95fr) minmax(150px, .9fr) minmax(190px, 1fr) minmax(105px, .58fr) !important;
   gap: 10px !important;
