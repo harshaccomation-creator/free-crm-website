@@ -9,7 +9,8 @@ import LeadListPage from './pages/leads/LeadListPage.jsx';
 import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
 import EmployeeReportsPage from './pages/employee/EmployeeReportsPage.jsx';
 import PremiumProfilePage from './pages/employee/ProfilePagePremium.jsx';
-import { WonPage, TasksPage, CalendarPage, ActivitiesPage } from './pages/employee/EmployeeWorkPages.jsx';
+import EmployeeActivitiesPage from './pages/employee/EmployeeActivitiesPage.jsx';
+import { WonPage, TasksPage, CalendarPage } from './pages/employee/EmployeeWorkPages.jsx';
 import './styles/dashboardBase.css';
 import './styles/loginPage.css';
 import './styles/loginDarkHero.css';
@@ -162,7 +163,7 @@ export default function App() {
   if (path === '/employee/won') return <WonPage />;
   if (path === '/employee/tasks') return <TasksPage />;
   if (path === '/employee/calendar') return <CalendarPage />;
-  if (path === '/employee/activities') return <ActivitiesPage />;
+  if (path === '/employee/activities') return <EmployeeActivitiesPage />;
   if (path === '/employee/reports') return <EmployeeReportsPage />;
   if (path === '/employee/profile') return <PremiumProfilePage />;
   if (path === '/admin/dashboard') return <AdminDashboard />;
