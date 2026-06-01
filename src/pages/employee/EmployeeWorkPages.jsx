@@ -31,8 +31,19 @@ function Shell({ title, subtitle, children, actions }) {
   return <div className={`emp-page${pageClass}`}><DashboardSidebar role="employee" /><main className="emp-main"><div className="emp-container"><header className="emp-head"><div><span className="emp-kicker">Employee Workspace</span><h1>{title}</h1><p>{subtitle}</p></div><div className="emp-actions">{actions}</div></header>{children}</div></main></div>;
 }
 
+function StatSvgIcon({ label }) {
+  const key = String(label || '').toLowerCase();
+  const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 2.4, strokeLinecap: 'round', strokeLinejoin: 'round' };
+  if (key.includes('won') || key.includes('task') || key.includes('completed')) return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M20 6 9 17l-5-5" /></svg>;
+  if (key.includes('value') || key.includes('revenue')) return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M7 5h10" /><path d="M7 9h10" /><path d="M8 5c6.5 0 6.5 8 0 8H7l8 7" /></svg>;
+  if (key.includes('conversion') || key.includes('best') || key.includes('source')) return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M4 17V7" /><path d="M4 17h13" /><path d="m13 9 4-4 3 3" /><path d="M17 5v8h-8" /></svg>;
+  if (key.includes('overdue')) return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M12 8v5" /><path d="M12 17h.01" /><path d="M10.3 3.9 2.5 17.5A2 2 0 0 0 4.2 20h15.6a2 2 0 0 0 1.7-2.5L13.7 3.9a2 2 0 0 0-3.4 0Z" /></svg>;
+  if (key.includes('call')) return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z" /></svg>;
+  return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M12 2l2.7 6.3L21 11l-6.3 2.7L12 20l-2.7-6.3L3 11l6.3-2.7L12 2Z" /></svg>;
+}
+
 function Stats({ items }) {
-  return <section className="emp-grid cards">{items.map((item) => <article className="emp-card emp-stat" key={item.label}><span className={`emp-icon ${item.tone || ''}`}>{item.icon}</span><div><p>{item.label}</p><h2>{item.value}</h2></div></article>)}</section>;
+  return <section className="emp-grid cards">{items.map((item) => <article className="emp-card emp-stat" key={item.label}><span className={`emp-icon ${item.tone || ''}`}><StatSvgIcon label={item.label} /></span><div><p>{item.label}</p><h2>{item.value}</h2></div></article>)}</section>;
 }
 
 function Modal({ title, subtitle, children, onClose }) {
