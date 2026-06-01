@@ -23,7 +23,7 @@ export async function getCurrentProfile() {
 
   const { data, error } = await client
     .from('profiles')
-    .select('*, companies(*)')
+    .select('*')
     .eq('id', user.id)
     .maybeSingle();
 
@@ -47,13 +47,19 @@ export async function getCompanyUsers(companyId) {
 export async function getSubscription(companyId) {
   const client = requireBackend();
   const { data, error } = await client
-    .from('subscriptions')
-    .select('*')
-    .eq('company_id', companyId)
+    .from('companies')
+    .select('id, plan, plan_status, trial_start_at, trial_ends_at')
+    .eq('id', companyId)
     .maybeSingle();
 
   if (error && error.code !== 'PGRST116') handleError(error, 'Unable to load subscription');
-  return data || null;
+  return data ? {
+    company_id: data.id,
+    plan_name: data.plan || 'trial',
+    status: data.plan_status || 'trial',
+    trial_started_at: data.trial_start_at,
+    trial_ends_at: data.trial_ends_at,
+  } : null;
 }
 
 export function isSubscriptionActive(subscription) {
@@ -215,7 +221,7 @@ export async function listActivities({ leadId, limit = 100 } = {}) {
 
   let query = client
     .from('lead_activities')
-    .select('*, user:profiles(id, full_name, email)')
+    .select('*, user:profiles!lead_activities_user_id_fkey(id, full_name, email)')
     .eq('company_id', profile.company_id)
     .order('activity_at', { ascending: false })
     .limit(limit);
