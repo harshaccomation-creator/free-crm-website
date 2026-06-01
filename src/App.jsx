@@ -125,6 +125,15 @@ function installEmployeeLeftAlignFix() {
     .emp-page .emp-section{padding:18px 20px!important;}
     .emp-page .cal-day{min-height:76px!important;}
     .emp-page .task-row{padding:12px 0!important;}
+    .ld-activity-icon{position:relative!important;font-size:0!important;line-height:0!important;overflow:hidden!important;display:grid!important;place-items:center!important;}
+    .ld-activity-icon *,.ld-activity-icon .ld-text-icon,.ld-activity-icon svg,.ld-activity-icon i,.ld-activity-icon span{display:none!important;visibility:hidden!important;opacity:0!important;width:0!important;height:0!important;max-width:0!important;max-height:0!important;overflow:hidden!important;position:absolute!important;pointer-events:none!important;}
+    .ld-activity-icon:before{content:none!important;display:none!important;}
+    .ld-activity-icon:after{content:""!important;display:block!important;visibility:visible!important;opacity:1!important;position:relative!important;z-index:5!important;width:22px!important;height:22px!important;background:currentColor!important;mask:var(--activity-icon) center/contain no-repeat!important;-webkit-mask:var(--activity-icon) center/contain no-repeat!important;}
+    .ld-activity-row .ld-activity-icon{--activity-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2Zm1 15h-2v-2h2Zm0-4h-2V7h2Z"/></svg>')!important;}
+    .ld-activity-row.green .ld-activity-icon{--activity-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.8-.4 1.2-.3c1.3.4 2.6.6 4 .6c.7 0 1.2.5 1.2 1.2v3.5c0 .7-.5 1.2-1.2 1.2C10.3 22 2 13.7 2 3.4C2 2.7 2.5 2 3.2 2h3.5c.7 0 1.2.5 1.2 1.2c0 1.4.2 2.7.6 4c.1.4 0 .9-.3 1.2Z"/></svg>')!important;}
+    .ld-activity-row.orange .ld-activity-icon{--activity-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M7 2h10v2h3a1 1 0 0 1 1 1v15a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a1 1 0 0 1 1-1h3Zm2 2v2h6V4Zm-4 6h14V6h-2v2H7V6H5Zm0 2v8h14v-8Zm5 6l-3-3l1.4-1.4l1.6 1.6l4.6-4.6L16 12.5Z"/></svg>')!important;}
+    .ld-activity-row.blue .ld-activity-icon{--activity-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Zm2 2v2h14V7Zm0 4v8h14v-8Zm3 2h6v2H8Z"/></svg>')!important;}
+    .ld-activity-row.purple .ld-activity-icon{--activity-icon:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="black" d="M12 2l2.2 6.1L20 10.4l-5.8 2.2L12 20l-2.2-7.4L4 10.4l5.8-2.3Z"/></svg>')!important;}
     @media(max-width:1200px){.emp-page{grid-template-columns:1fr!important}.emp-page .emp-main{grid-column:1!important;margin-left:0!important;padding:18px 14px 42px!important}.emp-page .calendar-wrap{grid-template-columns:1fr!important}}
     @media(max-width:700px){.emp-page .emp-main{padding-left:12px!important;padding-right:12px!important;}}
   `;
