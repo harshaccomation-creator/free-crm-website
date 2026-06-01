@@ -6,7 +6,7 @@ import './LeadDetailStable.css';
 import './LeadDetailProfessionalFix.css';
 import '../../styles/leadDetailFinalLock.css';
 import '../../styles/leadDetailTabContent.css';
-
+import '../../styles/leadDetailKpiFinalFix.css';
 function getCurrentRole() {
   const saved = window.localStorage.getItem('salesflowRole') || window.localStorage.getItem('salesflow_user_role');
   return saved === 'admin' || saved === 'company_admin' || saved === 'superAdmin' || saved === 'super_admin' || saved === 'employee' ? saved : 'employee';
