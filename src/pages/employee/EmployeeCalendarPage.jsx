@@ -33,6 +33,7 @@ function normalizeTaskEvent(task) {
     id: `task-${task.id}`,
     title: task.title || 'Task',
     lead: task.lead?.name || task.lead || 'Task',
+    leadId: task.lead_id || task.lead?.id || null,
     dateTime: due,
     date: formatDate(due),
     time: formatTime(due),
@@ -51,6 +52,7 @@ function normalizeLeadEvents(lead) {
       id: `lead-follow-${lead.id}`,
       title: `Follow-up: ${leadName}`,
       lead: leadName,
+      leadId: lead.id,
       dateTime: followUpAt,
       date: formatDate(followUpAt),
       time: formatTime(followUpAt),
@@ -63,6 +65,7 @@ function normalizeLeadEvents(lead) {
       id: `lead-demo-${lead.id}`,
       title: `Demo: ${leadName}`,
       lead: leadName,
+      leadId: lead.id,
       dateTime: demoAt,
       date: formatDate(demoAt),
       time: formatTime(demoAt),
@@ -71,6 +74,12 @@ function normalizeLeadEvents(lead) {
     });
   }
   return events;
+}
+
+function goToLead(event) {
+  if (!event?.leadId) return;
+  window.history.pushState({}, '', `/leads/${event.leadId}`);
+  window.dispatchEvent(new Event('salesflow:navigate'));
 }
 
 function useCalendarEvents() {
@@ -115,6 +124,7 @@ function useCalendarEvents() {
 export default function EmployeeCalendarPage() {
   const { events, isLive, message, loading } = useCalendarEvents();
   const now = new Date();
+  const [selectedDay, setSelectedDay] = useState(now.getDate());
   const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
   const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
   const currentMonth = now.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
@@ -129,7 +139,10 @@ export default function EmployeeCalendarPage() {
     return map;
   }, [events]);
 
+  const selectedEvents = eventMap[selectedDay] || [];
   const upcoming = useMemo(() => events.filter((event) => new Date(event.dateTime).getTime() >= Date.now()).slice(0, 8), [events]);
+  const rightPanelEvents = selectedEvents.length ? selectedEvents : upcoming;
+  const rightPanelTitle = selectedEvents.length ? `${selectedDay} ${currentMonth}` : 'Upcoming';
 
-  return <Shell title="Calendar" subtitle="Lead follow-up, demo aur task schedule real Supabase se dikhega." actions={<button className="emp-btn primary" onClick={() => { window.history.pushState({}, '', '/employee/tasks'); window.dispatchEvent(new Event('salesflow:navigate')); }}>+ Schedule</button>}><section className="calendar-wrap"><article className="emp-card emp-section"><div className="emp-section-head"><h2>{currentMonth}</h2><span className="emp-pill blue">{isLive ? 'Live Schedule' : 'Demo Schedule'}</span></div>{message ? <div className={`emp-data-banner ${isLive ? 'live' : 'demo'}`}>{loading ? 'Loading schedule...' : message}</div> : null}<div className="calendar-grid">{days.map((day) => <div className={`cal-day ${day === now.getDate() ? 'today' : ''}`} key={day}><b>{day}</b>{(eventMap[day] || []).slice(0, 3).map((event) => <span className={`cal-event ${event.tone}`} key={event.id}>{event.title}</span>)}</div>)}</div></article><article className="emp-card emp-section"><div className="emp-section-head"><h2>Upcoming</h2></div>{upcoming.length ? upcoming.map((event) => <div className="task-row" key={event.id}><span className="task-check" /><div><strong>{event.title}</strong><small>{event.date} • {event.lead} • {event.source}</small></div><span className="task-time">{event.time}</span></div>) : <p className="emp-empty-note">No upcoming schedules.</p>}</article></section></Shell>;
+  return <Shell title="Calendar" subtitle="Lead follow-up, demo aur task schedule real Supabase se dikhega." actions={<button className="emp-btn primary" onClick={() => { window.history.pushState({}, '', '/employee/tasks'); window.dispatchEvent(new Event('salesflow:navigate')); }}>+ Schedule</button>}><section className="calendar-wrap"><article className="emp-card emp-section"><div className="emp-section-head"><h2>{currentMonth}</h2><span className="emp-pill blue">{isLive ? 'Live Schedule' : 'Demo Schedule'}</span></div>{message ? <div className={`emp-data-banner ${isLive ? 'live' : 'demo'}`}>{loading ? 'Loading schedule...' : message}</div> : null}<div className="calendar-grid">{days.map((day) => <button type="button" className={`cal-day ${day === now.getDate() ? 'today' : ''} ${day === selectedDay ? 'selected' : ''}`} key={day} onClick={() => setSelectedDay(day)}><b>{day}</b>{(eventMap[day] || []).slice(0, 3).map((event) => <span className={`cal-event ${event.tone}`} key={event.id} onClick={(clickEvent) => { clickEvent.stopPropagation(); goToLead(event); }}>{event.title}</span>)}</button>)}</div></article><article className="emp-card emp-section"><div className="emp-section-head"><h2>{rightPanelTitle}</h2></div>{rightPanelEvents.length ? rightPanelEvents.map((event) => <button type="button" className="task-row calendar-click-row" key={event.id} onClick={() => goToLead(event)}><span className="task-check" /><div><strong>{event.title}</strong><small>{event.date} • {event.lead} • {event.source}</small></div><span className="task-time">{event.time}</span></button>) : <p className="emp-empty-note">No schedules for this date.</p>}</article></section></Shell>;
 }
