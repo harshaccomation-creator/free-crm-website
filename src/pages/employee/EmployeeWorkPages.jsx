@@ -48,15 +48,30 @@ function Shell({ title, subtitle, children, actions }) {
   );
 }
 
-function StatSvgIcon({ label }) {
-  const key = String(label || '').toLowerCase();
-  const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 2.4, strokeLinecap: 'round', strokeLinejoin: 'round' };
-  if (key.includes('won') || key.includes('task') || key.includes('completed')) return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M20 6 9 17l-5-5" /></svg>;
-  if (key.includes('value') || key.includes('revenue')) return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M7 5h10" /><path d="M7 9h10" /><path d="M8 5c6.5 0 6.5 8 0 8H7l8 7" /></svg>;
-  if (key.includes('conversion') || key.includes('best') || key.includes('source')) return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M4 17V7" /><path d="M4 17h13" /><path d="m13 9 4-4 3 3" /><path d="M17 5v8h-8" /></svg>;
-  if (key.includes('overdue')) return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M12 8v5" /><path d="M12 17h.01" /><path d="M10.3 3.9 2.5 17.5A2 2 0 0 0 4.2 20h15.6a2 2 0 0 0 1.7-2.5L13.7 3.9a2 2 0 0 0-3.4 0Z" /></svg>;
-  if (key.includes('call')) return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z" /></svg>;
+function PremiumIcon({ type }) {
+  const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 2.15, strokeLinecap: 'round', strokeLinejoin: 'round' };
+  if (type === 'badge-check') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M12 3.2 14.4 5l3-.2.8 2.9 2.3 1.8-1.1 2.8.7 2.9-2.6 1.5-1.4 2.6-3-.5-3 .5-1.4-2.6-2.6-1.5.7-2.9-1.1-2.8 2.3-1.8.8-2.9 3 .2L12 3.2Z" /><path d="m8.8 12.1 2.1 2 4.5-4.7" /></svg>;
+  if (type === 'rupee') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M7 5h10" /><path d="M7 9h10" /><path d="M8 5c6 0 6 8 0 8H7l7.2 6" /></svg>;
+  if (type === 'trending-up') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M4 17 10 11l4 4 6-8" /><path d="M15 7h5v5" /></svg>;
+  if (type === 'mail') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><rect x="3.5" y="5.5" width="17" height="13" rx="2.2" /><path d="m4.5 7 7.5 6 7.5-6" /></svg>;
+  if (type === 'circle-check') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><circle cx="12" cy="12" r="8.5" /><path d="m8.4 12.2 2.3 2.2 5-5.1" /></svg>;
+  if (type === 'arrow-up-right') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M7 17 17 7" /><path d="M9 7h8v8" /></svg>;
+  if (type === 'sparkles') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M12 3l1.8 5 5.2 1.8-5.2 1.8L12 17l-1.8-5.4L5 9.8 10.2 8 12 3Z" /><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z" /></svg>;
+  if (type === 'alert') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M12 8v5" /><path d="M12 17h.01" /><path d="M10.3 3.9 2.5 17.5A2 2 0 0 0 4.2 20h15.6a2 2 0 0 0 1.7-2.5L13.7 3.9a2 2 0 0 0-3.4 0Z" /></svg>;
+  if (type === 'phone') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.4 19.4 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2Z" /></svg>;
   return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M12 2l2.7 6.3L21 11l-6.3 2.7L12 20l-2.7-6.3L3 11l6.3-2.7L12 2Z" /></svg>;
+}
+
+function getIconType(label, explicitIcon) {
+  if (explicitIcon) return explicitIcon;
+  const key = String(label || '').toLowerCase();
+  if (key.includes('won') || key.includes('task') || key.includes('completed')) return 'badge-check';
+  if (key.includes('value') || key.includes('revenue')) return 'rupee';
+  if (key.includes('conversion')) return 'trending-up';
+  if (key.includes('best') || key.includes('source')) return 'mail';
+  if (key.includes('overdue')) return 'alert';
+  if (key.includes('call')) return 'phone';
+  return 'sparkles';
 }
 
 function Stats({ items }) {
@@ -64,7 +79,7 @@ function Stats({ items }) {
     <section className="emp-grid cards">
       {items.map((item) => (
         <article className="emp-card emp-stat" key={item.label}>
-          <span className={`emp-icon ${item.tone || ''}`}><StatSvgIcon label={item.label} /></span>
+          <span className={`emp-icon ${item.tone || ''}`}><PremiumIcon type={getIconType(item.label, item.icon)} /></span>
           <div><p>{item.label}</p><h2>{item.value}</h2></div>
         </article>
       ))}
@@ -106,7 +121,7 @@ export function WonPage() {
 
   return (
     <Shell title="Won Leads" subtitle="Converted leads, total value aur closing details ek jagah." actions={<button className="emp-btn primary" onClick={() => exportWonCsv(wonLeads)}>Export Won</button>}>
-      <Stats items={[{ icon: '✓', label: 'Won Leads', value: wonLeads.length, tone: 'green' }, { icon: '₹', label: 'Won Value', value: `₹${value.toLocaleString('en-IN')}` }, { icon: '↗', label: 'Conversion', value: '16.4%', tone: 'purple' }, { icon: '◆', label: 'Best Source', value: 'Email', tone: 'orange' }]} />
+      <Stats items={[{ icon: 'badge-check', label: 'Won Leads', value: wonLeads.length, tone: 'green' }, { icon: 'rupee', label: 'Won Value', value: `₹${value.toLocaleString('en-IN')}`, tone: 'blue' }, { icon: 'trending-up', label: 'Conversion', value: '16.4%', tone: 'purple' }, { icon: 'mail', label: 'Best Source', value: 'Email', tone: 'orange' }]} />
       <section className="emp-card emp-section">
         <div className="emp-section-head"><h2>Won Lead List</h2><span className="emp-pill green">Converted Status</span></div>
         <div className="emp-table-wrap">
@@ -131,7 +146,7 @@ export function WonPage() {
           </div>
         </div>
       </section>
-      <section className="won-premium-grid"><article className="won-insight-card"><span className="won-insight-icon success">✓</span><div><p>Revenue secured</p><strong>₹{value.toLocaleString('en-IN')}</strong><small>Closed from {wonLeads.length} verified deal</small></div></article><article className="won-insight-card"><span className="won-insight-icon blue">↗</span><div><p>Next best action</p><strong>Ask for referral</strong><small>Follow up within 2 days after closure</small></div></article><article className="won-insight-card dark"><div><p>Premium summary</p><strong>Sales quality is improving</strong><small>Email campaign is your strongest channel right now.</small></div></article></section>
+      <section className="won-premium-grid"><article className="won-insight-card"><span className="won-insight-icon success"><PremiumIcon type="circle-check" /></span><div><p>Revenue secured</p><strong>₹{value.toLocaleString('en-IN')}</strong><small>Closed from {wonLeads.length} verified deal</small></div></article><article className="won-insight-card"><span className="won-insight-icon blue"><PremiumIcon type="arrow-up-right" /></span><div><p>Next best action</p><strong>Ask for referral</strong><small>Follow up within 2 days after closure</small></div></article><article className="won-insight-card dark"><span className="won-insight-icon dark-icon"><PremiumIcon type="sparkles" /></span><div><p>Premium summary</p><strong>Sales quality is improving</strong><small>Email campaign is your strongest channel right now.</small></div></article></section>
     </Shell>
   );
 }
@@ -143,7 +158,7 @@ export function TasksPage() {
   const today = items.filter((task) => task.status === 'Today');
   const overdue = items.filter((task) => task.status === 'Overdue');
   const saveTask = (event) => { event.preventDefault(); if (!form.title.trim()) return; setItems([{ ...form, title: form.title.trim(), lead: form.lead.trim() || 'New Lead' }, ...items]); setShowModal(false); setForm({ title: '', lead: '', type: 'Call', date: '20 May 2025', time: '05:00 PM', status: 'Today' }); };
-  return <Shell title="Tasks" subtitle="Aaj ke tasks aur overdue follow-ups yahan dikhenge." actions={<button className="emp-btn primary" onClick={() => setShowModal(true)}>+ Add Task</button>}><Stats items={[{ icon: '✓', label: 'Today Tasks', value: today.length, tone: 'green' }, { icon: '!', label: 'Overdue', value: overdue.length, tone: 'red' }, { icon: '☎', label: 'Calls', value: items.filter((task) => task.type === 'Call').length }, { icon: '📌', label: 'Pending', value: items.length, tone: 'purple' }]} /><section className="emp-two"><article className="emp-card emp-section"><div className="emp-section-head"><h2>Today</h2><span className="emp-pill green">{today.length} Tasks</span></div>{today.map((task) => <div className="task-row" key={`${task.title}-${task.time}`}><span className="task-check" /><div><strong>{task.title}</strong><small>{task.lead} • {task.type}</small></div><span className="task-time">{task.time}</span></div>)}</article><article className="emp-card emp-section"><div className="emp-section-head"><h2>Overdue</h2><span className="emp-pill red">{overdue.length} Late</span></div>{overdue.map((task) => <div className="task-row" key={`${task.title}-${task.date}`}><span className="task-check danger" /><div><strong>{task.title}</strong><small>{task.lead} • {task.date}</small></div><span className="task-time red">{task.time}</span></div>)}</article></section>{showModal && <Modal title="Add Task" subtitle="Call, demo ya follow-up task add karo." onClose={() => setShowModal(false)}><form onSubmit={saveTask} className="emp-form"><label>Task Title<input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Call with client" /></label><label>Lead Name<input value={form.lead} onChange={(e) => setForm({ ...form, lead: e.target.value })} placeholder="Rohan Mehta" /></label><label>Type<select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}><option>Call</option><option>Follow-up</option><option>Demo</option><option>Meeting</option></select></label><label>Time<input value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })} /></label><label>Status<select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}><option>Today</option><option>Overdue</option></select></label><div className="emp-modal-actions"><button type="button" className="emp-btn" onClick={() => setShowModal(false)}>Cancel</button><button className="emp-btn primary">Save Task</button></div></form></Modal>}</Shell>;
+  return <Shell title="Tasks" subtitle="Aaj ke tasks aur overdue follow-ups yahan dikhenge." actions={<button className="emp-btn primary" onClick={() => setShowModal(true)}>+ Add Task</button>}><Stats items={[{ icon: 'badge-check', label: 'Today Tasks', value: today.length, tone: 'green' }, { icon: 'alert', label: 'Overdue', value: overdue.length, tone: 'red' }, { icon: 'phone', label: 'Calls', value: items.filter((task) => task.type === 'Call').length }, { icon: 'sparkles', label: 'Pending', value: items.length, tone: 'purple' }]} /><section className="emp-two"><article className="emp-card emp-section"><div className="emp-section-head"><h2>Today</h2><span className="emp-pill green">{today.length} Tasks</span></div>{today.map((task) => <div className="task-row" key={`${task.title}-${task.time}`}><span className="task-check" /><div><strong>{task.title}</strong><small>{task.lead} • {task.type}</small></div><span className="task-time">{task.time}</span></div>)}</article><article className="emp-card emp-section"><div className="emp-section-head"><h2>Overdue</h2><span className="emp-pill red">{overdue.length} Late</span></div>{overdue.map((task) => <div className="task-row" key={`${task.title}-${task.date}`}><span className="task-check danger" /><div><strong>{task.title}</strong><small>{task.lead} • {task.date}</small></div><span className="task-time red">{task.time}</span></div>)}</article></section>{showModal && <Modal title="Add Task" subtitle="Call, demo ya follow-up task add karo." onClose={() => setShowModal(false)}><form onSubmit={saveTask} className="emp-form"><label>Task Title<input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Call with client" /></label><label>Lead Name<input value={form.lead} onChange={(e) => setForm({ ...form, lead: e.target.value })} placeholder="Rohan Mehta" /></label><label>Type<select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}><option>Call</option><option>Follow-up</option><option>Demo</option><option>Meeting</option></select></label><label>Time<input value={form.time} onChange={(e) => setForm({ ...form, time: e.target.value })} /></label><label>Status<select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value })}><option>Today</option><option>Overdue</option></select></label><div className="emp-modal-actions"><button type="button" className="emp-btn" onClick={() => setShowModal(false)}>Cancel</button><button className="emp-btn primary">Save Task</button></div></form></Modal>}</Shell>;
 }
 
 export function CalendarPage() {
@@ -155,7 +170,7 @@ export function CalendarPage() {
 export function ActivitiesPage() {
   const [filter, setFilter] = useState('All');
   const list = filter === 'All' ? activities : activities.filter((item) => item.stage === filter);
-  return <Shell title="Activities" subtitle="Pipeline wise recent activity timeline." actions={<select className="emp-select" value={filter} onChange={(e) => setFilter(e.target.value)}><option>All</option><option>Lead Created</option><option>Contacted</option><option>Proposal</option><option>Negotiation</option><option>Won</option></select>}><Stats items={[{ icon: '◎', label: 'New', value: '18' }, { icon: '☎', label: 'Contacted', value: '12', tone: 'green' }, { icon: '▣', label: 'Proposal', value: '7', tone: 'purple' }, { icon: '✓', label: 'Won', value: '3', tone: 'green' }]} /><section className="emp-card emp-section"><div className="emp-section-head"><h2>Pipeline Activity</h2><span className="emp-pill blue">Latest</span></div><div className="pipeline">{list.map((item, index) => <div className="pipe-row" key={item.stage}><span className={`pipe-dot ${item.tone}`}>{index + 1}</span><div><strong>{item.stage}</strong><p>{item.text}</p></div><span className="pipe-meta">{item.time}</span></div>)}</div></section></Shell>;
+  return <Shell title="Activities" subtitle="Pipeline wise recent activity timeline." actions={<select className="emp-select" value={filter} onChange={(e) => setFilter(e.target.value)}><option>All</option><option>Lead Created</option><option>Contacted</option><option>Proposal</option><option>Negotiation</option><option>Won</option></select>}><Stats items={[{ icon: 'sparkles', label: 'New', value: '18' }, { icon: 'phone', label: 'Contacted', value: '12', tone: 'green' }, { icon: 'mail', label: 'Proposal', value: '7', tone: 'purple' }, { icon: 'badge-check', label: 'Won', value: '3', tone: 'green' }]} /><section className="emp-card emp-section"><div className="emp-section-head"><h2>Pipeline Activity</h2><span className="emp-pill blue">Latest</span></div><div className="pipeline">{list.map((item, index) => <div className="pipe-row" key={item.stage}><span className={`pipe-dot ${item.tone}`}>{index + 1}</span><div><strong>{item.stage}</strong><p>{item.text}</p></div><span className="pipe-meta">{item.time}</span></div>)}</div></section></Shell>;
 }
 
 export function ReportsPage() {
