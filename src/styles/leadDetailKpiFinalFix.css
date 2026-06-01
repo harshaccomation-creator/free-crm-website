@@ -1,61 +1,113 @@
-/* Final Lead Detail KPI polish: no layout changes, only icon blocks + production banner hide */
+/* Final Lead Detail KPI polish: reference-style premium single icons */
 .ld-live-banner {
   display: none !important;
 }
 
 .ld-summary-metrics .ld-metric-icon {
-  width: 44px !important;
-  height: 44px !important;
-  min-width: 44px !important;
-  border-radius: 15px !important;
+  width: 50px !important;
+  height: 50px !important;
+  min-width: 50px !important;
+  border-radius: 16px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   font-size: 0 !important;
-  font-weight: 800 !important;
   line-height: 1 !important;
   box-shadow: none !important;
+  position: relative !important;
+  overflow: hidden !important;
 }
 
-.ld-summary-metrics .ld-metric-icon::before {
+.ld-summary-metrics .ld-metric-icon::before,
+.ld-summary-metrics .ld-metric-icon::after {
+  content: '' !important;
+  position: absolute !important;
   display: block !important;
-  font-size: 20px !important;
-  font-weight: 800 !important;
-  line-height: 1 !important;
+  box-sizing: border-box !important;
 }
 
 .ld-summary-metrics .ld-metric-card:nth-child(1) .ld-metric-icon {
-  background: #f3e8ff !important;
+  background: #f0e6ff !important;
   color: #7c3aed !important;
 }
 
 .ld-summary-metrics .ld-metric-card:nth-child(1) .ld-metric-icon::before {
-  content: '●';
+  width: 22px !important;
+  height: 22px !important;
+  border: 3px solid currentColor !important;
+  border-radius: 50% !important;
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(1) .ld-metric-icon::after {
+  width: 10px !important;
+  height: 10px !important;
+  border: 3px solid currentColor !important;
+  border-radius: 50% !important;
+  box-shadow: 10px -10px 0 -3px #f0e6ff, 10px -10px 0 0 currentColor !important;
 }
 
 .ld-summary-metrics .ld-metric-card:nth-child(2) .ld-metric-icon {
-  background: #eff6ff !important;
+  background: #e8f2ff !important;
   color: #2563eb !important;
 }
 
 .ld-summary-metrics .ld-metric-card:nth-child(2) .ld-metric-icon::before {
-  content: '◆';
+  width: 24px !important;
+  height: 16px !important;
+  border: 3px solid currentColor !important;
+  border-radius: 4px 4px 8px 8px !important;
+  clip-path: polygon(0 0, 100% 0, 62% 100%, 38% 100%) !important;
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(2) .ld-metric-icon::after {
+  width: 8px !important;
+  height: 10px !important;
+  background: currentColor !important;
+  border-radius: 0 0 3px 3px !important;
+  top: 29px !important;
 }
 
 .ld-summary-metrics .ld-metric-card:nth-child(3) .ld-metric-icon {
-  background: #fff4df !important;
+  background: #fff0d8 !important;
   color: #f59e0b !important;
 }
 
 .ld-summary-metrics .ld-metric-card:nth-child(3) .ld-metric-icon::before {
-  content: '✓';
+  width: 23px !important;
+  height: 23px !important;
+  border: 3px solid currentColor !important;
+  border-radius: 5px !important;
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(3) .ld-metric-icon::after {
+  width: 15px !important;
+  height: 3px !important;
+  background: currentColor !important;
+  border-radius: 999px !important;
+  top: 19px !important;
+  box-shadow: -5px -6px 0 -1px currentColor, 5px -6px 0 -1px currentColor !important;
 }
 
 .ld-summary-metrics .ld-metric-card:nth-child(4) .ld-metric-icon {
-  background: #eaf8ef !important;
-  color: #16a34a !important;
+  background: #e8f8ef !important;
+  color: #22c55e !important;
 }
 
 .ld-summary-metrics .ld-metric-card:nth-child(4) .ld-metric-icon::before {
-  content: '₹';
+  content: '₹' !important;
+  position: static !important;
+  font-size: 27px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  font-family: Inter, system-ui, Arial, sans-serif !important;
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(4) .ld-metric-icon::after {
+  width: 14px !important;
+  height: 14px !important;
+  right: 10px !important;
+  bottom: 10px !important;
+  border-radius: 50% !important;
+  border: 2px solid currentColor !important;
+  background: #e8f8ef !important;
 }
