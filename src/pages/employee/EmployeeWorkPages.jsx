@@ -28,7 +28,24 @@ const activities = [
 
 function Shell({ title, subtitle, children, actions }) {
   const pageClass = title === 'Won Leads' ? ' won-page' : '';
-  return <div className={`emp-page${pageClass}`}><DashboardSidebar role="employee" /><main className="emp-main"><div className="emp-container"><header className="emp-head"><div><span className="emp-kicker">Employee Workspace</span><h1>{title}</h1><p>{subtitle}</p></div><div className="emp-actions">{actions}</div></header>{children}</div></main></div>;
+  return (
+    <div className={`emp-page${pageClass}`}>
+      <DashboardSidebar role="employee" />
+      <main className="emp-main">
+        <div className="emp-container">
+          <header className="emp-head">
+            <div>
+              <span className="emp-kicker">Employee Workspace</span>
+              <h1>{title}</h1>
+              <p>{subtitle}</p>
+            </div>
+            <div className="emp-actions">{actions}</div>
+          </header>
+          {children}
+        </div>
+      </main>
+    </div>
+  );
 }
 
 function StatSvgIcon({ label }) {
@@ -43,7 +60,16 @@ function StatSvgIcon({ label }) {
 }
 
 function Stats({ items }) {
-  return <section className="emp-grid cards">{items.map((item) => <article className="emp-card emp-stat" key={item.label}><span className={`emp-icon ${item.tone || ''}`}><StatSvgIcon label={item.label} /></span><div><p>{item.label}</p><h2>{item.value}</h2></div></article>)}</section>;
+  return (
+    <section className="emp-grid cards">
+      {items.map((item) => (
+        <article className="emp-card emp-stat" key={item.label}>
+          <span className={`emp-icon ${item.tone || ''}`}><StatSvgIcon label={item.label} /></span>
+          <div><p>{item.label}</p><h2>{item.value}</h2></div>
+        </article>
+      ))}
+    </section>
+  );
 }
 
 function Modal({ title, subtitle, children, onClose }) {
@@ -65,7 +91,49 @@ function exportWonCsv(rows) {
 export function WonPage() {
   const wonLeads = leads.filter((lead) => lead.status === 'Converted' || lead.status === 'Won');
   const value = wonLeads.length * 245000;
-  return <Shell title="Won Leads" subtitle="Converted leads, total value aur closing details ek jagah." actions={<button className="emp-btn primary" onClick={() => exportWonCsv(wonLeads)}>Export Won</button>}><Stats items={[{ icon: '✓', label: 'Won Leads', value: wonLeads.length, tone: 'green' }, { icon: '₹', label: 'Won Value', value: `₹${value.toLocaleString('en-IN')}` }, { icon: '↗', label: 'Conversion', value: '16.4%', tone: 'purple' }, { icon: '◆', label: 'Best Source', value: 'Email', tone: 'orange' }]} /><section className="emp-card emp-section"><div className="emp-section-head"><h2>Won Lead List</h2><span className="emp-pill green">Converted Status</span></div><div className="emp-table-wrap"><table className="emp-table"><thead><tr><th>Lead</th><th>Company</th><th>Source</th><th>Status</th><th>Owner</th><th>Closed</th></tr></thead><tbody>{wonLeads.map((lead) => <tr key={lead.id}><td><div className="emp-person"><span className="emp-avatar">{lead.initials}</span><div><strong>{lead.name}</strong><small>{lead.phone}</small></div></div></td><td>{lead.company}</td><td>{lead.source}</td><td><span className="emp-pill green">Won</span></td><td>{lead.owner}</td><td>{lead.lastActivity}</td></tr>)}</tbody></table></div></section><section className="won-premium-grid"><article className="won-insight-card"><span className="won-insight-icon success">✓</span><div><p>Revenue secured</p><strong>₹{value.toLocaleString('en-IN')}</strong><small>Closed from {wonLeads.length} verified deal</small></div></article><article className="won-insight-card"><span className="won-insight-icon blue">↗</span><div><p>Next best action</p><strong>Ask for referral</strong><small>Follow up within 2 days after closure</small></div></article><article className="won-insight-card dark"><div><p>Premium summary</p><strong>Sales quality is improving</strong><small>Email campaign is your strongest channel right now.</small></div></article></section></Shell>;
+  const rowsPerPage = 5;
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(wonLeads.length / rowsPerPage));
+  const currentPage = Math.min(page, totalPages);
+  const startIndex = (currentPage - 1) * rowsPerPage;
+  const paginatedWonLeads = wonLeads.slice(startIndex, startIndex + rowsPerPage);
+  const showingStart = wonLeads.length ? startIndex + 1 : 0;
+  const showingEnd = Math.min(startIndex + rowsPerPage, wonLeads.length);
+
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [page, totalPages]);
+
+  return (
+    <Shell title="Won Leads" subtitle="Converted leads, total value aur closing details ek jagah." actions={<button className="emp-btn primary" onClick={() => exportWonCsv(wonLeads)}>Export Won</button>}>
+      <Stats items={[{ icon: '✓', label: 'Won Leads', value: wonLeads.length, tone: 'green' }, { icon: '₹', label: 'Won Value', value: `₹${value.toLocaleString('en-IN')}` }, { icon: '↗', label: 'Conversion', value: '16.4%', tone: 'purple' }, { icon: '◆', label: 'Best Source', value: 'Email', tone: 'orange' }]} />
+      <section className="emp-card emp-section">
+        <div className="emp-section-head"><h2>Won Lead List</h2><span className="emp-pill green">Converted Status</span></div>
+        <div className="emp-table-wrap">
+          <table className="emp-table">
+            <thead><tr><th>Lead</th><th>Company</th><th>Source</th><th>Status</th><th>Owner</th><th>Closed</th></tr></thead>
+            <tbody>
+              {paginatedWonLeads.map((lead) => (
+                <tr key={lead.id}>
+                  <td><div className="emp-person"><span className="emp-avatar">{lead.initials}</span><div><strong>{lead.name}</strong><small>{lead.phone}</small></div></div></td>
+                  <td>{lead.company}</td><td>{lead.source}</td><td><span className="emp-pill green">Won</span></td><td>{lead.owner}</td><td>{lead.lastActivity}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="won-pagination">
+          <span>Showing {showingStart}-{showingEnd} of {wonLeads.length}</span>
+          <div>
+            <button type="button" disabled={currentPage === 1} onClick={() => setPage((value) => Math.max(1, value - 1))}>Previous</button>
+            <strong>Page {currentPage} of {totalPages}</strong>
+            <button type="button" disabled={currentPage === totalPages} onClick={() => setPage((value) => Math.min(totalPages, value + 1))}>Next</button>
+          </div>
+        </div>
+      </section>
+      <section className="won-premium-grid"><article className="won-insight-card"><span className="won-insight-icon success">✓</span><div><p>Revenue secured</p><strong>₹{value.toLocaleString('en-IN')}</strong><small>Closed from {wonLeads.length} verified deal</small></div></article><article className="won-insight-card"><span className="won-insight-icon blue">↗</span><div><p>Next best action</p><strong>Ask for referral</strong><small>Follow up within 2 days after closure</small></div></article><article className="won-insight-card dark"><div><p>Premium summary</p><strong>Sales quality is improving</strong><small>Email campaign is your strongest channel right now.</small></div></article></section>
+    </Shell>
+  );
 }
 
 export function TasksPage() {
@@ -119,14 +187,7 @@ export function ProfilePage() {
         return;
       }
 
-      setProfile({
-        name: data.full_name || 'Employee User',
-        role: data.role === 'employee' ? 'Sales Executive' : data.role || 'Employee',
-        email: data.email || '-',
-        phone: data.phone || '-',
-        team: 'Sales',
-        location: 'India',
-      });
+      setProfile({ name: data.full_name || 'Employee User', role: data.role === 'employee' ? 'Sales Executive' : data.role || 'Employee', email: data.email || '-', phone: data.phone || '-', team: 'Sales', location: 'India' });
     }
     loadProfile();
     return () => { alive = false; };
