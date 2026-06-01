@@ -5,13 +5,14 @@
 }
 
 .won-page .emp-container{
-  transform:translateY(-72px)!important;
+  transform:translateY(-32px)!important;
   max-width:1180px!important;
   margin-left:0!important;
   margin-right:auto!important;
 }
 
 .won-page .emp-head{
+  padding-top:8px!important;
   margin-bottom:12px!important;
   align-items:center!important;
 }
