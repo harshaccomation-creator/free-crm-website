@@ -5,63 +5,66 @@
 }
 
 .won-page .emp-container{
-  transform:translateY(-48px)!important;
-  max-width:1180px!important;
+  transform:translateY(-34px)!important;
+  max-width:1160px!important;
   margin-left:0!important;
   margin-right:auto!important;
 }
 
 .won-page .emp-head{
   padding-top:0!important;
-  margin-bottom:12px!important;
+  margin-bottom:10px!important;
   align-items:center!important;
 }
 
 .won-page .emp-head h1{
-  font-size:24px!important;
-  line-height:1!important;
-  letter-spacing:-.65px!important;
+  font-size:22px!important;
+  font-weight:760!important;
+  line-height:1.04!important;
+  letter-spacing:-.45px!important;
   color:#071a3a!important;
 }
 
 .won-page .emp-head p{
-  font-size:13px!important;
+  font-size:12px!important;
   color:#64748b!important;
-  font-weight:650!important;
+  font-weight:560!important;
 }
 
 .won-page .emp-kicker{
-  padding:5px 11px!important;
-  font-size:10px!important;
+  padding:4px 10px!important;
+  font-size:9.5px!important;
+  font-weight:700!important;
   box-shadow:0 8px 18px rgba(11,99,246,.06)!important;
 }
 
 .won-page .emp-btn.primary{
-  height:36px!important;
-  min-width:112px!important;
-  border-radius:11px!important;
-  font-size:12.2px!important;
-  box-shadow:0 14px 28px rgba(37,99,235,.18)!important;
+  height:34px!important;
+  min-width:104px!important;
+  border-radius:10px!important;
+  font-size:11.5px!important;
+  font-weight:760!important;
+  box-shadow:0 12px 24px rgba(37,99,235,.16)!important;
 }
 
 .won-page .emp-grid.cards{
   grid-template-columns:repeat(4,minmax(0,1fr))!important;
-  gap:10px!important;
-  margin-bottom:12px!important;
+  gap:9px!important;
+  margin-bottom:10px!important;
 }
 
 .won-page .emp-stat{
-  min-height:66px!important;
-  padding:11px 13px!important;
-  grid-template-columns:40px minmax(0,1fr)!important;
-  gap:10px!important;
-  border-radius:14px!important;
+  min-height:58px!important;
+  padding:10px 12px!important;
+  grid-template-columns:36px minmax(0,1fr)!important;
+  gap:9px!important;
+  border-radius:13px!important;
 }
 
 .won-page .emp-icon{
-  width:40px!important;
-  height:40px!important;
-  border-radius:13px!important;
+  width:36px!important;
+  height:36px!important;
+  border-radius:12px!important;
   display:grid!important;
   place-items:center!important;
   position:relative!important;
@@ -74,42 +77,44 @@
 }
 
 .won-page .emp-icon svg{
-  width:21px!important;
-  height:21px!important;
+  width:19px!important;
+  height:19px!important;
   display:block!important;
 }
 
 .won-page .emp-stat p{
-  font-size:10.6px!important;
+  font-size:10px!important;
   line-height:1.1!important;
-  font-weight:800!important;
+  font-weight:680!important;
   color:#64748b!important;
 }
 
 .won-page .emp-stat h2{
-  margin-top:4px!important;
-  font-size:21px!important;
+  margin-top:3px!important;
+  font-size:19px!important;
+  font-weight:760!important;
   line-height:1!important;
-  letter-spacing:-.65px!important;
+  letter-spacing:-.5px!important;
 }
 
 .won-page .emp-grid.cards .emp-stat:nth-child(2) h2,
 .won-page .emp-grid.cards .emp-stat:nth-child(4) h2{
-  font-size:20px!important;
+  font-size:18px!important;
 }
 
 .won-page .emp-section{
-  padding:14px 16px!important;
+  padding:13px 15px!important;
   border-radius:14px!important;
 }
 
 .won-page .emp-section-head{
-  margin-bottom:10px!important;
+  margin-bottom:8px!important;
 }
 
 .won-page .emp-section-head h2{
-  font-size:16px!important;
-  letter-spacing:-.3px!important;
+  font-size:15px!important;
+  font-weight:760!important;
+  letter-spacing:-.25px!important;
 }
 
 .won-page .emp-table{
@@ -117,16 +122,17 @@
 }
 
 .won-page .emp-table th{
-  padding:9px 8px!important;
-  font-size:11px!important;
-  font-weight:850!important;
+  padding:8px 8px!important;
+  font-size:10.5px!important;
+  font-weight:720!important;
   color:#64748b!important;
   background:#fbfdff!important;
 }
 
 .won-page .emp-table td{
-  padding:10px 8px!important;
-  font-size:11.8px!important;
+  padding:9px 8px!important;
+  font-size:11.2px!important;
+  font-weight:520!important;
   color:#0f172a!important;
 }
 
@@ -135,65 +141,69 @@
 }
 
 .won-page .emp-person strong{
-  font-size:12.2px!important;
+  font-size:11.6px!important;
+  font-weight:720!important;
 }
 
 .won-page .emp-person small{
-  font-size:10.8px!important;
+  font-size:10.3px!important;
+  font-weight:520!important;
 }
 
 .won-page .emp-avatar{
-  width:28px!important;
-  height:28px!important;
-  font-size:10.5px!important;
+  width:26px!important;
+  height:26px!important;
+  font-size:10px!important;
+  font-weight:760!important;
 }
 
 .won-page .emp-pill{
-  padding:5px 10px!important;
-  font-size:10.5px!important;
+  padding:4px 9px!important;
+  font-size:10px!important;
+  font-weight:760!important;
 }
 
 .won-pagination{
   display:flex!important;
   align-items:center!important;
   justify-content:space-between!important;
-  gap:12px!important;
-  padding:12px 0 0!important;
-  margin-top:10px!important;
+  gap:10px!important;
+  padding:10px 0 0!important;
+  margin-top:8px!important;
   border-top:1px solid #e6edf7!important;
 }
 
 .won-pagination > span{
   color:#64748b!important;
-  font-size:11px!important;
-  font-weight:750!important;
+  font-size:10.5px!important;
+  font-weight:640!important;
 }
 
 .won-pagination > div{
   display:flex!important;
   align-items:center!important;
-  gap:8px!important;
+  gap:7px!important;
 }
 
 .won-pagination strong{
   color:#0f172a!important;
-  font-size:11px!important;
-  font-weight:850!important;
-  padding:7px 10px!important;
-  border-radius:10px!important;
+  font-size:10.5px!important;
+  font-weight:720!important;
+  padding:6px 9px!important;
+  border-radius:9px!important;
   background:#f8fbff!important;
   border:1px solid #e5edf8!important;
 }
 
 .won-pagination button{
-  height:30px!important;
-  padding:0 11px!important;
+  height:28px!important;
+  padding:0 10px!important;
   border:1px solid #dbe7f5!important;
-  border-radius:10px!important;
+  border-radius:9px!important;
   background:#ffffff!important;
   color:#2563eb!important;
-  font-size:11px!important;
-  font-weight:850!important;
+  font-size:10.5px!important;
+  font-weight:720!important;
   cursor:pointer!important;
 }
 
@@ -206,20 +216,20 @@
 .won-premium-grid{
   display:grid!important;
   grid-template-columns:1fr 1fr 1.15fr!important;
-  gap:12px!important;
-  margin-top:12px!important;
+  gap:10px!important;
+  margin-top:10px!important;
 }
 
 .won-insight-card{
-  min-height:86px!important;
+  min-height:74px!important;
   display:flex!important;
   align-items:center!important;
-  gap:12px!important;
-  padding:16px!important;
-  border-radius:16px!important;
+  gap:10px!important;
+  padding:13px!important;
+  border-radius:14px!important;
   background:rgba(255,255,255,.92)!important;
   border:1px solid #dbe7f5!important;
-  box-shadow:0 18px 34px rgba(15,23,42,.055)!important;
+  box-shadow:0 16px 30px rgba(15,23,42,.05)!important;
 }
 
 .won-insight-card.dark{
@@ -229,13 +239,13 @@
 }
 
 .won-insight-icon{
-  width:38px!important;
-  height:38px!important;
-  border-radius:13px!important;
+  width:34px!important;
+  height:34px!important;
+  border-radius:12px!important;
   display:grid!important;
   place-items:center!important;
-  font-weight:900!important;
-  font-size:18px!important;
+  font-weight:820!important;
+  font-size:16px!important;
   flex:0 0 auto!important;
 }
 
@@ -250,10 +260,10 @@
 }
 
 .won-insight-card p{
-  margin:0 0 4px!important;
-  font-size:11px!important;
+  margin:0 0 3px!important;
+  font-size:10.5px!important;
   color:#64748b!important;
-  font-weight:800!important;
+  font-weight:680!important;
 }
 
 .won-insight-card.dark p{
@@ -262,9 +272,10 @@
 
 .won-insight-card strong{
   display:block!important;
-  font-size:15px!important;
+  font-size:13.5px!important;
+  font-weight:760!important;
   line-height:1.15!important;
-  letter-spacing:-.25px!important;
+  letter-spacing:-.2px!important;
   color:#0f172a!important;
 }
 
@@ -274,9 +285,10 @@
 
 .won-insight-card small{
   display:block!important;
-  margin-top:4px!important;
-  font-size:11px!important;
+  margin-top:3px!important;
+  font-size:10.4px!important;
   color:#64748b!important;
+  font-weight:520!important;
 }
 
 .won-insight-card.dark small{
