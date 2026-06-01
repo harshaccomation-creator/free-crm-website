@@ -1,0 +1,61 @@
+/* Final Lead Detail KPI polish: no layout changes, only icon blocks + production banner hide */
+.ld-live-banner {
+  display: none !important;
+}
+
+.ld-summary-metrics .ld-metric-icon {
+  width: 44px !important;
+  height: 44px !important;
+  min-width: 44px !important;
+  border-radius: 15px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0 !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+  box-shadow: none !important;
+}
+
+.ld-summary-metrics .ld-metric-icon::before {
+  display: block !important;
+  font-size: 20px !important;
+  font-weight: 800 !important;
+  line-height: 1 !important;
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(1) .ld-metric-icon {
+  background: #f3e8ff !important;
+  color: #7c3aed !important;
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(1) .ld-metric-icon::before {
+  content: '●';
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(2) .ld-metric-icon {
+  background: #eff6ff !important;
+  color: #2563eb !important;
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(2) .ld-metric-icon::before {
+  content: '◆';
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(3) .ld-metric-icon {
+  background: #fff4df !important;
+  color: #f59e0b !important;
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(3) .ld-metric-icon::before {
+  content: '✓';
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(4) .ld-metric-icon {
+  background: #eaf8ef !important;
+  color: #16a34a !important;
+}
+
+.ld-summary-metrics .ld-metric-card:nth-child(4) .ld-metric-icon::before {
+  content: '₹';
+}
