@@ -4,6 +4,7 @@ import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { leads } from '../leads/leadsData.js';
 import './EmployeePages.css';
 import './EmployeePagesLayoutFix.css';
+import './EmployeeReportsPremiumFix.css';
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
