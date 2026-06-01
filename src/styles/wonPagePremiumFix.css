@@ -19,22 +19,22 @@
 
 .won-page .emp-head h1{
   font-size:22px!important;
-  font-weight:760!important;
+  font-weight:640!important;
   line-height:1.04!important;
-  letter-spacing:-.45px!important;
+  letter-spacing:-.35px!important;
   color:#071a3a!important;
 }
 
 .won-page .emp-head p{
   font-size:12px!important;
   color:#64748b!important;
-  font-weight:560!important;
+  font-weight:430!important;
 }
 
 .won-page .emp-kicker{
   padding:4px 10px!important;
   font-size:9.5px!important;
-  font-weight:700!important;
+  font-weight:520!important;
   box-shadow:0 8px 18px rgba(11,99,246,.06)!important;
 }
 
@@ -43,7 +43,7 @@
   min-width:104px!important;
   border-radius:10px!important;
   font-size:11.5px!important;
-  font-weight:760!important;
+  font-weight:600!important;
   box-shadow:0 12px 24px rgba(37,99,235,.16)!important;
 }
 
@@ -85,16 +85,16 @@
 .won-page .emp-stat p{
   font-size:10px!important;
   line-height:1.1!important;
-  font-weight:680!important;
+  font-weight:500!important;
   color:#64748b!important;
 }
 
 .won-page .emp-stat h2{
   margin-top:3px!important;
   font-size:19px!important;
-  font-weight:760!important;
+  font-weight:620!important;
   line-height:1!important;
-  letter-spacing:-.5px!important;
+  letter-spacing:-.4px!important;
 }
 
 .won-page .emp-grid.cards .emp-stat:nth-child(2) h2,
@@ -113,8 +113,8 @@
 
 .won-page .emp-section-head h2{
   font-size:15px!important;
-  font-weight:760!important;
-  letter-spacing:-.25px!important;
+  font-weight:620!important;
+  letter-spacing:-.15px!important;
 }
 
 .won-page .emp-table{
@@ -124,7 +124,7 @@
 .won-page .emp-table th{
   padding:8px 8px!important;
   font-size:10.5px!important;
-  font-weight:720!important;
+  font-weight:560!important;
   color:#64748b!important;
   background:#fbfdff!important;
 }
@@ -132,7 +132,7 @@
 .won-page .emp-table td{
   padding:9px 8px!important;
   font-size:11.2px!important;
-  font-weight:520!important;
+  font-weight:400!important;
   color:#0f172a!important;
 }
 
@@ -142,25 +142,25 @@
 
 .won-page .emp-person strong{
   font-size:11.6px!important;
-  font-weight:720!important;
+  font-weight:560!important;
 }
 
 .won-page .emp-person small{
   font-size:10.3px!important;
-  font-weight:520!important;
+  font-weight:400!important;
 }
 
 .won-page .emp-avatar{
   width:26px!important;
   height:26px!important;
   font-size:10px!important;
-  font-weight:760!important;
+  font-weight:560!important;
 }
 
 .won-page .emp-pill{
   padding:4px 9px!important;
   font-size:10px!important;
-  font-weight:760!important;
+  font-weight:560!important;
 }
 
 .won-pagination{
@@ -176,7 +176,7 @@
 .won-pagination > span{
   color:#64748b!important;
   font-size:10.5px!important;
-  font-weight:640!important;
+  font-weight:430!important;
 }
 
 .won-pagination > div{
@@ -188,7 +188,7 @@
 .won-pagination strong{
   color:#0f172a!important;
   font-size:10.5px!important;
-  font-weight:720!important;
+  font-weight:560!important;
   padding:6px 9px!important;
   border-radius:9px!important;
   background:#f8fbff!important;
@@ -203,7 +203,7 @@
   background:#ffffff!important;
   color:#2563eb!important;
   font-size:10.5px!important;
-  font-weight:720!important;
+  font-weight:520!important;
   cursor:pointer!important;
 }
 
@@ -244,7 +244,7 @@
   border-radius:12px!important;
   display:grid!important;
   place-items:center!important;
-  font-weight:820!important;
+  font-weight:600!important;
   font-size:16px!important;
   flex:0 0 auto!important;
 }
@@ -263,7 +263,7 @@
   margin:0 0 3px!important;
   font-size:10.5px!important;
   color:#64748b!important;
-  font-weight:680!important;
+  font-weight:500!important;
 }
 
 .won-insight-card.dark p{
@@ -273,9 +273,9 @@
 .won-insight-card strong{
   display:block!important;
   font-size:13.5px!important;
-  font-weight:760!important;
+  font-weight:600!important;
   line-height:1.15!important;
-  letter-spacing:-.2px!important;
+  letter-spacing:-.1px!important;
   color:#0f172a!important;
 }
 
@@ -288,7 +288,7 @@
   margin-top:3px!important;
   font-size:10.4px!important;
   color:#64748b!important;
-  font-weight:520!important;
+  font-weight:400!important;
 }
 
 .won-insight-card.dark small{
