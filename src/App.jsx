@@ -42,6 +42,7 @@ import './styles/leadDetailActivityClickFix.css';
 import './styles/leadTagsWorking.css';
 import './styles/leadFinalPolish.css';
 import './styles/leadActivityTimelineFix.css';
+import './styles/leadDetailActivityPremiumPolish.css';
 import './styles/superAdminCompactFix.css';
 import './styles/brandUnifiedCrmTheme.css';
 import './styles/salesflowLogoEverywhere.css';
