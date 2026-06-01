@@ -50,7 +50,7 @@ function Shell({ title, subtitle, children, actions }) {
 
 function PremiumIcon({ type }) {
   const common = { fill: 'none', stroke: 'currentColor', strokeWidth: 2.15, strokeLinecap: 'round', strokeLinejoin: 'round' };
-  if (type === 'badge-check') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M12 3.2 14.4 5l3-.2.8 2.9 2.3 1.8-1.1 2.8.7 2.9-2.6 1.5-1.4 2.6-3-.5-3 .5-1.4-2.6-2.6-1.5.7-2.9-1.1-2.8 2.3-1.8.8-2.9 3 .2L12 3.2Z" /><path d="m8.8 12.1 2.1 2 4.5-4.7" /></svg>;
+  if (type === 'badge-check') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><circle cx="12" cy="12" r="8.5" /><path d="m8.4 12.2 2.3 2.2 5-5.1" /></svg>;
   if (type === 'rupee') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M7 5h10" /><path d="M7 9h10" /><path d="M8 5c6 0 6 8 0 8H7l7.2 6" /></svg>;
   if (type === 'trending-up') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><path d="M4 17 10 11l4 4 6-8" /><path d="M15 7h5v5" /></svg>;
   if (type === 'mail') return <svg viewBox="0 0 24 24" aria-hidden="true" {...common}><rect x="3.5" y="5.5" width="17" height="13" rx="2.2" /><path d="m4.5 7 7.5 6 7.5-6" /></svg>;
