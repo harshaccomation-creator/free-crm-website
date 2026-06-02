@@ -49,6 +49,31 @@ function passwordStrength(password) {
   return { label: 'Medium', className: 'medium' };
 }
 
+function normalizeRole(role) {
+  const value = String(role || 'employee').toLowerCase().replace(/[\s-]+/g, '_');
+  if (value === 'company_admin' || value === 'admin') return 'company_admin';
+  if (value === 'super_admin' || value === 'superadmin') return 'super_admin';
+  if (value === 'manager') return 'manager';
+  return 'employee';
+}
+
+function roleRedirect(role) {
+  if (role === 'super_admin') return '/super-admin/dashboard';
+  if (role === 'company_admin') return '/admin/dashboard';
+  return '/employee/dashboard';
+}
+
+function setSessionStorage({ email, userId, role, fullName }) {
+  const cleanRole = normalizeRole(role);
+  localStorage.removeItem('salesflowRole');
+  localStorage.setItem('salesflow_user_email', email || '');
+  localStorage.setItem('salesflow_user_id', userId || '');
+  localStorage.setItem('salesflow_user_role', cleanRole);
+  localStorage.setItem('salesflowRole', cleanRole);
+  if (fullName) localStorage.setItem('salesflow_user_name', fullName);
+  return cleanRole;
+}
+
 async function postJson(url, body) {
   const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   const data = await response.json().catch(() => ({}));
@@ -80,19 +105,18 @@ export default function LoginPage() {
     setMessage('');
     if (!email || !password) return setMessage('Please enter your email and password.');
     const cleanEmail = email.trim().toLowerCase();
-    if (cleanEmail.includes('superadmin')) return navigateTo('/super-admin/dashboard');
     if (!supabase) return setMessage('Supabase login env missing. Please check Vercel env variables.');
     try {
       setLoading(true);
+      localStorage.removeItem('salesflow_user_role');
+      localStorage.removeItem('salesflowRole');
       const { data, error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password });
       if (error) return setMessage(error.message || 'Invalid email or password. Please try again.');
       const userId = data?.user?.id || '';
-      const { data: profile } = await supabase.from('profiles').select('role,email,full_name').eq('id', userId).maybeSingle();
-      localStorage.setItem('salesflow_user_email', cleanEmail);
-      localStorage.setItem('salesflow_user_id', userId);
-      localStorage.setItem('salesflow_user_role', profile?.role || 'employee');
-      if (profile?.role === 'company_admin' || profile?.role === 'admin') return navigateTo('/admin/dashboard');
-      return navigateTo('/employee/dashboard');
+      const { data: profile, error: profileError } = await supabase.from('profiles').select('role,email,full_name').eq('id', userId).maybeSingle();
+      if (profileError) console.warn('[SalesFlow Login] Profile role lookup failed', profileError);
+      const role = setSessionStorage({ email: cleanEmail, userId, role: profile?.role || 'employee', fullName: profile?.full_name || cleanEmail.split('@')[0] });
+      return navigateTo(roleRedirect(role));
     } catch (error) {
       return setMessage(error.message || 'Unable to login. Please try again.');
     } finally {
@@ -139,10 +163,9 @@ export default function LoginPage() {
     try {
       setLoading(true);
       const data = await postJson('/api/signup-verify', { email: signup.email, otp: signup.otp, password: signup.password });
-      localStorage.setItem('salesflow_user_email', signup.email.trim().toLowerCase());
-      localStorage.setItem('salesflow_user_role', 'employee');
+      const role = setSessionStorage({ email: signup.email.trim().toLowerCase(), userId: data.userId || '', role: data.role || 'employee', fullName: signup.fullName });
       setMessage(data.message || 'Account created successfully.');
-      setTimeout(() => navigateTo(data.redirectTo || '/employee/dashboard'), 500);
+      setTimeout(() => navigateTo(data.redirectTo || roleRedirect(role)), 500);
     } catch (error) {
       setMessage(error.message);
     } finally {
