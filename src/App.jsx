@@ -11,6 +11,8 @@ import EmployeeReportsPage from './pages/employee/EmployeeReportsPage.jsx';
 import PremiumProfilePage from './pages/employee/ProfilePagePremium.jsx';
 import EmployeeActivitiesPage from './pages/employee/EmployeeActivitiesPage.jsx';
 import EmployeeCalendarPage from './pages/employee/EmployeeCalendarPage.jsx';
+import SettingsPage from './pages/shared/SettingsPage.jsx';
+import NotificationsPage from './pages/shared/NotificationsPage.jsx';
 import { WonPage, TasksPage } from './pages/employee/EmployeeWorkPages.jsx';
 import './styles/dashboardBase.css';
 import './styles/loginPage.css';
@@ -52,35 +54,21 @@ import './styles/leadDetailFinalPremiumPolish.css';
 import './styles/leadDetailHeaderHardFix.css';
 import './styles/leadActivityTopSpacingFix.css';
 
-const TAWK_WIDGET_ID = '6a185c426034501c34c0b3b0';
-const TAWK_PROPERTY_ID = '1jpnigpq8';
-
-function isPublicSupportPage(pathname) {
-  return pathname === '/login';
-}
-
 function getSavedRole() {
   const raw = window.localStorage.getItem('salesflow_user_role') || window.localStorage.getItem('salesflowRole') || '';
   return String(raw).toLowerCase().replace(/[\s-]+/g, '_');
 }
 
-function isSuperAdminRole(role) {
-  return role === 'super_admin' || role === 'superadmin';
-}
-
-function isAdminRole(role) {
-  return role === 'admin' || role === 'company_admin';
-}
-
-function isEmployeeRole(role) {
-  return !role || role === 'employee' || role === 'manager';
-}
+function isSuperAdminRole(role) { return role === 'super_admin' || role === 'superadmin'; }
+function isAdminRole(role) { return role === 'admin' || role === 'company_admin'; }
+function isManagerRole(role) { return role === 'manager'; }
+function isEmployeeRole(role) { return !role || role === 'employee'; }
+function isStaffRole(role) { return isEmployeeRole(role) || isManagerRole(role); }
 
 function hasActiveCrmSession() {
   if (typeof window === 'undefined') return false;
   return Boolean(
     window.localStorage.getItem('salesflow_user_email') ||
-    window.localStorage.getItem('salesflow_auth_token') ||
     window.localStorage.getItem('salesflow_session')
   );
 }
@@ -96,34 +84,9 @@ function isProtectedRoute(pathname) {
     pathname.startsWith('/admin') ||
     pathname.startsWith('/super-admin') ||
     pathname === '/leads' ||
-    pathname.startsWith('/leads/');
-}
-
-function applyTawkVisibility(pathname) {
-  if (typeof window === 'undefined' || !window.Tawk_API) return;
-  const showPublicBubble = isPublicSupportPage(pathname);
-  try {
-    if (showPublicBubble) window.Tawk_API.showWidget?.();
-    else window.Tawk_API.hideWidget?.();
-  } catch {}
-}
-
-function loadTawkWidget(pathname) {
-  if (typeof window === 'undefined') return;
-  window.Tawk_API = window.Tawk_API || {};
-  window.Tawk_API.onLoad = () => applyTawkVisibility(window.location.pathname || pathname);
-  window.Tawk_LoadStart = new Date();
-  if (document.getElementById('salesflow-tawk-widget')) {
-    applyTawkVisibility(pathname);
-    return;
-  }
-  const script = document.createElement('script');
-  script.id = 'salesflow-tawk-widget';
-  script.async = true;
-  script.src = `https://embed.tawk.to/${TAWK_WIDGET_ID}/${TAWK_PROPERTY_ID}`;
-  script.charset = 'UTF-8';
-  script.setAttribute('crossorigin', '*');
-  document.body.appendChild(script);
+    pathname.startsWith('/leads/') ||
+    pathname === '/settings' ||
+    pathname === '/notifications';
 }
 
 function installEmployeeLeftAlignFix() {
@@ -151,36 +114,15 @@ function installEmployeeLeftAlignFix() {
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
-  useEffect(() => { loadTawkWidget(path); }, []);
-  useEffect(() => { applyTawkVisibility(path); }, [path]);
   useEffect(() => { installEmployeeLeftAlignFix(); }, []);
   useEffect(() => {
     const role = getSavedRole();
     if (!hasActiveCrmSession()) return;
-
-    if (isSuperAdminRole(role) && path.startsWith('/employee')) {
-      redirectTo('/super-admin/dashboard', setPath);
-      return;
-    }
-
-    if (isSuperAdminRole(role) && path.startsWith('/admin')) {
-      redirectTo('/super-admin/dashboard', setPath);
-      return;
-    }
-
-    if (isAdminRole(role) && path.startsWith('/employee')) {
-      redirectTo('/admin/dashboard', setPath);
-      return;
-    }
-
-    if (isEmployeeRole(role) && path.startsWith('/admin')) {
-      redirectTo('/employee/dashboard', setPath);
-      return;
-    }
-
-    if (!isSuperAdminRole(role) && path.startsWith('/super-admin')) {
-      redirectTo(isAdminRole(role) ? '/admin/dashboard' : '/employee/dashboard', setPath);
-    }
+    if (isSuperAdminRole(role) && path.startsWith('/employee')) return redirectTo('/super-admin/dashboard', setPath);
+    if (isSuperAdminRole(role) && path.startsWith('/admin')) return redirectTo('/super-admin/dashboard', setPath);
+    if (isAdminRole(role) && path.startsWith('/employee')) return redirectTo('/admin/dashboard', setPath);
+    if (isStaffRole(role) && path.startsWith('/admin')) return redirectTo('/employee/dashboard', setPath);
+    if (!isSuperAdminRole(role) && path.startsWith('/super-admin')) redirectTo(isAdminRole(role) ? '/admin/dashboard' : '/employee/dashboard', setPath);
   }, [path]);
   useEffect(() => {
     const syncPath = () => setPath(window.location.pathname);
@@ -199,8 +141,10 @@ export default function App() {
   if (isProtected && !isLoggedIn) return <LoginPage />;
   if (path === '/login') return <LoginPage />;
   if (isLoggedIn && isSuperAdminRole(savedRole) && path.startsWith('/employee')) return <SuperAdminDashboard view="dashboard" />;
-  if (isLoggedIn && isEmployeeRole(savedRole) && path.startsWith('/admin')) return <EmployeeDashboard />;
+  if (isLoggedIn && isStaffRole(savedRole) && path.startsWith('/admin')) return <EmployeeDashboard />;
   if (isLoggedIn && !isSuperAdminRole(savedRole) && path.startsWith('/super-admin')) return isAdminRole(savedRole) ? <AdminDashboard /> : <EmployeeDashboard />;
+  if (path === '/settings') return <SettingsPage />;
+  if (path === '/notifications') return <NotificationsPage />;
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
   if (path === '/employee/won') return <WonPage />;
   if (path === '/employee/tasks') return <TasksPage />;
@@ -209,6 +153,7 @@ export default function App() {
   if (path === '/employee/reports') return <EmployeeReportsPage />;
   if (path === '/employee/profile') return <PremiumProfilePage />;
   if (path === '/admin/dashboard') return <AdminDashboard />;
+  if (path.startsWith('/admin/')) return <AdminDashboard />;
   if (path === '/super-admin/dashboard') return <SuperAdminDashboard />;
   if (path.startsWith('/super-admin/')) return <SuperAdminSectionPage view={path.split('/')[2] || 'users'} />;
   if (path === '/leads') return <LeadListPage />;
