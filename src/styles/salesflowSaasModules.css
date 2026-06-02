@@ -1,3 +1,313 @@
-:root{--sf-bg:#eef4fb;--sf-card:#fff;--sf-text:#06142e;--sf-muted:#66748a;--sf-line:#dbe7f6;--sf-blue:#1667f2;--sf-orange:#ff7a1a;--sf-green:#079669;--sf-red:#e94141;--sf-purple:#7c3aed;--sf-shadow:0 20px 55px rgba(15,35,75,.08)}
-.saas-page{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh;background:var(--sf-bg);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--sf-text)}
-.saas-main{padding:28px 32px 48px;min-width:0}.saas-wrap{max-width:1480px;margin:0 auto}.saas-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:22px}.saas-kicker{font-size:13px;font-weight:800;color:var(--sf-blue);letter-spacing:.08em;text-transform:uppercase}.saas-head h1{font-size:34px;line-height:1.1;margin:6px 0 8px;font-weight:900}.saas-head p{margin:0;color:var(--sf-muted);font-size:16px}.saas-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.saas-btn{border:1px solid var(--sf-line);background:#fff;border-radius:14px;padding:12px 16px;font-weight:850;color:#0b1b34;cursor:pointer;box-shadow:0 10px 25px rgba(0,0,0,.04)}.saas-btn.primary{background:linear-gradient(135deg,#246bff,#7c3aed);color:#fff;border:0}.saas-btn.danger{color:var(--sf-red)}.saas-btn:disabled{opacity:.55;cursor:not-allowed}.saas-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:18px}.saas-card{background:var(--sf-card);border:1px solid var(--sf-line);border-radius:24px;box-shadow:var(--sf-shadow)}.saas-stat{padding:20px;display:flex;align-items:center;gap:14px}.saas-icon{width:54px;height:54px;border-radius:18px;display:grid;place-items:center;background:#eff6ff;color:var(--sf-blue);font-weight:900}.saas-stat:nth-child(2) .saas-icon{background:#ecfdf5;color:var(--sf-green)}.saas-stat:nth-child(3) .saas-icon{background:#fff7ed;color:var(--sf-orange)}.saas-stat:nth-child(4) .saas-icon{background:#f5f3ff;color:var(--sf-purple)}.saas-stat p{margin:0;color:var(--sf-muted);font-weight:750}.saas-stat strong{display:block;font-size:28px;margin-top:4px}.saas-toolbar{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:16px;margin-bottom:18px}.saas-search{display:flex;align-items:center;gap:10px;border:1px solid var(--sf-line);border-radius:16px;padding:0 14px;background:#fff;min-width:280px}.saas-search input{border:0;outline:0;height:44px;font-size:15px;background:transparent;width:100%}.saas-select{height:44px;border:1px solid var(--sf-line);border-radius:14px;padding:0 14px;background:#fff;font-weight:750}.saas-table-card{overflow:hidden}.saas-table-wrap{overflow:auto}.saas-table{width:100%;border-collapse:separate;border-spacing:0;min-width:820px}.saas-table th{font-size:13px;text-align:left;color:var(--sf-muted);background:#f8fbff;padding:15px 18px;border-bottom:1px solid var(--sf-line);font-weight:900}.saas-table td{padding:16px 18px;border-bottom:1px solid #eef3fb;vertical-align:middle}.saas-table tr:hover td{background:#f8fbff}.saas-title-cell strong{display:block}.saas-title-cell small{color:var(--sf-muted);font-weight:700}.saas-badge{display:inline-flex;align-items:center;border-radius:999px;padding:7px 10px;font-weight:900;font-size:12px;background:#eff6ff;color:var(--sf-blue)}.saas-badge.green{background:#e9fbf2;color:var(--sf-green)}.saas-badge.orange{background:#fff4df;color:#d97706}.saas-badge.red{background:#fff0f0;color:var(--sf-red)}.saas-badge.purple{background:#f4efff;color:var(--sf-purple)}.saas-empty{padding:42px;text-align:center;color:var(--sf-muted)}.saas-empty h3{color:var(--sf-text);margin:0 0 8px}.saas-footer{padding:14px 18px;color:var(--sf-muted);display:flex;justify-content:space-between;gap:12px}.saas-panel-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:18px}.saas-panel{padding:20px}.saas-panel h2{margin:0 0 16px}.saas-pipeline{display:grid;grid-template-columns:repeat(4,minmax(220px,1fr));gap:14px;overflow:auto}.saas-stage{background:#f8fbff;border:1px solid var(--sf-line);border-radius:18px;padding:14px;min-height:280px}.saas-stage h3{margin:0 0 12px;font-size:15px}.saas-deal{background:#fff;border:1px solid var(--sf-line);border-radius:16px;padding:14px;margin-bottom:10px;box-shadow:0 10px 24px rgba(0,0,0,.04)}.saas-deal strong{display:block}.saas-deal small{color:var(--sf-muted)}.saas-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.saas-form label{font-weight:850;color:#20334f}.saas-form input,.saas-form select,.saas-form textarea{width:100%;box-sizing:border-box;margin-top:6px;border:1px solid var(--sf-line);border-radius:14px;padding:12px 14px;font:inherit}.saas-form textarea{min-height:90px;resize:vertical}.saas-form .full{grid-column:1/-1}.saas-banner{padding:12px 14px;border-radius:16px;background:#eff6ff;border:1px solid #bfdbfe;color:#174ea6;margin-bottom:14px;font-weight:750}.saas-banner.error{background:#fff0f0;border-color:#fecaca;color:#b91c1c}.saas-modal-backdrop{position:fixed;inset:0;background:rgba(4,12,28,.45);display:grid;place-items:center;z-index:80;padding:16px}.saas-modal{width:min(760px,100%);background:#fff;border-radius:24px;border:1px solid var(--sf-line);box-shadow:0 30px 90px rgba(0,0,0,.25);padding:22px}.saas-modal-head{display:flex;justify-content:space-between;gap:16px;margin-bottom:18px}.saas-modal-head h2{margin:0}.saas-modal-head button{width:40px;height:40px;border-radius:12px;border:1px solid var(--sf-line);background:#fff;font-size:24px;cursor:pointer}@media(max-width:1100px){.saas-page{grid-template-columns:1fr}.saas-main{padding:18px 14px 40px}.saas-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.saas-panel-grid{grid-template-columns:1fr}.saas-head{flex-direction:column}.saas-search{min-width:0;width:100%}.saas-toolbar{align-items:stretch;flex-direction:column}.saas-actions{width:100%}.saas-btn{flex:1}.saas-form{grid-template-columns:1fr}}@media(max-width:560px){.saas-grid{grid-template-columns:1fr}.saas-head h1{font-size:28px}.saas-main{padding:12px}.saas-card{border-radius:18px}.saas-stat{padding:16px}.saas-table{min-width:760px}}
+:root {
+  --sf-bg: #eef4fb;
+  --sf-card: #ffffff;
+  --sf-text: #06142e;
+  --sf-muted: #66748a;
+  --sf-line: #dbe7f6;
+  --sf-blue: #1667f2;
+  --sf-orange: #ff7a1a;
+  --sf-green: #079669;
+  --sf-red: #e94141;
+  --sf-purple: #7c3aed;
+  --sf-sidebar: 230px;
+  --sf-radius: 20px;
+  --sf-shadow: 0 14px 38px rgba(15, 35, 75, .075);
+}
+
+.saas-page {
+  display: grid;
+  grid-template-columns: var(--sf-sidebar) minmax(0, 1fr);
+  min-height: 100vh;
+  background: var(--sf-bg);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--sf-text);
+}
+
+.saas-main {
+  padding: 24px 28px 44px;
+  min-width: 0;
+}
+
+.saas-wrap {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+.saas-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.saas-kicker {
+  display: inline-flex;
+  margin-bottom: 6px;
+  font-size: 12px;
+  font-weight: 850;
+  color: var(--sf-blue);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.saas-head h1 {
+  font-size: 32px;
+  line-height: 1.12;
+  margin: 0 0 7px;
+  font-weight: 900;
+  letter-spacing: -.035em;
+}
+
+.saas-head p {
+  margin: 0;
+  color: var(--sf-muted);
+  font-size: 15px;
+  line-height: 1.55;
+  max-width: 760px;
+}
+
+.saas-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.saas-btn {
+  min-height: 40px;
+  border: 1px solid var(--sf-line);
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 1;
+  font-weight: 800;
+  color: #0b1b34;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .035);
+}
+
+.saas-btn.primary {
+  background: linear-gradient(135deg, #246bff, #7c3aed);
+  color: #ffffff;
+  border: 0;
+}
+
+.saas-btn.danger { color: var(--sf-red); }
+.saas-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+.saas-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.saas-card {
+  background: var(--sf-card);
+  border: 1px solid var(--sf-line);
+  border-radius: var(--sf-radius);
+  box-shadow: var(--sf-shadow);
+}
+
+.saas-stat {
+  min-height: 96px;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+
+.saas-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 15px;
+  display: grid;
+  place-items: center;
+  background: #eff6ff;
+  color: var(--sf-blue);
+  font-weight: 900;
+}
+
+.saas-stat:nth-child(2) .saas-icon { background: #ecfdf5; color: var(--sf-green); }
+.saas-stat:nth-child(3) .saas-icon { background: #fff7ed; color: var(--sf-orange); }
+.saas-stat:nth-child(4) .saas-icon { background: #f5f3ff; color: var(--sf-purple); }
+.saas-stat p { margin: 0; color: var(--sf-muted); font-size: 13px; font-weight: 750; }
+.saas-stat strong { display: block; margin-top: 4px; font-size: 24px; line-height: 1.08; letter-spacing: -.025em; }
+
+.saas-toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
+  margin-bottom: 18px;
+}
+
+.saas-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--sf-line);
+  border-radius: 14px;
+  padding: 0 13px;
+  background: #ffffff;
+  min-width: 280px;
+}
+
+.saas-search input {
+  border: 0;
+  outline: 0;
+  height: 42px;
+  font-size: 14px;
+  background: transparent;
+  width: 100%;
+}
+
+.saas-select {
+  height: 42px;
+  border: 1px solid var(--sf-line);
+  border-radius: 12px;
+  padding: 0 13px;
+  background: #ffffff;
+  color: var(--sf-text);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.saas-table-card { overflow: hidden; }
+.saas-table-wrap { width: 100%; overflow: auto; }
+.saas-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 860px;
+}
+
+.saas-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  font-size: 12px;
+  text-align: left;
+  color: var(--sf-muted);
+  background: #f8fbff;
+  padding: 13px 16px;
+  border-bottom: 1px solid var(--sf-line);
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.saas-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eef3fb;
+  vertical-align: middle;
+  font-size: 14px;
+  color: #17243a;
+}
+
+.saas-table tr:hover td { background: #f8fbff; }
+.saas-title-cell strong { display: block; font-size: 14px; line-height: 1.25; }
+.saas-title-cell small { display: block; margin-top: 3px; color: var(--sf-muted); font-size: 12px; font-weight: 700; line-height: 1.35; }
+
+.saas-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-weight: 850;
+  font-size: 12px;
+  line-height: 1;
+  background: #eff6ff;
+  color: var(--sf-blue);
+  white-space: nowrap;
+}
+
+.saas-badge.green { background: #e9fbf2; color: var(--sf-green); }
+.saas-badge.orange { background: #fff4df; color: #b45309; }
+.saas-badge.red { background: #fff0f0; color: var(--sf-red); }
+.saas-badge.purple { background: #f4efff; color: var(--sf-purple); }
+
+.saas-empty {
+  padding: 34px 24px;
+  text-align: center;
+  color: var(--sf-muted);
+}
+
+.saas-empty h3 { color: var(--sf-text); margin: 0 0 8px; font-size: 18px; }
+.saas-empty p { margin: 0; line-height: 1.5; }
+.saas-footer { padding: 13px 16px; color: var(--sf-muted); display: flex; justify-content: space-between; gap: 12px; align-items: center; font-size: 13px; }
+
+.saas-panel-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(320px, .7fr); gap: 18px; align-items: start; }
+.saas-panel { padding: 18px; }
+.saas-panel h2 { margin: 0 0 14px; font-size: 18px; letter-spacing: -.02em; }
+.saas-panel .saas-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 0; }
+
+.saas-pipeline { display: grid; grid-template-columns: repeat(4, minmax(220px, 1fr)); gap: 14px; overflow: auto; padding-bottom: 4px; }
+.saas-stage { background: #f8fbff; border: 1px solid var(--sf-line); border-radius: 16px; padding: 14px; min-height: 260px; }
+.saas-stage h3 { margin: 0 0 12px; font-size: 14px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.saas-deal { background: #ffffff; border: 1px solid var(--sf-line); border-radius: 14px; padding: 13px; margin-bottom: 10px; box-shadow: 0 8px 20px rgba(0, 0, 0, .035); cursor: pointer; }
+.saas-deal strong { display: block; font-size: 14px; }
+.saas-deal small { color: var(--sf-muted); }
+.saas-deal p { margin: 8px 0; font-weight: 850; }
+
+.saas-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.saas-form label { min-width: 0; font-size: 13px; font-weight: 850; color: #20334f; }
+.saas-form input,
+.saas-form select,
+.saas-form textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 6px;
+  border: 1px solid var(--sf-line);
+  border-radius: 12px;
+  padding: 11px 13px;
+  min-height: 42px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--sf-text);
+  background: #ffffff;
+}
+.saas-form textarea { min-height: 90px; resize: vertical; }
+.saas-form .full { grid-column: 1 / -1; }
+
+.saas-banner { padding: 12px 14px; border-radius: 14px; background: #eff6ff; border: 1px solid #bfdbfe; color: #174ea6; margin-bottom: 14px; font-size: 14px; font-weight: 750; }
+.saas-banner.error { background: #fff0f0; border-color: #fecaca; color: #b91c1c; }
+
+.saas-modal-backdrop { position: fixed; inset: 0; background: rgba(4, 12, 28, .45); display: grid; place-items: center; z-index: 80; padding: 16px; }
+.saas-modal { width: min(760px, 100%); background: #ffffff; border-radius: 22px; border: 1px solid var(--sf-line); box-shadow: 0 30px 90px rgba(0, 0, 0, .25); padding: 22px; }
+.saas-modal-head { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 18px; }
+.saas-modal-head h2 { margin: 0; font-size: 22px; }
+.saas-modal-head p { margin: 6px 0 0; color: var(--sf-muted); }
+.saas-modal-head button { width: 38px; height: 38px; border-radius: 12px; border: 1px solid var(--sf-line); background: #ffffff; font-size: 22px; cursor: pointer; }
+
+.task-row { align-items: center; }
+.task-row .task-complete-mini { margin-left: auto; }
+
+@media (max-width: 1200px) {
+  .saas-page { grid-template-columns: 1fr; }
+  .saas-main { padding: 18px 14px 40px; }
+  .saas-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .saas-panel-grid { grid-template-columns: 1fr; }
+  .saas-head { flex-direction: column; }
+  .saas-search { min-width: 0; width: 100%; }
+  .saas-toolbar { align-items: stretch; flex-direction: column; }
+  .saas-actions { width: 100%; }
+  .saas-btn { flex: 1; }
+  .saas-form { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .saas-grid { grid-template-columns: 1fr; }
+  .saas-head h1 { font-size: 27px; }
+  .saas-main { padding: 12px; }
+  .saas-card { border-radius: 16px; }
+  .saas-stat { min-height: 86px; padding: 15px; }
+  .saas-icon { width: 44px; height: 44px; min-width: 44px; }
+  .saas-table { min-width: 760px; }
+  .saas-footer { flex-direction: column; align-items: flex-start; }
+}
