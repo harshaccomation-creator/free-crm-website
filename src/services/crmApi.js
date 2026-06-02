@@ -175,7 +175,13 @@ export async function createLead(payload) {
 
   const { data, error } = await client.from('leads').insert(record).select('*').single();
   handleError(error, 'Unable to create lead');
-  await createActivity({ lead_id: data.id, type: 'lead_created', title: 'Lead created', note: data.name });
+
+  try {
+    await createActivity({ lead_id: data.id, type: 'lead_created', title: 'Lead created', note: data.name });
+  } catch (activityError) {
+    console.warn('[SalesFlow CRM API] Lead created activity failed, lead saved safely', activityError);
+  }
+
   return data;
 }
 
@@ -189,7 +195,13 @@ export async function updateLead(leadId, payload) {
     .single();
 
   handleError(error, 'Unable to update lead');
-  await createActivity({ lead_id: leadId, type: 'lead_updated', title: 'Lead updated', note: payload.status ? `Status: ${payload.status}` : null });
+
+  try {
+    await createActivity({ lead_id: leadId, type: 'lead_updated', title: 'Lead updated', note: payload.status ? `Status: ${payload.status}` : null });
+  } catch (activityError) {
+    console.warn('[SalesFlow CRM API] Lead updated activity failed, lead updated safely', activityError);
+  }
+
   return data;
 }
 
@@ -238,7 +250,15 @@ export async function createTask(payload) {
 
   const { data, error } = await client.from('tasks').insert(record).select('*').single();
   handleError(error, 'Unable to create task');
-  if (data.lead_id) await createActivity({ lead_id: data.lead_id, task_id: data.id, type: 'task_created', title: 'Task created', note: data.title });
+
+  if (data.lead_id) {
+    try {
+      await createActivity({ lead_id: data.lead_id, type: 'task_created', title: 'Task created', note: data.title });
+    } catch (activityError) {
+      console.warn('[SalesFlow CRM API] Task activity failed, task saved safely', activityError);
+    }
+  }
+
   return data;
 }
 
@@ -277,7 +297,7 @@ export async function listActivities({ leadId, limit = 100 } = {}) {
   return data || [];
 }
 
-export async function createActivity({ lead_id, task_id = null, type = 'note', title, note = null, activity_at = null }) {
+export async function createActivity({ lead_id, type = 'note', title, note = null, activity_at = null }) {
   const client = requireBackend();
   const profile = await getCurrentProfile();
   if (!profile?.company_id || !lead_id) return null;
@@ -286,7 +306,6 @@ export async function createActivity({ lead_id, task_id = null, type = 'note', t
     company_id: profile.company_id,
     lead_id,
     user_id: profile.id,
-    task_id,
     type,
     title,
     note,
@@ -294,13 +313,16 @@ export async function createActivity({ lead_id, task_id = null, type = 'note', t
   };
 
   const { data, error } = await client.from('lead_activities').insert(record).select('*').single();
-  if (error) console.warn('[SalesFlow CRM API] Activity insert failed', error);
+  if (error) {
+    console.warn('[SalesFlow CRM API] Activity insert failed', error);
+    return null;
+  }
 
   const nextStatus = getActivityLeadStatus(record);
   if (nextStatus) {
     const { error: leadError } = await client
       .from('leads')
-      .update({ status: nextStatus, last_activity_at: record.activity_at, updated_at: new Date().toISOString() })
+      .update({ status: nextStatus, updated_at: new Date().toISOString() })
       .eq('id', lead_id);
     if (leadError) console.warn('[SalesFlow CRM API] Lead status update failed', leadError);
   }
