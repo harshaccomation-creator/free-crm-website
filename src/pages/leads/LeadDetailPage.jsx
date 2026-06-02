@@ -7,14 +7,22 @@ import './LeadDetailProfessionalFix.css';
 import '../../styles/leadDetailFinalLock.css';
 import '../../styles/leadDetailTabContent.css';
 import '../../styles/leadDetailKpiFinalFix.css';
+
 function getCurrentRole() {
   const saved = window.localStorage.getItem('salesflowRole') || window.localStorage.getItem('salesflow_user_role');
   return saved === 'admin' || saved === 'company_admin' || saved === 'superAdmin' || saved === 'super_admin' || saved === 'employee' ? saved : 'employee';
 }
 
 const tabItems = [
-  ['overview', 'overview', 'Overview'], ['activity', 'activity', 'Activity'], ['tasks', 'tasks', 'Tasks'], ['notes', 'notes', 'Notes'], ['documents', 'documents', 'Documents'], ['email', 'email', 'Email History'], ['whatsapp', 'whatsapp', 'WhatsApp History'],
+  ['overview', 'overview', 'Overview'],
+  ['activity', 'activity', 'Activity'],
+  ['tasks', 'tasks', 'Tasks'],
+  ['notes', 'notes', 'Notes'],
+  ['documents', 'documents', 'Documents'],
+  ['email', 'email', 'Email History'],
+  ['whatsapp', 'whatsapp', 'WhatsApp History'],
 ];
+
 const tagPalette = {
   green: { bg: '#e8f8ef', color: '#039855', border: '#d1f2df', label: 'Green' },
   blue: { bg: '#eef5ff', color: '#0b63f6', border: '#dbeafe', label: 'Blue' },
@@ -22,23 +30,34 @@ const tagPalette = {
   orange: { bg: '#fff1dc', color: '#f59e0b', border: '#ffe4b5', label: 'Orange' },
   red: { bg: '#fff1f2', color: '#ef4444', border: '#ffe0e5', label: 'Red' },
 };
+
 const activityTypes = {
   call: { label: 'Call', icon: '☎', tone: 'green', title: 'Call Completed' },
   not_connected: { label: 'Not Connected', icon: '☎', tone: 'red', title: 'Call Not Connected' },
-  demo_done: { label: 'Demo Done', icon: '◈', tone: 'blue', title: 'Demo Completed' },
+  demo_done: { label: 'Demo Done', icon: '✓', tone: 'green', title: 'Demo Completed' },
   lost: { label: 'Lost', icon: '✕', tone: 'red', title: 'Lead Marked as Lost' },
   demo_scheduled: { label: 'Demo Scheduled', icon: '▣', tone: 'orange', title: 'Demo Scheduled' },
   follow_up: { label: 'Follow-up', icon: '↻', tone: 'orange', title: 'Follow-up Scheduled' },
   won: { label: 'Won', icon: '✓', tone: 'green', title: 'Lead Marked as Won' },
 };
-const taskTypes = { call: { label: 'Call', icon: '☎' }, demo_scheduled: { label: 'Demo Scheduled', icon: '▣' }, follow_up: { label: 'Follow-up', icon: '↻' } };
+
+const taskTypes = {
+  call: { label: 'Call', icon: '☎' },
+  demo_scheduled: { label: 'Demo Scheduled', icon: '▣' },
+  follow_up: { label: 'Follow-up', icon: '↻' },
+};
+
 const baseActivities = [
   { id: 'act-call-1', type: 'call', icon: '☎', title: 'Called Rohan Mehta', text: 'Discussed requirements and solution overview.', time: 'Today, 10:30 AM', user: 'Amit Kumar', tone: 'green' },
-  { id: 'act-mail-1', type: 'demo_done', icon: '✉', title: 'Sent Proposal', text: 'Proposal for CRM Software Implementation sent.', time: 'Yesterday, 04:15 PM', user: 'Amit Kumar', tone: 'blue' },
+  { id: 'act-demo-1', type: 'demo_done', icon: '✓', title: 'Demo Completed', text: 'Product demo completed successfully.', time: 'Yesterday, 04:15 PM', user: 'Amit Kumar', tone: 'green' },
   { id: 'act-follow-1', type: 'follow_up', icon: '▣', title: 'Follow-up Scheduled', text: 'Next follow-up scheduled on 24 May 2025.', time: 'Yesterday, 04:10 PM', user: 'Amit Kumar', tone: 'orange' },
   { id: 'act-web-1', type: 'website', icon: '◎', title: 'Lead Captured from Website', text: 'Lead captured from website contact form.', time: '20 May 2025, 10:30 AM', user: 'System', tone: 'purple' },
 ];
-const notes = [['Requirement Note', 'Client is interested in CRM automation, lead assignment, follow-up reminders and reporting dashboard.', 'Today, 12:20 PM'], ['Budget Discussion', 'Budget available. Decision expected after product demo and final proposal review.', 'Yesterday, 04:50 PM']];
+
+const notes = [
+  ['Requirement Note', 'Client is interested in CRM automation, lead assignment, follow-up reminders and reporting dashboard.', 'Today, 12:20 PM'],
+  ['Budget Discussion', 'Budget available. Decision expected after product demo and final proposal review.', 'Yesterday, 04:50 PM'],
+];
 const docs = [['Proposal_Rohan_Mehta.pdf', 'PDF • 1.2 MB'], ['CRM_Demo_Requirements.docx', 'DOCX • 860 KB'], ['Quotation_v2.xlsx', 'XLSX • 420 KB']];
 const emails = [['CRM Software Implementation Proposal', 'rohan.mehta@technova.com • Yesterday, 04:15 PM', 'Sent'], ['Demo Confirmation', 'rohan.mehta@technova.com • 20 May 2025, 02:10 PM', 'Opened']];
 const chats = [['Shared demo meeting link on WhatsApp.', 'Today, 09:15 AM', 'Delivered'], ['Client confirmed availability for follow-up call.', 'Yesterday, 06:35 PM', 'Read']];
@@ -47,10 +66,10 @@ function todayAt(hour, minute) { const d = new Date(); d.setHours(hour, minute, 
 function dateTimeToIso(date, time) { return new Date(`${date}T${time}`).toISOString(); }
 function formatDue(iso) { if (!iso) return '-'; const d = new Date(iso); if (Number.isNaN(d.getTime())) return String(iso); return d.toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }); }
 function formatFullDate(iso) { if (!iso) return '-'; const d = new Date(iso); if (Number.isNaN(d.getTime())) return String(iso); return d.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }).replace(',', ''); }
-function getTaskStatus(task) { if (task.completed) return { label: 'Completed', tone: 'done' }; if (new Date(task.dueAt).getTime() < Date.now()) return { label: 'Overdue', tone: 'danger' }; return { label: 'Pending', tone: 'pending' }; }
 function goToLeads() { window.history.pushState({}, '', '/leads'); window.dispatchEvent(new Event('salesflow:navigate')); }
 function Icon({ children }) { return <span className="ld-text-icon">{children}</span>; }
 function makeInitials(name = '') { const parts = name.trim().split(/\s+/).filter(Boolean); return ((parts[0]?.[0] || 'L') + (parts[1]?.[0] || '')).toUpperCase(); }
+
 function normalizeLead(record) {
   return {
     id: record?.id || 'demo-lead',
@@ -71,11 +90,22 @@ function normalizeLead(record) {
     raw: record || {},
   };
 }
+
+function isCompletionActivity(item) {
+  const title = String(item?.title || '').toLowerCase();
+  const text = String(item?.text || item?.note || item?.description || '').toLowerCase();
+  const type = String(item?.type || '').toLowerCase();
+  const combined = `${title} ${text} ${type}`;
+  return type === 'demo_done' || type === 'won' || type === 'call' || combined.includes('demo done') || combined.includes('demo completed') || combined.includes('completed') || combined.includes('complete') || combined.includes('done');
+}
+
 function normalizeActivity(item) {
-  const meta = activityTypes[item?.type] || activityTypes.call;
+  const originalType = String(item?.type || 'call').toLowerCase();
+  const effectiveType = isCompletionActivity(item) && originalType.includes('demo') ? 'demo_done' : originalType;
+  const meta = activityTypes[effectiveType] || activityTypes[originalType] || activityTypes.call;
   return {
     id: item.id,
-    type: item.type || 'call',
+    type: effectiveType,
     icon: meta.icon,
     title: item.title || meta.title,
     text: item.note || item.description || 'Activity added for this lead.',
@@ -85,171 +115,44 @@ function normalizeActivity(item) {
     raw: item,
   };
 }
+
 function normalizeTask(item) {
   const key = String(item?.type || 'call').toLowerCase().includes('demo') ? 'demo_scheduled' : String(item?.type || 'call').toLowerCase().includes('follow') ? 'follow_up' : 'call';
   const meta = taskTypes[key] || taskTypes.call;
-  return {
-    id: item.id,
-    icon: meta.icon,
-    title: item.title || `${meta.label} task`,
-    source: item.source || item.type || meta.label,
-    dueAt: item.due_at || item.dueAt || todayAt(18, 0),
-    note: item.note || '',
-    completed: item.status === 'Completed' || Boolean(item.completed_at),
-    isReal: true,
-  };
+  return { id: item.id, icon: meta.icon, title: item.title || `${meta.label} task`, source: item.source || item.type || meta.label, dueAt: item.due_at || item.dueAt || todayAt(18, 0), note: item.note || '', completed: item.status === 'Completed' || Boolean(item.completed_at), isReal: true };
 }
+function getTaskStatus(task) { if (task.completed) return { label: 'Completed', tone: 'done' }; if (new Date(task.dueAt).getTime() < Date.now()) return { label: 'Overdue', tone: 'danger' }; return { label: 'Pending', tone: 'pending' }; }
+
 function TagChip({ tag, onRemove }) { const p = tagPalette[tag.color] || tagPalette.blue; return <span className="ld-custom-tag" style={{ background: p.bg, color: p.color, border: `1px solid ${p.border}` }}>{tag.name}{onRemove && <button type="button" onClick={() => onRemove(tag.id)} aria-label="Remove tag">×</button>}</span>; }
 function TabIcon({ type }) { const paths = { overview: <><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></>, activity: <polyline points="3 12 7 12 10 5 14 19 17 12 21 12" />, tasks: <><path d="M9 6h12" /><path d="M9 12h12" /><path d="M9 18h12" /><path d="M3.5 6l1 1 2-2" /><path d="M3.5 12l1 1 2-2" /><path d="M3.5 18l1 1 2-2" /></>, notes: <><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><path d="M14 3v6h6" /></>, documents: <><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5" /><path d="M8 13h8" /><path d="M8 17h6" /></>, email: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></>, whatsapp: <><path d="M20.5 11.8a8.5 8.5 0 0 1-12.4 7.5L4 20.5l1.2-4A8.5 8.5 0 1 1 20.5 11.8z" /><path d="M9.2 8.7c.2 3 2.1 5.1 5.1 6.1l1.2-1.2" /></> }; return <svg className="ld-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[type]}</svg>; }
 
 function ActivitySvgIcon({ item }) {
+  if (isCompletionActivity(item)) return <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="8" /><path d="M8.5 12.2l2.2 2.2 4.8-5" /></svg>;
   const title = String(item?.title || '').toLowerCase();
   const type = String(item?.type || '').toLowerCase();
   const tone = String(item?.tone || '').toLowerCase();
-
-  if (
-    title.includes('lead created') ||
-    title.includes('lead captured') ||
-    type.includes('created') ||
-    type.includes('website')
-  ) {
-    return (
-      <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <circle cx="12" cy="8" r="4" />
-        <path d="M4 21c1.6-4.2 14.4-4.2 16 0" />
-      </svg>
-    );
-  }
-
-  if (
-    title.includes('not pick') ||
-    title.includes('not connected') ||
-    title.includes('dnp') ||
-    type.includes('not_connected') ||
-    tone === 'red'
-  ) {
-    return (
-      <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="8" />
-        <path d="M8 8l8 8" />
-        <path d="M16 8l-8 8" />
-      </svg>
-    );
-  }
-
-  if (
-    title.includes('demo') ||
-    type.includes('demo') ||
-    type.includes('follow_up') ||
-    type.includes('scheduled')
-  ) {
-    return (
-      <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <rect x="4" y="5" width="16" height="15" rx="3" />
-        <path d="M8 3v4" />
-        <path d="M16 3v4" />
-        <path d="M4 10h16" />
-      </svg>
-    );
-  }
-
-  return (
-    <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6.4 6.4l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z" />
-    </svg>
-  );
+  if (title.includes('not pick') || title.includes('not connected') || title.includes('dnp') || type.includes('not_connected') || tone === 'red') return <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="8" /><path d="M8 8l8 8" /><path d="M16 8l-8 8" /></svg>;
+  if (title.includes('lead created') || title.includes('lead captured') || type.includes('created') || type.includes('website')) return <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="4" /><path d="M4 21c1.6-4.2 14.4-4.2 16 0" /></svg>;
+  return <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="5" width="16" height="15" rx="3" /><path d="M8 3v4" /><path d="M16 3v4" /><path d="M4 10h16" /></svg>;
 }
 
 function getActivityStatus(item) {
   const title = String(item?.title || '').toLowerCase();
+  const text = String(item?.text || item?.note || item?.description || '').toLowerCase();
   const type = String(item?.type || '').toLowerCase();
   const tone = String(item?.tone || '').toLowerCase();
-
-  if (title.includes('not pick') || title.includes('not connected') || title.includes('dnp') || type.includes('not_connected') || tone === 'red') {
-    return { label: 'Not Connected', className: 'danger' };
-  }
-
-  if (title.includes('lead created') || title.includes('lead captured') || type.includes('website') || type.includes('created')) {
-    return { label: 'Completed', className: 'success' };
-  }
-
-  if (title.includes('demo') || type.includes('demo') || type.includes('follow_up') || type.includes('scheduled')) {
-    return { label: 'Scheduled', className: 'warning' };
-  }
-
+  const combined = `${title} ${text} ${type}`;
+  if (combined.includes('not pick') || combined.includes('not connected') || combined.includes('dnp') || type.includes('not_connected') || tone === 'red') return { label: 'Not Connected', className: 'danger' };
+  if (isCompletionActivity(item) || combined.includes('lead created') || combined.includes('lead captured') || type.includes('website') || type.includes('created')) return { label: 'Completed', className: 'success' };
+  if (combined.includes('scheduled') || type.includes('follow_up') || type.includes('demo_scheduled')) return { label: 'Scheduled', className: 'warning' };
   return { label: 'Completed', className: 'success' };
 }
 
 function ActivityTimeline({ items, onAdd, onEdit }) {
   const safeItems = Array.isArray(items) ? items : [];
-
-  return (
-    <article className="sf-activity-page">
-      <header className="sf-activity-header">
-        <div>
-          <h2>Activity Timeline</h2>
-          <p>{safeItems.length} activities • newest first</p>
-        </div>
-
-        <button type="button" className="sf-add-activity-btn" onClick={onAdd}>
-          + Add Activity
-        </button>
-      </header>
-
-      <div className="sf-activity-controls">
-        <button type="button" className="sf-filter-pill">
-          All Time
-        </button>
-        <button type="button" className="sf-filter-pill">
-          Sort: Newest First
-        </button>
-      </div>
-
-      <div className="sf-activity-list">
-        {safeItems.map((item, index) => {
-          const status = getActivityStatus(item);
-
-          return (
-            <div className="sf-activity-item" key={item.id || `${item.title}-${item.time}-${index}`}>
-              <div className={`sf-activity-icon ${status.className}`}>
-                <ActivitySvgIcon item={item} />
-              </div>
-
-              <div className="sf-activity-content">
-                <div className="sf-activity-title-row">
-                  <strong>{item.title}</strong>
-                  <span className={`sf-activity-status ${status.className}`}>{status.label}</span>
-                </div>
-
-                <p>{item.text}</p>
-
-                <div className="sf-activity-submeta">
-                  <span>🕒 {item.time}</span>
-                  <span>👤 {item.user}</span>
-                </div>
-              </div>
-
-              <div className="sf-activity-actions">
-                <button type="button" className="sf-more-btn" aria-label="More options">
-                  ⋮
-                </button>
-                <button type="button" className="sf-edit-activity-btn" onClick={() => onEdit(item)}>
-                  ✎
-                </button>
-              </div>
-            </div>
-          );
-        })}
-
-        <div className="sf-activity-end">
-          <span />
-          You’ve reached the end
-          <span />
-        </div>
-      </div>
-    </article>
-  );
+  return <article className="sf-activity-page"><header className="sf-activity-header"><div><h2>Activity Timeline</h2><p>{safeItems.length} activities • newest first</p></div><button type="button" className="sf-add-activity-btn" onClick={onAdd}>+ Add Activity</button></header><div className="sf-activity-controls"><button type="button" className="sf-filter-pill">All Time</button><button type="button" className="sf-filter-pill">Sort: Newest First</button></div><div className="sf-activity-list">{safeItems.map((item, index) => { const status = getActivityStatus(item); return <div className="sf-activity-item" key={item.id || `${item.title}-${item.time}-${index}`}><div className={`sf-activity-icon ${status.className}`}><ActivitySvgIcon item={item} /></div><div className="sf-activity-content"><div className="sf-activity-title-row"><strong>{item.title}</strong><span className={`sf-activity-status ${status.className}`}>{status.label}</span></div><p>{item.text}</p><div className="sf-activity-submeta"><span>🕒 {item.time}</span><span>👤 {item.user}</span></div></div><div className="sf-activity-actions"><button type="button" className="sf-more-btn" aria-label="More options">⋮</button><button type="button" className="sf-edit-activity-btn" onClick={() => onEdit(item)}>✎</button></div></div>; })}<div className="sf-activity-end"><span />You’ve reached the end<span /></div></div></article>;
 }
+
 function ActivityModal({ form, onChange, onClose, onSave, saving }) { return <div className="ld-modal-backdrop" onClick={onClose}><div className="ld-modal" onClick={(e) => e.stopPropagation()}><div className="ld-modal-top"><div><h3>{form.id ? 'Edit Activity' : 'Add Activity'}</h3><p>{form.id ? 'Activity details update karo.' : 'Activity type select karo aur note box me details likho.'}</p></div><button type="button" className="ld-modal-close" onClick={onClose}>×</button></div><form onSubmit={onSave}><div className="ld-form-grid"><label className="ld-field"><span>Activity Type</span><select value={form.type} onChange={(e) => onChange('type', e.target.value)}>{Object.entries(activityTypes).map(([key, v]) => <option key={key} value={key}>{v.label}</option>)}</select></label><label className="ld-field"><span>Title</span><input value={form.title} onChange={(e) => onChange('title', e.target.value)} placeholder="Activity title" /></label><label className="ld-field"><span>Date</span><input type="date" value={form.date} onChange={(e) => onChange('date', e.target.value)} /></label><label className="ld-field"><span>Time</span><input type="time" value={form.time} onChange={(e) => onChange('time', e.target.value)} /></label><label className="ld-field full"><span>Note</span><textarea value={form.note} onChange={(e) => onChange('note', e.target.value)} placeholder="Yaha activity ka note likho..." /></label></div><div className="ld-modal-actions"><button type="button" className="ghost" onClick={onClose}>Cancel</button><button type="submit" className="primary" disabled={saving}>{saving ? 'Saving...' : form.id ? 'Update Activity' : 'Save Activity'}</button></div></form></div></div>; }
 function TaskModal({ form, onChange, onClose, onSave, saving }) { return <div className="ld-modal-backdrop" onClick={onClose}><div className="ld-modal" onClick={(e) => e.stopPropagation()}><div className="ld-modal-top"><div><h3>Add Task</h3><p>From Website se task banao: Call, Demo Scheduled ya Follow-up.</p></div><button type="button" className="ld-modal-close" onClick={onClose}>×</button></div><form onSubmit={onSave}><div className="ld-form-grid"><label className="ld-field"><span>Task Source</span><select value={form.source} onChange={(e) => onChange('source', e.target.value)}><option value="From Website">From Website</option></select></label><label className="ld-field"><span>Task Type</span><select value={form.type} onChange={(e) => onChange('type', e.target.value)}>{Object.entries(taskTypes).map(([key, v]) => <option key={key} value={key}>{v.label}</option>)}</select></label><label className="ld-field"><span>Date</span><input type="date" value={form.date} onChange={(e) => onChange('date', e.target.value)} /></label><label className="ld-field"><span>Time</span><input type="time" value={form.time} onChange={(e) => onChange('time', e.target.value)} /></label><label className="ld-field full"><span>Task Title</span><input value={form.title} onChange={(e) => onChange('title', e.target.value)} placeholder="Task title optional" /></label><label className="ld-field full"><span>Note</span><textarea value={form.note} onChange={(e) => onChange('note', e.target.value)} placeholder="Task ka note likho..." /></label></div><div className="ld-modal-actions"><button type="button" className="ghost" onClick={onClose}>Cancel</button><button type="submit" className="primary" disabled={saving}>{saving ? 'Saving...' : 'Save Task'}</button></div></form></div></div>; }
 function TagModal({ form, onChange, onClose, onSave }) { return <div className="ld-modal-backdrop" onClick={onClose}><div className="ld-modal" onClick={(e) => e.stopPropagation()}><div className="ld-modal-top"><div><h3>Add Tag</h3><p>Employee apna tag bana sakta hai aur color choose kar sakta hai.</p></div><button type="button" className="ld-modal-close" onClick={onClose}>×</button></div><form onSubmit={onSave}><div className="ld-form-grid"><label className="ld-field full"><span>Tag Name</span><input value={form.name} onChange={(e) => onChange('name', e.target.value)} placeholder="Example: High Priority" autoFocus /></label><label className="ld-field full"><span>Tag Color</span><div className="ld-color-palette">{Object.entries(tagPalette).map(([key, value]) => <button type="button" key={key} className={form.color === key ? 'active' : ''} onClick={() => onChange('color', key)} style={{ '--tag-bg': value.bg, '--tag-color': value.color, '--tag-border': value.border }}><i />{value.label}</button>)}</div></label></div><div className="ld-modal-actions"><button type="button" className="ghost" onClick={onClose}>Cancel</button><button type="submit" className="primary">Save Tag</button></div></form></div></div>; }
@@ -288,10 +191,7 @@ export default function LeadDetailPage({ leadId }) {
   useEffect(() => {
     let alive = true;
     async function loadRealLead() {
-      if (!isBackendConfigured) {
-        setStatusMessage('Demo mode: Supabase env missing. Showing sample lead.');
-        return;
-      }
+      if (!isBackendConfigured) { setStatusMessage('Demo mode: Supabase env missing. Showing sample lead.'); return; }
       try {
         const real = await getRealLead(leadId);
         if (!alive || !real) return;
@@ -302,9 +202,8 @@ export default function LeadDetailPage({ leadId }) {
         setStatusMessage('Live Supabase lead connected.');
         const [realActivities, realTasks] = await Promise.all([listActivities({ leadId, limit: 100 }), listTasks({ limit: 100 })]);
         if (!alive) return;
-        const leadTasks = realTasks.filter((task) => task.lead_id === leadId);
         setActivities(realActivities.length ? realActivities.map(normalizeActivity) : baseActivities);
-        setManualTasks(leadTasks.map(normalizeTask));
+        setManualTasks(realTasks.filter((task) => task.lead_id === leadId).map(normalizeTask));
       } catch (error) {
         if (!alive) return;
         setIsRealLead(false);
@@ -318,85 +217,47 @@ export default function LeadDetailPage({ leadId }) {
   const score = lead.score || 85;
   const autoTasks = useMemo(() => isRealLead ? [] : [{ id: 'auto-followup', icon: '☎', title: `Follow-up call with ${lead.name}`, source: 'Auto from Next Follow-up', dueAt: todayAt(17, 0), completed: false }, { id: 'auto-demo', icon: '▣', title: `Demo scheduled for ${lead.company}`, source: 'Auto from demo schedule', dueAt: todayAt(14, 0), completed: false }, { id: 'auto-proposal', icon: '✉', title: 'Send revised proposal', source: 'Auto from proposal stage', dueAt: todayAt(11, 30), completed: false }], [isRealLead, lead.name, lead.company]);
   const tasks = [...manualTasks, ...autoTasks].map((t) => ({ ...t, completed: t.completed || completedIds.includes(t.id) }));
+
   const changeActivityForm = (k, v) => setActivityForm((c) => ({ ...c, [k]: v }));
   const changeTaskForm = (k, v) => setTaskForm((c) => ({ ...c, [k]: v }));
   const changeEditForm = (k, v) => setEditForm((c) => ({ ...c, [k]: v }));
   const changeTagForm = (k, v) => setTagForm((c) => ({ ...c, [k]: v }));
   const openAddActivity = () => { setActivityForm({ id: '', type: 'call', title: '', note: '', date: today, time: '10:30' }); setShowActivityModal(true); };
   const openEditActivity = (activity) => { setActivityForm({ id: activity.id, type: activity.type && activityTypes[activity.type] ? activity.type : 'call', title: activity.title || '', note: activity.text || '', date: today, time: '10:30' }); setShowActivityModal(true); };
+
   const saveActivity = async (e) => {
     e.preventDefault();
-    const meta = activityTypes[activityForm.type];
-    const updated = { id: activityForm.id || `act-${Date.now()}`, type: activityForm.type, icon: meta.icon, title: activityForm.title.trim() || meta.title, text: activityForm.note.trim() || `${meta.label} activity added for this lead.`, time: formatDue(dateTimeToIso(activityForm.date, activityForm.time)), user: 'Amit Kumar', tone: meta.tone };
+    const selectedMeta = activityTypes[activityForm.type];
+    const baseItem = { type: activityForm.type, title: activityForm.title.trim() || selectedMeta.title, text: activityForm.note.trim() || `${selectedMeta.label} activity added for this lead.` };
+    const effectiveType = isCompletionActivity(baseItem) && String(activityForm.type).includes('demo') ? 'demo_done' : activityForm.type;
+    const meta = activityTypes[effectiveType] || selectedMeta;
+    const updated = { id: activityForm.id || `act-${Date.now()}`, type: effectiveType, icon: meta.icon, title: baseItem.title, text: baseItem.text, time: formatDue(dateTimeToIso(activityForm.date, activityForm.time)), user: 'Jayraj', tone: meta.tone };
     setIsSaving(true);
     try {
       if (isRealLead && !activityForm.id) {
-        const saved = await createActivity({ lead_id: lead.id, type: activityForm.type, title: updated.title, note: updated.text, activity_at: dateTimeToIso(activityForm.date, activityForm.time) });
+        const saved = await createActivity({ lead_id: lead.id, type: effectiveType, title: updated.title, note: updated.text, activity_at: dateTimeToIso(activityForm.date, activityForm.time) });
         if (saved) updated.id = saved.id;
         setStatusMessage('Activity saved to Supabase.');
       }
       setActivities((list) => activityForm.id ? list.map((item) => item.id === activityForm.id ? updated : item) : [updated, ...list]);
       setShowActivityModal(false);
       setActivityForm({ id: '', type: 'call', title: '', note: '', date: today, time: '10:30' });
-    } catch (error) {
-      setStatusMessage(`Activity save failed: ${error.message}`);
-    } finally {
-      setIsSaving(false);
-    }
+    } catch (error) { setStatusMessage(`Activity save failed: ${error.message}`); } finally { setIsSaving(false); }
   };
+
   const saveTask = async (e) => {
     e.preventDefault();
     const meta = taskTypes[taskForm.type];
     const item = { id: `manual-${Date.now()}`, icon: meta.icon, title: taskForm.title.trim() || `${meta.label} for ${lead.name}`, source: `${taskForm.source} • ${meta.label}`, dueAt: dateTimeToIso(taskForm.date, taskForm.time), note: taskForm.note.trim(), completed: false };
     setIsSaving(true);
     try {
-      if (isRealLead) {
-        const saved = await createTask({ lead_id: lead.id, title: item.title, note: item.note, type: meta.label, due_at: item.dueAt, status: 'Pending' });
-        item.id = saved.id;
-        item.isReal = true;
-        setStatusMessage('Task saved to Supabase.');
-      }
-      setManualTasks([item, ...manualTasks]);
-      setShowTaskModal(false);
-      setActiveTab('tasks');
-      setTaskForm({ source: 'From Website', type: 'call', title: '', note: '', date: today, time: '18:00' });
-    } catch (error) {
-      setStatusMessage(`Task save failed: ${error.message}`);
-    } finally {
-      setIsSaving(false);
-    }
+      if (isRealLead) { const saved = await createTask({ lead_id: lead.id, title: item.title, note: item.note, type: meta.label, due_at: item.dueAt, status: 'Pending' }); item.id = saved.id; item.isReal = true; setStatusMessage('Task saved to Supabase.'); }
+      setManualTasks([item, ...manualTasks]); setShowTaskModal(false); setActiveTab('tasks'); setTaskForm({ source: 'From Website', type: 'call', title: '', note: '', date: today, time: '18:00' });
+    } catch (error) { setStatusMessage(`Task save failed: ${error.message}`); } finally { setIsSaving(false); }
   };
   const saveTag = (e) => { e.preventDefault(); const name = tagForm.name.trim(); if (!name) return; setTags((list) => [...list, { id: Date.now(), name, color: tagForm.color }]); setTagForm({ name: '', color: 'blue' }); setShowTagModal(false); };
-  const saveLead = async (e) => {
-    e.preventDefault();
-    const initials = makeInitials(editForm.name);
-    setIsSaving(true);
-    try {
-      if (isRealLead) {
-        const saved = await updateLead(lead.id, { name: editForm.name, company: editForm.company, job_title: editForm.jobTitle, email: editForm.email, phone: editForm.phone });
-        setLead(normalizeLead(saved));
-        setStatusMessage('Lead updated in Supabase.');
-      } else {
-        setLead((old) => ({ ...old, ...editForm, initials }));
-      }
-      setShowEditModal(false);
-    } catch (error) {
-      setStatusMessage(`Lead update failed: ${error.message}`);
-    } finally {
-      setIsSaving(false);
-    }
-  };
-  const completeTask = async (id) => {
-    const task = manualTasks.find((item) => item.id === id);
-    try {
-      if (isRealLead && task?.isReal) await updateTask(id, { status: 'Completed' });
-      setCompletedIds((ids) => ids.includes(id) ? ids : [...ids, id]);
-      setManualTasks((list) => list.map((item) => item.id === id ? { ...item, completed: true } : item));
-      setStatusMessage('Task marked completed.');
-    } catch (error) {
-      setStatusMessage(`Task update failed: ${error.message}`);
-    }
-  };
+  const saveLead = async (e) => { e.preventDefault(); const initials = makeInitials(editForm.name); setIsSaving(true); try { if (isRealLead) { const saved = await updateLead(lead.id, { name: editForm.name, company: editForm.company, job_title: editForm.jobTitle, email: editForm.email, phone: editForm.phone }); setLead(normalizeLead(saved)); setStatusMessage('Lead updated in Supabase.'); } else { setLead((old) => ({ ...old, ...editForm, initials })); } setShowEditModal(false); } catch (error) { setStatusMessage(`Lead update failed: ${error.message}`); } finally { setIsSaving(false); } };
+  const completeTask = async (id) => { const task = manualTasks.find((item) => item.id === id); try { if (isRealLead && task?.isReal) await updateTask(id, { status: 'Completed' }); setCompletedIds((ids) => ids.includes(id) ? ids : [...ids, id]); setManualTasks((list) => list.map((item) => item.id === id ? { ...item, completed: true } : item)); setStatusMessage('Task marked completed.'); } catch (error) { setStatusMessage(`Task update failed: ${error.message}`); } };
 
-  return <div className="ld-shell"><DashboardSidebar role={role} /><main className="ld-main"><header className="ld-topbar"><div className="ld-breadcrumb"><button onClick={goToLeads} type="button">Leads</button><span>›</span><strong>Lead Details</strong></div><div className="ld-actions"><button type="button" onClick={() => setShowShareModal(true)}>↗ Share</button><button type="button" onClick={() => setShowEditModal(true)}>✎ Edit Lead</button><button className="dots">⋮</button></div></header>{statusMessage ? <div className="ld-live-banner">{statusMessage}</div> : null}<section className="ld-profile-card"><div className="ld-profile-left"><div className="ld-avatar-large">{lead.initials}<span /></div><div className="ld-profile-main"><div className="ld-profile-title"><h1>{lead.name}</h1><b>{lead.status || 'Hot Lead'}</b></div><p>{lead.jobTitle || 'Customer'} at {lead.company}</p><div className="ld-contact-list"><span>✉ {lead.email || '-'}</span><span>☎ {lead.phone}</span><span>⌖ Mumbai, Maharashtra, India</span></div></div></div><div className="ld-profile-facts"><div className="ld-fact owner"><small>Lead Owner</small><div><span className="ld-owner-avatar">{makeInitials(lead.owner || 'U')}</span><strong>{lead.owner || 'Unassigned'}<em>Sales Executive</em></strong></div></div><div className="ld-fact"><small>Source</small><strong>{lead.source}</strong></div><div className="ld-fact"><small>Created On</small><strong>{formatFullDate(lead.createdAt) || '-'}</strong></div></div></section><section className="ld-summary-metrics"><article className="ld-metric-card purple"><span className="ld-metric-icon">◎</span><div className="ld-metric-body"><small>Lead Score</small><div className="ld-metric-value"><strong>{score}</strong><b>High</b></div><p>Great potential</p></div></article><article className="ld-metric-card"><span className="ld-metric-icon">▽</span><div className="ld-metric-body"><small>Pipeline Stage</small><div className="ld-metric-value"><strong>{lead.status || 'New'}</strong></div><div className="ld-progress"><i /><em>75%</em></div></div></article><article className="ld-metric-card orange"><span className="ld-metric-icon">▣</span><div className="ld-metric-body"><small>Next Follow-up</small><div className="ld-metric-value"><strong>{formatDue(lead.nextFollowUp)}</strong></div><p>{lead.nextFollowUp ? 'Scheduled' : 'Not set'}</p></div></article><article className="ld-metric-card green"><span className="ld-metric-icon">₹</span><div className="ld-metric-body"><small>Potential Deal Value</small><div className="ld-metric-value"><strong>₹ {Number(lead.value || 0).toLocaleString('en-IN')}</strong></div><p>Deal Value</p></div></article></section><section className="ld-tag-strip"><h2>Tags</h2><div>{tags.map((tag) => <TagChip key={tag.id} tag={tag} onRemove={(id) => setTags((list) => list.filter((x) => x.id !== id))} />)}<button type="button" onClick={() => setShowTagModal(true)}>+ Add Tag</button></div></section><nav className="ld-tabs">{tabItems.map(([key, icon, label]) => <button key={key} type="button" className={activeTab === key ? 'active' : ''} onClick={() => setActiveTab(key)}><TabIcon type={icon} />{label}</button>)}</nav><TabContent activeTab={activeTab} activities={activities} onAddActivity={openAddActivity} onEditActivity={openEditActivity} tasks={tasks} onAddTask={() => setShowTaskModal(true)} onCompleteTask={completeTask} lead={lead} /></main>{showActivityModal && <ActivityModal form={activityForm} onChange={changeActivityForm} onClose={() => setShowActivityModal(false)} onSave={saveActivity} saving={isSaving} />}{showTaskModal && <TaskModal form={taskForm} onChange={changeTaskForm} onClose={() => setShowTaskModal(false)} onSave={saveTask} saving={isSaving} />}{showTagModal && <TagModal form={tagForm} onChange={changeTagForm} onClose={() => setShowTagModal(false)} onSave={saveTag} />}{showEditModal && <EditLeadModal form={editForm} onChange={changeEditForm} onClose={() => setShowEditModal(false)} onSave={saveLead} saving={isSaving} />}{showShareModal && <ShareModal link={window.location.href} onClose={() => setShowShareModal(false)} />}</div>;
+  return <div className="ld-shell"><DashboardSidebar role={role} /><main className="ld-main"><header className="ld-topbar"><div className="ld-breadcrumb"><button onClick={goToLeads} type="button">Leads</button><span>›</span><strong>Lead Details</strong></div><div className="ld-actions"><button type="button" onClick={() => setShowShareModal(true)}>↗ Share</button><button type="button" onClick={() => setShowEditModal(true)}>✎ Edit Lead</button><button className="dots">⋮</button></div></header>{statusMessage ? <div className="ld-live-banner">{statusMessage}</div> : null}<section className="ld-profile-card"><div className="ld-profile-left"><div className="ld-avatar-large">{lead.initials}<span /></div><div className="ld-profile-main"><div className="ld-profile-title"><h1>{lead.name}</h1><b>{lead.status || 'Hot Lead'}</b></div><p>{lead.jobTitle || 'Customer'} at {lead.company}</p><div className="ld-contact-list"><span>✉ {lead.email || '-'}</span><span>☎ {lead.phone}</span><span>⌖ Location not added</span></div></div></div><div className="ld-profile-facts"><div className="ld-fact owner"><small>Lead Owner</small><div><span className="ld-owner-avatar">{makeInitials(lead.owner || 'U')}</span><strong>{lead.owner || 'Unassigned'}<em>Sales Executive</em></strong></div></div><div className="ld-fact"><small>Source</small><strong>{lead.source}</strong></div><div className="ld-fact"><small>Created On</small><strong>{formatFullDate(lead.createdAt) || '-'}</strong></div></div></section><section className="ld-summary-metrics"><article className="ld-metric-card purple"><span className="ld-metric-icon">◎</span><div className="ld-metric-body"><small>Lead Score</small><div className="ld-metric-value"><strong>{score}</strong><b>High</b></div><p>Great potential</p></div></article><article className="ld-metric-card"><span className="ld-metric-icon">▽</span><div className="ld-metric-body"><small>Pipeline Stage</small><div className="ld-metric-value"><strong>{lead.status || 'New'}</strong></div><div className="ld-progress"><i /><em>75%</em></div></div></article><article className="ld-metric-card orange"><span className="ld-metric-icon">▣</span><div className="ld-metric-body"><small>Next Follow-up</small><div className="ld-metric-value"><strong>{formatDue(lead.nextFollowUp)}</strong></div><p>{lead.nextFollowUp ? 'Scheduled' : 'Not set'}</p></div></article><article className="ld-metric-card green"><span className="ld-metric-icon">₹</span><div className="ld-metric-body"><small>Potential Deal Value</small><div className="ld-metric-value"><strong>₹ {Number(lead.value || 0).toLocaleString('en-IN')}</strong></div><p>Deal Value</p></div></article></section><section className="ld-tag-strip"><h2>Tags</h2><div>{tags.map((tag) => <TagChip key={tag.id} tag={tag} onRemove={(id) => setTags((list) => list.filter((x) => x.id !== id))} />)}<button type="button" onClick={() => setShowTagModal(true)}>+ Add Tag</button></div></section><nav className="ld-tabs">{tabItems.map(([key, icon, label]) => <button key={key} type="button" className={activeTab === key ? 'active' : ''} onClick={() => setActiveTab(key)}><TabIcon type={icon} />{label}</button>)}</nav><TabContent activeTab={activeTab} activities={activities} onAddActivity={openAddActivity} onEditActivity={openEditActivity} tasks={tasks} onAddTask={() => setShowTaskModal(true)} onCompleteTask={completeTask} lead={lead} /></main>{showActivityModal && <ActivityModal form={activityForm} onChange={changeActivityForm} onClose={() => setShowActivityModal(false)} onSave={saveActivity} saving={isSaving} />}{showTaskModal && <TaskModal form={taskForm} onChange={changeTaskForm} onClose={() => setShowTaskModal(false)} onSave={saveTask} saving={isSaving} />}{showTagModal && <TagModal form={tagForm} onChange={changeTagForm} onClose={() => setShowTagModal(false)} onSave={saveTag} />}{showEditModal && <EditLeadModal form={editForm} onChange={changeEditForm} onClose={() => setShowEditModal(false)} onSave={saveLead} saving={isSaving} />}{showShareModal && <ShareModal link={window.location.href} onClose={() => setShowShareModal(false)} />}</div>;
 }
