@@ -53,6 +53,58 @@ async function enrichLeadsWithActivityStatus(client, leads = []) {
   return leads.map((lead) => statusByLead.has(lead.id) ? { ...lead, status: statusByLead.get(lead.id) } : lead);
 }
 
+async function insertLeadWithFallback(client, record) {
+  const attempts = [
+    record,
+    {
+      company_id: record.company_id,
+      created_by: record.created_by,
+      owner_id: record.owner_id,
+      name: record.name,
+      email: record.email,
+      phone: record.phone,
+      company: record.company,
+      source: record.source,
+      status: record.status,
+      priority: record.priority,
+      notes: record.notes,
+      next_follow_up: record.next_follow_up,
+    },
+    {
+      company_id: record.company_id,
+      created_by: record.created_by,
+      owner_id: record.owner_id,
+      name: record.name,
+      email: record.email,
+      phone: record.phone,
+      company: record.company,
+      source: record.source,
+      status: record.status,
+    },
+    {
+      company_id: record.company_id,
+      created_by: record.created_by,
+      name: record.name,
+      email: record.email,
+      phone: record.phone,
+      company: record.company,
+      source: record.source,
+      status: record.status,
+    },
+  ];
+
+  let lastError = null;
+  for (const payload of attempts) {
+    const { data, error } = await client.from('leads').insert(payload).select('*').single();
+    if (!error && data) return data;
+    lastError = error;
+    console.warn('[SalesFlow CRM API] Lead insert attempt failed', error);
+  }
+
+  handleError(lastError, 'Unable to create lead');
+  return null;
+}
+
 export async function getCurrentUser() {
   const client = requireBackend();
   const { data, error } = await client.auth.getUser();
@@ -155,7 +207,7 @@ export async function getLead(leadId) {
 export async function createLead(payload) {
   const client = requireBackend();
   const profile = await getCurrentProfile();
-  if (!profile?.company_id) throw new Error('Profile company is missing');
+  if (!profile?.company_id) throw new Error('Profile company is missing. Logout karke dobara login karo ya profile company mapping check karo.');
 
   const record = {
     company_id: profile.company_id,
@@ -173,8 +225,7 @@ export async function createLead(payload) {
     next_follow_up: payload.next_follow_up || payload.follow_up_at || null,
   };
 
-  const { data, error } = await client.from('leads').insert(record).select('*').single();
-  handleError(error, 'Unable to create lead');
+  const data = await insertLeadWithFallback(client, record);
 
   try {
     await createActivity({ lead_id: data.id, type: 'lead_created', title: 'Lead created', note: data.name });
