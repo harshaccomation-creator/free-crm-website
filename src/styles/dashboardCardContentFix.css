@@ -122,6 +122,94 @@
   max-height:86px!important;
 }
 
+.employee-v2-page .focus-panel{
+  gap:12px!important;
+}
+
+.employee-v2-page .focus-grid{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:10px!important;
+  padding:14px 0 0!important;
+}
+
+.employee-v2-page .focus-metric{
+  width:100%!important;
+  border:1px solid #e2eaf6!important;
+  border-radius:18px!important;
+  background:#f8fbff!important;
+  padding:13px 14px!important;
+  display:grid!important;
+  grid-template-columns:44px minmax(0,1fr) auto!important;
+  gap:12px!important;
+  align-items:center!important;
+  text-align:left!important;
+  cursor:pointer!important;
+}
+
+.employee-v2-page .focus-metric i{
+  width:44px!important;
+  height:44px!important;
+  border-radius:15px!important;
+  display:grid!important;
+  place-items:center!important;
+  background:#eaf2ff!important;
+  color:#2563eb!important;
+}
+
+.employee-v2-page .focus-metric span{
+  display:block!important;
+  font-size:12px!important;
+  color:#64748b!important;
+  font-weight:850!important;
+}
+
+.employee-v2-page .focus-metric strong{
+  display:block!important;
+  font-size:24px!important;
+  line-height:1!important;
+  color:#071633!important;
+  margin:2px 0!important;
+}
+
+.employee-v2-page .focus-metric small{
+  display:block!important;
+  font-size:12px!important;
+  color:#64748b!important;
+}
+
+.employee-v2-page .focus-metric em{
+  font-style:normal!important;
+  border-radius:999px!important;
+  padding:7px 10px!important;
+  background:#fff!important;
+  border:1px solid #dce8f8!important;
+  color:#2563eb!important;
+  font-size:12px!important;
+  font-weight:900!important;
+}
+
+.employee-v2-page .focus-tip{
+  margin-top:auto!important;
+  border-radius:18px!important;
+  background:linear-gradient(135deg,#2563eb,#7c3aed)!important;
+  color:#fff!important;
+  padding:14px!important;
+  display:grid!important;
+  gap:4px!important;
+}
+
+.employee-v2-page .focus-tip strong{
+  font-size:14px!important;
+  color:#fff!important;
+}
+
+.employee-v2-page .focus-tip span{
+  font-size:13px!important;
+  color:rgba(255,255,255,.86)!important;
+  line-height:1.45!important;
+}
+
 @media(max-width:1200px){
   .employee-v2-page .followup-card,
   .employee-v2-page .tasks-panel,
