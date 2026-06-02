@@ -1,0 +1,16 @@
+/* Regression fix: SaaS module pages were starting under the fixed sidebar on desktop. */
+@media (min-width: 1201px) {
+  .saas-page {
+    grid-template-columns: 300px minmax(0, 1fr) !important;
+  }
+
+  .saas-main {
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .saas-wrap {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
