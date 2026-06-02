@@ -9,9 +9,9 @@ import '../../styles/leadFilterFix.css';
 import '../../styles/leadListFinalTableFix.css';
 
 const sourceClass = { Website: 'blue', Referral: 'green', LinkedIn: 'purple', 'Cold Call': 'orange', 'Email Campaign': 'purple', WhatsApp: 'green', Other: 'blue' };
-const statusClass = { New: 'blue', Contacted: 'orange', 'In Progress': 'blue', Converted: 'green', Won: 'green', Lost: 'red' };
+const statusClass = { New: 'blue', Contacted: 'orange', 'In Progress': 'blue', Converted: 'green', Won: 'green', Lost: 'red', 'Demo Done': 'green', 'Demo Scheduled': 'orange', 'Not Connected': 'red', 'Follow-up': 'orange' };
 const sourceOptions = ['All Sources', 'Website', 'Referral', 'LinkedIn', 'Cold Call', 'Email Campaign', 'WhatsApp', 'Other'];
-const statusOptions = ['All Statuses', 'New', 'Contacted', 'In Progress', 'Converted', 'Won', 'Lost'];
+const statusOptions = ['All Statuses', 'New', 'Contacted', 'In Progress', 'Converted', 'Won', 'Lost', 'Demo Scheduled', 'Demo Done', 'Not Connected', 'Follow-up'];
 const dateOptions = [
   { label: 'All Dates', value: 'all' },
   { label: '01 May 2025 - 31 May 2025', value: 'may-2025' },
@@ -107,7 +107,7 @@ function buildMetrics(rows) {
   const newCount = rows.filter((lead) => lead.status === 'New').length;
   const contacted = rows.filter((lead) => lead.status === 'Contacted').length;
   const progress = rows.filter((lead) => lead.status === 'In Progress').length;
-  const converted = rows.filter((lead) => lead.status === 'Converted' || lead.status === 'Won').length;
+  const converted = rows.filter((lead) => lead.status === 'Converted' || lead.status === 'Won' || lead.status === 'Demo Done').length;
   const lost = rows.filter((lead) => lead.status === 'Lost').length;
   return [
     ['Total Leads', total.toLocaleString('en-IN'), 'Live data', 'user', 'blue'],
@@ -121,6 +121,23 @@ function buildMetrics(rows) {
 function getFollowUpIso(form) {
   if (!form.nextFollowUpDate) return null;
   return new Date(`${form.nextFollowUpDate}T${form.nextFollowUpTime || '10:00'}`).toISOString();
+}
+function buildLocalLead(form, followUpIso, role) {
+  return normalizeLead({
+    id: `local-${Date.now()}`,
+    name: form.name.trim(),
+    phone: form.phone.trim(),
+    email: form.email.trim(),
+    company: form.company.trim(),
+    source: form.source,
+    status: form.status,
+    owner: role === 'admin' || role === 'company_admin' ? 'Admin' : 'Jayraj',
+    created_at: new Date().toISOString(),
+    next_follow_up: followUpIso,
+    priority: form.priority,
+    job_title: form.jobTitle || 'Customer',
+    notes: form.notes,
+  });
 }
 
 export default function LeadListPage() {
@@ -194,6 +211,7 @@ export default function LeadListPage() {
   const openAddLead = () => {
     setCreatedAt(formatDateTime());
     setForm(defaultForm);
+    setDataMessage('');
     setIsAddOpen(true);
   };
   const updateForm = (key, value) => setForm((current) => ({ ...current, [key]: value }));
@@ -202,6 +220,7 @@ export default function LeadListPage() {
     if (isSaving) return;
     setIsSaving(true);
     const followUpIso = getFollowUpIso(form);
+    const localLead = buildLocalLead(form, followUpIso, role);
     try {
       if (isBackendConfigured) {
         const saved = await createLead({
@@ -220,28 +239,21 @@ export default function LeadListPage() {
         setIsLiveData(true);
         setDataMessage('Lead saved to Supabase.');
       } else {
-        const nextFollowUp = followUpIso ? formatDateTime(followUpIso) : '-';
-        const newLead = normalizeLead({
-          id: `demo-${Date.now()}`,
-          name: form.name.trim(),
-          phone: form.phone.trim(),
-          email: form.email.trim(),
-          company: form.company.trim(),
-          source: form.source,
-          status: form.status,
-          owner: role === 'admin' ? 'Priya Mehta' : 'Rahul Sharma',
-          created_at: new Date().toISOString(),
-          nextFollowUp,
-          priority: form.priority,
-          jobTitle: form.jobTitle || 'Customer',
-          notes: form.notes,
-        });
-        setLeadRows((rows) => [newLead, ...rows]);
+        setLeadRows((rows) => [localLead, ...rows]);
+        setIsLiveData(false);
+        setDataMessage('Lead added locally. Supabase env missing.');
       }
       setCurrentPage(1);
       setIsAddOpen(false);
+      setForm(defaultForm);
     } catch (error) {
-      setDataMessage(`Save failed: ${error.message}`);
+      console.error('[SalesFlow] Add lead failed, using local fallback', error);
+      setLeadRows((rows) => [localLead, ...rows]);
+      setCurrentPage(1);
+      setIsAddOpen(false);
+      setForm(defaultForm);
+      setIsLiveData(false);
+      setDataMessage(`Lead added locally, but Supabase save failed: ${error.message}`);
     } finally {
       setIsSaving(false);
     }
@@ -289,7 +301,7 @@ export default function LeadListPage() {
           <footer className="la-footer"><span>{totalText}</span><div className="la-pagination"><button type="button" disabled={safePage === 1} onClick={() => setCurrentPage((page) => Math.max(1, page - 1))}>‹</button>{pageNumbers.map((page, index) => <span className="la-page-wrap" key={page}>{index > 0 && page - pageNumbers[index - 1] > 1 ? <em>...</em> : null}<button type="button" className={safePage === page ? 'active' : ''} onClick={() => setCurrentPage(page)}>{page}</button></span>)}<button type="button" disabled={safePage === totalPages} onClick={() => setCurrentPage((page) => Math.min(totalPages, page + 1))}>›</button><select value={pageSize} onChange={(event) => { setPageSize(Number(event.target.value)); setCurrentPage(1); }}><option value="5">5 / page</option><option value="10">10 / page</option><option value="20">20 / page</option><option value="50">50 / page</option></select></div></footer>
         </section>
       </main>
-      {isAddOpen && <div className="la-modal-backdrop" role="presentation" onClick={() => setIsAddOpen(false)}><section className="la-modal" role="dialog" aria-modal="true" aria-labelledby="addLeadTitle" onClick={(event) => event.stopPropagation()}><header><div><h2 id="addLeadTitle">Add New Lead</h2><p>Created automatically on {createdAt}</p></div><button type="button" onClick={() => setIsAddOpen(false)}>×</button></header><form onSubmit={saveLead} className="la-form"><label>Customer Name<input required value={form.name} onChange={(event) => updateForm('name', event.target.value)} placeholder="Enter customer name" /></label><label>Email ID<input required type="email" value={form.email} onChange={(event) => updateForm('email', event.target.value)} placeholder="customer@example.com" /></label><label>Mobile Number<input required value={form.phone} onChange={(event) => updateForm('phone', event.target.value)} placeholder="+91 98765 43210" /></label><label>Company<input required value={form.company} onChange={(event) => updateForm('company', event.target.value)} placeholder="Company name" /></label><label>Lead Source<select value={form.source} onChange={(event) => updateForm('source', event.target.value)}><option>Website</option><option>Referral</option><option>LinkedIn</option><option>Cold Call</option><option>Email Campaign</option><option>WhatsApp</option><option>Other</option></select></label><label>Status<select value={form.status} onChange={(event) => updateForm('status', event.target.value)}><option>New</option><option>Contacted</option><option>In Progress</option><option>Converted</option><option>Lost</option></select></label><label>Next Follow-up Date<input type="date" value={form.nextFollowUpDate} onChange={(event) => updateForm('nextFollowUpDate', event.target.value)} /></label><label>Next Follow-up Time<input type="time" value={form.nextFollowUpTime} onChange={(event) => updateForm('nextFollowUpTime', event.target.value)} /></label><label>Priority<select value={form.priority} onChange={(event) => updateForm('priority', event.target.value)}><option>Hot</option><option>Warm</option><option>High</option><option>Medium</option><option>Low</option></select></label><label>Job Title<input value={form.jobTitle} onChange={(event) => updateForm('jobTitle', event.target.value)} placeholder="Founder / Manager / Customer" /></label><label className="full">Notes<textarea value={form.notes} onChange={(event) => updateForm('notes', event.target.value)} placeholder="Requirement, budget, interest, discussion notes..." /></label><footer><button type="button" onClick={() => setIsAddOpen(false)}>Cancel</button><button className="primary" type="submit" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Lead'}</button></footer></form></section></div>}
+      {isAddOpen && <div className="la-modal-backdrop" role="presentation" onClick={() => setIsAddOpen(false)}><section className="la-modal" role="dialog" aria-modal="true" aria-labelledby="addLeadTitle" onClick={(event) => event.stopPropagation()}><header><div><h2 id="addLeadTitle">Add New Lead</h2><p>Created automatically on {createdAt}</p></div><button type="button" onClick={() => setIsAddOpen(false)}>×</button></header><form onSubmit={saveLead} className="la-form"><label>Customer Name<input required value={form.name} onChange={(event) => updateForm('name', event.target.value)} placeholder="Enter customer name" /></label><label>Email ID<input required type="email" value={form.email} onChange={(event) => updateForm('email', event.target.value)} placeholder="customer@example.com" /></label><label>Mobile Number<input required value={form.phone} onChange={(event) => updateForm('phone', event.target.value)} placeholder="+91 98765 43210" /></label><label>Company<input required value={form.company} onChange={(event) => updateForm('company', event.target.value)} placeholder="Company name" /></label><label>Lead Source<select value={form.source} onChange={(event) => updateForm('source', event.target.value)}><option>Website</option><option>Referral</option><option>LinkedIn</option><option>Cold Call</option><option>Email Campaign</option><option>WhatsApp</option><option>Other</option></select></label><label>Status<select value={form.status} onChange={(event) => updateForm('status', event.target.value)}><option>New</option><option>Contacted</option><option>In Progress</option><option>Converted</option><option>Lost</option><option>Demo Scheduled</option><option>Demo Done</option><option>Not Connected</option><option>Follow-up</option></select></label><label>Next Follow-up Date<input type="date" value={form.nextFollowUpDate} onChange={(event) => updateForm('nextFollowUpDate', event.target.value)} /></label><label>Next Follow-up Time<input type="time" value={form.nextFollowUpTime} onChange={(event) => updateForm('nextFollowUpTime', event.target.value)} /></label><label>Priority<select value={form.priority} onChange={(event) => updateForm('priority', event.target.value)}><option>Hot</option><option>Warm</option><option>High</option><option>Medium</option><option>Low</option></select></label><label>Job Title<input value={form.jobTitle} onChange={(event) => updateForm('jobTitle', event.target.value)} placeholder="Founder / Manager / Customer" /></label><label className="full">Notes<textarea value={form.notes} onChange={(event) => updateForm('notes', event.target.value)} placeholder="Requirement, budget, interest, discussion notes..." /></label><footer><button type="button" onClick={() => setIsAddOpen(false)}>Cancel</button><button className="primary" type="submit" disabled={isSaving}>{isSaving ? 'Saving...' : 'Save Lead'}</button></footer></form></section></div>}
     </div>
   );
 }
