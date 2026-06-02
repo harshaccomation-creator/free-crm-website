@@ -31,7 +31,32 @@
 }
 
 .sf-activity-list {
+  position: relative !important;
   margin-top: 8px !important;
+  padding-left: 14px !important;
+}
+
+/* Timeline vertical line should start after first created activity, not from the top */
+.sf-activity-list::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 47px !important;
+  top: 94px !important;
+  bottom: 72px !important;
+  width: 2px !important;
+  border-radius: 999px !important;
+  background: #dbeafe !important;
+  z-index: 0 !important;
+}
+
+.sf-activity-item {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.sf-activity-icon {
+  position: relative !important;
+  z-index: 2 !important;
 }
 
 .ld-side-info {
@@ -46,5 +71,11 @@
 
   .sf-activity-page {
     padding-top: 22px !important;
+  }
+
+  .sf-activity-list::before {
+    left: 41px !important;
+    top: 88px !important;
+    bottom: 64px !important;
   }
 }
