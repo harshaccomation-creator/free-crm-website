@@ -60,11 +60,20 @@ function isPublicSupportPage(pathname) {
 }
 
 function getSavedRole() {
-  return String(window.localStorage.getItem('salesflow_user_role') || '').toLowerCase().replace(/[\s-]+/g, '_');
+  const raw = window.localStorage.getItem('salesflow_user_role') || window.localStorage.getItem('salesflowRole') || '';
+  return String(raw).toLowerCase().replace(/[\s-]+/g, '_');
 }
 
 function isSuperAdminRole(role) {
   return role === 'super_admin' || role === 'superadmin';
+}
+
+function isAdminRole(role) {
+  return role === 'admin' || role === 'company_admin';
+}
+
+function isEmployeeRole(role) {
+  return !role || role === 'employee' || role === 'manager';
 }
 
 function hasActiveCrmSession() {
@@ -74,6 +83,12 @@ function hasActiveCrmSession() {
     window.localStorage.getItem('salesflow_auth_token') ||
     window.localStorage.getItem('salesflow_session')
   );
+}
+
+function redirectTo(path, setPath) {
+  window.history.replaceState({}, '', path);
+  setPath(path);
+  window.dispatchEvent(new Event('salesflow:navigate'));
 }
 
 function isProtectedRoute(pathname) {
@@ -141,10 +156,30 @@ export default function App() {
   useEffect(() => { installEmployeeLeftAlignFix(); }, []);
   useEffect(() => {
     const role = getSavedRole();
-    if (hasActiveCrmSession() && isSuperAdminRole(role) && path.startsWith('/employee')) {
-      window.history.replaceState({}, '', '/super-admin/dashboard');
-      setPath('/super-admin/dashboard');
-      window.dispatchEvent(new Event('salesflow:navigate'));
+    if (!hasActiveCrmSession()) return;
+
+    if (isSuperAdminRole(role) && path.startsWith('/employee')) {
+      redirectTo('/super-admin/dashboard', setPath);
+      return;
+    }
+
+    if (isSuperAdminRole(role) && path.startsWith('/admin')) {
+      redirectTo('/super-admin/dashboard', setPath);
+      return;
+    }
+
+    if (isAdminRole(role) && path.startsWith('/employee')) {
+      redirectTo('/admin/dashboard', setPath);
+      return;
+    }
+
+    if (isEmployeeRole(role) && path.startsWith('/admin')) {
+      redirectTo('/employee/dashboard', setPath);
+      return;
+    }
+
+    if (!isSuperAdminRole(role) && path.startsWith('/super-admin')) {
+      redirectTo(isAdminRole(role) ? '/admin/dashboard' : '/employee/dashboard', setPath);
     }
   }, [path]);
   useEffect(() => {
@@ -162,8 +197,10 @@ export default function App() {
   const isLoggedIn = hasActiveCrmSession();
 
   if (isProtected && !isLoggedIn) return <LoginPage />;
-  if (isLoggedIn && isSuperAdminRole(savedRole) && path.startsWith('/employee')) return <SuperAdminDashboard view="dashboard" />;
   if (path === '/login') return <LoginPage />;
+  if (isLoggedIn && isSuperAdminRole(savedRole) && path.startsWith('/employee')) return <SuperAdminDashboard view="dashboard" />;
+  if (isLoggedIn && isEmployeeRole(savedRole) && path.startsWith('/admin')) return <EmployeeDashboard />;
+  if (isLoggedIn && !isSuperAdminRole(savedRole) && path.startsWith('/super-admin')) return isAdminRole(savedRole) ? <AdminDashboard /> : <EmployeeDashboard />;
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
   if (path === '/employee/won') return <WonPage />;
   if (path === '/employee/tasks') return <TasksPage />;
