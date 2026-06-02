@@ -1,0 +1,133 @@
+/* Dashboard card content alignment fix */
+.employee-v2-page .employee-main-grid,
+.employee-v2-page .employee-bottom-grid{
+  align-items:start!important;
+}
+
+.employee-v2-page .employee-main-grid .emp-card,
+.employee-v2-page .employee-bottom-grid .emp-card{
+  overflow:hidden!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+
+.employee-v2-page .followup-card,
+.employee-v2-page .tasks-panel{
+  min-height:210px!important;
+  max-height:260px!important;
+}
+
+.employee-v2-page .recent-panel{
+  min-height:320px!important;
+  max-height:420px!important;
+}
+
+.employee-v2-page .quick-panel,
+.employee-v2-page .performance-panel{
+  min-height:320px!important;
+  max-height:420px!important;
+}
+
+.employee-v2-page .emp-card-head{
+  flex:0 0 auto!important;
+  min-height:54px!important;
+  padding-bottom:0!important;
+  border-bottom:1px solid #e8eff8!important;
+}
+
+.employee-v2-page .followup-list{
+  flex:1 1 auto!important;
+  min-height:0!important;
+  max-height:178px!important;
+  overflow:auto!important;
+  padding:12px 0!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:8px!important;
+}
+
+.employee-v2-page .tasks-panel > .task-row,
+.employee-v2-page .tasks-panel > .emp-empty-note{
+  flex:0 0 auto!important;
+}
+
+.employee-v2-page .tasks-panel{
+  overflow:auto!important;
+}
+
+.employee-v2-page .emp-empty-note{
+  margin:0!important;
+  padding:22px 18px!important;
+  min-height:96px!important;
+  width:100%!important;
+  box-sizing:border-box!important;
+  border-radius:16px!important;
+  background:#f8fbff!important;
+  border:1px dashed #cbd5e1!important;
+  color:#64748b!important;
+  font-size:16px!important;
+  line-height:1.4!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+
+.employee-v2-page .followup-card .emp-empty-note{
+  flex:1 1 auto!important;
+  min-height:118px!important;
+  max-height:150px!important;
+}
+
+.employee-v2-page .followup-row{
+  flex:0 0 auto!important;
+  min-height:52px!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+}
+
+.employee-v2-page .recent-panel table{
+  width:100%!important;
+  table-layout:fixed!important;
+}
+
+.employee-v2-page .recent-panel table th,
+.employee-v2-page .recent-panel table td{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+.employee-v2-page .recent-panel table th:nth-child(1),
+.employee-v2-page .recent-panel table td:nth-child(1){width:22%!important;}
+.employee-v2-page .recent-panel table th:nth-child(2),
+.employee-v2-page .recent-panel table td:nth-child(2){width:15%!important;}
+.employee-v2-page .recent-panel table th:nth-child(3),
+.employee-v2-page .recent-panel table td:nth-child(3){width:17%!important;}
+.employee-v2-page .recent-panel table th:nth-child(4),
+.employee-v2-page .recent-panel table td:nth-child(4){width:25%!important;}
+.employee-v2-page .recent-panel table th:nth-child(5),
+.employee-v2-page .recent-panel table td:nth-child(5){width:21%!important;}
+
+.employee-v2-page .recent-panel tbody{
+  max-height:260px!important;
+}
+
+.employee-v2-page .quick-panel{
+  gap:12px!important;
+}
+
+.employee-v2-page .quick-panel button{
+  min-height:72px!important;
+  max-height:86px!important;
+}
+
+@media(max-width:1200px){
+  .employee-v2-page .followup-card,
+  .employee-v2-page .tasks-panel,
+  .employee-v2-page .recent-panel,
+  .employee-v2-page .quick-panel,
+  .employee-v2-page .performance-panel{
+    max-height:none!important;
+  }
+}
