@@ -11,7 +11,7 @@ import EmployeeReportsPage from './pages/employee/EmployeeReportsPage.jsx';
 import PremiumProfilePage from './pages/employee/ProfilePagePremium.jsx';
 import EmployeeActivitiesPage from './pages/employee/EmployeeActivitiesPage.jsx';
 import EmployeeCalendarPage from './pages/employee/EmployeeCalendarPage.jsx';
-import { WonPage, TasksPage } from './pages/employee/EmployeeWorkPages.jsx';
+import { WonPage, TasksPage } from './pages/employee/EmployeeWorkPagesLive.jsx';
 import ModuleRouter, { isPlatformModuleRoute } from './pages/modules/ModuleRouter.jsx';
 import AdminModulePage from './pages/modules/AdminModulePage.jsx';
 import { roleHome, useAuthProfile } from './hooks/useAuthProfile.js';
