@@ -97,19 +97,18 @@ function installEmployeeLeftAlignFix() {
   const style = document.createElement('style');
   style.id = 'salesflow-employee-left-align-fix';
   style.textContent = `
-    .emp-page{grid-template-columns:230px minmax(0,1fr)!important;}
-    .emp-page .emp-main{grid-column:2!important;margin-left:0!important;padding:22px 24px 42px!important;min-width:0!important;width:100%!important;max-width:100%!important;overflow-x:hidden!important;}
-    .emp-page .emp-container{width:100%!important;max-width:none!important;margin:0!important;padding:0!important;}
-    .emp-page .emp-head{margin-left:0!important;margin-right:0!important;margin-bottom:16px!important;}
-    .emp-page .emp-grid.cards,.emp-page .emp-two,.emp-page .calendar-wrap,.emp-page .reports-grid,.emp-page .report-main{margin-left:0!important;margin-right:0!important;}
-    .emp-page .emp-grid.cards{gap:14px!important;margin-bottom:16px!important;}
-    .emp-page .emp-two{gap:16px!important;}
-    .emp-page .calendar-wrap{gap:16px!important;grid-template-columns:minmax(0,1.45fr) minmax(320px,.85fr)!important;align-items:start!important;}
-    .emp-page .emp-section{padding:18px 20px!important;}
-    .emp-page .cal-day{min-height:76px!important;}
-    .emp-page .task-row{padding:12px!important;}
-    @media(max-width:1200px){.emp-page{grid-template-columns:1fr!important}.emp-page .emp-main{grid-column:1!important;margin-left:0!important;padding:18px 14px 42px!important}.emp-page .calendar-wrap{grid-template-columns:1fr!important}}
-    @media(max-width:700px){.emp-page .emp-main{padding-left:12px!important;padding-right:12px!important;}}
+    @media(min-width:1201px){
+      html body #root .emp-page{display:block!important;position:relative!important;width:100vw!important;max-width:100vw!important;min-height:100vh!important;overflow-x:hidden!important;}
+      html body #root .emp-page>.sfx-sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:310px!important;min-width:310px!important;max-width:310px!important;z-index:999!important;}
+      html body #root .emp-page>.emp-main{position:relative!important;display:block!important;grid-column:auto!important;margin-left:310px!important;width:calc(100vw - 310px)!important;max-width:calc(100vw - 310px)!important;min-width:0!important;padding:24px 28px 44px!important;box-sizing:border-box!important;overflow-x:hidden!important;transform:none!important;}
+      html body #root .emp-page>.emp-main>.emp-container{width:100%!important;max-width:1120px!important;min-width:0!important;margin:0!important;padding:0!important;box-sizing:border-box!important;}
+      html body #root .emp-page .emp-head,html body #root .emp-page .emp-grid.cards,html body #root .emp-page .emp-two,html body #root .emp-page .emp-section{margin-left:0!important;margin-right:0!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;}
+      html body #root .emp-page .emp-grid.cards{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important;}
+    }
+    @media(max-width:1200px){
+      html body #root .emp-page>.sfx-sidebar{position:relative!important;width:100%!important;min-width:0!important;max-width:none!important;height:auto!important;min-height:auto!important;}
+      html body #root .emp-page>.emp-main{margin-left:0!important;width:100%!important;max-width:100%!important;padding:18px 14px 42px!important;}
+    }
   `;
   document.head.appendChild(style);
 }
