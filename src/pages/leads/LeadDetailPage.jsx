@@ -102,7 +102,154 @@ function normalizeTask(item) {
 function TagChip({ tag, onRemove }) { const p = tagPalette[tag.color] || tagPalette.blue; return <span className="ld-custom-tag" style={{ background: p.bg, color: p.color, border: `1px solid ${p.border}` }}>{tag.name}{onRemove && <button type="button" onClick={() => onRemove(tag.id)} aria-label="Remove tag">×</button>}</span>; }
 function TabIcon({ type }) { const paths = { overview: <><rect x="3" y="3" width="7" height="7" rx="1.5" /><rect x="14" y="3" width="7" height="7" rx="1.5" /><rect x="3" y="14" width="7" height="7" rx="1.5" /><rect x="14" y="14" width="7" height="7" rx="1.5" /></>, activity: <polyline points="3 12 7 12 10 5 14 19 17 12 21 12" />, tasks: <><path d="M9 6h12" /><path d="M9 12h12" /><path d="M9 18h12" /><path d="M3.5 6l1 1 2-2" /><path d="M3.5 12l1 1 2-2" /><path d="M3.5 18l1 1 2-2" /></>, notes: <><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" /><path d="M14 3v6h6" /></>, documents: <><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" /><path d="M14 3v5h5" /><path d="M8 13h8" /><path d="M8 17h6" /></>, email: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></>, whatsapp: <><path d="M20.5 11.8a8.5 8.5 0 0 1-12.4 7.5L4 20.5l1.2-4A8.5 8.5 0 1 1 20.5 11.8z" /><path d="M9.2 8.7c.2 3 2.1 5.1 5.1 6.1l1.2-1.2" /></> }; return <svg className="ld-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[type]}</svg>; }
 
-function ActivityTimeline({ items, onAdd, onEdit }) { return <article className="ld-card ld-activity-panel"><header className="ld-panel-header"><h2>Activity Timeline</h2><button type="button" className="ld-add-activity-btn" onClick={onAdd}>+ Add Activity</button></header><div className="ld-activity-list">{items.map((item) => <div className={`ld-activity-row ${item.tone}`} key={item.id || item.title + item.time}><span className="ld-activity-icon"><Icon>{item.icon}</Icon></span><div className="ld-activity-text"><strong>{item.title}</strong><p>{item.text}</p></div><div className="ld-activity-meta">{item.time}<small>{item.user}</small><button type="button" className="ld-edit-activity-btn" onClick={() => onEdit(item)}>Edit</button></div></div>)}</div></article>; }
+function ActivitySvgIcon({ item }) {
+  const title = String(item?.title || '').toLowerCase();
+  const type = String(item?.type || '').toLowerCase();
+  const tone = String(item?.tone || '').toLowerCase();
+
+  if (
+    title.includes('lead created') ||
+    title.includes('lead captured') ||
+    type.includes('created') ||
+    type.includes('website')
+  ) {
+    return (
+      <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="12" cy="8" r="4" />
+        <path d="M4 21c1.6-4.2 14.4-4.2 16 0" />
+      </svg>
+    );
+  }
+
+  if (
+    title.includes('not pick') ||
+    title.includes('not connected') ||
+    title.includes('dnp') ||
+    type.includes('not_connected') ||
+    tone === 'red'
+  ) {
+    return (
+      <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="8" />
+        <path d="M8 8l8 8" />
+        <path d="M16 8l-8 8" />
+      </svg>
+    );
+  }
+
+  if (
+    title.includes('demo') ||
+    type.includes('demo') ||
+    type.includes('follow_up') ||
+    type.includes('scheduled')
+  ) {
+    return (
+      <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="4" y="5" width="16" height="15" rx="3" />
+        <path d="M8 3v4" />
+        <path d="M16 3v4" />
+        <path d="M4 10h16" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg className="sf-activity-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6.4 6.4l1.2-1.2a2 2 0 0 1 2.1-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z" />
+    </svg>
+  );
+}
+
+function getActivityStatus(item) {
+  const title = String(item?.title || '').toLowerCase();
+  const type = String(item?.type || '').toLowerCase();
+  const tone = String(item?.tone || '').toLowerCase();
+
+  if (title.includes('not pick') || title.includes('not connected') || title.includes('dnp') || type.includes('not_connected') || tone === 'red') {
+    return { label: 'Not Connected', className: 'danger' };
+  }
+
+  if (title.includes('lead created') || title.includes('lead captured') || type.includes('website') || type.includes('created')) {
+    return { label: 'Completed', className: 'success' };
+  }
+
+  if (title.includes('demo') || type.includes('demo') || type.includes('follow_up') || type.includes('scheduled')) {
+    return { label: 'Scheduled', className: 'warning' };
+  }
+
+  return { label: 'Completed', className: 'success' };
+}
+
+function ActivityTimeline({ items, onAdd, onEdit }) {
+  const safeItems = Array.isArray(items) ? items : [];
+
+  return (
+    <article className="sf-activity-page">
+      <header className="sf-activity-header">
+        <div>
+          <h2>Activity Timeline</h2>
+          <p>{safeItems.length} activities • newest first</p>
+        </div>
+
+        <button type="button" className="sf-add-activity-btn" onClick={onAdd}>
+          + Add Activity
+        </button>
+      </header>
+
+      <div className="sf-activity-controls">
+        <button type="button" className="sf-filter-pill">
+          All Time
+        </button>
+        <button type="button" className="sf-filter-pill">
+          Sort: Newest First
+        </button>
+      </div>
+
+      <div className="sf-activity-list">
+        {safeItems.map((item, index) => {
+          const status = getActivityStatus(item);
+
+          return (
+            <div className="sf-activity-item" key={item.id || `${item.title}-${item.time}-${index}`}>
+              <div className={`sf-activity-icon ${status.className}`}>
+                <ActivitySvgIcon item={item} />
+              </div>
+
+              <div className="sf-activity-content">
+                <div className="sf-activity-title-row">
+                  <strong>{item.title}</strong>
+                  <span className={`sf-activity-status ${status.className}`}>{status.label}</span>
+                </div>
+
+                <p>{item.text}</p>
+
+                <div className="sf-activity-submeta">
+                  <span>🕒 {item.time}</span>
+                  <span>👤 {item.user}</span>
+                </div>
+              </div>
+
+              <div className="sf-activity-actions">
+                <button type="button" className="sf-more-btn" aria-label="More options">
+                  ⋮
+                </button>
+                <button type="button" className="sf-edit-activity-btn" onClick={() => onEdit(item)}>
+                  ✎
+                </button>
+              </div>
+            </div>
+          );
+        })}
+
+        <div className="sf-activity-end">
+          <span />
+          You’ve reached the end
+          <span />
+        </div>
+      </div>
+    </article>
+  );
+}
 function ActivityModal({ form, onChange, onClose, onSave, saving }) { return <div className="ld-modal-backdrop" onClick={onClose}><div className="ld-modal" onClick={(e) => e.stopPropagation()}><div className="ld-modal-top"><div><h3>{form.id ? 'Edit Activity' : 'Add Activity'}</h3><p>{form.id ? 'Activity details update karo.' : 'Activity type select karo aur note box me details likho.'}</p></div><button type="button" className="ld-modal-close" onClick={onClose}>×</button></div><form onSubmit={onSave}><div className="ld-form-grid"><label className="ld-field"><span>Activity Type</span><select value={form.type} onChange={(e) => onChange('type', e.target.value)}>{Object.entries(activityTypes).map(([key, v]) => <option key={key} value={key}>{v.label}</option>)}</select></label><label className="ld-field"><span>Title</span><input value={form.title} onChange={(e) => onChange('title', e.target.value)} placeholder="Activity title" /></label><label className="ld-field"><span>Date</span><input type="date" value={form.date} onChange={(e) => onChange('date', e.target.value)} /></label><label className="ld-field"><span>Time</span><input type="time" value={form.time} onChange={(e) => onChange('time', e.target.value)} /></label><label className="ld-field full"><span>Note</span><textarea value={form.note} onChange={(e) => onChange('note', e.target.value)} placeholder="Yaha activity ka note likho..." /></label></div><div className="ld-modal-actions"><button type="button" className="ghost" onClick={onClose}>Cancel</button><button type="submit" className="primary" disabled={saving}>{saving ? 'Saving...' : form.id ? 'Update Activity' : 'Save Activity'}</button></div></form></div></div>; }
 function TaskModal({ form, onChange, onClose, onSave, saving }) { return <div className="ld-modal-backdrop" onClick={onClose}><div className="ld-modal" onClick={(e) => e.stopPropagation()}><div className="ld-modal-top"><div><h3>Add Task</h3><p>From Website se task banao: Call, Demo Scheduled ya Follow-up.</p></div><button type="button" className="ld-modal-close" onClick={onClose}>×</button></div><form onSubmit={onSave}><div className="ld-form-grid"><label className="ld-field"><span>Task Source</span><select value={form.source} onChange={(e) => onChange('source', e.target.value)}><option value="From Website">From Website</option></select></label><label className="ld-field"><span>Task Type</span><select value={form.type} onChange={(e) => onChange('type', e.target.value)}>{Object.entries(taskTypes).map(([key, v]) => <option key={key} value={key}>{v.label}</option>)}</select></label><label className="ld-field"><span>Date</span><input type="date" value={form.date} onChange={(e) => onChange('date', e.target.value)} /></label><label className="ld-field"><span>Time</span><input type="time" value={form.time} onChange={(e) => onChange('time', e.target.value)} /></label><label className="ld-field full"><span>Task Title</span><input value={form.title} onChange={(e) => onChange('title', e.target.value)} placeholder="Task title optional" /></label><label className="ld-field full"><span>Note</span><textarea value={form.note} onChange={(e) => onChange('note', e.target.value)} placeholder="Task ka note likho..." /></label></div><div className="ld-modal-actions"><button type="button" className="ghost" onClick={onClose}>Cancel</button><button type="submit" className="primary" disabled={saving}>{saving ? 'Saving...' : 'Save Task'}</button></div></form></div></div>; }
 function TagModal({ form, onChange, onClose, onSave }) { return <div className="ld-modal-backdrop" onClick={onClose}><div className="ld-modal" onClick={(e) => e.stopPropagation()}><div className="ld-modal-top"><div><h3>Add Tag</h3><p>Employee apna tag bana sakta hai aur color choose kar sakta hai.</p></div><button type="button" className="ld-modal-close" onClick={onClose}>×</button></div><form onSubmit={onSave}><div className="ld-form-grid"><label className="ld-field full"><span>Tag Name</span><input value={form.name} onChange={(e) => onChange('name', e.target.value)} placeholder="Example: High Priority" autoFocus /></label><label className="ld-field full"><span>Tag Color</span><div className="ld-color-palette">{Object.entries(tagPalette).map(([key, value]) => <button type="button" key={key} className={form.color === key ? 'active' : ''} onClick={() => onChange('color', key)} style={{ '--tag-bg': value.bg, '--tag-color': value.color, '--tag-border': value.border }}><i />{value.label}</button>)}</div></label></div><div className="ld-modal-actions"><button type="button" className="ghost" onClick={onClose}>Cancel</button><button type="submit" className="primary">Save Tag</button></div></form></div></div>; }
