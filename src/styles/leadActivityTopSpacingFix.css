@@ -1,0 +1,50 @@
+/* Final fix: Activity tab/panel top clipping and breathing space */
+.ld-tab-single,
+.ld-activity-layout {
+  margin-top: 18px !important;
+  padding-top: 6px !important;
+  overflow: visible !important;
+  align-items: start !important;
+}
+
+.sf-activity-page {
+  margin-top: 0 !important;
+  padding-top: 26px !important;
+  overflow: visible !important;
+}
+
+.sf-activity-header {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  min-height: 58px !important;
+  align-items: flex-start !important;
+}
+
+.sf-activity-header h2 {
+  line-height: 1.15 !important;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.sf-activity-controls {
+  margin-top: 4px !important;
+}
+
+.sf-activity-list {
+  margin-top: 8px !important;
+}
+
+.ld-side-info {
+  margin-top: 0 !important;
+}
+
+@media (max-width: 900px) {
+  .ld-tab-single,
+  .ld-activity-layout {
+    margin-top: 14px !important;
+  }
+
+  .sf-activity-page {
+    padding-top: 22px !important;
+  }
+}
