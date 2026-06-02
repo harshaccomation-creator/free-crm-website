@@ -13,7 +13,8 @@ import EmployeeActivitiesPage from './pages/employee/EmployeeActivitiesPage.jsx'
 import EmployeeCalendarPage from './pages/employee/EmployeeCalendarPage.jsx';
 import SettingsPage from './pages/shared/SettingsPage.jsx';
 import NotificationsPage from './pages/shared/NotificationsPage.jsx';
-import { WonPage, TasksPage } from './pages/employee/EmployeeWorkPages.jsx';
+import WonPageFixed from './pages/employee/WonPageFixed.jsx';
+import TasksPageFixed from './pages/employee/TasksPageFixed.jsx';
 import './styles/dashboardBase.css';
 import './styles/loginPage.css';
 import './styles/loginDarkHero.css';
@@ -147,8 +148,8 @@ export default function App() {
   if (path === '/settings') return <SettingsPage />;
   if (path === '/notifications') return <NotificationsPage />;
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
-  if (path === '/employee/won') return <WonPage />;
-  if (path === '/employee/tasks') return <TasksPage />;
+  if (path === '/employee/won') return <WonPageFixed />;
+  if (path === '/employee/tasks') return <TasksPageFixed />;
   if (path === '/employee/calendar') return <EmployeeCalendarPage />;
   if (path === '/employee/activities') return <EmployeeActivitiesPage />;
   if (path === '/employee/reports') return <EmployeeReportsPage />;
