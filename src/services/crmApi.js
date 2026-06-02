@@ -9,6 +9,50 @@ function handleError(error, fallbackMessage = 'Something went wrong') {
   }
 }
 
+function getActivityLeadStatus(activity = {}) {
+  const type = String(activity.type || '').toLowerCase();
+  const title = String(activity.title || '').toLowerCase();
+  const note = String(activity.note || activity.description || '').toLowerCase();
+  const combined = `${type} ${title} ${note}`;
+
+  if (type === 'lead_created' || type === 'lead_updated' || combined.includes('lead created') || combined.includes('lead captured')) return null;
+  if (combined.includes('lost')) return 'Lost';
+  if (combined.includes('won') || combined.includes('payment done') || combined.includes('payment received') || combined.includes('deal won')) return 'Won';
+  if (type === 'demo_done' || combined.includes('demo done') || combined.includes('demo completed') || combined.includes('completed') || combined.includes('done')) return 'Demo Done';
+  if (type === 'not_connected' || combined.includes('not connected') || combined.includes('not pick') || combined.includes('dnp')) return 'Not Connected';
+  if (type === 'demo_scheduled' || combined.includes('demo scheduled') || combined.includes('scheduled')) return 'Demo Scheduled';
+  if (type === 'follow_up' || combined.includes('follow')) return 'Follow-up';
+  if (type === 'call' || combined.includes('called') || combined.includes('contacted')) return 'Contacted';
+  return null;
+}
+
+async function enrichLeadsWithActivityStatus(client, leads = []) {
+  if (!leads.length) return [];
+  const ids = leads.map((lead) => lead.id).filter(Boolean);
+  if (!ids.length) return leads;
+
+  const { data, error } = await client
+    .from('lead_activities')
+    .select('lead_id, type, title, note, activity_at, created_at')
+    .in('lead_id', ids)
+    .order('activity_at', { ascending: false })
+    .limit(1000);
+
+  if (error) {
+    console.warn('[SalesFlow CRM API] Activity status lookup failed', error);
+    return leads;
+  }
+
+  const statusByLead = new Map();
+  (data || []).forEach((activity) => {
+    if (statusByLead.has(activity.lead_id)) return;
+    const derivedStatus = getActivityLeadStatus(activity);
+    if (derivedStatus) statusByLead.set(activity.lead_id, derivedStatus);
+  });
+
+  return leads.map((lead) => statusByLead.has(lead.id) ? { ...lead, status: statusByLead.get(lead.id) } : lead);
+}
+
 export async function getCurrentUser() {
   const client = requireBackend();
   const { data, error } = await client.auth.getUser();
@@ -93,7 +137,7 @@ export async function listLeads({ status, assignedToMe = false, search = '', lim
 
   const { data, error } = await query;
   handleError(error, 'Unable to load leads');
-  return data || [];
+  return enrichLeadsWithActivityStatus(client, data || []);
 }
 
 export async function getLead(leadId) {
@@ -242,6 +286,7 @@ export async function createActivity({ lead_id, task_id = null, type = 'note', t
     company_id: profile.company_id,
     lead_id,
     user_id: profile.id,
+    task_id,
     type,
     title,
     note,
@@ -250,6 +295,16 @@ export async function createActivity({ lead_id, task_id = null, type = 'note', t
 
   const { data, error } = await client.from('lead_activities').insert(record).select('*').single();
   if (error) console.warn('[SalesFlow CRM API] Activity insert failed', error);
+
+  const nextStatus = getActivityLeadStatus(record);
+  if (nextStatus) {
+    const { error: leadError } = await client
+      .from('leads')
+      .update({ status: nextStatus, last_activity_at: record.activity_at, updated_at: new Date().toISOString() })
+      .eq('id', lead_id);
+    if (leadError) console.warn('[SalesFlow CRM API] Lead status update failed', leadError);
+  }
+
   return data || null;
 }
 
@@ -258,22 +313,16 @@ export async function getReportsSummary({ from, to } = {}) {
   const tasks = await listTasks({ from, to, limit: 1000 });
 
   const wonLeads = leads.filter((lead) => ['Won', 'Converted', 'won'].includes(lead.status));
-  const lostLeads = leads.filter((lead) => ['Lost', 'lost'].includes(lead.status));
-  const completedTasks = tasks.filter((task) => task.status === 'Completed');
-  const overdueTasks = tasks.filter((task) => task.status === 'Overdue' || (task.due_at && new Date(task.due_at) < new Date() && task.status !== 'Completed'));
-  const revenueWon = wonLeads.reduce((sum, lead) => sum + Number(lead.value || 0), 0);
-  const conversionRate = leads.length ? (wonLeads.length / leads.length) * 100 : 0;
+  const revenue = wonLeads.reduce((sum, lead) => sum + Number(lead.value || 0), 0);
+  const pendingTasks = tasks.filter((task) => task.status !== 'Completed');
+  const overdueTasks = pendingTasks.filter((task) => task.due_at && new Date(task.due_at).getTime() < Date.now());
 
   return {
     totalLeads: leads.length,
     wonLeads: wonLeads.length,
-    lostLeads: lostLeads.length,
-    conversionRate,
-    revenueWon,
-    totalTasks: tasks.length,
-    completedTasks: completedTasks.length,
+    openTasks: pendingTasks.length,
     overdueTasks: overdueTasks.length,
-    leads,
-    tasks,
+    revenue,
+    conversionRate: leads.length ? Math.round((wonLeads.length / leads.length) * 100) : 0,
   };
 }
