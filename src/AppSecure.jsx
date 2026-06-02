@@ -60,6 +60,7 @@ import './styles/leadActivityTopSpacingFix.css';
 import './styles/salesflowSaasModules.css';
 import './styles/saasSidebarOverlapFix.css';
 import './styles/zzzzFinalPageOffsetLock.css';
+import './styles/dashboardCardContentFix.css';
 
 function isProtected(path) {
   return path.startsWith('/employee') ||
