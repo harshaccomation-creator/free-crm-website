@@ -11,7 +11,10 @@ import EmployeeReportsPage from './pages/employee/EmployeeReportsPage.jsx';
 import PremiumProfilePage from './pages/employee/ProfilePagePremium.jsx';
 import EmployeeActivitiesPage from './pages/employee/EmployeeActivitiesPage.jsx';
 import EmployeeCalendarPage from './pages/employee/EmployeeCalendarPage.jsx';
-import { WonPage, TasksPage } from './pages/employee/EmployeeWorkPagesLive.jsx';
+import WonPageFixed from './pages/employee/WonPageFixed.jsx';
+import TasksPageFixed from './pages/employee/TasksPageFixed.jsx';
+import SettingsPage from './pages/shared/SettingsPage.jsx';
+import NotificationsPage from './pages/shared/NotificationsPage.jsx';
 import ModuleRouter, { isPlatformModuleRoute } from './pages/modules/ModuleRouter.jsx';
 import AdminModulePage from './pages/modules/AdminModulePage.jsx';
 import { roleHome, useAuthProfile } from './hooks/useAuthProfile.js';
@@ -56,9 +59,17 @@ import './styles/leadDetailHeaderHardFix.css';
 import './styles/leadActivityTopSpacingFix.css';
 import './styles/salesflowSaasModules.css';
 import './styles/saasSidebarOverlapFix.css';
+import './styles/zzzzFinalPageOffsetLock.css';
 
 function isProtected(path) {
-  return path.startsWith('/employee') || path.startsWith('/admin') || path.startsWith('/super-admin') || path === '/leads' || path.startsWith('/leads/') || isPlatformModuleRoute(path);
+  return path.startsWith('/employee') ||
+    path.startsWith('/admin') ||
+    path.startsWith('/super-admin') ||
+    path === '/leads' ||
+    path.startsWith('/leads/') ||
+    path === '/settings' ||
+    path === '/notifications' ||
+    isPlatformModuleRoute(path);
 }
 function go(path, setPath) { window.history.replaceState({}, '', path); setPath(path); window.dispatchEvent(new Event('salesflow:navigate')); }
 function isSuper(role) { return role === 'super_admin'; }
@@ -78,8 +89,10 @@ export default function AppSecure() {
   if (path === '/login') return <LoginPage />;
   if (loggedIn && path === '/') { const home = roleHome(role); if (home.startsWith('/super-admin')) return <SuperAdminDashboard />; if (home.startsWith('/admin')) return <AdminDashboard />; return <EmployeeDashboard />; }
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
-  if (path === '/employee/won') return <WonPage />;
-  if (path === '/employee/tasks') return <TasksPage />;
+  if (path === '/employee/won') return <WonPageFixed />;
+  if (path === '/employee/tasks') return <TasksPageFixed />;
+  if (path === '/settings') return <SettingsPage />;
+  if (path === '/notifications') return <NotificationsPage />;
   if (path === '/employee/calendar') return <EmployeeCalendarPage />;
   if (path === '/employee/activities') return <EmployeeActivitiesPage />;
   if (path === '/employee/reports') return <EmployeeReportsPage />;
