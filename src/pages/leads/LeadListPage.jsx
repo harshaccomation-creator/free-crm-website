@@ -219,41 +219,48 @@ export default function LeadListPage() {
     event.preventDefault();
     if (isSaving) return;
     setIsSaving(true);
+
     const followUpIso = getFollowUpIso(form);
     const localLead = buildLocalLead(form, followUpIso, role);
+
+    setLeadRows((rows) => [localLead, ...rows.filter((lead) => lead.id !== localLead.id)]);
+    setCurrentPage(1);
+    setDateRange('all');
+    setSourceFilter('All Sources');
+    setStatusFilter('All Statuses');
+    setSearchTerm('');
+    setIsAddOpen(false);
+    setForm(defaultForm);
+    setDataMessage('Lead added on screen. Saving to Supabase...');
+
     try {
-      if (isBackendConfigured) {
-        const saved = await createLead({
-          name: form.name.trim(),
-          email: form.email.trim(),
-          phone: form.phone.trim(),
-          company: form.company.trim(),
-          source: form.source,
-          status: form.status,
-          priority: form.priority,
-          job_title: form.jobTitle || 'Customer',
-          notes: form.notes,
-          next_follow_up: followUpIso,
-        });
-        setLeadRows((rows) => [normalizeLead(saved), ...rows]);
-        setIsLiveData(true);
-        setDataMessage('Lead saved to Supabase.');
-      } else {
-        setLeadRows((rows) => [localLead, ...rows]);
+      if (!isBackendConfigured) {
         setIsLiveData(false);
         setDataMessage('Lead added locally. Supabase env missing.');
+        return;
       }
-      setCurrentPage(1);
-      setIsAddOpen(false);
-      setForm(defaultForm);
+
+      const saved = await createLead({
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        company: form.company.trim(),
+        source: form.source,
+        status: form.status,
+        priority: form.priority,
+        job_title: form.jobTitle || 'Customer',
+        notes: form.notes,
+        next_follow_up: followUpIso,
+      });
+
+      const savedLead = normalizeLead(saved);
+      setLeadRows((rows) => rows.map((lead) => lead.id === localLead.id ? savedLead : lead));
+      setIsLiveData(true);
+      setDataMessage('Lead saved to Supabase.');
     } catch (error) {
-      console.error('[SalesFlow] Add lead failed, using local fallback', error);
-      setLeadRows((rows) => [localLead, ...rows]);
-      setCurrentPage(1);
-      setIsAddOpen(false);
-      setForm(defaultForm);
+      console.error('[SalesFlow] Add lead failed, keeping local lead', error);
       setIsLiveData(false);
-      setDataMessage(`Lead added locally, but Supabase save failed: ${error.message}`);
+      setDataMessage(`Lead added on screen, but Supabase save failed: ${error.message}`);
     } finally {
       setIsSaving(false);
     }
