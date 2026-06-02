@@ -55,6 +55,7 @@ import './styles/leadDetailFinalPremiumPolish.css';
 import './styles/leadDetailHeaderHardFix.css';
 import './styles/leadActivityTopSpacingFix.css';
 import './styles/salesflowSaasModules.css';
+import './styles/saasSidebarOverlapFix.css';
 
 function isProtected(path) {
   return path.startsWith('/employee') || path.startsWith('/admin') || path.startsWith('/super-admin') || path === '/leads' || path.startsWith('/leads/') || isPlatformModuleRoute(path);
