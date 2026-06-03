@@ -126,17 +126,6 @@ export default function EmployeeDashboardV2() {
     }
   };
 
-  const logAction = async (leadId, type) => {
-    if (!leadId) return toast('Lead link missing');
-    try {
-      await createActivity({ lead_id: leadId, type, title: type === 'call' ? 'Call logged' : 'WhatsApp reminder', note: 'Dashboard quick action' });
-      await load();
-      toast(type === 'call' ? 'Call activity saved' : 'WhatsApp activity saved');
-    } catch (err) {
-      toast(err.message || 'Activity save failed');
-    }
-  };
-
   const readNotifications = async () => {
     try {
       await markAllNotificationsRead();
@@ -180,16 +169,16 @@ export default function EmployeeDashboardV2() {
         <section className="employee-main-grid">
           <article className="emp-card followup-card priority-card-real">
             <div className="emp-card-head">
-              <h2><span><SvgIcon name="target" /></span> Today's Priority</h2>
+              <h2><span><SvgIcon name="target" /></span> Action Queue</h2>
               <button type="button" onClick={() => go('/employee/tasks')}>View All ›</button>
             </div>
             <div className="priority-strip">
-              <PriorityMetric icon="clock" label="Overdue" value={summary?.overdueLeads || 0} text="need action" onClick={() => go('/employee/tasks')} />
-              <PriorityMetric icon="users" label="Assigned" value={summary?.assignedLeads || 0} text="in pipeline" onClick={() => go('/leads')} />
-              <PriorityMetric icon="calendar" label="Follow-ups" value={summary?.todayFollowups || 0} text="today" onClick={() => go('/employee/calendar')} />
-              <PriorityMetric icon="trophy" label="Won" value={summary?.wonLeads || 0} text="closed" onClick={() => go('/employee/won')} />
+              <PriorityMetric icon="clock" label="Fix Overdue" value="Fix" text="Open overdue work" onClick={() => go('/employee/tasks')} />
+              <PriorityMetric icon="users" label="Lead Calling" value="Start" text="Open assigned leads" onClick={() => go('/leads')} />
+              <PriorityMetric icon="calendar" label="Follow-up" value="Plan" text="Schedule next touch" onClick={() => go('/employee/calendar')} />
+              <PriorityMetric icon="trophy" label="Won Review" value="View" text="Check closed deals" onClick={() => go('/employee/won')} />
             </div>
-            <div className="priority-next">Next: {(summary?.overdueLeads || 0) > 0 ? 'Start with overdue leads first, then clear today follow-ups.' : 'No overdue work. Focus on fresh assigned leads.'}</div>
+            <div className="priority-next">Next: {(summary?.overdueLeads || 0) > 0 ? 'Fix overdue work first, then start fresh lead calling.' : 'No overdue work. Start calling fresh assigned leads.'}</div>
           </article>
 
           <article className="emp-card tasks-panel">
