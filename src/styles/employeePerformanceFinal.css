@@ -1,69 +1,41 @@
-/* Safe dashboard layout restore - no aggressive compression */
+/* Emergency dashboard recovery */
 html,body,#root{max-width:100%!important;overflow-x:hidden!important}
 .sf-dashboard.employee-v2-page{overflow-x:hidden!important}
-.employee-v2-page .employee-v2-main{width:100%!important;max-width:none!important;overflow-x:hidden!important}
-.employee-v2-page .employee-kpis,.employee-v2-page .employee-main-grid,.employee-v2-page .employee-bottom-grid{width:auto!important;max-width:100%!important}
+.employee-v2-page .employee-v2-main{display:block!important;width:100%!important;max-width:calc(100vw - 330px)!important;margin:0!important;padding:12px 16px 30px!important;box-sizing:border-box!important;overflow-x:hidden!important}
 
-/* Emergency: hide broken Action Queue JSX until component is safely reverted */
-.employee-v2-page .priority-card-real{display:none!important;visibility:hidden!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important}
-.employee-v2-page .employee-main-grid{display:grid!important;grid-template-columns:1fr!important;gap:12px!important;align-items:start!important;overflow:visible!important}
-.employee-v2-page .tasks-panel{grid-column:1!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}
-.employee-v2-page .tasks-panel .task-row{max-width:100%!important;overflow:hidden!important}
-.employee-v2-page .tasks-panel .task-row strong,.employee-v2-page .tasks-panel .task-row small{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-.employee-v2-page .sf-ai-panel,.employee-v2-page .chat-panel,.employee-v2-page .ai-panel,.employee-v2-page .chat-suggestions,.employee-v2-page .chat-window,.employee-v2-page .salesflow-ai-panel{z-index:15!important}
-.employee-v2-page .emp-card,.employee-v2-page .tasks-panel,.employee-v2-page .recent-panel,.employee-v2-page .quick-panel{position:relative!important;z-index:40!important}
-
-/* keep KPI cards readable */
-.employee-v2-page .employee-kpis{display:grid!important;grid-template-columns:repeat(4,minmax(220px,1fr))!important;gap:12px!important;overflow:hidden!important}
-.employee-v2-page .kpi-card{min-width:0!important}
+/* top KPI row */
+.employee-v2-page .employee-kpis{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important;width:100%!important;max-width:100%!important;margin:0 0 14px!important}
+.employee-v2-page .kpi-card{min-width:0!important;width:100%!important;box-sizing:border-box!important}
 .employee-v2-page .kpi-card span,.employee-v2-page .kpi-card small{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
 
-/* bottom: recent + quick, performance below full width */
-.employee-v2-page .employee-bottom-grid{display:grid!important;grid-template-columns:minmax(0,1.45fr) minmax(320px,.95fr)!important;gap:12px!important;align-items:start!important;overflow:hidden!important}
-.employee-v2-page .recent-panel{grid-column:1/2!important;grid-row:1!important;min-width:0!important;width:100%!important;max-width:100%!important;align-self:start!important;overflow:hidden!important}
-.employee-v2-page .quick-panel{grid-column:2/3!important;grid-row:1!important;min-width:0!important;width:100%!important;max-width:100%!important;align-self:start!important;overflow:hidden!important}
-.employee-v2-page .performance-panel{grid-column:1/3!important;grid-row:2!important;min-width:0!important;width:100%!important;max-width:100%!important;align-self:start!important;overflow:hidden!important;display:block!important;visibility:visible!important;background:linear-gradient(180deg,#fff 0%,#fbfdff 100%)!important;border-color:#d8e7f8!important;box-shadow:0 18px 42px rgba(15,23,42,.06)!important}
+/* broken action queue hidden */
+.employee-v2-page .priority-card-real{display:none!important;visibility:hidden!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important}
 
-/* recent table back to readable */
-.employee-v2-page .recent-panel table{width:100%!important;table-layout:auto!important}
-.employee-v2-page .recent-panel th,.employee-v2-page .recent-panel td{font-size:10.6px!important;padding:8px 12px!important;white-space:normal!important;word-break:normal!important}
-.employee-v2-page .recent-panel td:nth-child(4),.employee-v2-page .recent-panel th:nth-child(4),.employee-v2-page .recent-panel td:nth-child(5),.employee-v2-page .recent-panel th:nth-child(5){width:auto!important}
+/* make tasks a normal full-width row while old file is restored */
+.employee-v2-page .employee-main-grid{display:block!important;width:100%!important;max-width:100%!important;margin:0 0 14px!important;overflow:visible!important}
+.employee-v2-page .employee-main-grid>.tasks-panel{display:block!important;width:100%!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important;overflow:hidden!important}
+.employee-v2-page .tasks-panel .task-row{max-width:100%!important;overflow:hidden!important}
+.employee-v2-page .tasks-panel .task-row strong,.employee-v2-page .tasks-panel .task-row small{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
 
-/* premium performance chart */
-.employee-v2-page .performance-panel .emp-card-head{min-height:42px!important;padding:10px 16px!important;border-bottom:1px solid #e7eef7!important;background:linear-gradient(180deg,#fff,#fbfdff)!important}
-.employee-v2-page .performance-panel .emp-card-head h2{font-size:15.5px!important;font-weight:750!important;color:#0f172a!important;letter-spacing:-.02em!important}
-.employee-v2-page .performance-panel .emp-card-head button{height:32px!important;min-width:104px!important;border-radius:12px!important;font-size:10.8px!important;background:#fff!important;border:1px solid #d8e7f8!important;box-shadow:0 6px 14px rgba(15,23,42,.04)!important}
-.employee-v2-page .perf-body{display:grid!important;grid-template-columns:minmax(0,1fr) 282px!important;gap:18px!important;padding:16px 18px 18px!important;align-items:stretch!important}
-.employee-v2-page .perf-chart{position:relative!important;min-height:258px!important;min-width:0!important;padding:0 0 0 46px!important;overflow:visible!important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='38' height='222' viewBox='0 0 38 222'%3E%3Cg fill='%2364758b' font-family='Arial, sans-serif' font-size='11' font-weight='600' text-anchor='end'%3E%3Ctext x='34' y='20'%3E140%3C/text%3E%3Ctext x='34' y='48'%3E120%3C/text%3E%3Ctext x='34' y='76'%3E100%3C/text%3E%3Ctext x='34' y='104'%3E80%3C/text%3E%3Ctext x='34' y='132'%3E60%3C/text%3E%3Ctext x='34' y='160'%3E40%3C/text%3E%3Ctext x='34' y='188'%3E20%3C/text%3E%3Ctext x='34' y='216'%3E0%3C/text%3E%3C/g%3E%3C/svg%3E")!important;background-repeat:no-repeat!important;background-size:38px 222px!important;background-position:left 34px!important}
-.employee-v2-page .perf-chart:before{display:none!important;content:none!important}
-.employee-v2-page .perf-chart:after{content:""!important;position:absolute!important;left:46px!important;right:4px!important;top:44px!important;height:192px!important;border-radius:16px!important;background:linear-gradient(90deg,rgba(255,255,255,.96),rgba(255,255,255,.55) 45%,rgba(255,255,255,.96)),radial-gradient(circle at 70% 15%,rgba(11,114,255,.08),transparent 34%),radial-gradient(circle at 58% 78%,rgba(255,101,8,.07),transparent 30%)!important;pointer-events:none!important;z-index:1!important}
-.employee-v2-page .perf-chart p{position:relative!important;z-index:4!important;display:flex!important;align-items:center!important;gap:13px!important;margin:0 0 8px -46px!important;font-size:12.4px!important;font-weight:750!important;color:#0f172a!important;white-space:nowrap!important;letter-spacing:-.01em!important}
-.employee-v2-page .perf-chart p span{display:inline-flex!important;align-items:center!important;gap:6px!important;font-size:11.2px!important;font-weight:600!important;color:#64748b!important}
-.employee-v2-page .perf-chart p i{width:8px!important;height:8px!important;border-radius:999px!important;background:#0b72ff!important;display:inline-block!important;box-shadow:0 0 0 4px rgba(11,114,255,.08)!important}
-.employee-v2-page .perf-chart p i.orange-dot{background:#ff6508!important;box-shadow:0 0 0 4px rgba(255,101,8,.08)!important}
-.employee-v2-page .perf-chart svg{width:100%!important;height:224px!important;display:block!important;overflow:visible!important;position:relative!important;z-index:3!important}
-.employee-v2-page .perf-chart .grid line{stroke:#dfe8f4!important;stroke-width:1!important;stroke-dasharray:5 7!important}
-.employee-v2-page .perf-chart rect{fill:#b7d7ff!important;rx:5!important;opacity:.82!important;filter:drop-shadow(0 5px 8px rgba(59,130,246,.10))!important}
-.employee-v2-page .perf-chart .lead-line{stroke:#0b72ff!important;stroke-width:4.1!important;fill:none!important;stroke-linecap:round!important;stroke-linejoin:round!important;filter:drop-shadow(0 5px 7px rgba(11,114,255,.18))!important}
-.employee-v2-page .perf-chart .won-line{stroke:#ff6508!important;stroke-width:4.1!important;fill:none!important;stroke-linecap:round!important;stroke-linejoin:round!important;filter:drop-shadow(0 5px 7px rgba(255,101,8,.14))!important}
-.employee-v2-page .perf-chart text{fill:#64748b!important;font-size:11.5px!important;font-weight:650!important}
-.employee-v2-page .perf-stats{display:grid!important;grid-template-rows:repeat(3,1fr)!important;gap:12px!important;min-width:0!important}
-.employee-v2-page .perf-stats div{border:1px solid #d8e7f8!important;border-radius:16px!important;background:linear-gradient(180deg,#fff 0%,#fcfdff 100%)!important;padding:14px 15px!important;box-shadow:0 12px 28px rgba(15,23,42,.045)!important;display:grid!important;grid-template-columns:38px minmax(0,1fr)!important;grid-template-rows:auto auto auto!important;column-gap:12px!important;align-items:center!important;min-height:78px!important;transition:transform .18s ease,box-shadow .18s ease!important}
-.employee-v2-page .perf-stats div:hover{transform:translateY(-1px)!important;box-shadow:0 16px 34px rgba(15,23,42,.07)!important}
-.employee-v2-page .perf-stats i{grid-row:1/4!important;width:38px!important;height:38px!important;border-radius:12px!important;background:linear-gradient(135deg,#eff6ff,#dbeafe)!important;color:#0b72ff!important;display:grid!important;place-items:center!important;margin:0!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.75)!important}
-.employee-v2-page .perf-stats div:nth-child(2) i{background:linear-gradient(135deg,#ecfdf5,#dcfce7)!important;color:#16a34a!important}
-.employee-v2-page .perf-stats div:nth-child(3) i{background:linear-gradient(135deg,#fff7ed,#ffedd5)!important;color:#f97316!important}
-.employee-v2-page .perf-stats i svg.emp-svg-icon{width:17px!important;height:17px!important}
-.employee-v2-page .perf-stats i svg.emp-svg-icon path{stroke:currentColor!important;stroke-width:2.4!important}
-.employee-v2-page .perf-stats span{font-size:11px!important;font-weight:650!important;color:#64748b!important;line-height:1.1!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-.employee-v2-page .perf-stats strong{font-size:23px!important;line-height:1!important;font-weight:800!important;color:#0f172a!important;margin:2px 0!important;letter-spacing:-.03em!important}
-.employee-v2-page .perf-stats small{font-size:9.5px!important;color:#475569!important;font-weight:600!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-.employee-v2-page .perf-stats small b{font-weight:800!important;color:#00945f!important}
+/* bottom: recent + quick + notifications in stable columns */
+.employee-v2-page .employee-bottom-grid{display:grid!important;grid-template-columns:minmax(0,1.35fr) minmax(320px,.9fr)!important;gap:14px!important;width:100%!important;max-width:100%!important;margin:0!important;align-items:start!important;overflow:visible!important}
+.employee-v2-page .recent-panel{grid-column:1/2!important;grid-row:1!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}
+.employee-v2-page .quick-panel{grid-column:2/3!important;grid-row:1!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important;display:block!important;visibility:visible!important;opacity:1!important}
+.employee-v2-page .performance-panel{grid-column:1/3!important;grid-row:2!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important;display:block!important;visibility:visible!important}
+
+/* readable tables */
+.employee-v2-page .recent-panel table{width:100%!important;table-layout:auto!important;border-collapse:collapse!important}
+.employee-v2-page .recent-panel th,.employee-v2-page .recent-panel td{font-size:12px!important;padding:10px 13px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.employee-v2-page .recent-panel footer{font-size:12px!important}
+
+/* chat must not cover working cards */
+.employee-v2-page .sf-ai-panel,.employee-v2-page .chat-panel,.employee-v2-page .ai-panel,.employee-v2-page .chat-suggestions,.employee-v2-page .chat-window,.employee-v2-page .salesflow-ai-panel{z-index:15!important}
+.employee-v2-page .emp-card,.employee-v2-page .tasks-panel,.employee-v2-page .recent-panel,.employee-v2-page .quick-panel{position:relative!important;z-index:50!important}
 
 @media(max-width:1200px){
+  .employee-v2-page .employee-v2-main{max-width:100%!important}
   .employee-v2-page .employee-kpis{grid-template-columns:repeat(2,minmax(0,1fr))!important}
-  .employee-v2-page .employee-main-grid{grid-template-columns:1fr!important}
   .employee-v2-page .employee-bottom-grid{grid-template-columns:1fr!important}
-  .employee-v2-page .recent-panel,.employee-v2-page .quick-panel,.employee-v2-page .performance-panel{grid-column:auto!important;grid-row:auto!important}
-  .employee-v2-page .perf-body{grid-template-columns:1fr!important}
+  .employee-v2-page .recent-panel,.employee-v2-page .quick-panel,.employee-v2-page .performance-panel{grid-column:1!important;grid-row:auto!important}
 }
+@media(max-width:700px){.employee-v2-page .employee-kpis{grid-template-columns:1fr!important}}
