@@ -8,28 +8,29 @@ html, body, #root { overflow-x: hidden !important; }
 .employee-v2-page .employee-topbar{
   display:grid!important;
   grid-template-columns:minmax(360px,1fr) auto!important;
-  gap:12px!important;
+  gap:10px!important;
   align-items:center!important;
-  min-height:72px!important;
-  height:72px!important;
-  padding:8px 14px!important;
-  margin:0 0 14px!important;
+  min-height:60px!important;
+  height:60px!important;
+  padding:6px 12px!important;
+  margin:0 0 12px!important;
   border-radius:0!important;
   box-sizing:border-box!important;
   overflow:hidden!important;
 }
 .employee-v2-page .employee-menu-btn{display:none!important;}
-.employee-v2-page .employee-search{height:50px!important;min-height:50px!important;width:100%!important;max-width:none!important;border-radius:17px!important;box-sizing:border-box!important;}
-.employee-v2-page .employee-search input{font-size:14px!important;}
-.employee-v2-page .employee-search kbd{height:34px!important;min-width:48px!important;display:grid!important;place-items:center!important;padding:0 10px!important;}
-.employee-v2-page .employee-top-actions{height:56px!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:10px!important;overflow:hidden!important;}
-.employee-v2-page .employee-bell{width:50px!important;height:50px!important;min-width:50px!important;border-radius:16px!important;}
-.employee-v2-page .employee-profile-wrap{height:56px!important;display:flex!important;align-items:center!important;gap:10px!important;}
-.employee-v2-page .employee-profile{height:50px!important;min-height:50px!important;min-width:250px!important;border-radius:18px!important;padding:6px 12px!important;box-sizing:border-box!important;}
-.employee-v2-page .employee-profile b{width:38px!important;height:38px!important;min-width:38px!important;}
-.employee-v2-page .employee-profile span{font-size:15px!important;line-height:1.1!important;}
-.employee-v2-page .employee-profile small{font-size:12px!important;margin-top:2px!important;}
-.employee-v2-page .employee-logout-btn{height:50px!important;min-height:50px!important;border-radius:16px!important;padding:0 18px!important;white-space:nowrap!important;}
+.employee-v2-page .employee-search{height:44px!important;min-height:44px!important;width:100%!important;max-width:none!important;border-radius:15px!important;box-sizing:border-box!important;padding:0 12px!important;}
+.employee-v2-page .employee-search input{font-size:13.5px!important;}
+.employee-v2-page .employee-search kbd{height:30px!important;min-width:42px!important;display:grid!important;place-items:center!important;padding:0 8px!important;font-size:12px!important;}
+.employee-v2-page .employee-top-actions{height:48px!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:8px!important;overflow:hidden!important;}
+.employee-v2-page .employee-bell{width:44px!important;height:44px!important;min-width:44px!important;border-radius:14px!important;}
+.employee-v2-page .employee-bell i{width:18px!important;height:18px!important;font-size:10px!important;right:5px!important;top:4px!important;}
+.employee-v2-page .employee-profile-wrap{height:48px!important;display:flex!important;align-items:center!important;gap:8px!important;}
+.employee-v2-page .employee-profile{height:44px!important;min-height:44px!important;min-width:230px!important;border-radius:16px!important;padding:5px 10px!important;box-sizing:border-box!important;}
+.employee-v2-page .employee-profile b{width:34px!important;height:34px!important;min-width:34px!important;}
+.employee-v2-page .employee-profile span{font-size:14px!important;line-height:1.05!important;}
+.employee-v2-page .employee-profile small{font-size:11px!important;margin-top:2px!important;}
+.employee-v2-page .employee-logout-btn{height:44px!important;min-height:44px!important;border-radius:14px!important;padding:0 16px!important;white-space:nowrap!important;font-size:13px!important;}
 
 /* KPI row */
 .employee-v2-page .employee-kpis{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important;margin:0 0 14px!important;width:100%!important;max-width:100%!important;}
