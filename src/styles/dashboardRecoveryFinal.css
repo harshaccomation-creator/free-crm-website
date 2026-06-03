@@ -15,6 +15,15 @@ html, body, #root {
   box-sizing: border-box !important;
 }
 
+.employee-v2-page .employee-v2-main > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  justify-self: stretch !important;
+  transform: none !important;
+}
+
 /* ===== Top bar fix ===== */
 .employee-v2-page .employee-topbar {
   display: grid !important;
@@ -62,6 +71,8 @@ html, body, #root {
   grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
   gap: 14px !important;
   margin-bottom: 14px !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 .employee-v2-page .kpi-card {
@@ -81,6 +92,8 @@ html, body, #root {
   grid-template-columns: 1fr !important;
   gap: 14px !important;
   margin-bottom: 14px !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 .employee-v2-page .priority-card-real {
@@ -91,6 +104,7 @@ html, body, #root {
   width: 100% !important;
   max-width: 100% !important;
   overflow: hidden !important;
+  justify-self: stretch !important;
 }
 
 .employee-v2-page .tasks-panel .task-row {
@@ -110,9 +124,11 @@ html, body, #root {
 /* ===== Bottom section: Recent Leads + Quick Actions side by side ===== */
 .employee-v2-page .employee-bottom-grid {
   display: grid !important;
-  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.9fr) !important;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.85fr) !important;
   gap: 14px !important;
   align-items: start !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 .employee-v2-page .recent-panel {
@@ -121,6 +137,7 @@ html, body, #root {
   width: 100% !important;
   max-width: 100% !important;
   overflow: hidden !important;
+  justify-self: stretch !important;
 }
 
 .employee-v2-page .quick-panel {
@@ -130,7 +147,9 @@ html, body, #root {
   max-width: 100% !important;
   display: block !important;
   visibility: visible !important;
+  opacity: 1 !important;
   overflow: hidden !important;
+  justify-self: stretch !important;
 }
 
 .employee-v2-page .performance-panel {
