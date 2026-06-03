@@ -3,7 +3,7 @@ html body #root .sf-tasks-page .sf-tasks-main{
   margin-left:310px!important;
   width:calc(100vw - 310px)!important;
   max-width:calc(100vw - 310px)!important;
-  padding:22px 28px 34px!important;
+  padding:10px 24px 28px!important;
   box-sizing:border-box!important;
   overflow-x:hidden!important;
 }
@@ -12,6 +12,7 @@ html body #root .sf-tasks-page .sf-tasks-container{
   max-width:none!important;
   margin:0!important;
   padding:0!important;
+  padding-top:0!important;
   box-sizing:border-box!important;
 }
 html body #root .sf-tasks-page .sf-tasks-head{
@@ -19,50 +20,51 @@ html body #root .sf-tasks-page .sf-tasks-head{
   justify-content:space-between!important;
   align-items:flex-start!important;
   gap:14px!important;
-  margin:0 0 16px!important;
+  margin:0 0 12px!important;
 }
 html body #root .sf-tasks-page .sf-tasks-kicker{
-  font-size:10px!important;
-  padding:5px 10px!important;
+  font-size:11px!important;
+  padding:6px 12px!important;
   border-radius:999px!important;
-  font-weight:850!important;
+  font-weight:800!important;
+  letter-spacing:.04em!important;
 }
 html body #root .sf-tasks-page .sf-tasks-head h1{
-  margin:7px 0 4px!important;
-  font-size:26px!important;
-  line-height:1.05!important;
-  font-weight:850!important;
-  letter-spacing:-.04em!important;
+  margin:8px 0 4px!important;
+  font-size:22px!important;
+  line-height:1.08!important;
+  font-weight:800!important;
+  letter-spacing:-.02em!important;
 }
 html body #root .sf-tasks-page .sf-tasks-head p{
   margin:0!important;
-  font-size:14px!important;
-  line-height:1.35!important;
+  font-size:13px!important;
+  line-height:1.45!important;
   color:#64748b!important;
 }
 html body #root .sf-tasks-page .sf-fixed-btn{
-  height:44px!important;
-  min-height:44px!important;
+  height:42px!important;
+  min-height:42px!important;
   margin-top:0!important;
   border-radius:14px!important;
-  padding:0 18px!important;
+  padding:0 16px!important;
   font-size:13px!important;
-  font-weight:850!important;
+  font-weight:800!important;
 }
 html body #root .sf-tasks-page .sf-tasks-stats{
   display:grid!important;
   grid-template-columns:repeat(4,minmax(0,1fr))!important;
   gap:12px!important;
-  margin:0 0 14px!important;
+  margin:0 0 12px!important;
 }
 html body #root .sf-tasks-page .sf-tasks-card{
   border-radius:18px!important;
-  padding:14px!important;
+  padding:16px!important;
   box-shadow:0 12px 28px rgba(15,23,42,.045)!important;
   min-width:0!important;
 }
 html body #root .sf-tasks-page .sf-tasks-stat{
-  min-height:66px!important;
+  min-height:64px!important;
   display:flex!important;
   align-items:center!important;
   gap:12px!important;
@@ -75,16 +77,16 @@ html body #root .sf-tasks-page .sf-tasks-dot{
   font-size:16px!important;
 }
 html body #root .sf-tasks-page .sf-tasks-stat p{
-  margin:0 0 3px!important;
+  margin:0 0 2px!important;
   font-size:12px!important;
   line-height:1.1!important;
-  font-weight:850!important;
+  font-weight:700!important;
   color:#64748b!important;
 }
 html body #root .sf-tasks-page .sf-tasks-stat strong{
-  font-size:22px!important;
+  font-size:20px!important;
   line-height:1!important;
-  font-weight:850!important;
+  font-weight:800!important;
 }
 html body #root .sf-tasks-page .sf-tasks-grid{
   display:grid!important;
@@ -94,23 +96,23 @@ html body #root .sf-tasks-page .sf-tasks-grid{
   width:100%!important;
 }
 html body #root .sf-tasks-page .sf-tasks-grid .sf-tasks-card{
-  min-height:180px!important;
+  min-height:160px!important;
   max-height:none!important;
   padding:18px!important;
 }
 html body #root .sf-tasks-page .sf-tasks-grid h2{
-  margin:0 0 14px!important;
-  font-size:21px!important;
+  margin:0 0 12px!important;
+  font-size:20px!important;
   line-height:1.1!important;
-  font-weight:850!important;
+  font-weight:800!important;
   letter-spacing:-.03em!important;
 }
 html body #root .sf-tasks-page .sf-task-row{
   display:grid!important;
-  grid-template-columns:18px minmax(0,1fr) 92px 76px!important;
+  grid-template-columns:18px minmax(0,1fr) 90px 74px!important;
   gap:10px!important;
   align-items:center!important;
-  min-height:48px!important;
+  min-height:46px!important;
   padding:10px 0!important;
   border-bottom:1px solid #edf3fb!important;
 }
@@ -121,9 +123,9 @@ html body #root .sf-tasks-page .sf-task-row > span{
 }
 html body #root .sf-tasks-page .sf-task-row strong{
   display:block!important;
-  font-size:13.5px!important;
+  font-size:13px!important;
   line-height:1.2!important;
-  font-weight:850!important;
+  font-weight:700!important;
   white-space:nowrap!important;
   overflow:hidden!important;
   text-overflow:ellipsis!important;
@@ -145,13 +147,14 @@ html body #root .sf-tasks-page .sf-task-row em{
   padding:6px 10px!important;
   border-radius:999px!important;
   white-space:nowrap!important;
+  font-weight:700!important;
 }
 html body #root .sf-tasks-page .sf-task-row button{
   height:36px!important;
   padding:0 12px!important;
   border-radius:12px!important;
   font-size:12px!important;
-  font-weight:850!important;
+  font-weight:700!important;
   white-space:nowrap!important;
 }
 html body #root .sf-tasks-page .chat-panel,
