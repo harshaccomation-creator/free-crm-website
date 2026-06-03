@@ -24,8 +24,8 @@
 
 .employee-v2-page .quick-panel,
 .employee-v2-page .performance-panel{
-  min-height:300px!important;
-  max-height:360px!important;
+  min-height:240px!important;
+  max-height:280px!important;
 }
 
 .employee-v2-page .emp-card-head{
@@ -176,59 +176,67 @@
 }
 
 .employee-v2-page .focus-panel{
-  gap:10px!important;
+  gap:8px!important;
+  min-height:190px!important;
+  max-height:230px!important;
 }
 
 .employee-v2-page .focus-grid{
   display:grid!important;
   grid-template-columns:repeat(3,minmax(0,1fr))!important;
-  gap:10px!important;
-  padding:12px 0 0!important;
+  gap:8px!important;
+  padding:10px 0 0!important;
 }
 
 .employee-v2-page .focus-metric{
   width:100%!important;
   border:1px solid #e2eaf6!important;
-  border-radius:16px!important;
+  border-radius:14px!important;
   background:#f8fbff!important;
-  padding:11px!important;
+  padding:9px 10px!important;
   display:grid!important;
-  grid-template-columns:36px minmax(0,1fr)!important;
-  gap:10px!important;
+  grid-template-columns:30px minmax(0,1fr)!important;
+  gap:8px!important;
   align-items:center!important;
   text-align:left!important;
   cursor:pointer!important;
-  min-height:82px!important;
+  min-height:62px!important;
 }
 
 .employee-v2-page .focus-metric i{
-  width:36px!important;
-  height:36px!important;
-  border-radius:13px!important;
+  width:30px!important;
+  height:30px!important;
+  border-radius:11px!important;
   display:grid!important;
   place-items:center!important;
   background:#eaf2ff!important;
   color:#2563eb!important;
 }
 
+.employee-v2-page .focus-metric .emp-svg-icon{
+  width:16px!important;
+  height:16px!important;
+}
+
 .employee-v2-page .focus-metric span{
   display:block!important;
-  font-size:11px!important;
+  font-size:10.5px!important;
   color:#64748b!important;
   font-weight:850!important;
+  line-height:1.1!important;
 }
 
 .employee-v2-page .focus-metric strong{
   display:block!important;
-  font-size:22px!important;
+  font-size:19px!important;
   line-height:1!important;
   color:#071633!important;
-  margin:2px 0!important;
+  margin:1px 0!important;
 }
 
 .employee-v2-page .focus-metric small{
   display:block!important;
-  font-size:11px!important;
+  font-size:10.5px!important;
   color:#64748b!important;
   white-space:nowrap!important;
   overflow:hidden!important;
@@ -240,24 +248,29 @@
 }
 
 .employee-v2-page .focus-tip{
-  margin-top:8px!important;
-  border-radius:16px!important;
+  margin-top:6px!important;
+  border-radius:14px!important;
   background:linear-gradient(135deg,#2563eb,#7c3aed)!important;
   color:#fff!important;
-  padding:11px 13px!important;
-  display:grid!important;
-  gap:3px!important;
+  padding:9px 11px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:8px!important;
 }
 
 .employee-v2-page .focus-tip strong{
-  font-size:13px!important;
+  font-size:12px!important;
   color:#fff!important;
+  white-space:nowrap!important;
 }
 
 .employee-v2-page .focus-tip span{
-  font-size:12px!important;
+  font-size:11.5px!important;
   color:rgba(255,255,255,.88)!important;
-  line-height:1.35!important;
+  line-height:1.25!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
 }
 
 @media(max-width:1200px){
@@ -274,5 +287,9 @@
   }
   .employee-v2-page .focus-grid{
     grid-template-columns:1fr!important;
+  }
+  .employee-v2-page .focus-tip{
+    align-items:flex-start!important;
+    flex-direction:column!important;
   }
 }
