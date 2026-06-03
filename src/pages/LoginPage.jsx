@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase, isBackendConfigured } from '../lib/supabaseClient.js';
+import { supabase } from '../lib/supabaseClient.js';
 import { normalizeRole, roleHome, syncStoredProfile } from '../hooks/useAuthProfile.js';
 import '../styles/loginPage.css';
 import '../styles/loginDarkHero.css';
@@ -59,7 +59,6 @@ export default function LoginPage() {
     setMessage('');
     const cleanEmail = email.trim().toLowerCase();
     if (!cleanEmail || !password) return setMessage('Please enter email and password.');
-    if (!isBackendConfigured || !supabase) return setMessage('Supabase env missing in Vercel.');
     try {
       setLoading(true);
       const { data, error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password });
@@ -143,7 +142,7 @@ export default function LoginPage() {
               <>
                 <h2>Create Account</h2>
                 <p>Step {step} of 3</p>
-                {step === 1 && <form onSubmit={(e) => { e.preventDefault(); setStep(2); }} className="login-form signup-form-grid step-signup-form"><label>Full Name<div className="login-input-wrap"><span>👤</span><input value={signup.fullName} onChange={(e) => updateSignup('fullName', e.target.value)} /></div></label><label>Mobile Number<div className="login-input-wrap"><span>📱</span><input value={signup.phone} onChange={(e) => updateSignup('phone', e.target.value)} /></div></label><label>Company Name<div className="login-input-wrap"><span>🏢</span><input value={signup.companyName} onChange={(e) => updateSignup('companyName', e.target.value)} /></div></label><button className="sign-in-btn" type="submit">Next</button></form>}
+                {step === 1 && <form onSubmit={(e) => { e.preventDefault(); setStep(2); }} className="login-form signup-form-grid step-signup-form"><label>Full Name<div className="login-input-wrap"><span>👤</span><input value={signup.fullName} onChange={(e) => updateSignup('fullName', e.target.value)} /></div></label><label>Mobile Number<div className="login-input-wrap"><span>��</span><input value={signup.phone} onChange={(e) => updateSignup('phone', e.target.value)} /></div></label><label>Company Name<div className="login-input-wrap"><span>🏢</span><input value={signup.companyName} onChange={(e) => updateSignup('companyName', e.target.value)} /></div></label><button className="sign-in-btn" type="submit">Next</button></form>}
                 {step === 2 && <form onSubmit={requestOtp} className="login-form signup-form-grid step-signup-form"><label>Email ID<div className="login-input-wrap"><span>✉</span><input type="email" value={signup.email} onChange={(e) => updateSignup('email', e.target.value)} /></div></label><label>Password<div className="login-input-wrap"><span>🔒</span><input type="password" value={signup.password} onChange={(e) => updateSignup('password', e.target.value)} /></div></label><label>Confirm Password<div className="login-input-wrap"><span>🔐</span><input type="password" value={signup.confirmPassword} onChange={(e) => updateSignup('confirmPassword', e.target.value)} /></div></label><div className="signup-nav-row"><button type="button" className="google-login-btn" onClick={() => setStep(1)}>Back</button><button className="sign-in-btn" type="submit" disabled={loading}>{loading ? 'Sending...' : 'Send OTP'}</button></div></form>}
                 {step === 3 && <form onSubmit={verifyOtp} className="login-form signup-form-grid step-signup-form"><label>Email OTP<div className="login-input-wrap"><span>✅</span><input maxLength={6} value={signup.otp} onChange={(e) => updateSignup('otp', e.target.value)} /></div></label><button className="sign-in-btn" type="submit" disabled={loading}>{loading ? 'Verifying...' : 'Verify & Create Account'}</button></form>}
               </>
