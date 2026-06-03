@@ -3,16 +3,16 @@ import './DashboardSidebar.css';
 import './DashboardSidebarLogoFix.css';
 
 const menuByRole = {
-  employee: ['Dashboard', 'My Leads', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
-  manager: ['Dashboard', 'Team Leads', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
-  admin: ['Dashboard', 'Leads', 'Tasks', 'Activities', 'Reports', 'Calendar', 'Users', 'Notifications', 'Settings'],
+  employee: ['Dashboard', 'My Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
+  manager: ['Dashboard', 'Team Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
+  admin: ['Dashboard', 'Leads', 'Contacts', 'Tasks', 'Activities', 'Reports', 'Calendar', 'Users', 'Notifications', 'Settings'],
   superAdmin: ['Overview', 'Companies', 'Users & Roles', 'Subscriptions', 'Revenue & Plans', 'Leads Monitor', 'Notifications', 'Email Logs', 'Security', 'Platform Settings', 'Reports', 'Activity Logs', 'Support Tickets'],
 };
 
 const routes = {
-  employee: { Dashboard: '/employee/dashboard', 'My Leads': '/leads', Won: '/employee/won', Tasks: '/employee/tasks', Calendar: '/employee/calendar', Activities: '/employee/activities', Reports: '/employee/reports', Notifications: '/notifications', Profile: '/employee/profile', Settings: '/settings' },
-  manager: { Dashboard: '/employee/dashboard', 'Team Leads': '/leads', Won: '/employee/won', Tasks: '/employee/tasks', Calendar: '/employee/calendar', Activities: '/employee/activities', Reports: '/employee/reports', Notifications: '/notifications', Profile: '/employee/profile', Settings: '/settings' },
-  admin: { Dashboard: '/admin/dashboard', Leads: '/leads', Tasks: '/admin/tasks', Activities: '/admin/activities', Reports: '/admin/reports', Calendar: '/admin/calendar', Users: '/admin/users', Notifications: '/notifications', Settings: '/settings' },
+  employee: { Dashboard: '/employee/dashboard', 'My Leads': '/leads', Contacts: '/contacts', Won: '/employee/won', Tasks: '/employee/tasks', Calendar: '/employee/calendar', Activities: '/employee/activities', Reports: '/employee/reports', Notifications: '/notifications', Profile: '/employee/profile', Settings: '/settings' },
+  manager: { Dashboard: '/employee/dashboard', 'Team Leads': '/leads', Contacts: '/contacts', Won: '/employee/won', Tasks: '/employee/tasks', Calendar: '/employee/calendar', Activities: '/employee/activities', Reports: '/employee/reports', Notifications: '/notifications', Profile: '/employee/profile', Settings: '/settings' },
+  admin: { Dashboard: '/admin/dashboard', Leads: '/leads', Contacts: '/contacts', Tasks: '/admin/tasks', Activities: '/admin/activities', Reports: '/admin/reports', Calendar: '/admin/calendar', Users: '/admin/users', Notifications: '/notifications', Settings: '/settings' },
   superAdmin: {
     Overview: '/super-admin/dashboard',
     Companies: '/super-admin/companies',
@@ -30,7 +30,7 @@ const routes = {
   },
 };
 
-const iconByItem = { Dashboard: 'grid', Overview: 'grid', 'My Leads': 'users', 'Team Leads': 'users', Leads: 'users', 'Leads Monitor': 'users', Won: 'won', Tasks: 'check', Calendar: 'calendar', Activities: 'list', Reports: 'chart', Profile: 'user', Users: 'users', 'Users & Roles': 'users', Settings: 'settings', 'Platform Settings': 'settings', Notifications: 'bell', 'Email Logs': 'mail', Security: 'shield', 'Roles & Permissions': 'shield', Companies: 'building', Organizations: 'building', Modules: 'box', Subscriptions: 'rupee', 'Revenue & Plans': 'chart', 'Plans & Billing': 'rupee', 'Activity Logs': 'list', 'System Logs': 'list', Integrations: 'plug', Backup: 'refresh', 'Support Tickets': 'help' };
+const iconByItem = { Dashboard: 'grid', Overview: 'grid', 'My Leads': 'users', 'Team Leads': 'users', Leads: 'users', Contacts: 'users', 'Leads Monitor': 'users', Won: 'won', Tasks: 'check', Calendar: 'calendar', Activities: 'list', Reports: 'chart', Profile: 'user', Users: 'users', 'Users & Roles': 'users', Settings: 'settings', 'Platform Settings': 'settings', Notifications: 'bell', 'Email Logs': 'mail', Security: 'shield', 'Roles & Permissions': 'shield', Companies: 'building', Organizations: 'building', Modules: 'box', Subscriptions: 'rupee', 'Revenue & Plans': 'chart', 'Plans & Billing': 'rupee', 'Activity Logs': 'list', 'System Logs': 'list', Integrations: 'plug', Backup: 'refresh', 'Support Tickets': 'help' };
 
 function Icon({ name }) {
   const path = {
@@ -58,7 +58,15 @@ function Icon({ name }) {
 }
 
 function navigateTo(path) { if (!path) return; window.history.pushState({}, '', path); window.dispatchEvent(new Event('salesflow:navigate')); }
-function isActive(item, path, currentPath, index) { if (path) return currentPath === path || (item === 'Overview' && currentPath === '/super-admin/dashboard') || ((item === 'My Leads' || item === 'Team Leads') && currentPath.startsWith('/leads')); return index === 0 && currentPath.includes('/dashboard'); }
+function isActive(item, path, currentPath, index) {
+  if (path) {
+    return currentPath === path
+      || (item === 'Overview' && currentPath === '/super-admin/dashboard')
+      || ((item === 'My Leads' || item === 'Team Leads' || item === 'Leads') && currentPath.startsWith('/leads'))
+      || (item === 'Contacts' && currentPath === '/contacts');
+  }
+  return index === 0 && currentPath.includes('/dashboard');
+}
 function SidebarBrand() { return <img className="sfx-real-logo" src="/assets/salesflow-hub-logo-transparent.png" alt="SalesFlow Hub" />; }
 
 export default function DashboardSidebar({ role = 'employee' }) {

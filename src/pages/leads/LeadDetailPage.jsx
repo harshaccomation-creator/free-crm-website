@@ -2,9 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { getLead as getMockLead } from './leadsData.js';
 import { createActivity, createTask, getLead as getRealLead, isBackendConfigured, listActivities, listTasks, updateLead, updateTask } from '../../services/crmApi.js';
-import './LeadDetailStable.css';
-import './LeadDetailProfessionalFix.css';
-import '../../styles/leadDetailFinalLock.css';
+import './LeadDetailPageLayout.css';
 import '../../styles/leadDetailTabContent.css';
 import '../../styles/leadDetailKpiFinalFix.css';
 
@@ -182,7 +180,20 @@ function TasksPanel({ tasks, onAdd, onComplete }) { const counts = tasks.reduce(
 function SimplePanel({ title, action, rows, icon = '☷' }) { return <section className="ld-card ld-tab-panel"><header><h2>{title}</h2><button>{action}</button></header>{rows.map((r) => <div className="ld-tab-row" key={r[0]}><span className="ld-tab-dot blue"><Icon>{icon}</Icon></span><div><strong>{r[0]}</strong><p>{r[1]}</p></div><b>{r[2]}</b></div>)}</section>; }
 function NotesPanel({ lead }) { return <section className="ld-card ld-tab-panel"><header><h2>Notes</h2><button>+ Add Note</button></header>{lead.notes ? <div className="ld-tab-note"><strong>Lead Note</strong><p>{lead.notes}</p><small>Saved on lead</small></div> : notes.map(([a, b, c]) => <div className="ld-tab-note" key={a}><strong>{a}</strong><p>{b}</p><small>{c}</small></div>)}</section>; }
 function FilesPanel() { return <section className="ld-card ld-tab-panel"><header><h2>Documents</h2><button>Upload File</button></header>{docs.map(([name, meta]) => <div className="ld-file-row wide" key={name}><span>FILE</span><div><strong>{name}</strong><small>{meta}</small></div><button>↓</button></div>)}</section>; }
-function TabContent({ activeTab, activities, onAddActivity, onEditActivity, tasks, onAddTask, onCompleteTask, lead }) { if (activeTab === 'overview') return <section className="ld-activity-layout"><ActivityTimeline items={activities} onAdd={onAddActivity} onEdit={onEditActivity} /><SideInfo /></section>; if (activeTab === 'activity') return <section className="ld-tab-single"><ActivityTimeline items={activities} onAdd={onAddActivity} onEdit={onEditActivity} /></section>; if (activeTab === 'tasks') return <TasksPanel tasks={tasks} onAdd={onAddTask} onComplete={onCompleteTask} />; if (activeTab === 'notes') return <NotesPanel lead={lead} />; if (activeTab === 'documents') return <FilesPanel />; if (activeTab === 'email') return <SimplePanel title="Email History" action="Send Email" rows={emails} icon="✉" />; return <SimplePanel title="WhatsApp History" action="Send Message" rows={chats} icon="◌" />; }
+function TabContent({ activeTab, activities, onAddActivity, onEditActivity, tasks, onAddTask, onCompleteTask, lead }) {
+  if (activeTab === 'overview' || activeTab === 'activity') {
+    return (
+      <section className="ld-tab-single">
+        <ActivityTimeline items={activities} onAdd={onAddActivity} onEdit={onEditActivity} />
+      </section>
+    );
+  }
+  if (activeTab === 'tasks') return <TasksPanel tasks={tasks} onAdd={onAddTask} onComplete={onCompleteTask} />;
+  if (activeTab === 'notes') return <NotesPanel lead={lead} />;
+  if (activeTab === 'documents') return <FilesPanel />;
+  if (activeTab === 'email') return <SimplePanel title="Email History" action="Send Email" rows={emails} icon="✉" />;
+  return <SimplePanel title="WhatsApp History" action="Send Message" rows={chats} icon="◌" />;
+}
 
 export default function LeadDetailPage({ leadId }) {
   const role = getCurrentRole();
@@ -278,5 +289,105 @@ export default function LeadDetailPage({ leadId }) {
   const saveLead = async (e) => { e.preventDefault(); const initials = makeInitials(editForm.name); setIsSaving(true); try { if (isRealLead) { const saved = await updateLead(lead.id, { name: editForm.name, company: editForm.company, job_title: editForm.jobTitle, email: editForm.email, phone: editForm.phone }); setLead(normalizeLead(saved)); setStatusMessage('Lead updated in Supabase.'); } else { setLead((old) => ({ ...old, ...editForm, initials })); } setShowEditModal(false); } catch (error) { setStatusMessage(`Lead update failed: ${error.message}`); } finally { setIsSaving(false); } };
   const completeTask = async (id) => { const task = manualTasks.find((item) => item.id === id); try { if (isRealLead && task?.isReal) await updateTask(id, { status: 'Completed' }); setCompletedIds((ids) => ids.includes(id) ? ids : [...ids, id]); setManualTasks((list) => list.map((item) => item.id === id ? { ...item, completed: true } : item)); setStatusMessage('Task marked completed.'); } catch (error) { setStatusMessage(`Task update failed: ${error.message}`); } };
 
-  return <div className="ld-shell"><DashboardSidebar role={role} /><main className="ld-main"><header className="ld-topbar"><div className="ld-breadcrumb"><button onClick={goToLeads} type="button">Leads</button><span>›</span><strong>Lead Details</strong></div><div className="ld-actions"><button type="button" onClick={() => setShowShareModal(true)}>↗ Share</button><button type="button" onClick={() => setShowEditModal(true)}>✎ Edit Lead</button><button className="dots">⋮</button></div></header>{statusMessage ? <div className="ld-live-banner">{statusMessage}</div> : null}<section className="ld-profile-card"><div className="ld-profile-left"><div className="ld-avatar-large">{lead.initials}<span /></div><div className="ld-profile-main"><div className="ld-profile-title"><h1>{lead.name}</h1><b>{lead.status || 'Hot Lead'}</b></div><p>{lead.jobTitle || 'Customer'} at {lead.company}</p><div className="ld-contact-list"><span>✉ {lead.email || '-'}</span><span>☎ {lead.phone}</span><span>⌖ Location not added</span></div></div></div><div className="ld-profile-facts"><div className="ld-fact owner"><small>Lead Owner</small><div><span className="ld-owner-avatar">{makeInitials(lead.owner || 'U')}</span><strong>{lead.owner || 'Unassigned'}<em>Sales Executive</em></strong></div></div><div className="ld-fact"><small>Source</small><strong>{lead.source}</strong></div><div className="ld-fact"><small>Created On</small><strong>{formatFullDate(lead.createdAt) || '-'}</strong></div></div></section><section className="ld-summary-metrics"><article className="ld-metric-card purple"><span className="ld-metric-icon">◎</span><div className="ld-metric-body"><small>Lead Score</small><div className="ld-metric-value"><strong>{score}</strong><b>High</b></div><p>Great potential</p></div></article><article className="ld-metric-card"><span className="ld-metric-icon">▽</span><div className="ld-metric-body"><small>Pipeline Stage</small><div className="ld-metric-value"><strong>{lead.status || 'New'}</strong></div><div className="ld-progress"><i /><em>75%</em></div></div></article><article className="ld-metric-card orange"><span className="ld-metric-icon">▣</span><div className="ld-metric-body"><small>Next Follow-up</small><div className="ld-metric-value"><strong>{formatDue(lead.nextFollowUp)}</strong></div><p>{lead.nextFollowUp ? 'Scheduled' : 'Not set'}</p></div></article><article className="ld-metric-card green"><span className="ld-metric-icon">₹</span><div className="ld-metric-body"><small>Potential Deal Value</small><div className="ld-metric-value"><strong>₹ {Number(lead.value || 0).toLocaleString('en-IN')}</strong></div><p>Deal Value</p></div></article></section><section className="ld-tag-strip"><h2>Tags</h2><div>{tags.map((tag) => <TagChip key={tag.id} tag={tag} onRemove={(id) => setTags((list) => list.filter((x) => x.id !== id))} />)}<button type="button" onClick={() => setShowTagModal(true)}>+ Add Tag</button></div></section><nav className="ld-tabs">{tabItems.map(([key, icon, label]) => <button key={key} type="button" className={activeTab === key ? 'active' : ''} onClick={() => setActiveTab(key)}><TabIcon type={icon} />{label}</button>)}</nav><TabContent activeTab={activeTab} activities={activities} onAddActivity={openAddActivity} onEditActivity={openEditActivity} tasks={tasks} onAddTask={() => setShowTaskModal(true)} onCompleteTask={completeTask} lead={lead} /></main>{showActivityModal && <ActivityModal form={activityForm} onChange={changeActivityForm} onClose={() => setShowActivityModal(false)} onSave={saveActivity} saving={isSaving} />}{showTaskModal && <TaskModal form={taskForm} onChange={changeTaskForm} onClose={() => setShowTaskModal(false)} onSave={saveTask} saving={isSaving} />}{showTagModal && <TagModal form={tagForm} onChange={changeTagForm} onClose={() => setShowTagModal(false)} onSave={saveTag} />}{showEditModal && <EditLeadModal form={editForm} onChange={changeEditForm} onClose={() => setShowEditModal(false)} onSave={saveLead} saving={isSaving} />}{showShareModal && <ShareModal link={window.location.href} onClose={() => setShowShareModal(false)} />}</div>;
+  return (
+    <div className="ld-detail-page emp-page">
+      <DashboardSidebar role={role} />
+      <main className="emp-main ld-detail-main ld-main">
+        <div className="emp-container ld-detail-container">
+          <header className="ld-topbar">
+            <div className="ld-breadcrumb">
+              <button onClick={goToLeads} type="button">Leads</button>
+              <span>›</span>
+              <strong>Lead Details</strong>
+            </div>
+            <div className="ld-actions">
+              <button type="button" onClick={() => setShowShareModal(true)}>↗ Share</button>
+              <button type="button" onClick={() => setShowEditModal(true)}>✎ Edit Lead</button>
+              <button type="button" className="dots">⋮</button>
+            </div>
+          </header>
+
+          {statusMessage ? <div className="ld-live-banner">{statusMessage}</div> : null}
+
+          <div className="ld-detail-body">
+            <aside className="ld-detail-col ld-detail-col--left">
+              <section className="ld-profile-card">
+                <div className="ld-profile-left">
+                  <div className="ld-avatar-large">{lead.initials}<span /></div>
+                  <div className="ld-profile-main">
+                    <div className="ld-profile-title">
+                      <h1>{lead.name}</h1>
+                      <b>{lead.status || 'Hot Lead'}</b>
+                    </div>
+                    <p>{lead.jobTitle || 'Customer'} at {lead.company}</p>
+                    <div className="ld-contact-list">
+                      <span>✉ {lead.email || '-'}</span>
+                      <span>☎ {lead.phone}</span>
+                      <span>⌖ Location not added</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="ld-profile-facts">
+                  <div className="ld-fact owner">
+                    <small>Lead Owner</small>
+                    <div>
+                      <span className="ld-owner-avatar">{makeInitials(lead.owner || 'U')}</span>
+                      <strong>{lead.owner || 'Unassigned'}<em>Sales Executive</em></strong>
+                    </div>
+                  </div>
+                  <div className="ld-fact"><small>Source</small><strong>{lead.source}</strong></div>
+                  <div className="ld-fact"><small>Created On</small><strong>{formatFullDate(lead.createdAt) || '-'}</strong></div>
+                </div>
+              </section>
+
+              <section className="ld-summary-metrics">
+                <article className="ld-metric-card purple"><span className="ld-metric-icon">◎</span><div className="ld-metric-body"><small>Lead Score</small><div className="ld-metric-value"><strong>{score}</strong><b>High</b></div><p>Great potential</p></div></article>
+                <article className="ld-metric-card"><span className="ld-metric-icon">▽</span><div className="ld-metric-body"><small>Pipeline Stage</small><div className="ld-metric-value"><strong>{lead.status || 'New'}</strong></div><div className="ld-progress"><i /><em>75%</em></div></div></article>
+                <article className="ld-metric-card orange"><span className="ld-metric-icon">▣</span><div className="ld-metric-body"><small>Next Follow-up</small><div className="ld-metric-value"><strong>{formatDue(lead.nextFollowUp)}</strong></div><p>{lead.nextFollowUp ? 'Scheduled' : 'Not set'}</p></div></article>
+                <article className="ld-metric-card green"><span className="ld-metric-icon">₹</span><div className="ld-metric-body"><small>Potential Deal Value</small><div className="ld-metric-value"><strong>₹ {Number(lead.value || 0).toLocaleString('en-IN')}</strong></div><p>Deal Value</p></div></article>
+              </section>
+
+              <section className="ld-tag-strip">
+                <h2>Tags</h2>
+                <div>
+                  {tags.map((tag) => <TagChip key={tag.id} tag={tag} onRemove={(id) => setTags((list) => list.filter((x) => x.id !== id))} />)}
+                  <button type="button" onClick={() => setShowTagModal(true)}>+ Add Tag</button>
+                </div>
+              </section>
+
+              <nav className="ld-tabs" aria-label="Lead sections">
+                {tabItems.map(([key, icon, label]) => (
+                  <button key={key} type="button" className={activeTab === key ? 'active' : ''} onClick={() => setActiveTab(key)}>
+                    <TabIcon type={icon} />
+                    {label}
+                  </button>
+                ))}
+              </nav>
+
+              <SideInfo />
+            </aside>
+
+            <div className="ld-detail-col ld-detail-col--right">
+              <TabContent
+                activeTab={activeTab}
+                activities={activities}
+                onAddActivity={openAddActivity}
+                onEditActivity={openEditActivity}
+                tasks={tasks}
+                onAddTask={() => setShowTaskModal(true)}
+                onCompleteTask={completeTask}
+                lead={lead}
+              />
+            </div>
+          </div>
+        </div>
+      </main>
+
+      {showActivityModal && <ActivityModal form={activityForm} onChange={changeActivityForm} onClose={() => setShowActivityModal(false)} onSave={saveActivity} saving={isSaving} />}
+      {showTaskModal && <TaskModal form={taskForm} onChange={changeTaskForm} onClose={() => setShowTaskModal(false)} onSave={saveTask} saving={isSaving} />}
+      {showTagModal && <TagModal form={tagForm} onChange={changeTagForm} onClose={() => setShowTagModal(false)} onSave={saveTag} />}
+      {showEditModal && <EditLeadModal form={editForm} onChange={changeEditForm} onClose={() => setShowEditModal(false)} onSave={saveLead} saving={isSaving} />}
+      {showShareModal && <ShareModal link={window.location.href} onClose={() => setShowShareModal(false)} />}
+    </div>
+  );
 }

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { getCurrentProfile, supabase } from '../../services/crmApi.js';
 import './ProfilePagePremium.css';
+import { CrmLoadingPanel } from '../../components/crm/CrmUiStates.jsx';
 
 function roleLabel(role) {
   if (role === 'company_admin') return 'Company Admin';
@@ -72,8 +73,9 @@ export default function ProfilePage() {
     <div className="sf-dashboard premium-profile-page">
       <DashboardSidebar role="employee" />
       <main className="profile-premium-main">
-        <header className="profile-premium-head"><div><span className="profile-kicker">Employee Workspace</span><h1>Profile</h1><p>Manage your account details and workspace identity.</p></div><button className="profile-edit-btn" type="button" onClick={openEdit}>Edit Profile</button></header>
-        <section className="profile-hero-card"><div className="profile-cover-glow" /><div className="profile-avatar-xl">{initial}</div><div className="profile-main-info"><span className="profile-status">Active Employee</span><h2>{loading ? 'Loading profile...' : profile.name}</h2><p>{profile.role}</p><div className="profile-actions-row"><button type="button" className="ghost" onClick={openEdit}>Update Details</button></div></div></section>
+        <header className="profile-premium-head"><div><span className="profile-kicker">Employee Workspace</span><h1>Profile</h1><p>Manage your account details and workspace identity.</p></div><button className="profile-edit-btn" type="button" onClick={openEdit} disabled={loading}>Edit Profile</button></header>
+        {loading ? <CrmLoadingPanel label="Loading profile..." compact /> : null}
+        <section className="profile-hero-card"><div className="profile-cover-glow" /><div className="profile-avatar-xl">{initial}</div><div className="profile-main-info"><span className="profile-status">Active Employee</span><h2>{profile.name}</h2><p>{profile.role}</p><div className="profile-actions-row"><button type="button" className="ghost" onClick={openEdit} disabled={loading}>Update Details</button></div></div></section>
         {message && <div className="profile-success">{message}</div>}
         <section className="profile-details-grid"><article><span>Email Address</span><strong>{profile.email}</strong><small>Read-only login email</small></article><article><span>Mobile Number</span><strong>{profile.phone}</strong><small>Internal communication</small></article><article><span>Team</span><strong>{profile.team}</strong><small>Your department</small></article><article><span>Location</span><strong>{profile.location}</strong><small>Workspace region</small></article></section>
       </main>

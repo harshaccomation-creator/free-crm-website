@@ -61,6 +61,10 @@ import './styles/salesflowSaasModules.css';
 import './styles/saasSidebarOverlapFix.css';
 import './styles/zzzzFinalPageOffsetLock.css';
 import './styles/wonFixedHardOverride.css';
+import './styles/crmDesignSystem.css';
+import './styles/crmFixedPageShell.css';
+import './styles/crmProductionPolish.css';
+import './styles/crmDesignSystemOverrides.css';
 
 function isProtected(path) {
   return path.startsWith('/employee') ||
@@ -85,7 +89,16 @@ export default function AppSecure() {
   const protectedRoute = isProtected(path);
   useEffect(() => { const sync = () => setPath(window.location.pathname); window.addEventListener('popstate', sync); window.addEventListener('salesflow:navigate', sync); return () => { window.removeEventListener('popstate', sync); window.removeEventListener('salesflow:navigate', sync); }; }, []);
   useEffect(() => { if (auth.loading || !loggedIn || !protectedRoute) return; if (isSuper(role) && (path.startsWith('/employee') || path.startsWith('/admin'))) go('/super-admin/dashboard', setPath); if (isAdmin(role) && (path.startsWith('/employee') || path.startsWith('/super-admin'))) go('/admin/dashboard', setPath); if (isEmployee(role) && (path.startsWith('/admin') || path.startsWith('/super-admin'))) go('/employee/dashboard', setPath); }, [auth.loading, loggedIn, protectedRoute, role, path]);
-  if (auth.loading && protectedRoute) return <div className="login-dark-page"><div className="login-message">Checking secure session...</div></div>;
+  if (auth.loading && protectedRoute) {
+    return (
+      <div className="crm-session-loader">
+        <div className="crm-session-loader__card">
+          <span className="crm-spinner" aria-hidden="true" />
+          Checking secure session...
+        </div>
+      </div>
+    );
+  }
   if (protectedRoute && !loggedIn) return <LoginPage />;
   if (path === '/login') return <LoginPage />;
   if (loggedIn && path === '/') { const home = roleHome(role); if (home.startsWith('/super-admin')) return <SuperAdminDashboard />; if (home.startsWith('/admin')) return <AdminDashboard />; return <EmployeeDashboard />; }

@@ -11,6 +11,7 @@ import '../../styles/employeeTopbarDarkFix.css';
 import '../../styles/employeeHeaderFinal.css';
 import '../../styles/employeeDashboardVisualPolish.css';
 import '../../styles/employeePerformanceFinal.css';
+import { CrmEmptyState, CrmLoadingPanel } from '../../components/crm/CrmUiStates.jsx';
 
 function go(path) {
   window.history.pushState({}, '', path);
@@ -139,7 +140,8 @@ export default function EmployeeDashboardV2() {
   return (
     <div className="sf-dashboard employee-v2-page">
       <DashboardSidebar role="employee" />
-      <main className="employee-v2-main">
+      <main className={`employee-v2-main${loading ? ' is-loading' : ''}`}>
+        {loading ? <CrmLoadingPanel label="Loading your dashboard..." compact className="crm-dashboard-loader" /> : null}
         <header className="employee-topbar">
           <button type="button" className="employee-menu-btn"><SvgIcon name="menu" /></button>
           <label className="employee-search">
@@ -190,7 +192,14 @@ export default function EmployeeDashboardV2() {
                 <em>{task.type || 'Task'}</em>
                 <time>{formatTime(task.due_at)}</time>
               </label>
-            )) : <p className="emp-empty-note">No tasks assigned.</p>}
+            )) : (
+              <CrmEmptyState
+                title="No tasks assigned"
+                text="Tasks from leads and follow-ups will appear here."
+                icon="✓"
+                action={<button type="button" className="crm-empty-cta" onClick={() => go('/employee/tasks')}>Open Tasks</button>}
+              />
+            )}
           </article>
         </section>
 
@@ -204,7 +213,18 @@ export default function EmployeeDashboardV2() {
                   <tr key={lead.id} onClick={() => go(`/leads/${lead.id}`)}>
                     <td>{lead.name}</td><td>{lead.source}</td><td><span className={`status ${statusClass(lead.status)}`}>• {lead.status}</span></td><td>{formatDate(lead.next_follow_up)}</td><td><b className="mini-face">{initials(lead.owner?.full_name || displayName)}</b> {lead.owner?.full_name || displayName}</td>
                   </tr>
-                )) : <tr><td colSpan="5">No assigned leads found.</td></tr>}
+                )) : (
+                  <tr>
+                    <td colSpan="5">
+                      <CrmEmptyState
+                        title="No assigned leads"
+                        text="Leads assigned to you will show up here."
+                        icon="👥"
+                        action={<button type="button" className="crm-empty-cta" onClick={() => go('/leads')}>Browse Leads</button>}
+                      />
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
             <footer>Showing {visibleLeads.length} assigned leads <button type="button" onClick={() => go('/leads')}>View All Leads →</button></footer>

@@ -14,7 +14,7 @@ export function SaasLayout({ role = 'employee', kicker = 'SalesFlow Hub', title,
         <div className="saas-wrap">
           <header className="saas-head">
             <div>
-              <span className="saas-kicker">{kicker}</span>
+              <span className="saas-kicker">{kicker || 'SalesFlow Hub'}</span>
               <h1>{title}</h1>
               {subtitle ? <p>{subtitle}</p> : null}
             </div>

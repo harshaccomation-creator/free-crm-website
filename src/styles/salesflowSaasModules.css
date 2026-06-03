@@ -90,9 +90,10 @@
 }
 
 .saas-btn.primary {
-  background: linear-gradient(135deg, #246bff, #7c3aed);
+  background: linear-gradient(135deg, #0b63f6 0%, #ff7a1a 100%);
   color: #ffffff;
   border: 0;
+  box-shadow: 0 12px 26px rgba(255, 122, 26, 0.18);
 }
 
 .saas-btn.danger { color: var(--sf-red); }
@@ -233,13 +234,14 @@
 .saas-badge.purple { background: #f4efff; color: var(--sf-purple); }
 
 .saas-empty {
-  padding: 34px 24px;
+  padding: 40px 28px;
   text-align: center;
   color: var(--sf-muted);
+  border-top: 1px solid var(--sf-line);
 }
 
-.saas-empty h3 { color: var(--sf-text); margin: 0 0 8px; font-size: 18px; }
-.saas-empty p { margin: 0; line-height: 1.5; }
+.saas-empty h3 { color: var(--sf-text); margin: 0 0 8px; font-size: 18px; font-weight: 900; letter-spacing: -0.03em; }
+.saas-empty p { margin: 0 auto; line-height: 1.55; max-width: 420px; font-size: 14px; }
 .saas-footer { padding: 13px 16px; color: var(--sf-muted); display: flex; justify-content: space-between; gap: 12px; align-items: center; font-size: 13px; }
 
 .saas-panel-grid { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(320px, .7fr); gap: 18px; align-items: start; }

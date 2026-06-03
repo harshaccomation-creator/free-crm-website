@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { getMyDashboardSummary, markAllNotificationsRead } from '../../services/crmApi.js';
 import '../../styles/settingsNotificationsPolish.css';
+import { CrmEmptyState, CrmLoadingPanel } from '../../components/crm/CrmUiStates.jsx';
 
 function getRole() {
   return localStorage.getItem('salesflow_user_role') || localStorage.getItem('salesflowRole') || 'employee';
@@ -70,9 +71,7 @@ export default function NotificationsPage() {
         {message ? <div className="settings-alert">{message}</div> : null}
         <section className="notifications-panel">
           {loading ? (
-            <div className="notification-empty">
-              <p>Loading notifications...</p>
-            </div>
+            <CrmLoadingPanel label="Loading notifications..." />
           ) : items.length ? (
             items.map((item) => (
               <article className={`notification-row ${item.read_at ? 'read' : 'unread'}`} key={item.id || item.title}>
@@ -85,11 +84,12 @@ export default function NotificationsPage() {
               </article>
             ))
           ) : (
-            <div className="notification-empty">
-              <h2>No notifications</h2>
-              <p>You are all caught up. New overdue, follow-up and task alerts will appear here.</p>
-              <button type="button" onClick={() => go('/employee/dashboard')}>Back to Dashboard</button>
-            </div>
+            <CrmEmptyState
+              title="No notifications"
+              text="You are all caught up. New overdue, follow-up and task alerts will appear here."
+              icon="🔔"
+              action={<button type="button" className="crm-empty-cta" onClick={() => go('/employee/dashboard')}>Back to Dashboard</button>}
+            />
           )}
         </section>
       </main>

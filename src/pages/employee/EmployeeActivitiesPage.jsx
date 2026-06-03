@@ -3,6 +3,7 @@ import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { isBackendConfigured, listActivities } from '../../services/crmApi.js';
 import './EmployeePages.css';
 import './EmployeePagesLayoutFix.css';
+import { CrmEmptyState, CrmLoadingPanel } from '../../components/crm/CrmUiStates.jsx';
 
 const demoActivities = [
   { stage: 'Lead Created', text: 'Rohan Mehta captured from website form.', time: '20 May 2025, 10:30 AM', tone: 'blue' },
@@ -126,5 +127,29 @@ export default function EmployeeActivitiesPage() {
     ];
   }, [items, loading]);
 
-  return <Shell title="Activities" subtitle="Pipeline wise recent activity timeline." actions={<select className="emp-select" value={filter} onChange={(e) => setFilter(e.target.value)}>{filterOptions.map((item) => <option key={item}>{item}</option>)}</select>}><Stats items={stats} />{message ? <div className={`emp-data-banner ${isLive ? 'live' : 'demo'}`}>{message}</div> : null}<section className="emp-card emp-section"><div className="emp-section-head"><h2>Pipeline Activity</h2><span className="emp-pill blue">{isLive ? 'Live' : 'Demo'}</span></div><div className="pipeline">{list.length ? list.map((item, index) => <div className="pipe-row" key={item.id}><span className={`pipe-dot ${item.tone}`}>{index + 1}</span><div><strong>{item.stage}</strong><p>{item.text}</p></div><span className="pipe-meta">{item.time}<small>{item.user}</small></span></div>) : <p className="emp-empty-note">No activities found.</p>}</div></section></Shell>;
+  return (
+    <Shell
+      title="Activities"
+      subtitle="Pipeline-wise recent activity timeline."
+      actions={<select className="emp-select" value={filter} onChange={(e) => setFilter(e.target.value)} aria-label="Filter activities">{filterOptions.map((item) => <option key={item}>{item}</option>)}</select>}
+    >
+      <Stats items={stats} />
+      {loading ? <CrmLoadingPanel label="Loading activities..." compact /> : null}
+      {message && !loading ? <div className={`emp-data-banner ${isLive ? 'live' : 'demo'}`}>{message}</div> : null}
+      <section className="emp-card emp-section">
+        <div className="emp-section-head"><h2>Pipeline Activity</h2><span className="emp-pill blue">{isLive ? 'Live' : 'Demo'}</span></div>
+        <div className="pipeline">
+          {list.length ? list.map((item, index) => (
+            <div className="pipe-row" key={item.id}>
+              <span className={`pipe-dot ${item.tone}`}>{index + 1}</span>
+              <div><strong>{item.stage}</strong><p>{item.text}</p></div>
+              <span className="pipe-meta">{item.time}<small>{item.user}</small></span>
+            </div>
+          )) : (
+            <CrmEmptyState title="No activities found" text="Activities from leads and tasks will appear in this timeline." icon="📋" />
+          )}
+        </div>
+      </section>
+    </Shell>
+  );
 }

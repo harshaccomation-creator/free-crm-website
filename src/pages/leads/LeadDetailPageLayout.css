@@ -1,0 +1,280 @@
+/**
+ * Lead Detail — layout only
+ * Shell matches Activities (emp-page / emp-main / emp-container).
+ * Does not change sidebar, theme, or navigation.
+ */
+
+.ld-detail-page.emp-page {
+  display: grid !important;
+  grid-template-columns: 300px minmax(0, 1fr) !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: hidden !important;
+  background: #f5f8fc !important;
+  position: relative !important;
+  transform: none !important;
+}
+
+.ld-detail-page .sfx-sidebar {
+  position: relative !important;
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+  height: auto !important;
+  min-height: 100vh !important;
+  left: auto !important;
+  top: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+}
+
+/* Beat global .ld-main / .emp-main margin hacks (crmReadabilityFix, leadDetailFinalLock) */
+html body .ld-detail-page.emp-page .emp-main.ld-detail-main.ld-main,
+html body .ld-detail-page.emp-page .ld-detail-main.emp-main {
+  grid-column: 2 !important;
+  display: block !important;
+  position: relative !important;
+  margin: 0 !important;
+  margin-left: 0 !important;
+  padding: 18px 22px 40px 18px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+  transform: none !important;
+  left: auto !important;
+  right: auto !important;
+  background: #f5f8fc !important;
+}
+
+html body .ld-detail-page.emp-page {
+  padding-left: 0 !important;
+}
+
+.ld-detail-page .ld-detail-container.emp-container {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Top bar */
+.ld-detail-page .ld-topbar {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  margin: 0 0 14px !important;
+  padding: 0 !important;
+  width: 100% !important;
+  max-width: none !important;
+  height: auto !important;
+  position: relative !important;
+}
+
+.ld-detail-page .ld-live-banner {
+  margin: 0 0 14px !important;
+  padding: 11px 14px !important;
+  border-radius: 12px !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  background: #fff7ed !important;
+  border: 1px solid #fed7aa !important;
+  color: #9a3412 !important;
+}
+
+/* Two-column body */
+.ld-detail-page .ld-detail-body {
+  display: grid !important;
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr) !important;
+  gap: 14px !important;
+  align-items: start !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+.ld-detail-page .ld-detail-col {
+  min-width: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
+.ld-detail-page .ld-detail-col--left {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+
+.ld-detail-page .ld-detail-col--right {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+  min-width: 0 !important;
+}
+
+/* Cards — match Activities / Tasks density */
+.ld-detail-page .ld-profile-card,
+.ld-detail-page .ld-metric-card,
+.ld-detail-page .ld-tag-strip,
+.ld-detail-page .ld-tabs,
+.ld-detail-page .ld-card,
+.ld-detail-page .ld-side-info,
+.ld-detail-page .sf-activity-page {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  transform: none !important;
+  position: relative !important;
+  background: #fff !important;
+  border: 1px solid #dce8f8 !important;
+  border-radius: 16px !important;
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.055) !important;
+}
+
+.ld-detail-page .ld-profile-card {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+  padding: 18px 20px !important;
+  grid-template-columns: unset !important;
+}
+
+.ld-detail-page .ld-profile-left {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 16px !important;
+  min-width: 0 !important;
+}
+
+.ld-detail-page .ld-profile-facts {
+  border-left: 0 !important;
+  border-top: 1px solid #edf3fb !important;
+  padding: 16px 0 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.ld-detail-page .ld-summary-metrics {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin: 0 !important;
+  max-width: none !important;
+}
+
+.ld-detail-page .ld-tag-strip {
+  padding: 16px 18px !important;
+}
+
+.ld-detail-page .ld-tabs {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  padding: 12px 14px !important;
+  margin: 0 !important;
+  overflow-x: auto !important;
+}
+
+.ld-detail-page .ld-side-info {
+  padding: 16px 18px !important;
+}
+
+.ld-detail-page .ld-side-info h2 {
+  margin: 0 0 12px !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+}
+
+/* Right column: tab panels fill width — no nested 2-col squeeze */
+.ld-detail-page .ld-detail-col--right .ld-activity-layout,
+.ld-detail-page .ld-detail-col--right .ld-tab-single {
+  display: block !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  grid-template-columns: unset !important;
+}
+
+.ld-detail-page .ld-detail-col--right .sf-activity-page,
+.ld-detail-page .ld-detail-col--right .ld-tab-panel,
+.ld-detail-page .ld-detail-col--right .ld-card {
+  width: 100% !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+.ld-detail-page .ld-detail-col--right .ld-side-info {
+  display: none !important;
+}
+
+/* Timeline / tab panels use full right column width (leadDetailKpiFinalFix targets .ld-main) */
+html body .ld-detail-page .ld-detail-main.ld-main .sf-activity-page,
+html body .ld-detail-page .ld-detail-main.ld-main .ld-tab-panel {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+html body .ld-detail-page .ld-detail-main.ld-main .ld-activity-layout {
+  display: block !important;
+  grid-template-columns: none !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
+@media (min-width: 1201px) {
+  .ld-detail-page.emp-page {
+    grid-template-columns: 300px minmax(0, 1fr) !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .ld-detail-page.emp-page {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ld-detail-page .sfx-sidebar {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    min-height: auto !important;
+  }
+
+  .ld-detail-page .ld-detail-main.emp-main {
+    grid-column: 1 !important;
+    padding: 18px 14px 40px !important;
+  }
+
+  .ld-detail-page .ld-detail-body {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ld-detail-page .ld-profile-facts {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .ld-detail-page .ld-summary-metrics {
+    grid-template-columns: 1fr !important;
+  }
+
+  .ld-detail-page .ld-topbar {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .ld-detail-page .ld-actions {
+    flex-wrap: wrap !important;
+    width: 100% !important;
+  }
+}

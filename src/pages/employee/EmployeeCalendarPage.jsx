@@ -5,6 +5,7 @@ import './EmployeePages.css';
 import './EmployeePagesLayoutFix.css';
 import './EmployeeReportsPremiumFix.css';
 import './EmployeeCalendarClickFix.css';
+import { CrmEmptyState, CrmLoadingPanel } from '../../components/crm/CrmUiStates.jsx';
 
 function Shell({ title, subtitle, children, actions }) {
   return <div className="emp-page"><DashboardSidebar role="employee" /><main className="emp-main"><div className="emp-container"><header className="emp-head"><div><span className="emp-kicker">Employee Workspace</span><h1>{title}</h1><p>{subtitle}</p></div><div className="emp-actions">{actions}</div></header>{children}</div></main></div>;
@@ -145,5 +146,46 @@ export default function EmployeeCalendarPage() {
   const rightPanelEvents = selectedEvents.length ? selectedEvents : upcoming;
   const rightPanelTitle = selectedEvents.length ? `${selectedDay} ${currentMonth}` : 'Upcoming';
 
-  return <Shell title="Calendar" subtitle="View and manage your lead follow-ups, demos and scheduled tasks." actions={<button className="emp-btn primary" onClick={() => { window.history.pushState({}, '', '/employee/tasks'); window.dispatchEvent(new Event('salesflow:navigate')); }}>+ Schedule</button>}><section className="calendar-wrap"><article className="emp-card emp-section"><div className="emp-section-head"><h2>{currentMonth}</h2><span className="emp-pill blue">{isLive ? 'Live Schedule' : 'Demo Schedule'}</span></div>{message ? <div className={`emp-data-banner ${isLive ? 'live' : 'demo'}`}>{loading ? 'Loading schedule...' : message}</div> : null}<div className="calendar-grid">{days.map((day) => <button type="button" className={`cal-day ${day === now.getDate() ? 'today' : ''} ${day === selectedDay ? 'selected' : ''}`} key={day} onClick={() => setSelectedDay(day)}><b>{day}</b>{(eventMap[day] || []).slice(0, 3).map((event) => <span className={`cal-event ${event.tone}`} key={event.id} onClick={(clickEvent) => { clickEvent.stopPropagation(); goToLead(event); }}>{event.title}</span>)}</button>)}</div></article><article className="emp-card emp-section"><div className="emp-section-head"><h2>{rightPanelTitle}</h2></div>{rightPanelEvents.length ? rightPanelEvents.map((event) => <button type="button" className="task-row calendar-click-row" key={event.id} onClick={() => goToLead(event)}><span className="task-check" /><div><strong>{event.title}</strong><small>{event.date} • {event.lead} • {event.source}</small></div><span className="task-time">{event.time}</span></button>) : <p className="emp-empty-note">No schedules for this date.</p>}</article></section></Shell>;
+  return (
+    <Shell
+      title="Calendar"
+      subtitle="View and manage your lead follow-ups, demos and scheduled tasks."
+      actions={<button className="emp-btn primary" type="button" onClick={() => { window.history.pushState({}, '', '/employee/tasks'); window.dispatchEvent(new Event('salesflow:navigate')); }}>+ Schedule</button>}
+    >
+      {loading ? <CrmLoadingPanel label="Loading schedule..." compact /> : null}
+      <section className="calendar-wrap">
+        <article className="emp-card emp-section">
+          <div className="emp-section-head"><h2>{currentMonth}</h2><span className="emp-pill blue">{isLive ? 'Live Schedule' : 'Demo Schedule'}</span></div>
+          {message ? <div className={`emp-data-banner ${isLive ? 'live' : 'demo'}`}>{message}</div> : null}
+          <div className="calendar-grid">
+            {days.map((day) => (
+              <button type="button" className={`cal-day ${day === now.getDate() ? 'today' : ''} ${day === selectedDay ? 'selected' : ''}`} key={day} onClick={() => setSelectedDay(day)}>
+                <b>{day}</b>
+                {(eventMap[day] || []).slice(0, 3).map((event) => (
+                  <span className={`cal-event ${event.tone}`} key={event.id} onClick={(clickEvent) => { clickEvent.stopPropagation(); goToLead(event); }}>{event.title}</span>
+                ))}
+              </button>
+            ))}
+          </div>
+        </article>
+        <article className="emp-card emp-section">
+          <div className="emp-section-head"><h2>{rightPanelTitle}</h2></div>
+          {rightPanelEvents.length ? rightPanelEvents.map((event) => (
+            <button type="button" className="task-row calendar-click-row" key={event.id} onClick={() => goToLead(event)}>
+              <span className="task-check" />
+              <div><strong>{event.title}</strong><small>{event.date} • {event.lead} • {event.source}</small></div>
+              <span className="task-time">{event.time}</span>
+            </button>
+          )) : (
+            <CrmEmptyState
+              title="Nothing scheduled"
+              text={selectedEvents.length ? 'No events on this date.' : 'No upcoming follow-ups or demos.'}
+              icon="📅"
+              action={<button type="button" className="crm-empty-cta" onClick={() => { window.history.pushState({}, '', '/employee/tasks'); window.dispatchEvent(new Event('salesflow:navigate')); }}>Schedule Task</button>}
+            />
+          )}
+        </article>
+      </section>
+    </Shell>
+  );
 }

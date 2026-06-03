@@ -1,44 +1,20 @@
-import { useEffect, useRef } from 'react';
+import { useMemo } from 'react';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
+import { CrmEmptyState } from '../../components/crm/CrmUiStates.jsx';
 import { leads } from '../leads/leadsData.js';
-
-function applyLayout(mainRef) {
-  const main = mainRef.current;
-  if (!main) return;
-  if (window.innerWidth > 1200) {
-    main.style.setProperty('margin-left', '310px', 'important');
-    main.style.setProperty('width', 'calc(100vw - 310px)', 'important');
-    main.style.setProperty('max-width', 'calc(100vw - 310px)', 'important');
-    main.style.setProperty('padding', '8px 24px 28px', 'important');
-  } else {
-    main.style.setProperty('margin-left', '0', 'important');
-    main.style.setProperty('width', '100%', 'important');
-    main.style.setProperty('max-width', '100%', 'important');
-    main.style.setProperty('padding', '12px 14px 24px', 'important');
-  }
-}
+import '../../styles/crmFixedPageShell.css';
 
 export default function WonPageFixed() {
-  const mainRef = useRef(null);
-  const rows = leads.filter((lead) => lead.status === 'Converted' || lead.status === 'Won');
+  const rows = useMemo(
+    () => leads.filter((lead) => lead.status === 'Converted' || lead.status === 'Won'),
+    [],
+  );
   const value = rows.length * 245000;
-
-  useEffect(() => {
-    applyLayout(mainRef);
-    const onResize = () => applyLayout(mainRef);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
 
   return (
     <div className="sf-fixed-shell won-polish-page">
-      <style>{`
-        @media(min-width:1201px){.sf-fixed-shell>.sfx-sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:310px!important;min-width:310px!important;max-width:310px!important;z-index:1000!important}}
-        @media(max-width:1200px){.sf-fixed-shell>.sfx-sidebar{position:relative!important;width:100%!important;min-width:0!important;max-width:none!important;height:auto!important}}
-        .sf-fixed-shell{min-height:100vh;background:#f6f9ff;color:#071633;overflow-x:hidden;font-family:Inter,system-ui,sans-serif}.sf-fixed-main{box-sizing:border-box;min-height:100vh;overflow-x:hidden}.sf-fixed-container{max-width:none;width:100%;margin:0}.sf-fixed-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin:0 0 12px}.sf-fixed-kicker{display:inline-flex;padding:5px 10px;border-radius:999px;background:#eaf2ff;color:#2563eb;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.06em}.sf-fixed-head h1{margin:6px 0 3px;font-size:25px;line-height:1.06;letter-spacing:-.04em;font-weight:850}.sf-fixed-head p{margin:0;color:#64748b;font-size:13.5px;line-height:1.32}.sf-fixed-btn{border:0;border-radius:14px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;font-weight:850;padding:11px 18px;box-shadow:0 12px 26px rgba(37,99,235,.14);font-size:13px;white-space:nowrap;margin-top:18px}.sf-fixed-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:12px}.sf-fixed-card{background:#fff;border:1px solid #dce8f8;border-radius:18px;box-shadow:0 12px 28px rgba(15,23,42,.045);padding:13px;min-width:0}.sf-fixed-stat{display:flex;gap:12px;align-items:center;min-height:62px}.sf-fixed-dot{width:42px;height:42px;min-width:42px;border-radius:14px;display:grid;place-items:center;background:#eef5ff;color:#2563eb;font-weight:900;font-size:17px}.sf-fixed-stat p{margin:0 0 3px;color:#64748b;font-size:12px;font-weight:850;line-height:1.1}.sf-fixed-stat strong{font-size:22px;line-height:1;font-weight:850;letter-spacing:-.03em}.sf-fixed-table-wrap{overflow-x:auto}.sf-fixed-table{width:100%;min-width:820px;border-collapse:collapse}.sf-fixed-table th,.sf-fixed-table td{padding:10px 14px;text-align:left;border-bottom:1px solid #edf3fb;font-size:13px;vertical-align:middle}.sf-fixed-table th{color:#64748b;font-weight:850;font-size:12.5px}.sf-fixed-table td strong{font-size:13.5px;font-weight:850;line-height:1.25}.sf-fixed-table td small{display:block;margin-top:2px;color:#071633;font-size:11.5px}.sf-fixed-pill{display:inline-flex;border-radius:999px;padding:6px 11px;background:#dcfce7;color:#059669;font-size:11.5px;font-weight:900}.sf-fixed-card:has(.sf-fixed-table-wrap){padding:12px 16px 14px}@media(max-width:900px){.sf-fixed-stats{grid-template-columns:repeat(2,1fr)}}@media(max-width:640px){.sf-fixed-head{align-items:flex-start;flex-direction:column}.sf-fixed-stats{grid-template-columns:1fr}.sf-fixed-btn{width:100%;margin-top:0}.sf-fixed-head h1{font-size:23px}.sf-fixed-head p{font-size:13px}}
-      `}</style>
       <DashboardSidebar role="employee" />
-      <main ref={mainRef} className="sf-fixed-main">
+      <main className="sf-fixed-main">
         <div className="sf-fixed-container">
           <header className="sf-fixed-head">
             <div>
@@ -48,18 +24,49 @@ export default function WonPageFixed() {
             </div>
             <button className="sf-fixed-btn" type="button">Export Won</button>
           </header>
+
           <section className="sf-fixed-stats">
             <article className="sf-fixed-card sf-fixed-stat"><span className="sf-fixed-dot">✓</span><div><p>Won Leads</p><strong>{rows.length}</strong></div></article>
             <article className="sf-fixed-card sf-fixed-stat"><span className="sf-fixed-dot">₹</span><div><p>Won Value</p><strong>₹{value.toLocaleString('en-IN')}</strong></div></article>
-            <article className="sf-fixed-card sf-fixed-stat"><span className="sf-fixed-dot">%</span><div><p>Conversion</p><strong>20%</strong></div></article>
-            <article className="sf-fixed-card sf-fixed-stat"><span className="sf-fixed-dot">#</span><div><p>Total Leads</p><strong>{rows.length}</strong></div></article>
+            <article className="sf-fixed-card sf-fixed-stat"><span className="sf-fixed-dot">%</span><div><p>Conversion</p><strong>{rows.length ? '20%' : '0%'}</strong></div></article>
+            <article className="sf-fixed-card sf-fixed-stat"><span className="sf-fixed-dot">#</span><div><p>Total Leads</p><strong>{leads.length}</strong></div></article>
           </section>
+
           <section className="sf-fixed-card">
             <div className="sf-fixed-table-wrap">
-              <table className="sf-fixed-table">
-                <thead><tr><th>Lead</th><th>Company</th><th>Source</th><th>Status</th><th>Owner</th><th>Closed</th></tr></thead>
-                <tbody>{rows.map((lead) => <tr key={lead.id}><td><strong>{lead.name}</strong><br /><small>{lead.phone}</small></td><td>{lead.company}</td><td>{lead.source}</td><td><span className="sf-fixed-pill">Won</span></td><td>{lead.owner}</td><td>{lead.lastActivity}</td></tr>)}</tbody>
-              </table>
+              {rows.length ? (
+                <table className="sf-fixed-table">
+                  <thead>
+                    <tr>
+                      <th>Lead</th>
+                      <th>Company</th>
+                      <th>Source</th>
+                      <th>Status</th>
+                      <th>Owner</th>
+                      <th>Closed</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((lead) => (
+                      <tr key={lead.id}>
+                        <td><strong>{lead.name}</strong><br /><small>{lead.phone}</small></td>
+                        <td>{lead.company}</td>
+                        <td>{lead.source}</td>
+                        <td><span className="sf-fixed-pill">Won</span></td>
+                        <td>{lead.owner}</td>
+                        <td>{lead.lastActivity}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <CrmEmptyState
+                  title="No won deals yet"
+                  text="Closed deals will appear here once leads are marked as won or converted."
+                  icon="🏆"
+                  action={<button type="button" className="crm-empty-cta" onClick={() => { window.history.pushState({}, '', '/leads'); window.dispatchEvent(new Event('salesflow:navigate')); }}>View Leads</button>}
+                />
+              )}
             </div>
           </section>
         </div>

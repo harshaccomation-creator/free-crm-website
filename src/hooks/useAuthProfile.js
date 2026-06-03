@@ -59,8 +59,15 @@ export function useAuthProfile() {
         return;
       }
 
+      const sessionTimeout = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Session check timed out.')), 8000);
+      });
+
       try {
-        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        const { data: sessionData, error: sessionError } = await Promise.race([
+          supabase.auth.getSession(),
+          sessionTimeout,
+        ]);
         if (sessionError) throw sessionError;
         const session = sessionData?.session || null;
         const user = session?.user || null;

@@ -1,0 +1,680 @@
+/**
+ * SalesFlow CRM — Global overrides (loads last)
+ * Unifies legacy page CSS under one design system
+ */
+
+/* ─── App shell & sidebar ─── */
+.sf-dashboard,
+.employee-v2-page,
+.emp-page,
+.saas-page,
+.settings-shell,
+.sf-tasks-page,
+.sf-fixed-shell,
+.premium-profile-page,
+.la-page {
+  font-family: var(--font-sans) !important;
+  color: var(--crm-text) !important;
+  background: var(--crm-bg) !important;
+}
+
+.sf-dashboard,
+.reference-dashboard,
+.ld-shell,
+.employee-v2-page {
+  display: grid !important;
+  grid-template-columns: var(--crm-sidebar-width) minmax(0, 1fr) !important;
+  min-height: 100vh !important;
+}
+
+.sfx-sidebar {
+  width: var(--crm-sidebar-width) !important;
+  min-width: var(--crm-sidebar-width) !important;
+  max-width: var(--crm-sidebar-width) !important;
+  padding: var(--space-5) var(--space-4) !important;
+  gap: var(--space-4) !important;
+}
+
+.sfx-nav {
+  gap: var(--space-1) !important;
+}
+
+.sfx-nav button {
+  min-height: 40px !important;
+  height: 40px !important;
+  padding: var(--space-2) var(--space-3) !important;
+  border-radius: var(--radius-md) !important;
+  font-size: var(--text-base) !important;
+  font-weight: var(--weight-medium) !important;
+}
+
+.sfx-nav button:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+
+.sfx-nav button.active {
+  background: var(--crm-primary-gradient) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 8px 20px rgba(255, 122, 26, 0.25) !important;
+  font-weight: var(--weight-semibold) !important;
+}
+
+.sfx-nav-icon {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+}
+
+.sfx-icon {
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.sfx-upgrade button {
+  background: var(--crm-primary-gradient) !important;
+  border-radius: var(--radius-md) !important;
+  min-height: 36px !important;
+  font-weight: var(--weight-bold) !important;
+}
+
+/* ─── Main content areas ─── */
+.employee-v2-main,
+.emp-main,
+.saas-main,
+.settings-main,
+.profile-premium-main,
+.la-main,
+.sf-tasks-main,
+.sf-fixed-main,
+.rep-main {
+  grid-column: 2 !important;
+  min-width: 0 !important;
+  padding: var(--space-6) var(--space-8) var(--space-10) !important;
+  box-sizing: border-box !important;
+}
+
+.emp-container,
+.saas-wrap,
+.sf-tasks-container,
+.sf-fixed-container {
+  width: 100% !important;
+  max-width: var(--crm-content-max) !important;
+  margin: 0 auto !important;
+}
+
+/* Remove inline margin hacks where shell class applies */
+.sf-tasks-main,
+.sf-fixed-main {
+  margin-left: 0 !important;
+  width: auto !important;
+  max-width: none !important;
+}
+
+@media (min-width: 1201px) {
+  .sf-tasks-page > .sfx-sidebar,
+  .sf-fixed-shell > .sfx-sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    z-index: 100 !important;
+  }
+
+  .sf-tasks-main,
+  .sf-fixed-main {
+    margin-left: var(--crm-sidebar-width) !important;
+    width: calc(100vw - var(--crm-sidebar-width)) !important;
+    max-width: calc(100vw - var(--crm-sidebar-width)) !important;
+  }
+
+  .settings-main {
+    margin-left: var(--crm-sidebar-width) !important;
+    width: calc(100vw - var(--crm-sidebar-width)) !important;
+    max-width: calc(100vw - var(--crm-sidebar-width)) !important;
+  }
+}
+
+/* ─── Page headers (all patterns) ─── */
+.emp-head,
+.saas-head,
+.settings-hero,
+.employee-topbar,
+.la-header,
+.sf-tasks-head,
+.sf-fixed-head,
+.profile-premium-head {
+  margin-bottom: var(--space-6) !important;
+}
+
+.emp-head h1,
+.saas-head h1,
+.settings-hero h1,
+.la-header h1,
+.sf-tasks-head h1,
+.sf-fixed-head h1,
+.profile-premium-head h1 {
+  font-size: var(--text-2xl) !important;
+  font-weight: var(--weight-black) !important;
+  line-height: var(--leading-tight) !important;
+  letter-spacing: -0.04em !important;
+  margin: var(--space-2) 0 var(--space-1) !important;
+  color: var(--crm-text) !important;
+}
+
+.emp-head p,
+.saas-head p,
+.settings-hero p,
+.la-header p,
+.sf-tasks-head p,
+.sf-fixed-head p,
+.profile-premium-head p {
+  font-size: var(--text-md) !important;
+  line-height: var(--leading-relaxed) !important;
+  color: var(--crm-muted) !important;
+  margin: 0 !important;
+}
+
+.emp-kicker,
+.saas-kicker,
+.settings-eyebrow,
+.sf-tasks-kicker,
+.sf-fixed-kicker,
+.profile-kicker {
+  display: inline-flex !important;
+  padding: var(--space-1) var(--space-3) !important;
+  border-radius: var(--radius-full) !important;
+  background: var(--crm-orange-soft) !important;
+  border: 1px solid var(--crm-orange-border) !important;
+  color: var(--crm-orange-hover) !important;
+  font-size: var(--text-xs) !important;
+  font-weight: var(--weight-bold) !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+}
+
+/* ─── Cards ─── */
+.emp-card,
+.saas-card,
+.settings-hero,
+.settings-profile-card,
+.settings-card,
+.kpi-card,
+.rep-card,
+.la-table-card,
+.la-metric,
+.notification-row,
+.profile-hero-card,
+.profile-details-grid article,
+.sf-tasks-card,
+.sf-fixed-card {
+  background: var(--crm-bg-elevated) !important;
+  border: 1px solid var(--crm-line) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.emp-card-head,
+.la-header + section {
+  border-color: #edf3fb !important;
+}
+
+.emp-card-head {
+  padding: var(--space-4) var(--space-5) !important;
+}
+
+.emp-card-head h2 {
+  font-size: var(--text-lg) !important;
+  font-weight: var(--weight-bold) !important;
+}
+
+/* ─── KPI / stat grids ─── */
+.employee-kpis,
+.emp-grid.cards,
+.saas-grid,
+.rep-kpis,
+.la-metrics,
+.sf-tasks-stats,
+.sf-fixed-stats {
+  gap: var(--space-4) !important;
+  margin-bottom: var(--space-6) !important;
+}
+
+.kpi-card {
+  min-height: 104px !important;
+  padding: var(--space-4) !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+.kpi-card strong {
+  font-size: var(--text-2xl) !important;
+}
+
+.emp-stat,
+.saas-stat,
+.rep-stat,
+.la-metric,
+.sf-tasks-stat,
+.sf-fixed-stat {
+  min-height: 88px !important;
+}
+
+.emp-stat h2,
+.saas-stat strong,
+.sf-tasks-stat strong,
+.sf-fixed-stat strong {
+  font-size: var(--text-2xl) !important;
+  font-weight: var(--weight-black) !important;
+}
+
+/* ─── Buttons ─── */
+.emp-btn,
+.saas-btn,
+.la-actions button,
+.la-actions .primary,
+.primary-btn,
+.sign-in-btn,
+.profile-edit-btn,
+.crm-empty-cta,
+.sf-tasks-head .crm-empty-cta,
+.sf-fixed-btn,
+.settings-hero button,
+.emp-actions .emp-btn.primary,
+.la-actions .primary {
+  min-height: var(--crm-btn-height) !important;
+  padding: 0 var(--space-4) !important;
+  border-radius: var(--radius-md) !important;
+  font-size: var(--text-base) !important;
+  font-weight: var(--weight-bold) !important;
+  line-height: 1 !important;
+  transition: filter var(--duration-fast), box-shadow var(--duration-fast), transform var(--duration-fast) !important;
+}
+
+.emp-btn.primary,
+.saas-btn.primary,
+.la-actions .primary,
+.primary-btn,
+.sign-in-btn,
+.profile-edit-btn,
+.crm-empty-cta,
+.sf-fixed-btn,
+.settings-hero button,
+.notification-empty button {
+  background: var(--crm-primary-gradient) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+  box-shadow: 0 10px 24px rgba(255, 122, 26, 0.2) !important;
+}
+
+.emp-btn.primary:hover,
+.saas-btn.primary:hover,
+.sign-in-btn:hover:not(:disabled),
+.crm-empty-cta:hover,
+.sf-fixed-btn:hover {
+  filter: brightness(1.04) !important;
+}
+
+.emp-btn:focus-visible,
+.saas-btn:focus-visible,
+.sign-in-btn:focus-visible,
+.crm-empty-cta:focus-visible {
+  outline: none !important;
+  box-shadow: var(--shadow-focus) !important;
+}
+
+.emp-btn:not(.primary),
+.saas-btn:not(.primary),
+.la-actions button:not(.primary) {
+  background: var(--crm-bg-elevated) !important;
+  border: 1px solid var(--crm-line) !important;
+  color: var(--crm-blue) !important;
+}
+
+/* ─── Topbar (dashboard) ─── */
+.employee-topbar {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: var(--space-3) !important;
+  margin-bottom: var(--space-6) !important;
+  grid-template-columns: unset !important;
+}
+
+.employee-search {
+  flex: 1 1 280px !important;
+  max-width: 480px !important;
+  height: 48px !important;
+  border-radius: var(--radius-lg) !important;
+  border: 1px solid var(--crm-line) !important;
+  padding: 0 var(--space-4) !important;
+}
+
+.employee-search input {
+  font-size: var(--text-base) !important;
+}
+
+.employee-menu-btn,
+.employee-bell {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: var(--radius-md) !important;
+}
+
+.employee-profile {
+  min-height: 48px !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+/* ─── Tables ─── */
+.la-table,
+.saas-table,
+.emp-table,
+.sf-fixed-table,
+.recent-panel table {
+  font-size: var(--text-base) !important;
+}
+
+.la-table th,
+.saas-table th,
+.emp-table th,
+.sf-fixed-table th,
+.recent-panel th {
+  padding: var(--crm-table-cell-y) var(--crm-table-cell-x) !important;
+  font-size: var(--text-sm) !important;
+  font-weight: var(--weight-bold) !important;
+  color: var(--crm-muted) !important;
+  background: #f8fbff !important;
+}
+
+.la-table td,
+.saas-table td,
+.emp-table td,
+.sf-fixed-table td,
+.recent-panel td {
+  padding: var(--crm-table-cell-y) var(--crm-table-cell-x) !important;
+  vertical-align: middle !important;
+}
+
+.la-table tbody tr,
+.saas-table tbody tr {
+  cursor: pointer;
+  transition: background var(--duration-fast);
+}
+
+.la-pill,
+.saas-badge,
+.sf-fixed-pill,
+.emp-pill,
+.status {
+  min-height: 26px !important;
+  padding: var(--space-1) var(--space-3) !important;
+  border-radius: var(--radius-full) !important;
+  font-size: var(--text-sm) !important;
+  font-weight: var(--weight-bold) !important;
+}
+
+/* ─── Forms & modals ─── */
+.la-form input,
+.la-form select,
+.la-form textarea,
+.saas-form input,
+.saas-form select,
+.saas-form textarea,
+.emp-form input,
+.emp-form select,
+.profile-modal input,
+.profile-modal label {
+  min-height: var(--crm-input-height) !important;
+  border-radius: var(--radius-md) !important;
+  border-color: var(--crm-line) !important;
+  font-size: var(--text-base) !important;
+}
+
+.la-form input:focus,
+.saas-form input:focus,
+.emp-form input:focus,
+.profile-modal input:focus {
+  border-color: var(--crm-blue) !important;
+  box-shadow: var(--shadow-focus) !important;
+  outline: none !important;
+}
+
+.la-modal,
+.saas-modal,
+.emp-modal,
+.profile-modal {
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.la-modal-backdrop,
+.saas-modal-backdrop,
+.emp-modal-backdrop,
+.profile-modal-backdrop {
+  background: rgba(4, 12, 28, 0.45) !important;
+}
+
+/* ─── Filters & toolbars ─── */
+.la-filters,
+.saas-toolbar {
+  gap: var(--space-3) !important;
+  padding: var(--space-4) !important;
+  margin-bottom: var(--space-4) !important;
+  border-radius: var(--radius-lg) !important;
+}
+
+.la-search,
+.saas-search {
+  min-height: var(--crm-input-height) !important;
+  border-radius: var(--radius-md) !important;
+}
+
+/* ─── Data banners ─── */
+.emp-data-banner,
+.la-live-banner,
+.settings-alert {
+  margin-bottom: var(--space-4) !important;
+  padding: var(--space-3) var(--space-4) !important;
+  border-radius: var(--radius-md) !important;
+  font-size: var(--text-base) !important;
+  font-weight: var(--weight-semibold) !important;
+}
+
+.emp-data-banner.live,
+.la-live-banner.live {
+  background: var(--crm-green-soft) !important;
+  border: 1px solid #bbf7d0 !important;
+  color: var(--crm-green) !important;
+}
+
+.emp-data-banner.demo,
+.la-live-banner.demo {
+  background: #fff7ed !important;
+  border: 1px solid #fed7aa !important;
+  color: #9a3412 !important;
+}
+
+/* ─── Login ─── */
+.sign-in-btn,
+.auth-submit-btn {
+  min-height: 48px !important;
+  border-radius: var(--radius-md) !important;
+  font-size: var(--text-lg) !important;
+  font-weight: var(--weight-black) !important;
+  background: var(--crm-primary-gradient) !important;
+  border: 0 !important;
+  box-shadow: 0 14px 32px rgba(255, 122, 26, 0.25) !important;
+}
+
+.login-form-box input {
+  min-height: var(--crm-input-height) !important;
+  border-radius: var(--radius-md) !important;
+  font-size: var(--text-base) !important;
+}
+
+.login-form-box input:focus {
+  border-color: var(--crm-blue) !important;
+  box-shadow: var(--shadow-focus) !important;
+}
+
+.auth-mode-tabs button.active {
+  font-weight: var(--weight-bold) !important;
+}
+
+.sign-in-btn:disabled,
+.emp-btn:disabled,
+.crm-empty-cta:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.login-form-box label {
+  font-size: var(--text-sm) !important;
+  font-weight: var(--weight-semibold) !important;
+  color: var(--crm-text-secondary) !important;
+  margin-bottom: var(--space-2) !important;
+}
+
+.login-dark-right {
+  padding: var(--space-8) var(--space-10) !important;
+}
+
+.employee-logout-btn {
+  min-height: 36px !important;
+  padding: 0 var(--space-3) !important;
+  border-radius: var(--radius-md) !important;
+  font-size: var(--text-sm) !important;
+  font-weight: var(--weight-bold) !important;
+}
+
+.dark-hero-content h1 span {
+  color: #38bdf8 !important;
+}
+
+/* ─── Calendar ─── */
+.calendar-grid {
+  gap: var(--space-2) !important;
+}
+
+.cal-day {
+  min-height: 80px !important;
+  border-radius: var(--radius-md) !important;
+  padding: var(--space-2) !important;
+}
+
+.cal-day.today {
+  border-color: var(--crm-blue) !important;
+}
+
+.cal-day.selected {
+  border-color: var(--crm-orange) !important;
+  box-shadow: 0 0 0 2px rgba(255, 122, 26, 0.15) !important;
+}
+
+/* ─── Pipeline / activities ─── */
+.pipe-row {
+  padding: var(--space-4) 0 !important;
+}
+
+.pipe-dot {
+  width: 36px !important;
+  height: 36px !important;
+  font-size: var(--text-sm) !important;
+}
+
+/* ─── Notifications ─── */
+.notification-row {
+  padding: var(--space-4) !important;
+  gap: var(--space-3) !important;
+  transition: box-shadow var(--duration-fast);
+}
+
+.notification-row:hover {
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.notification-row.unread {
+  border-left: 3px solid var(--crm-orange) !important;
+}
+
+.notification-row h3 {
+  font-size: var(--text-md) !important;
+  font-weight: var(--weight-bold) !important;
+}
+
+/* ─── Grids responsive ─── */
+.employee-main-grid,
+.employee-bottom-grid,
+.emp-two,
+.calendar-wrap,
+.rep-row.three,
+.rep-row.bottom {
+  gap: var(--space-4) !important;
+}
+
+@media (max-width: 1200px) {
+  .sf-dashboard,
+  .employee-v2-page,
+  .emp-page,
+  .saas-page,
+  .settings-shell {
+    grid-template-columns: 1fr !important;
+  }
+
+  .sfx-sidebar {
+    position: relative !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    height: auto !important;
+  }
+
+  .employee-v2-main,
+  .emp-main,
+  .saas-main,
+  .settings-main,
+  .profile-premium-main,
+  .la-main,
+  .sf-tasks-main,
+  .sf-fixed-main,
+  .rep-main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: var(--space-4) var(--space-4) var(--space-8) !important;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .employee-kpis,
+  .la-metrics {
+    grid-template-columns: 1fr !important;
+  }
+
+  .la-actions,
+  .emp-actions,
+  .saas-actions {
+    width: 100% !important;
+    flex-direction: column !important;
+  }
+
+  .la-actions button,
+  .emp-actions .emp-btn {
+    width: 100% !important;
+  }
+}
+
+/* ─── Accessibility: reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
