@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
+const SUPABASE_URL = process.env.SUPABASE_URL;
 const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const OTP_FROM_EMAIL = process.env.OTP_FROM_EMAIL || 'SalesFlow Hub <onboarding@resend.dev>';
@@ -21,7 +21,7 @@ export function assertPost(req, res) {
 
 export function getAdminClient() {
   if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-    throw new Error('Missing Supabase server env. Add VITE_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel.');
+    throw new Error('Supabase env missing in Vercel. Add SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY in Vercel environment variables.');
   }
   return createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
     auth: { persistSession: false, autoRefreshToken: false },
