@@ -56,6 +56,7 @@ import './styles/leadDetailHeaderHardFix.css';
 import './styles/leadActivityTopSpacingFix.css';
 import './styles/crmReadabilityFix.css';
 import './styles/zzzzFinalPageOffsetLock.css';
+import './styles/superAdminFinalDarkLock.css';
 
 function getSavedRole() {
   const raw = window.localStorage.getItem('salesflow_user_role') || window.localStorage.getItem('salesflowRole') || '';
