@@ -65,6 +65,7 @@ import './styles/crmDesignSystem.css';
 import './styles/crmFixedPageShell.css';
 import './styles/crmProductionPolish.css';
 import './styles/crmDesignSystemOverrides.css';
+import './styles/tasksFixedHardOverride.css';
 
 function isProtected(path) {
   return path.startsWith('/employee') ||
