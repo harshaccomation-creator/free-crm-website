@@ -65,16 +65,30 @@
   display:none!important;
 }
 
+.employee-v2-page .followup-card .followup-list > .emp-empty-note,
+.employee-v2-page .followup-card .followup-list > p.emp-empty-note,
+.employee-v2-page .followup-card .followup-list > .followup-row{
+  display:none!important;
+  visibility:hidden!important;
+  height:0!important;
+  min-height:0!important;
+  max-height:0!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  overflow:hidden!important;
+}
+
 .employee-v2-page .followup-list::before,
 .employee-v2-page .followup-list::after{
   display:flex!important;
   flex-direction:column!important;
   justify-content:center!important;
-  min-height:82px!important;
+  min-height:96px!important;
   border-radius:18px!important;
   border:1px solid #e2eaf6!important;
   background:#f8fbff!important;
-  padding:14px 16px!important;
+  padding:16px!important;
   color:#071633!important;
   font-weight:850!important;
   line-height:1.35!important;
@@ -87,7 +101,7 @@
 }
 
 .employee-v2-page .followup-list::after{
-  content:"Recommended\A Start with overdue leads first, then clear today’s assigned work."!important;
+  content:"Recommended\A Start with overdue leads first, then clear today's assigned work."!important;
   white-space:pre-line!important;
 }
 
