@@ -6,20 +6,17 @@ import '../../styles/settingsNotificationsPolish.css';
 function getRole() {
   return localStorage.getItem('salesflow_user_role') || localStorage.getItem('salesflowRole') || 'employee';
 }
-
 function getSidebarRole(role) {
   if (role === 'admin' || role === 'company_admin') return 'admin';
   if (role === 'super_admin' || role === 'superadmin') return 'superAdmin';
   if (role === 'manager') return 'manager';
   return 'employee';
 }
-
 function formatDate(value) {
   const date = value ? new Date(value) : null;
   if (!date || Number.isNaN(date.getTime())) return 'Just now';
   return date.toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit', hour12: true }).replace(',', '');
 }
-
 function go(path) {
   window.history.pushState({}, '', path);
   window.dispatchEvent(new Event('salesflow:navigate'));
@@ -35,9 +32,11 @@ export default function NotificationsPage() {
     try {
       setLoading(true);
       const summary = await getMyDashboardSummary();
-      setItems(summary?.notifications || []);
+      const notifs = summary?.notifications ?? summary?.data?.notifications ?? [];
+      setItems(Array.isArray(notifs) ? notifs : []);
       setMessage('');
     } catch (error) {
+      setItems([]);
       setMessage(error.message || 'Notifications are unavailable right now.');
     } finally {
       setLoading(false);
@@ -68,12 +67,12 @@ export default function NotificationsPage() {
           </div>
           <button type="button" onClick={markRead}>Mark All Read</button>
         </header>
-
         {message ? <div className="settings-alert">{message}</div> : null}
-
         <section className="notifications-panel">
           {loading ? (
-            <div className="notification-empty">Loading notifications...</div>
+            <div className="notification-empty">
+              <p>Loading notifications...</p>
+            </div>
           ) : items.length ? (
             items.map((item) => (
               <article className={`notification-row ${item.read_at ? 'read' : 'unread'}`} key={item.id || item.title}>
