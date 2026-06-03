@@ -1,0 +1,37 @@
+# Environment Variable Configuration Fix
+
+## Summary of Changes
+
+### Files Modified (4 files)
+
+| File | Changes | Issue Fixed |
+|------|---------|------------|
+| `src/lib/supabaseClient.js` | Added fallback: `VITE_SUPABASE_URL \|\| NEXT_PUBLIC_SUPABASE_URL` | Frontend now checks both VITE_ (dev) and NEXT_PUBLIC_ (prod) |
+| `src/pages/dashboards/EmployeeDashboard.jsx` | Added fallback: `VITE_SUPABASE_URL \|\| NEXT_PUBLIC_SUPABASE_URL` | Frontend now checks both VITE_ (dev) and NEXT_PUBLIC_ (prod) |
+| `api/_utils.js` | Changed: `NEXT_PUBLIC_SUPABASE_URL \|\| SUPABASE_URL` | Backend now supports public URL variable |
+| `api/_lib.js` | Changed: `NEXT_PUBLIC_SUPABASE_URL \|\| SUPABASE_URL \|\| VITE_SUPABASE_URL` | Backend now has proper fallback chain |
+
+### Root Cause of Error Message
+
+The error **"Supabase env missing in Vercel"** came from `api/_utils.js` line 24 because:
+1. Code expected `SUPABASE_URL` environment variable
+2. Vercel project had **zero Supabase environment variables set**
+3. Frontend and backend had different expectations for variable names
+
+### What Needs to Be Done Next
+
+You must add these environment variables in Vercel project settings:
+
+```
+NEXT_PUBLIC_SUPABASE_URL          (from your Supabase dashboard)
+NEXT_PUBLIC_SUPABASE_ANON_KEY     (from your Supabase dashboard)
+SUPABASE_SERVICE_ROLE_KEY         (from your Supabase dashboard)
+RESEND_API_KEY                    (if using Resend for emails)
+OTP_FROM_EMAIL                    (optional, defaults to onboarding@resend.dev)
+```
+
+### Variable Naming Convention Explained
+
+- **`NEXT_PUBLIC_*`** = Accessible in browser (safe to expose) - Frontend uses these
+- **`SUPABASE_SERVICE_ROLE_KEY`** = Server-only secret (NEVER expose to frontend)
+- **`VITE_*`** = Local development only (Vite dev server), replaced by `NEXT_PUBLIC_*` in production
