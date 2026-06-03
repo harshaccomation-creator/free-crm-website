@@ -35,15 +35,60 @@
   border-bottom:1px solid #e8eff8!important;
 }
 
+.employee-v2-page .followup-card .emp-card-head h2{
+  font-size:0!important;
+}
+
+.employee-v2-page .followup-card .emp-card-head h2::after{
+  content:"Today's Priority"!important;
+  font-size:21px!important;
+  color:#071633!important;
+  font-weight:850!important;
+}
+
+.employee-v2-page .followup-card .emp-card-head h2 span{
+  display:none!important;
+}
+
 .employee-v2-page .followup-list{
   flex:1 1 auto!important;
   min-height:0!important;
   max-height:178px!important;
-  overflow:auto!important;
+  overflow:hidden!important;
   padding:12px 0!important;
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:10px!important;
+}
+
+.employee-v2-page .followup-list > *{
+  display:none!important;
+}
+
+.employee-v2-page .followup-list::before,
+.employee-v2-page .followup-list::after{
   display:flex!important;
   flex-direction:column!important;
-  gap:8px!important;
+  justify-content:center!important;
+  min-height:82px!important;
+  border-radius:18px!important;
+  border:1px solid #e2eaf6!important;
+  background:#f8fbff!important;
+  padding:14px 16px!important;
+  color:#071633!important;
+  font-weight:850!important;
+  line-height:1.35!important;
+  box-sizing:border-box!important;
+}
+
+.employee-v2-page .followup-list::before{
+  content:"Action Center\A Overdue leads, assigned leads and follow-ups in one priority view."!important;
+  white-space:pre-line!important;
+}
+
+.employee-v2-page .followup-list::after{
+  content:"Recommended\A Start with overdue leads first, then clear today’s assigned work."!important;
+  white-space:pre-line!important;
 }
 
 .employee-v2-page .tasks-panel > .task-row,
@@ -71,12 +116,6 @@
   align-items:center!important;
   justify-content:center!important;
   text-align:center!important;
-}
-
-.employee-v2-page .followup-card .emp-empty-note{
-  flex:1 1 auto!important;
-  min-height:118px!important;
-  max-height:150px!important;
 }
 
 .employee-v2-page .followup-row{
@@ -216,6 +255,10 @@
   .employee-v2-page .recent-panel,
   .employee-v2-page .quick-panel,
   .employee-v2-page .performance-panel{
+    max-height:none!important;
+  }
+  .employee-v2-page .followup-list{
+    grid-template-columns:1fr!important;
     max-height:none!important;
   }
 }
