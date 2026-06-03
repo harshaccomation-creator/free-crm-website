@@ -1,0 +1,217 @@
+/* ===== Dashboard final recovery ===== */
+
+html, body, #root {
+  overflow-x: hidden !important;
+}
+
+.employee-v2-page {
+  overflow-x: hidden !important;
+}
+
+.employee-v2-page .employee-v2-main {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 10px 16px 24px !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== Top bar fix ===== */
+.employee-v2-page .employee-topbar {
+  display: grid !important;
+  grid-template-columns: minmax(320px, 1fr) auto !important;
+  gap: 12px !important;
+  align-items: center !important;
+  margin-bottom: 14px !important;
+}
+
+.employee-v2-page .employee-menu-btn {
+  display: none !important;
+}
+
+.employee-v2-page .employee-search {
+  width: 100% !important;
+  max-width: none !important;
+  height: 56px !important;
+  border-radius: 18px !important;
+}
+
+.employee-v2-page .employee-top-actions {
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.employee-v2-page .employee-profile-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.employee-v2-page .employee-profile {
+  min-width: 250px !important;
+}
+
+.employee-v2-page .employee-logout-btn {
+  white-space: nowrap !important;
+}
+
+/* ===== KPI row fix ===== */
+.employee-v2-page .employee-kpis {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  margin-bottom: 14px !important;
+}
+
+.employee-v2-page .kpi-card {
+  min-width: 0 !important;
+}
+
+.employee-v2-page .kpi-card span,
+.employee-v2-page .kpi-card small {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* ===== My Tasks area fix ===== */
+.employee-v2-page .employee-main-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 14px !important;
+  margin-bottom: 14px !important;
+}
+
+.employee-v2-page .priority-card-real {
+  display: none !important;
+}
+
+.employee-v2-page .tasks-panel {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+.employee-v2-page .tasks-panel .task-row {
+  grid-template-columns: 22px minmax(140px, 1fr) 140px 90px !important;
+  gap: 10px !important;
+}
+
+.employee-v2-page .tasks-panel .task-row strong,
+.employee-v2-page .tasks-panel .task-row small,
+.employee-v2-page .tasks-panel .task-row em,
+.employee-v2-page .tasks-panel .task-row time {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+/* ===== Bottom section: Recent Leads + Quick Actions side by side ===== */
+.employee-v2-page .employee-bottom-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.9fr) !important;
+  gap: 14px !important;
+  align-items: start !important;
+}
+
+.employee-v2-page .recent-panel {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+.employee-v2-page .quick-panel {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  visibility: visible !important;
+  overflow: hidden !important;
+}
+
+.employee-v2-page .performance-panel {
+  grid-column: 1 / span 2 !important;
+  grid-row: 2 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* ===== Quick actions button polish ===== */
+.employee-v2-page .quick-panel > button {
+  width: calc(100% - 28px) !important;
+  margin: 0 14px 12px !important;
+}
+
+/* ===== Recent Leads table ===== */
+.employee-v2-page .recent-panel table {
+  width: 100% !important;
+  table-layout: auto !important;
+}
+
+.employee-v2-page .recent-panel th,
+.employee-v2-page .recent-panel td {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* ===== Prevent chat overlap ===== */
+.employee-v2-page .emp-card,
+.employee-v2-page .tasks-panel,
+.employee-v2-page .recent-panel,
+.employee-v2-page .quick-panel,
+.employee-v2-page .performance-panel {
+  position: relative !important;
+  z-index: 20 !important;
+}
+
+.employee-v2-page .sf-ai-panel,
+.employee-v2-page .chat-panel,
+.employee-v2-page .chat-window,
+.employee-v2-page .chat-suggestions,
+.employee-v2-page .salesflow-ai-panel {
+  z-index: 10 !important;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1200px) {
+  .employee-v2-page .employee-kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .employee-v2-page .employee-bottom-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .employee-v2-page .recent-panel,
+  .employee-v2-page .quick-panel,
+  .employee-v2-page .performance-panel {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .employee-v2-page .employee-topbar {
+    grid-template-columns: 1fr !important;
+  }
+
+  .employee-v2-page .employee-top-actions {
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+  }
+
+  .employee-v2-page .employee-kpis {
+    grid-template-columns: 1fr !important;
+  }
+
+  .employee-v2-page .tasks-panel .task-row {
+    grid-template-columns: 22px 1fr !important;
+  }
+}
