@@ -1,0 +1,165 @@
+/* Super Admin only final lock. Does not target employee/admin CRM pages. */
+html body #root .super-admin-premium-page,
+html body #root .super-admin-premium-page.sa-dark-shell,
+html body #root .sf-dashboard.super-admin-premium-page{
+  min-height:100vh!important;
+  background:radial-gradient(circle at 12% 0%,rgba(37,99,235,.22),transparent 28%),radial-gradient(circle at 96% 8%,rgba(124,58,237,.20),transparent 30%),linear-gradient(135deg,#020817 0%,#071426 52%,#020817 100%)!important;
+  color:#f8fafc!important;
+}
+html body #root .super-admin-premium-page .super-admin-main{
+  grid-column:2!important;
+  width:calc(100vw - 310px)!important;
+  max-width:calc(100vw - 310px)!important;
+  min-height:100vh!important;
+  margin-left:0!important;
+  padding:26px 30px 56px!important;
+  background:transparent!important;
+  color:#f8fafc!important;
+  box-sizing:border-box!important;
+}
+html body #root .super-admin-premium-page .sa-topbar,
+html body #root .super-admin-premium-page .super-topbar,
+html body #root .super-admin-premium-page .super-section-hero{
+  max-width:1440px!important;
+  margin:0 auto 22px!important;
+  padding:16px 0 0!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:18px!important;
+  background:transparent!important;
+}
+html body #root .super-admin-premium-page h1,
+html body #root .super-admin-premium-page h2,
+html body #root .super-admin-premium-page h3{
+  color:#ffffff!important;
+  opacity:1!important;
+  text-shadow:none!important;
+}
+html body #root .super-admin-premium-page .sa-topbar h1,
+html body #root .super-admin-premium-page .super-topbar h1,
+html body #root .super-admin-premium-page .super-section-hero h1{
+  font-size:34px!important;
+  line-height:1!important;
+  margin:10px 0 8px!important;
+  letter-spacing:-.055em!important;
+}
+html body #root .super-admin-premium-page p,
+html body #root .super-admin-premium-page small,
+html body #root .super-admin-premium-page em{
+  opacity:1!important;
+}
+html body #root .super-admin-premium-page .sa-topbar p,
+html body #root .super-admin-premium-page .super-topbar p,
+html body #root .super-admin-premium-page .super-section-hero p{
+  color:#a8b4c7!important;
+  font-size:15px!important;
+  max-width:720px!important;
+}
+html body #root .super-admin-premium-page .super-kicker{
+  display:inline-flex!important;
+  padding:8px 13px!important;
+  border-radius:999px!important;
+  border:1px solid rgba(96,165,250,.28)!important;
+  background:rgba(37,99,235,.13)!important;
+  color:#bfdbfe!important;
+  font-weight:950!important;
+  box-shadow:none!important;
+}
+html body #root .super-admin-premium-page .super-actions label{
+  width:min(430px,34vw)!important;
+  height:50px!important;
+  padding:0 15px!important;
+  border:1px solid rgba(148,163,184,.20)!important;
+  background:rgba(15,23,42,.78)!important;
+  border-radius:18px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  box-shadow:0 18px 38px rgba(0,0,0,.22)!important;
+}
+html body #root .super-admin-premium-page .super-actions input{
+  color:#f8fafc!important;
+  background:transparent!important;
+}
+html body #root .super-admin-premium-page .super-actions input::placeholder{color:#7f8da4!important;}
+html body #root .super-admin-premium-page .super-actions button,
+html body #root .super-admin-premium-page .sa-small-btn,
+html body #root .super-admin-premium-page .sa-panel-head button{
+  background:linear-gradient(135deg,#2563eb,#7c3aed)!important;
+  color:#fff!important;
+  border:1px solid rgba(129,140,248,.35)!important;
+  border-radius:15px!important;
+  box-shadow:0 16px 34px rgba(37,99,235,.25)!important;
+}
+html body #root .super-admin-premium-page .sa-stats-grid,
+html body #root .super-admin-premium-page .super-stats-grid,
+html body #root .super-admin-premium-page .super-mini-stats{
+  max-width:1440px!important;
+  margin:0 auto 16px!important;
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:15px!important;
+}
+html body #root .super-admin-premium-page .sa-stats-grid.five{grid-template-columns:repeat(5,minmax(0,1fr))!important;}
+html body #root .super-admin-premium-page .sa-stat-card,
+html body #root .super-admin-premium-page .super-stats-grid article,
+html body #root .super-admin-premium-page .super-mini-stats article{
+  min-width:0!important;
+  padding:18px!important;
+  border:1px solid rgba(148,163,184,.18)!important;
+  border-radius:22px!important;
+  background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(7,18,34,.96))!important;
+  color:#fff!important;
+  box-shadow:0 24px 50px rgba(0,0,0,.28)!important;
+  display:grid!important;
+  grid-template-columns:56px minmax(0,1fr)!important;
+  gap:14px!important;
+}
+html body #root .super-admin-premium-page .sa-stat-card strong,
+html body #root .super-admin-premium-page .super-stats-grid strong,
+html body #root .super-admin-premium-page .super-mini-stats b{
+  color:#fff!important;
+  font-size:30px!important;
+  margin:4px 0!important;
+}
+html body #root .super-admin-premium-page .sa-stat-card small,
+html body #root .super-admin-premium-page .super-stats-grid small{color:#cbd5e1!important;}
+html body #root .super-admin-premium-page .sa-stat-card em,
+html body #root .super-admin-premium-page .super-stats-grid em{color:#34d399!important;font-weight:900!important;}
+html body #root .super-admin-premium-page .sa-stat-icon,
+html body #root .super-admin-premium-page .super-stats-grid span{
+  display:grid!important;
+  place-items:center!important;
+  width:52px!important;
+  height:52px!important;
+  border-radius:18px!important;
+  background:rgba(59,130,246,.18)!important;
+  font-size:24px!important;
+}
+html body #root .super-admin-premium-page .super-card,
+html body #root .super-admin-premium-page .sa-panel{
+  background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(7,18,34,.96))!important;
+  border:1px solid rgba(148,163,184,.18)!important;
+  border-radius:22px!important;
+  color:#f8fafc!important;
+  box-shadow:0 24px 50px rgba(0,0,0,.28)!important;
+}
+html body #root .super-admin-premium-page .sa-overview-grid,
+html body #root .super-admin-premium-page .sa-bottom-grid,
+html body #root .super-admin-premium-page .sa-feature-grid,
+html body #root .super-admin-premium-page .super-content-grid,
+html body #root .super-admin-premium-page .super-table-grid{
+  max-width:1440px!important;
+  margin:0 auto 16px!important;
+}
+html body #root .super-admin-premium-page table th{color:#91a4bd!important;background:rgba(15,23,42,.38)!important;}
+html body #root .super-admin-premium-page table td{color:#e5edf8!important;border-color:rgba(148,163,184,.10)!important;}
+html body #root .super-admin-premium-page .sfx-sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:310px!important;z-index:50!important;}
+@media(max-width:1200px){
+  html body #root .super-admin-premium-page .super-admin-main{width:100%!important;max-width:100%!important;padding:18px 14px 44px!important;}
+  html body #root .super-admin-premium-page .sfx-sidebar{position:relative!important;width:100%!important;}
+  html body #root .super-admin-premium-page .sa-stats-grid,
+  html body #root .super-admin-premium-page .sa-stats-grid.five{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}
+@media(max-width:760px){html body #root .super-admin-premium-page .sa-stats-grid,html body #root .super-admin-premium-page .sa-stats-grid.five{grid-template-columns:1fr!important;}}
