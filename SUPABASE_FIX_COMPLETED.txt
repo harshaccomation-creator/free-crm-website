@@ -1,0 +1,72 @@
+SUPABASE ENVIRONMENT VARIABLE FIX - COMPLETED
+==============================================
+
+ROOT CAUSE
+----------
+Code referenced both VITE_SUPABASE_* and NEXT_PUBLIC_SUPABASE_* variables inconsistently.
+Your existing Vercel environment variables use: VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY
+
+STRATEGY
+--------
+Updated all code to use VITE_SUPABASE_* exclusively for frontend and backend references.
+Removed all fallbacks to NEXT_PUBLIC_SUPABASE_* to maintain a single convention.
+
+FILES CHANGED (4 TOTAL)
+-----------------------
+
+1. src/lib/supabaseClient.js
+   - BEFORE: import.meta.env.VITE_SUPABASE_URL || import.meta.env.NEXT_PUBLIC_SUPABASE_URL
+   - AFTER:  import.meta.env.VITE_SUPABASE_URL
+   - Error message updated to reference VITE_SUPABASE_URL
+
+2. src/pages/dashboards/EmployeeDashboard.jsx
+   - BEFORE: import.meta.env.VITE_SUPABASE_URL || import.meta.env.NEXT_PUBLIC_SUPABASE_URL
+   - AFTER:  import.meta.env.VITE_SUPABASE_URL
+   - Removed fallback to NEXT_PUBLIC variables
+
+3. api/_utils.js
+   - BEFORE: process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL
+   - AFTER:  process.env.VITE_SUPABASE_URL
+   - Error message updated to reference VITE_SUPABASE_URL
+
+4. api/_lib.js
+   - BEFORE: process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
+   - AFTER:  process.env.VITE_SUPABASE_URL
+   - Error message updated to reference VITE_SUPABASE_URL
+
+ENVIRONMENT VARIABLES REQUIRED
+------------------------------
+✓ VITE_SUPABASE_URL (already in Vercel)
+✓ VITE_SUPABASE_ANON_KEY (already in Vercel)
+✓ SUPABASE_SERVICE_ROLE_KEY (already in Vercel)
+✓ RESEND_API_KEY (already in Vercel)
+✓ OTP_FROM_EMAIL (already in Vercel)
+
+ALL REQUIRED VARIABLES ARE ALREADY SET IN YOUR VERCEL PROJECT.
+
+VERIFICATION
+------------
+Frontend imports (use supabaseClient.js):
+- src/lib/supabaseClient.js ✓
+- src/pages/LoginPage.jsx ✓
+- src/pages/dashboards/EmployeeDashboard.jsx ✓
+- src/hooks/useAuthProfile.js ✓
+- src/services/crmApi.js ✓
+- src/services/crmModulesApi.js ✓
+- src/services/leadsService.js ✓
+
+Backend imports (use _utils.js and _lib.js):
+- api/signup-send-otp.js ✓
+- api/signup-verify.js ✓
+- api/super-admin-overview.js ✓
+
+All imports now reference the corrected supabaseClient.js which uses VITE_SUPABASE_* only.
+
+NO NEXT_PUBLIC_SUPABASE_* references remain in the codebase.
+
+NEXT STEPS
+----------
+1. The fixes are complete and use your existing Vercel environment variables
+2. No changes to Supabase credentials or database needed
+3. The app should now correctly initialize with your existing Supabase project
+4. Test login, signup, dashboard loading, and API routes
