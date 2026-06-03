@@ -4,14 +4,19 @@ html,body,#root{max-width:100%!important;overflow-x:hidden!important}
 .employee-v2-page .employee-v2-main{width:100%!important;max-width:none!important;overflow-x:hidden!important}
 .employee-v2-page .employee-kpis,.employee-v2-page .employee-main-grid,.employee-v2-page .employee-bottom-grid{width:auto!important;max-width:100%!important}
 
+/* Emergency: hide broken Action Queue JSX until component is safely reverted */
+.employee-v2-page .priority-card-real{display:none!important;visibility:hidden!important;height:0!important;min-height:0!important;max-height:0!important;margin:0!important;padding:0!important;border:0!important;overflow:hidden!important}
+.employee-v2-page .employee-main-grid{display:grid!important;grid-template-columns:1fr!important;gap:12px!important;align-items:start!important;overflow:visible!important}
+.employee-v2-page .tasks-panel{grid-column:1!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}
+.employee-v2-page .tasks-panel .task-row{max-width:100%!important;overflow:hidden!important}
+.employee-v2-page .tasks-panel .task-row strong,.employee-v2-page .tasks-panel .task-row small{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+.employee-v2-page .sf-ai-panel,.employee-v2-page .chat-panel,.employee-v2-page .ai-panel,.employee-v2-page .chat-suggestions,.employee-v2-page .chat-window,.employee-v2-page .salesflow-ai-panel{z-index:15!important}
+.employee-v2-page .emp-card,.employee-v2-page .tasks-panel,.employee-v2-page .recent-panel,.employee-v2-page .quick-panel{position:relative!important;z-index:40!important}
+
 /* keep KPI cards readable */
 .employee-v2-page .employee-kpis{display:grid!important;grid-template-columns:repeat(4,minmax(220px,1fr))!important;gap:12px!important;overflow:hidden!important}
 .employee-v2-page .kpi-card{min-width:0!important}
 .employee-v2-page .kpi-card span,.employee-v2-page .kpi-card small{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-
-/* followup and tasks balanced */
-.employee-v2-page .employee-main-grid{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:12px!important;align-items:start!important;overflow:hidden!important}
-.employee-v2-page .employee-main-grid>*{min-width:0!important;max-width:100%!important}
 
 /* bottom: recent + quick, performance below full width */
 .employee-v2-page .employee-bottom-grid{display:grid!important;grid-template-columns:minmax(0,1.45fr) minmax(320px,.95fr)!important;gap:12px!important;align-items:start!important;overflow:hidden!important}
