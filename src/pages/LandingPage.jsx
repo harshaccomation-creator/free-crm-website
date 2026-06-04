@@ -5,6 +5,7 @@ import LandingInfoPage from '../components/landing/LandingInfoPage.jsx';
 import LandingModules from '../components/landing/LandingModules.jsx';
 import LandingPricingFAQ from '../components/landing/LandingPricingFAQ.jsx';
 import PageLoader from '../components/landing/PageLoader.jsx';
+import CompanyAdminPreview from '../company-admin-new/CompanyAdminPreview.jsx';
 import { pageFromPathname, slugifyInfoPage } from '../components/landing/infoRoutes.js';
 import '../styles/landingPage.css';
 import '../styles/landingFit.css';
@@ -21,6 +22,7 @@ const sideItems = [
 const formModals = new Set(['Book a Demo', 'Start Free Trial', 'Contact Sales', 'Customer Support', 'Support', 'Chat']);
 
 export default function LandingPage() {
+  if (window.location.pathname.startsWith('/company-admin-preview')) return <CompanyAdminPreview />;
   const [modal, setModal] = useState('');
   const [notice, setNotice] = useState('');
   const [infoPage, setInfoPage] = useState(() => pageFromPathname(window.location.pathname));
