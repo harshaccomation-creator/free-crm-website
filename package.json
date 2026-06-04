@@ -20,7 +20,8 @@
     "framer-motion": "latest",
     "clsx": "latest",
     "tailwind-merge": "latest",
-    "class-variance-authority": "latest"
+    "class-variance-authority": "latest",
+    "tailwindcss": "latest"
   },
   "devDependencies": {}
 }
