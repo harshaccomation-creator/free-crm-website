@@ -33,7 +33,9 @@
     "@radix-ui/react-switch": "latest",
     "@radix-ui/react-dialog": "latest",
     "@radix-ui/react-alert-dialog": "latest",
-    "@radix-ui/react-popover": "latest"
+    "@radix-ui/react-popover": "latest",
+    "@radix-ui/react-toast": "latest",
+    "@radix-ui/react-separator": "latest"
   },
   "devDependencies": {}
 }
