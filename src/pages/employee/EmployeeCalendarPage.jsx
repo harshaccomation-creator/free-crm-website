@@ -5,6 +5,7 @@ import './EmployeePages.css';
 import './EmployeePagesLayoutFix.css';
 import './EmployeeReportsPremiumFix.css';
 import './EmployeeCalendarClickFix.css';
+import './EmployeeCalendarFinalFix.css';
 import { CrmEmptyState, CrmLoadingPanel } from '../../components/crm/CrmUiStates.jsx';
 
 const SIDEBAR_WIDTH = 220;
