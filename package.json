@@ -19,7 +19,8 @@
     "recharts": "latest",
     "framer-motion": "latest",
     "clsx": "latest",
-    "tailwind-merge": "latest"
+    "tailwind-merge": "latest",
+    "class-variance-authority": "latest"
   },
   "devDependencies": {}
 }
