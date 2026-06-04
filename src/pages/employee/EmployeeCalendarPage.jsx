@@ -7,8 +7,38 @@ import './EmployeeReportsPremiumFix.css';
 import './EmployeeCalendarClickFix.css';
 import { CrmEmptyState, CrmLoadingPanel } from '../../components/crm/CrmUiStates.jsx';
 
+const SIDEBAR_WIDTH = 220;
+
 function Shell({ title, subtitle, children, actions }) {
-  return <div className="emp-page"><DashboardSidebar role="employee" /><main className="emp-main"><div className="emp-container"><header className="emp-head"><div><span className="emp-kicker">Employee Workspace</span><h1>{title}</h1><p>{subtitle}</p></div><div className="emp-actions">{actions}</div></header>{children}</div></main></div>;
+  return (
+    <div className="emp-page emp-calendar-page" style={{ display: 'block', position: 'relative', width: '100vw', maxWidth: '100vw', minHeight: '100vh', overflowX: 'hidden' }}>
+      <DashboardSidebar role="employee" />
+      <main
+        className="emp-main"
+        style={{
+          marginLeft: SIDEBAR_WIDTH,
+          width: `calc(100vw - ${SIDEBAR_WIDTH}px)`,
+          maxWidth: `calc(100vw - ${SIDEBAR_WIDTH}px)`,
+          minHeight: '100vh',
+          boxSizing: 'border-box',
+          padding: '18px 26px 34px',
+          overflowX: 'hidden',
+        }}
+      >
+        <div className="emp-container" style={{ width: '100%', maxWidth: '100%', margin: 0, boxSizing: 'border-box' }}>
+          <header className="emp-head">
+            <div>
+              <span className="emp-kicker">Employee Workspace</span>
+              <h1>{title}</h1>
+              <p>{subtitle}</p>
+            </div>
+            <div className="emp-actions">{actions}</div>
+          </header>
+          {children}
+        </div>
+      </main>
+    </div>
+  );
 }
 
 function formatDate(value) {
