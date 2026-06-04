@@ -15,7 +15,9 @@
     "react-dom": "latest",
     "@supabase/supabase-js": "latest",
     "lucide-react": "latest",
-    "wouter": "latest"
+    "wouter": "latest",
+    "recharts": "latest",
+    "framer-motion": "latest"
   },
   "devDependencies": {}
 }
