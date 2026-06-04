@@ -8,7 +8,7 @@ import './EmployeeCalendarClickFix.css';
 import './EmployeeCalendarFinalFix.css';
 import { CrmEmptyState, CrmLoadingPanel } from '../../components/crm/CrmUiStates.jsx';
 
-const SIDEBAR_WIDTH = 220;
+const SIDEBAR_WIDTH = 300;
 
 function Shell({ title, subtitle, children, actions }) {
   return (
