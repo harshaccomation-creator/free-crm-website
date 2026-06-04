@@ -12,22 +12,36 @@ const SIDEBAR_WIDTH = 220;
 
 function Shell({ title, subtitle, children, actions }) {
   return (
-    <div className="emp-page emp-calendar-page" style={{ display: 'block', position: 'relative', width: '100vw', maxWidth: '100vw', minHeight: '100vh', overflowX: 'hidden' }}>
-      <DashboardSidebar role="employee" />
+    <div
+      className="calendar-hard-shell emp-calendar-page"
+      style={{
+        display: 'grid',
+        gridTemplateColumns: `${SIDEBAR_WIDTH}px minmax(0, 1fr)`,
+        width: '100vw',
+        maxWidth: '100vw',
+        minHeight: '100vh',
+        overflowX: 'hidden',
+        background: '#f5f8fc',
+      }}
+    >
+      <div style={{ gridColumn: '1 / 2', width: SIDEBAR_WIDTH }}>
+        <DashboardSidebar role="employee" />
+      </div>
       <main
-        className="emp-main"
+        className="calendar-hard-main"
         style={{
-          marginLeft: SIDEBAR_WIDTH,
-          width: `calc(100vw - ${SIDEBAR_WIDTH}px)`,
-          maxWidth: `calc(100vw - ${SIDEBAR_WIDTH}px)`,
+          gridColumn: '2 / 3',
+          width: '100%',
+          maxWidth: '100%',
+          minWidth: 0,
           minHeight: '100vh',
           boxSizing: 'border-box',
           padding: '18px 26px 34px',
           overflowX: 'hidden',
         }}
       >
-        <div className="emp-container" style={{ width: '100%', maxWidth: '100%', margin: 0, boxSizing: 'border-box' }}>
-          <header className="emp-head">
+        <div className="calendar-hard-container" style={{ width: '100%', maxWidth: '100%', margin: 0, boxSizing: 'border-box' }}>
+          <header className="emp-head calendar-hard-head">
             <div>
               <span className="emp-kicker">Employee Workspace</span>
               <h1>{title}</h1>
@@ -184,7 +198,7 @@ export default function EmployeeCalendarPage() {
       actions={<button className="emp-btn primary" type="button" onClick={() => { window.history.pushState({}, '', '/employee/tasks'); window.dispatchEvent(new Event('salesflow:navigate')); }}>+ Schedule</button>}
     >
       {loading ? <CrmLoadingPanel label="Loading schedule..." compact /> : null}
-      <section className="calendar-wrap">
+      <section className="calendar-wrap calendar-hard-wrap">
         <article className="emp-card emp-section">
           <div className="emp-section-head"><h2>{currentMonth}</h2><span className="emp-pill blue">{isLive ? 'Live Schedule' : 'Demo Schedule'}</span></div>
           {message ? <div className={`emp-data-banner ${isLive ? 'live' : 'demo'}`}>{message}</div> : null}
