@@ -1,0 +1,65 @@
+/* Final app sidebar width lock - excludes Super Admin pages */
+:root{--sf-sidebar-width:250px!important;}
+@media(min-width:1201px){
+  html body #root .emp-page:not(.super-admin-page) > .sfx-sidebar,
+  html body #root .settings-shell > .sfx-sidebar,
+  html body #root .sf-tasks-page > .sfx-sidebar,
+  html body #root .won-polish-page > .sfx-sidebar{
+    width:250px!important;
+    min-width:250px!important;
+    max-width:250px!important;
+    padding:16px 12px!important;
+    gap:14px!important;
+  }
+  html body #root .emp-page:not(.super-admin-page) > .emp-main,
+  html body #root .settings-shell > .settings-main,
+  html body #root .sf-tasks-page .sf-tasks-main,
+  html body #root .won-polish-page .sf-fixed-main{
+    margin-left:250px!important;
+    width:calc(100vw - 250px)!important;
+    max-width:calc(100vw - 250px)!important;
+  }
+  html body #root .sfx-sidebar .sfx-brand-row{
+    gap:8px!important;
+    margin-bottom:18px!important;
+  }
+  html body #root .sfx-sidebar .sfx-brand-dark,
+  html body #root .sfx-sidebar .sfx-brand-image{
+    width:186px!important;
+    min-width:186px!important;
+    max-width:186px!important;
+    height:58px!important;
+    border-radius:16px!important;
+    padding:8px 10px!important;
+  }
+  html body #root .sfx-sidebar .sfx-real-logo{
+    width:166px!important;
+    max-width:166px!important;
+    height:auto!important;
+    display:block!important;
+  }
+  html body #root .sfx-sidebar .sfx-menu{
+    width:26px!important;
+    min-width:26px!important;
+    height:26px!important;
+  }
+  html body #root .sfx-sidebar .sfx-nav{
+    gap:8px!important;
+  }
+  html body #root .sfx-sidebar .sfx-nav button{
+    min-height:40px!important;
+    height:40px!important;
+    padding:6px 10px!important;
+    border-radius:10px!important;
+    gap:10px!important;
+    font-size:13px!important;
+  }
+  html body #root .sfx-sidebar .sfx-nav-icon{
+    width:24px!important;
+    height:24px!important;
+    min-width:24px!important;
+  }
+  html body #root .sfx-sidebar .sfx-upgrade{
+    padding:12px!important;
+  }
+}
