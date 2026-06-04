@@ -1,37 +1,239 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import '../../styles/dashboardBase.css';
-import '../../styles/referenceDashboardExact.css';
-import '../../styles/sidebarGlobalFinalLock.css';
-import '../../styles/superAdminPremium.css';
+import '../../styles/superAdminDesignSystem.css';
 
-const CSS = `
-html body #root .sf-dashboard.super-admin-premium-page{display:grid!important;grid-template-columns:310px minmax(0,1fr)!important;min-height:100vh!important;background:linear-gradient(135deg,#020817,#071426 52%,#020817)!important;color:#fff!important;overflow-x:hidden!important}
-html body #root .super-admin-premium-page .sfx-sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:310px!important;z-index:50!important;background:#020817!important}
-html body #root .super-admin-premium-page .super-admin-main{grid-column:2!important;margin-left:0!important;transform:none!important;left:auto!important;width:auto!important;max-width:none!important;min-width:0!important;padding:22px 24px 48px!important;background:transparent!important;color:#fff!important;box-sizing:border-box!important;overflow-x:hidden!important}
-html body #root .sa-dashboard-inner{width:100%!important;max-width:100%!important;margin:0!important}
-html body #root .sa-topbar{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(320px,460px) auto!important;gap:14px!important;align-items:center!important;margin:0 0 16px!important;padding:16px 18px!important;border:1px solid rgba(148,163,184,.16)!important;border-radius:22px!important;background:rgba(15,23,42,.78)!important}
-html body #root .sa-title h1{margin:8px 0 5px!important;font-size:32px!important;line-height:1!important;color:#fff!important}.sa-title p{margin:0!important;color:#a8b4c7!important}.super-kicker{display:inline-flex!important;padding:7px 11px!important;border-radius:999px!important;background:rgba(37,99,235,.16)!important;border:1px solid rgba(96,165,250,.34)!important;color:#bfdbfe!important;font-size:12px!important;font-weight:950!important}
-html body #root .sa-search{height:46px!important;border-radius:16px!important;border:1px solid rgba(148,163,184,.18)!important;background:rgba(2,8,23,.5)!important;display:flex!important;align-items:center!important;gap:10px!important;padding:0 14px!important}.sa-search input{width:100%!important;background:transparent!important;border:0!important;outline:0!important;color:#fff!important}.sa-search input::placeholder{color:#748399!important}.sa-top-actions{display:flex!important;gap:10px!important}.sa-icon-btn,.sa-refresh{height:42px!important;border-radius:14px!important;border:1px solid rgba(148,163,184,.18)!important;background:rgba(15,23,42,.72)!important;color:#fff!important;font-weight:900!important}.sa-icon-btn{width:42px!important}.sa-refresh{padding:0 15px!important;background:linear-gradient(135deg,#2563eb,#7c3aed)!important}
-html body #root .sa-stats-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:14px!important;margin:0 0 16px!important}.sa-stat-card{min-width:0!important;min-height:122px!important;padding:18px!important;border-radius:22px!important;border:1px solid rgba(148,163,184,.16)!important;background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(7,18,34,.96))!important;display:grid!important;grid-template-columns:52px minmax(0,1fr)!important;gap:13px!important;position:relative!important}.sa-stat-icon{width:50px!important;height:50px!important;border-radius:17px!important;background:rgba(59,130,246,.18)!important;display:grid!important;place-items:center!important;font-size:23px!important}.sa-stat-card small{color:#cbd5e1!important;font-weight:850!important}.sa-stat-card strong{display:block!important;color:#fff!important;font-size:29px!important;margin:7px 0!important}.sa-stat-card em{color:#34d399!important;font-style:normal!important;font-size:12px!important;font-weight:900!important}.sa-stat-card i{position:absolute!important;right:13px!important;top:12px!important;width:20px!important;height:20px!important;border-radius:999px!important;border:1px solid rgba(203,213,225,.32)!important;color:#93a4ba!important;font-style:normal!important;font-size:11px!important;display:grid!important;place-items:center!important}
-html body #root .sa-main-grid{display:grid!important;grid-template-columns:minmax(0,1.5fr) minmax(320px,.82fr)!important;gap:16px!important;margin-bottom:16px!important}.sa-secondary-grid{display:grid!important;grid-template-columns:minmax(0,1.18fr) minmax(320px,.82fr)!important;gap:16px!important}.sa-panel{border-radius:22px!important;border:1px solid rgba(148,163,184,.16)!important;background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(7,18,34,.96))!important;color:#fff!important;overflow:hidden!important}.sa-panel-head{display:flex!important;justify-content:space-between!important;padding:18px 20px 12px!important}.sa-panel-head h2{margin:0!important;color:#fff!important}.sa-panel-head p{margin:5px 0 0!important;color:#97a6bb!important}.sa-panel-head span,.sa-panel-head button{border:1px solid rgba(96,165,250,.22)!important;background:rgba(37,99,235,.14)!important;color:#bfdbfe!important;border-radius:999px!important;padding:8px 12px!important;font-weight:900!important}
-.sa-chart{height:286px!important;padding:10px 16px!important}.sa-bar-chart{height:286px!important;padding:28px 22px 22px!important;display:grid!important;grid-template-columns:repeat(12,1fr)!important;gap:10px!important;align-items:end!important}.sa-bar-chart span{height:100%!important;background:rgba(148,163,184,.08)!important;border-radius:999px!important;display:flex!important;align-items:end!important}.sa-bar-chart b{display:block!important;width:100%!important;height:var(--h)!important;border-radius:999px!important;background:linear-gradient(180deg,#38bdf8,#2563eb,#7c3aed)!important}.sa-table-wrap{overflow:auto!important;padding:0 16px 16px!important}.sa-table-wrap table{width:100%!important;min-width:760px!important;border-collapse:collapse!important}.sa-table-wrap th{color:#91a4bd!important;background:rgba(15,23,42,.44)!important;padding:12px!important;text-align:left!important}.sa-table-wrap td{padding:13px 12px!important;border-bottom:1px solid rgba(148,163,184,.1)!important;color:#e5edf8!important}.sa-activity-list{padding:0 16px 16px!important}.sa-activity-row,.sa-user-row{display:grid!important;grid-template-columns:42px minmax(0,1fr) auto!important;gap:12px!important;align-items:center!important;padding:13px 2px!important;border-top:1px solid rgba(148,163,184,.12)!important}.sa-activity-row>span,.sa-user-row>span{width:40px!important;height:40px!important;border-radius:15px!important;background:linear-gradient(135deg,#2563eb,#7c3aed)!important;display:grid!important;place-items:center!important}.sa-activity-row small,.sa-user-row small{display:block!important;color:#97a6bb!important}.super-pill{border-radius:999px!important;padding:6px 10px!important;font-size:12px!important;font-weight:950!important}.super-pill.blue{background:rgba(37,99,235,.18)!important;color:#93c5fd!important}.super-pill.green{background:rgba(34,197,94,.15)!important;color:#86efac!important}.super-pill.orange{background:rgba(245,158,11,.15)!important;color:#fbbf24!important}.super-pill.red{background:rgba(239,68,68,.15)!important;color:#fca5a5!important}.sa-user-row button{border:0!important;border-radius:12px!important;padding:9px 11px!important;color:#fff!important;font-weight:900!important}.sa-user-row button.danger{background:#ef4444!important}.sa-user-row button.success{background:#16a34a!important}
-@media(max-width:1280px){.sa-topbar,.sa-main-grid,.sa-secondary-grid{grid-template-columns:1fr!important}.sa-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}@media(max-width:900px){html body #root .sf-dashboard.super-admin-premium-page{grid-template-columns:1fr!important}.super-admin-premium-page .sfx-sidebar{position:relative!important;width:100%!important}.super-admin-premium-page .super-admin-main{grid-column:1!important;width:100%!important;padding:16px 12px 40px!important}.sa-stats-grid{grid-template-columns:1fr!important}}
-`;
-function Style(){return <style>{CSS}</style>}
-function dateText(v){if(!v)return '-';const d=new Date(v);return Number.isNaN(d.getTime())?'-':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
-function badge(s){const t=String(s||'').toLowerCase();if(t.includes('active')||t.includes('paid'))return 'green';if(t.includes('trial')||t.includes('pending'))return 'orange';if(t.includes('expired')||t.includes('inactive'))return 'red';return 'blue';}
-function initials(v){return String(v||'S').trim().slice(0,1).toUpperCase()}
-function go(p){window.history.pushState({},'',p);window.dispatchEvent(new Event('salesflow:navigate'))}
-function StatCard({icon,label,value,trend,tone='blue'}){return <article className={`sa-stat-card tone-${tone}`}><span className="sa-stat-icon">{icon}</span><div><small>{label}</small><strong>{value}</strong><em>{trend}</em></div><i>i</i></article>}
-function BarChart(){return <div className="sa-bar-chart">{[48,35,70,44,82,52,64,88,46,72,91,55].map((h,i)=><span key={i} style={{'--h':`${h}%`}}><b/></span>)}</div>}
-function LineChart(){return <div className="sa-chart"><svg viewBox="0 0 720 260"><line x1="44" y1="220" x2="680" y2="220" className="sa-chart-grid"/><path d="M50 190 L160 150 L270 165 L380 105 L490 120 L620 70" fill="none" stroke="#8b5cf6" strokeWidth="5" strokeLinecap="round"/><path d="M50 190 L160 150 L270 165 L380 105 L490 120 L620 70 L620 226 L50 226 Z" fill="#4f46e5" opacity=".18"/></svg></div>}
-export default function SuperAdminDashboard(){
- const [data,setData]=useState({stats:{},recentUsers:[],companies:[],pendingSignups:[]}); const [loading,setLoading]=useState(true); const [message,setMessage]=useState('');
- const loadData=async()=>{try{setLoading(true);setMessage('');const r=await fetch('/api/super-admin-overview');const j=await r.json();if(!r.ok||j.ok===false)throw new Error(j.message||'Unable to load dashboard data.');setData(j)}catch(e){setMessage(e.message||'Unable to load dashboard data.')}finally{setLoading(false)}};
- useEffect(()=>{loadData()},[]);
- const toggleUser=async(u)=>{try{const r=await fetch('/api/super-admin-overview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'toggleUser',userId:u.id,isActive:!u.isActive})});const j=await r.json();setMessage(j.message||'Updated.');loadData()}catch(e){setMessage(e.message||'Unable to update user.')}};
- const stats=data.stats||{}, companies=data.companies||[], recentUsers=data.recentUsers||[], pendingSignups=data.pendingSignups||[]; const name=localStorage.getItem('salesflow_user_email')?.split('@')[0]||'Super Admin';
- const active=stats.activeCompanies||companies.filter(c=>String(c.status||'').toLowerCase().includes('active')).length||0; const trial=stats.trialCompanies||companies.filter(c=>String(c.status||'').toLowerCase().includes('trial')).length||0; const paid=stats.paidCompanies||companies.filter(c=>String(c.plan||'').toLowerCase()!=='free').length||0; const expired=stats.expiredTrials||companies.filter(c=>Number(c.trialDaysLeft)<0).length||0;
- return <div className="sf-dashboard super-admin-premium-page sa-dark-shell"><Style/><DashboardSidebar role="superAdmin"/><main className="super-admin-main sa-main"><div className="sa-dashboard-inner"><header className="sa-topbar"><div className="sa-title"><span className="super-kicker">SalesFlow Hub · Super Admin</span><h1>Overview Dashboard</h1><p>Welcome back, {name}. Real-time platform overview and key metrics at a glance.</p></div><label className="sa-search"><span>⌕</span><input placeholder="Search companies, users, invoices, tickets..."/></label><div className="sa-top-actions"><button className="sa-icon-btn" type="button">🔔</button><button className="sa-icon-btn" type="button">?</button><button className="sa-refresh" type="button" onClick={loadData}>{loading?'Loading...':'Refresh'}</button></div></header>{message&&<div className="super-message sa-message">{message}</div>}<section className="sa-stats-grid"><StatCard icon="🏢" label="Total Companies" value={stats.totalCompanies||companies.length||0} trend="↑ platform workspaces"/><StatCard icon="✅" label="Active Companies" value={active} trend="↑ healthy accounts"/><StatCard icon="⏱" label="Trial Companies" value={trial} trend="↑ trial pipeline"/><StatCard icon="💳" label="Paid Companies" value={paid} trend="↑ paid customers"/><StatCard icon="⌛" label="Expired Trials" value={expired} trend="needs follow-up"/><StatCard icon="👥" label="Total Users" value={stats.totalUsers||recentUsers.length||0} trend={`${stats.activeUsers||0} active users`}/><StatCard icon="₹" label="Monthly Revenue" value={stats.monthlyRevenue?`₹${stats.monthlyRevenue}`:'₹0'} trend="connect billing data"/><StatCard icon="📥" label="Pending Signups" value={stats.pendingSignups||pendingSignups.length||0} trend="waiting verification"/></section><section className="sa-main-grid"><article className="super-card sa-panel"><div className="super-card-head sa-panel-head"><div><h2>Revenue / Growth Overview</h2><p>Connected with Super Admin overview API.</p></div><span>{stats.uptime||'99.98%'} uptime</span></div><LineChart/></article><article className="super-card sa-panel"><div className="super-card-head sa-panel-head"><div><h2>Company Growth</h2><p>New companies and activation trend.</p></div><span>Monthly</span></div><BarChart/></article></section><section className="sa-secondary-grid"><article className="super-card sa-panel"><div className="super-card-head sa-panel-head"><div><h2>Recent Companies</h2><p>Company name, plan, users, status and trial.</p></div><button type="button" onClick={()=>go('/super-admin/companies')}>View All</button></div><div className="super-table-wrap sa-table-wrap"><table><thead><tr><th>Company</th><th>Plan</th><th>Users</th><th>Status</th><th>Trial</th><th>Admin</th></tr></thead><tbody>{companies.slice(0,7).map(c=><tr key={c.id||c.name}><td><strong>{c.name}</strong><small>{dateText(c.createdAt)}</small></td><td><span className="super-pill blue">{c.plan||'Starter'}</span></td><td>{c.users||0}</td><td><span className={`super-pill ${badge(c.status)}`}>{c.status||'Active'}</span></td><td>{c.trialDaysLeft==null?'-':c.trialDaysLeft>=0?`${c.trialDaysLeft} days left`:'Expired'}</td><td>{c.adminEmail||'-'}</td></tr>)}</tbody></table>{!loading&&!companies.length&&<p className="super-empty">No companies found.</p>}</div></article><article className="super-card sa-panel"><div className="super-card-head sa-panel-head"><div><h2>Recent Activity</h2><p>Latest users and signups.</p></div><button type="button" onClick={()=>go('/super-admin/activity-logs')}>View All</button></div><div className="sa-activity-list">{recentUsers.slice(0,5).map(u=><div className="sa-activity-row" key={u.id||u.email}><span>{initials(u.name||u.email)}</span><div><strong>{u.name||'User'}</strong><small>{u.email}</small></div><em>{u.isActive?'Active':'Inactive'}</em></div>)}{pendingSignups.slice(0,3).map(i=><div className="sa-activity-row" key={i.id||i.email}><span>{initials(i.name||i.email)}</span><div><strong>{i.name||'Signup'}</strong><small>{i.email}</small></div><em>{i.status||'Pending'}</em></div>)}</div><div className="super-user-list sa-user-list">{recentUsers.slice(0,4).map(u=><div className="super-user-row sa-user-row" key={`ctrl-${u.id||u.email}`}><span>{initials(u.name||u.email)}</span><div><strong>{u.name||'User'}</strong><small>{u.email}</small></div><button type="button" className={u.isActive?'danger':'success'} onClick={()=>toggleUser(u)}>{u.isActive?'Deactivate':'Activate'}</button></div>)}</div></article></section></div></main></div>;
+const initialState = { stats: {}, recentUsers: [], companies: [], pendingSignups: [], growth: [] };
+
+function formatDate(value) {
+  if (!value) return '-';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '-';
+  return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function initials(value) {
+  return String(value || 'S').trim().slice(0, 1).toUpperCase();
+}
+
+function badgeClass(value) {
+  const text = String(value || '').toLowerCase();
+  if (text.includes('active') || text.includes('paid') || text.includes('won')) return 'green';
+  if (text.includes('trial') || text.includes('pending')) return 'orange';
+  if (text.includes('expired') || text.includes('inactive') || text.includes('suspend')) return 'red';
+  return 'blue';
+}
+
+function navigateTo(path) {
+  window.history.pushState({}, '', path);
+  window.dispatchEvent(new Event('salesflow:navigate'));
+}
+
+function StatCard({ icon, label, value, hint, accent = 'blue' }) {
+  return (
+    <article className={`sa-stat-card sa-accent-${accent}`}>
+      <span className="sa-stat-icon">{icon}</span>
+      <div className="sa-stat-copy">
+        <small>{label}</small>
+        <strong>{value}</strong>
+        <em>{hint}</em>
+      </div>
+      <i>i</i>
+    </article>
+  );
+}
+
+function RevenueChart({ growth = [] }) {
+  const points = useMemo(() => {
+    const fallback = [32, 44, 39, 62, 56, 74, 68, 92];
+    const values = growth.length ? growth.slice(-8).map((item) => Number(item.users) || 0) : fallback;
+    const max = Math.max(...values, 1);
+    return values.map((value, index) => {
+      const x = 42 + (index * 616) / Math.max(values.length - 1, 1);
+      const y = 220 - (value / max) * 160;
+      return { x, y, value };
+    });
+  }, [growth]);
+  const line = points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
+  const fill = `${line} L ${points[points.length - 1]?.x || 42} 230 L ${points[0]?.x || 42} 230 Z`;
+  return (
+    <div className="sa-chart sa-line-chart">
+      <svg viewBox="0 0 720 260" role="img" aria-label="Revenue growth chart">
+        {[60, 100, 140, 180, 220].map((y) => <line key={y} x1="38" y1={y} x2="680" y2={y} className="sa-chart-grid" />)}
+        <path d={fill} className="sa-chart-area" />
+        <path d={line} className="sa-chart-line" />
+        {points.map((point, index) => <circle key={index} cx={point.x} cy={point.y} r="5" className="sa-chart-dot" />)}
+      </svg>
+    </div>
+  );
+}
+
+function GrowthBars() {
+  const bars = [42, 58, 46, 72, 63, 82, 66, 92, 54, 76, 88, 70];
+  return <div className="sa-bar-chart">{bars.map((height, index) => <span key={index} style={{ '--h': `${height}%` }}><b /></span>)}</div>;
+}
+
+export default function SuperAdminDashboard() {
+  const [data, setData] = useState(initialState);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState('');
+
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      setMessage('');
+      const response = await fetch('/api/super-admin-overview');
+      const result = await response.json();
+      if (!response.ok || result.ok === false) throw new Error(result.message || 'Unable to load dashboard data.');
+      setData(result);
+    } catch (error) {
+      setMessage(error.message || 'Unable to load dashboard data.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { loadData(); }, []);
+
+  const toggleUser = async (user) => {
+    try {
+      const response = await fetch('/api/super-admin-overview', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'toggleUser', userId: user.id, isActive: !user.isActive }),
+      });
+      const result = await response.json();
+      if (!response.ok || result.ok === false) throw new Error(result.message || 'Unable to update user.');
+      setMessage(result.message || 'Updated successfully.');
+      loadData();
+    } catch (error) {
+      setMessage(error.message || 'Unable to update user.');
+    }
+  };
+
+  const stats = data.stats || {};
+  const companies = data.companies || [];
+  const recentUsers = data.recentUsers || [];
+  const pendingSignups = data.pendingSignups || [];
+  const displayName = localStorage.getItem('salesflow_user_email')?.split('@')[0] || 'Super Admin';
+
+  const activeCompanies = stats.activeCompanies || companies.filter((company) => String(company.status || '').toLowerCase().includes('active')).length || 0;
+  const trialCompanies = stats.trialCompanies || companies.filter((company) => String(company.status || '').toLowerCase().includes('trial')).length || 0;
+  const paidCompanies = stats.paidCompanies || companies.filter((company) => String(company.plan || '').toLowerCase() !== 'free').length || 0;
+  const expiredTrials = stats.expiredTrials || companies.filter((company) => Number(company.trialDaysLeft) < 0).length || 0;
+
+  return (
+    <div className="sf-dashboard super-admin-premium-page sa-dashboard-page">
+      <DashboardSidebar role="superAdmin" />
+      <main className="super-admin-main">
+        <div className="sa-dashboard-inner">
+          <header className="sa-topbar sa-hero-topbar">
+            <div className="sa-title">
+              <span className="super-kicker">SalesFlow Hub · Super Admin</span>
+              <h1>Overview Dashboard</h1>
+              <p>Welcome back, {displayName}. Control companies, trials, subscriptions and platform health from one premium command center.</p>
+            </div>
+            <label className="sa-search">
+              <span>⌕</span>
+              <input placeholder="Search company, user, plan, invoice..." />
+            </label>
+            <div className="sa-top-actions">
+              <button className="sa-icon-btn" type="button" aria-label="Notifications">🔔</button>
+              <button className="sa-icon-btn" type="button" aria-label="Help">?</button>
+              <button className="sa-refresh" type="button" onClick={loadData}>{loading ? 'Loading...' : 'Refresh'}</button>
+            </div>
+          </header>
+
+          {message && <div className="super-message sa-message">{message}</div>}
+
+          <section className="sa-stats-grid">
+            <StatCard icon="🏢" label="Total Companies" value={stats.totalCompanies || companies.length || 0} hint="Platform workspaces" accent="blue" />
+            <StatCard icon="✅" label="Active Companies" value={activeCompanies} hint="Healthy accounts" accent="green" />
+            <StatCard icon="⏱" label="Trial Companies" value={trialCompanies} hint="Trial pipeline" accent="purple" />
+            <StatCard icon="💳" label="Paid Companies" value={paidCompanies} hint="Revenue accounts" accent="blue" />
+            <StatCard icon="⌛" label="Expired Trials" value={expiredTrials} hint="Needs follow-up" accent="orange" />
+            <StatCard icon="👥" label="Total Users" value={stats.totalUsers || recentUsers.length || 0} hint={`${stats.activeUsers || 0} active users`} accent="cyan" />
+            <StatCard icon="₹" label="Monthly Revenue" value={stats.monthlyRevenue ? `₹${stats.monthlyRevenue}` : '₹0'} hint="Billing ready" accent="purple" />
+            <StatCard icon="📥" label="Pending Signups" value={stats.pendingSignups || pendingSignups.length || 0} hint="Verification queue" accent="red" />
+          </section>
+
+          <section className="sa-main-grid">
+            <article className="sa-panel sa-chart-panel">
+              <div className="sa-panel-head">
+                <div><h2>Revenue / Growth Overview</h2><p>Live platform growth trend from Super Admin overview API.</p></div>
+                <span>{stats.uptime || '99.98%'} uptime</span>
+              </div>
+              <RevenueChart growth={data.growth} />
+            </article>
+            <article className="sa-panel sa-chart-panel">
+              <div className="sa-panel-head">
+                <div><h2>Company Growth</h2><p>New signups and activation momentum.</p></div>
+                <span>Monthly</span>
+              </div>
+              <GrowthBars />
+            </article>
+          </section>
+
+          <section className="sa-secondary-grid">
+            <article className="sa-panel">
+              <div className="sa-panel-head">
+                <div><h2>Recent Companies</h2><p>Company, plan, users, status and trial overview.</p></div>
+                <button type="button" onClick={() => navigateTo('/super-admin/companies')}>View All</button>
+              </div>
+              <div className="sa-table-wrap">
+                <table>
+                  <thead><tr><th>Company</th><th>Plan</th><th>Users</th><th>Status</th><th>Trial</th><th>Admin</th></tr></thead>
+                  <tbody>
+                    {companies.slice(0, 7).map((company) => (
+                      <tr key={company.id || company.name}>
+                        <td><strong>{company.name}</strong><small>{formatDate(company.createdAt)}</small></td>
+                        <td><span className="super-pill blue">{company.plan || 'Starter'}</span></td>
+                        <td>{company.users || 0}</td>
+                        <td><span className={`super-pill ${badgeClass(company.status)}`}>{company.status || 'Active'}</span></td>
+                        <td>{company.trialDaysLeft == null ? '-' : company.trialDaysLeft >= 0 ? `${company.trialDaysLeft} days left` : 'Expired'}</td>
+                        <td>{company.adminEmail || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {!loading && !companies.length && <p className="super-empty">No companies found.</p>}
+              </div>
+            </article>
+
+            <article className="sa-panel">
+              <div className="sa-panel-head">
+                <div><h2>Activity & User Control</h2><p>Recent account activity with quick activation controls.</p></div>
+                <button type="button" onClick={() => navigateTo('/super-admin/activity-logs')}>View Logs</button>
+              </div>
+              <div className="sa-activity-list">
+                {recentUsers.slice(0, 5).map((user) => (
+                  <div className="sa-activity-row" key={user.id || user.email}>
+                    <span>{initials(user.name || user.email)}</span>
+                    <div><strong>{user.name || 'User'}</strong><small>{user.email}</small></div>
+                    <em>{user.isActive ? 'Active' : 'Inactive'}</em>
+                  </div>
+                ))}
+                {pendingSignups.slice(0, 2).map((item) => (
+                  <div className="sa-activity-row" key={item.id || item.email}>
+                    <span>{initials(item.name || item.email)}</span>
+                    <div><strong>{item.name || 'Signup'}</strong><small>{item.email}</small></div>
+                    <em>{item.status || 'Pending'}</em>
+                  </div>
+                ))}
+              </div>
+              <div className="sa-user-list">
+                {recentUsers.slice(0, 4).map((user) => (
+                  <div className="sa-user-row" key={`ctrl-${user.id || user.email}`}>
+                    <span>{initials(user.name || user.email)}</span>
+                    <div><strong>{user.name || 'User'}</strong><small>{user.email}</small></div>
+                    <button type="button" className={user.isActive ? 'danger' : 'success'} onClick={() => toggleUser(user)}>{user.isActive ? 'Deactivate' : 'Activate'}</button>
+                  </div>
+                ))}
+              </div>
+            </article>
+          </section>
+        </div>
+      </main>
+    </div>
+  );
 }
