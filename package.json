@@ -25,6 +25,7 @@
     "@tailwindcss/vite": "latest",
     "@tailwindcss/typography": "latest",
     "tw-animate-css": "latest",
+    "zod": "latest",
     "@radix-ui/react-slot": "latest",
     "@radix-ui/react-avatar": "latest",
     "@radix-ui/react-tooltip": "latest",
