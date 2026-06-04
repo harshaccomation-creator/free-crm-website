@@ -27,7 +27,10 @@
     "@radix-ui/react-tooltip": "latest",
     "@radix-ui/react-dropdown-menu": "latest",
     "@radix-ui/react-select": "latest",
-    "@radix-ui/react-tabs": "latest"
+    "@radix-ui/react-tabs": "latest",
+    "@radix-ui/react-label": "latest",
+    "@radix-ui/react-checkbox": "latest",
+    "@radix-ui/react-switch": "latest"
   },
   "devDependencies": {}
 }
