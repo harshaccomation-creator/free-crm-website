@@ -24,7 +24,10 @@
     "tailwindcss": "latest",
     "@radix-ui/react-slot": "latest",
     "@radix-ui/react-avatar": "latest",
-    "@radix-ui/react-tooltip": "latest"
+    "@radix-ui/react-tooltip": "latest",
+    "@radix-ui/react-dropdown-menu": "latest",
+    "@radix-ui/react-select": "latest",
+    "@radix-ui/react-tabs": "latest"
   },
   "devDependencies": {}
 }
