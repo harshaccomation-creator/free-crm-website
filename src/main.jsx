@@ -1,6 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import AppSecure from './AppSecure.jsx';
+import CompanyAdminPreview from './company-admin-new/CompanyAdminPreview.jsx';
 import './styles.css';
 
-createRoot(document.querySelector('#root')).render(<AppSecure />);
+const root = createRoot(document.querySelector('#root'));
+const path = window.location.pathname;
+
+root.render(path.startsWith('/company-admin-preview') ? <CompanyAdminPreview /> : <AppSecure />);
