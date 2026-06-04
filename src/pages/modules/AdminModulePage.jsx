@@ -1,15 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import { SaasEmpty, SaasLayout, SaasStats, goTo } from '../../components/saas/SaasLayout.jsx';
 import { getAdminReportsData, getCompanyAdminSummary } from '../../services/crmModulesApi.js';
+import CompanyAdminPreview from '../../company-admin-new/CompanyAdminPreview.jsx';
 
 function titleFor(view) {
-  const map = { users: 'Users', roles: 'Roles & Permissions', teams: 'Teams', reports: 'Company Reports', settings: 'Company Settings', companies: 'Company', tasks: 'Company Tasks', activities: 'Company Activities', calendar: 'Company Calendar' };
+  const map = { preview: 'Company Admin Preview', users: 'Users', roles: 'Roles & Permissions', teams: 'Teams', reports: 'Company Reports', settings: 'Company Settings', companies: 'Company', tasks: 'Company Tasks', activities: 'Company Activities', calendar: 'Company Calendar' };
   return map[view] || 'Company Admin';
 }
 function fmt(value) { return value ? new Date(value).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'; }
 function roleBadge(role) { if (role === 'company_admin') return 'purple'; if (role === 'manager') return 'orange'; return 'green'; }
 
 export default function AdminModulePage({ view = 'users' }) {
+  if (view === 'preview') return <CompanyAdminPreview />;
   const [summary, setSummary] = useState(null);
   const [reports, setReports] = useState(null);
   const [loading, setLoading] = useState(true);
