@@ -23,6 +23,7 @@
     "class-variance-authority": "latest",
     "tailwindcss": "latest",
     "@tailwindcss/vite": "latest",
+    "@tailwindcss/typography": "latest",
     "tw-animate-css": "latest",
     "@radix-ui/react-slot": "latest",
     "@radix-ui/react-avatar": "latest",
