@@ -1,44 +1,14 @@
-/* Final compact app sidebar width lock - excludes Super Admin routes as much as possible */
+/* Final compact app sidebar width lock - Super Admin untouched */
 :root{--sf-sidebar-width:220px!important;}
 
-/* Apply outside media too because browser zoom / viewport can fall under 1200px */
-html body #root .emp-page:not(.super-admin-page) > .sfx-sidebar,
-html body #root .settings-shell > .sfx-sidebar,
-html body #root .sf-tasks-page > .sfx-sidebar,
-html body #root .won-polish-page > .sfx-sidebar,
-html body #root .reference-dashboard > .sfx-sidebar,
-html body #root .sf-dashboard > .sfx-sidebar{
-  position:fixed!important;
-  left:0!important;
-  top:0!important;
-  bottom:0!important;
+/* Sidebar compact visual */
+html body #root .sfx-sidebar{
   width:220px!important;
   min-width:220px!important;
   max-width:220px!important;
-  height:100vh!important;
-  min-height:100vh!important;
-  max-height:100vh!important;
   padding:14px 10px!important;
   gap:12px!important;
   box-sizing:border-box!important;
-}
-
-html body #root .emp-page:not(.super-admin-page) > .emp-main,
-html body #root .settings-shell > .settings-main,
-html body #root .sf-tasks-page .sf-tasks-main,
-html body #root .won-polish-page .sf-fixed-main,
-html body #root .reference-dashboard > main,
-html body #root .sf-dashboard > main{
-  margin-left:220px!important;
-  width:calc(100vw - 220px)!important;
-  max-width:calc(100vw - 220px)!important;
-  box-sizing:border-box!important;
-}
-
-html body #root .emp-page:not(.super-admin-page) > .emp-main,
-html body #root .settings-shell > .settings-main{
-  padding-left:22px!important;
-  padding-right:22px!important;
 }
 
 html body #root .sfx-sidebar .sfx-brand-row{
@@ -89,14 +59,61 @@ html body #root .sfx-sidebar .sfx-upgrade{
   padding:10px!important;
 }
 
-/* Real mobile: allow sidebar to become top layout */
+/* Employee shell pages */
+html body #root .emp-page:not(.super-admin-page) > .emp-main,
+html body #root .settings-shell > .settings-main,
+html body #root .sf-tasks-page .sf-tasks-main,
+html body #root .won-polish-page .sf-fixed-main{
+  margin-left:220px!important;
+  width:calc(100vw - 220px)!important;
+  max-width:calc(100vw - 220px)!important;
+  box-sizing:border-box!important;
+}
+html body #root .emp-page:not(.super-admin-page) > .emp-main,
+html body #root .settings-shell > .settings-main{
+  padding-left:22px!important;
+  padding-right:22px!important;
+}
+
+/* Dashboard shell uses its own grid, do not double offset it */
+html body #root .reference-dashboard,
+html body #root .sf-dashboard{
+  grid-template-columns:220px minmax(0,1fr)!important;
+}
+html body #root .reference-dashboard > main,
+html body #root .sf-dashboard > main,
+html body #root .reference-dashboard .dashboard-main,
+html body #root .sf-dashboard .dashboard-main{
+  margin-left:0!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+
+/* Lead list page often has fixed content wrappers; pull it next to sidebar */
+html body #root .lead-page,
+html body #root .leads-page,
+html body #root .lead-list-page,
+html body #root .lead-shell,
+html body #root .ld-shell{
+  grid-template-columns:220px minmax(0,1fr)!important;
+}
+html body #root .lead-page main,
+html body #root .leads-page main,
+html body #root .lead-list-page main,
+html body #root .lead-shell main,
+html body #root .ld-shell main,
+html body #root .lead-main,
+html body #root .leads-main,
+html body #root .ld-main{
+  margin-left:0!important;
+  width:100%!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+
 @media(max-width:760px){
-  html body #root .emp-page:not(.super-admin-page) > .sfx-sidebar,
-  html body #root .settings-shell > .sfx-sidebar,
-  html body #root .sf-tasks-page > .sfx-sidebar,
-  html body #root .won-polish-page > .sfx-sidebar,
-  html body #root .reference-dashboard > .sfx-sidebar,
-  html body #root .sf-dashboard > .sfx-sidebar{
+  html body #root .sfx-sidebar{
     position:relative!important;
     width:100%!important;
     min-width:0!important;
@@ -108,11 +125,18 @@ html body #root .sfx-sidebar .sfx-upgrade{
   html body #root .emp-page:not(.super-admin-page) > .emp-main,
   html body #root .settings-shell > .settings-main,
   html body #root .sf-tasks-page .sf-tasks-main,
-  html body #root .won-polish-page .sf-fixed-main,
-  html body #root .reference-dashboard > main,
-  html body #root .sf-dashboard > main{
+  html body #root .won-polish-page .sf-fixed-main{
     margin-left:0!important;
     width:100%!important;
     max-width:100%!important;
+  }
+  html body #root .reference-dashboard,
+  html body #root .sf-dashboard,
+  html body #root .lead-page,
+  html body #root .leads-page,
+  html body #root .lead-list-page,
+  html body #root .lead-shell,
+  html body #root .ld-shell{
+    grid-template-columns:1fr!important;
   }
 }
