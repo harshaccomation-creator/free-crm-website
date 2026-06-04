@@ -10,133 +10,72 @@ html body #root .sfx-sidebar{
   gap:12px!important;
   box-sizing:border-box!important;
 }
-
-html body #root .sfx-sidebar .sfx-brand-row{
-  gap:6px!important;
-  margin-bottom:16px!important;
-}
+html body #root .sfx-sidebar .sfx-brand-row{gap:6px!important;margin-bottom:16px!important;}
 html body #root .sfx-sidebar .sfx-brand-dark,
-html body #root .sfx-sidebar .sfx-brand-image{
-  width:166px!important;
-  min-width:166px!important;
-  max-width:166px!important;
-  height:52px!important;
-  border-radius:15px!important;
-  padding:7px 9px!important;
-}
-html body #root .sfx-sidebar .sfx-real-logo{
-  width:148px!important;
-  max-width:148px!important;
-  height:auto!important;
-  display:block!important;
-}
-html body #root .sfx-sidebar .sfx-menu{
-  width:22px!important;
-  min-width:22px!important;
-  height:22px!important;
-}
-html body #root .sfx-sidebar .sfx-icon{
-  width:14px!important;
-  height:14px!important;
-}
-html body #root .sfx-sidebar .sfx-nav{
-  gap:7px!important;
-}
-html body #root .sfx-sidebar .sfx-nav button{
-  min-height:38px!important;
-  height:38px!important;
-  padding:6px 9px!important;
-  border-radius:10px!important;
-  gap:9px!important;
-  font-size:12.5px!important;
-}
-html body #root .sfx-sidebar .sfx-nav-icon{
-  width:22px!important;
-  height:22px!important;
-  min-width:22px!important;
-}
-html body #root .sfx-sidebar .sfx-upgrade{
-  padding:10px!important;
-}
+html body #root .sfx-sidebar .sfx-brand-image{width:166px!important;min-width:166px!important;max-width:166px!important;height:52px!important;border-radius:15px!important;padding:7px 9px!important;}
+html body #root .sfx-sidebar .sfx-real-logo{width:148px!important;max-width:148px!important;height:auto!important;display:block!important;}
+html body #root .sfx-sidebar .sfx-menu{width:22px!important;min-width:22px!important;height:22px!important;}
+html body #root .sfx-sidebar .sfx-icon{width:14px!important;height:14px!important;}
+html body #root .sfx-sidebar .sfx-nav{gap:7px!important;}
+html body #root .sfx-sidebar .sfx-nav button{min-height:38px!important;height:38px!important;padding:6px 9px!important;border-radius:10px!important;gap:9px!important;font-size:12.5px!important;}
+html body #root .sfx-sidebar .sfx-nav-icon{width:22px!important;height:22px!important;min-width:22px!important;}
+html body #root .sfx-sidebar .sfx-upgrade{padding:10px!important;}
 
-/* Employee shell pages */
+/* Employee shell pages: exact offset after compact sidebar */
 html body #root .emp-page:not(.super-admin-page) > .emp-main,
 html body #root .settings-shell > .settings-main,
 html body #root .sf-tasks-page .sf-tasks-main,
 html body #root .won-polish-page .sf-fixed-main{
+  position:relative!important;
+  left:auto!important;
+  transform:none!important;
   margin-left:220px!important;
   width:calc(100vw - 220px)!important;
   max-width:calc(100vw - 220px)!important;
+  min-width:0!important;
   box-sizing:border-box!important;
+  overflow-x:hidden!important;
 }
 html body #root .emp-page:not(.super-admin-page) > .emp-main,
 html body #root .settings-shell > .settings-main{
   padding-left:22px!important;
   padding-right:22px!important;
 }
+html body #root .emp-page:not(.super-admin-page) > .emp-main > .emp-container,
+html body #root .settings-shell > .settings-main > .settings-container,
+html body #root .settings-shell > .settings-main > div,
+html body #root .sf-tasks-page .sf-tasks-container,
+html body #root .won-polish-page .sf-fixed-container{
+  width:100%!important;
+  max-width:100%!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  box-sizing:border-box!important;
+}
 
 /* Dashboard shell uses its own grid, do not double offset it */
 html body #root .reference-dashboard,
-html body #root .sf-dashboard{
-  grid-template-columns:220px minmax(0,1fr)!important;
-}
+html body #root .sf-dashboard{grid-template-columns:220px minmax(0,1fr)!important;}
 html body #root .reference-dashboard > main,
 html body #root .sf-dashboard > main,
 html body #root .reference-dashboard .dashboard-main,
-html body #root .sf-dashboard .dashboard-main{
-  margin-left:0!important;
-  width:100%!important;
-  max-width:100%!important;
-  box-sizing:border-box!important;
-}
+html body #root .sf-dashboard .dashboard-main{margin-left:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box!important;}
 
-/* Lead list page often has fixed content wrappers; pull it next to sidebar */
-html body #root .lead-page,
-html body #root .leads-page,
-html body #root .lead-list-page,
-html body #root .lead-shell,
-html body #root .ld-shell{
-  grid-template-columns:220px minmax(0,1fr)!important;
-}
-html body #root .lead-page main,
-html body #root .leads-page main,
-html body #root .lead-list-page main,
-html body #root .lead-shell main,
-html body #root .ld-shell main,
-html body #root .lead-main,
-html body #root .leads-main,
-html body #root .ld-main{
-  margin-left:0!important;
-  width:100%!important;
-  max-width:100%!important;
-  box-sizing:border-box!important;
-}
+/* Lead list shell */
+html body #root .ld-shell{grid-template-columns:220px minmax(0,1fr)!important;}
+html body #root .ld-shell > .sfx-sidebar{grid-column:1!important;}
+html body #root .ld-shell > .ld-main,
+html body #root .ld-main{grid-column:2!important;margin-left:0!important;width:100%!important;max-width:100%!important;box-sizing:border-box!important;}
 
 @media(max-width:760px){
-  html body #root .sfx-sidebar{
-    position:relative!important;
-    width:100%!important;
-    min-width:0!important;
-    max-width:none!important;
-    height:auto!important;
-    min-height:auto!important;
-    max-height:none!important;
-  }
+  html body #root .sfx-sidebar{position:relative!important;width:100%!important;min-width:0!important;max-width:none!important;height:auto!important;min-height:auto!important;max-height:none!important;}
   html body #root .emp-page:not(.super-admin-page) > .emp-main,
   html body #root .settings-shell > .settings-main,
   html body #root .sf-tasks-page .sf-tasks-main,
-  html body #root .won-polish-page .sf-fixed-main{
-    margin-left:0!important;
-    width:100%!important;
-    max-width:100%!important;
-  }
+  html body #root .won-polish-page .sf-fixed-main{margin-left:0!important;width:100%!important;max-width:100%!important;}
   html body #root .reference-dashboard,
   html body #root .sf-dashboard,
-  html body #root .lead-page,
-  html body #root .leads-page,
-  html body #root .lead-list-page,
-  html body #root .lead-shell,
-  html body #root .ld-shell{
-    grid-template-columns:1fr!important;
-  }
+  html body #root .ld-shell{grid-template-columns:1fr!important;}
+  html body #root .ld-shell > .ld-main,
+  html body #root .ld-main{grid-column:1!important;}
 }
