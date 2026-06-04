@@ -69,6 +69,21 @@ function isActive(item, path, currentPath, index) {
 }
 function SidebarBrand() { return <img className="sfx-real-logo" src="/assets/salesflow-hub-logo-transparent.png" alt="SalesFlow Hub" />; }
 
+const sidebarInlineStyle = {
+  position: 'fixed',
+  left: 0,
+  top: 0,
+  bottom: 0,
+  width: '220px',
+  minWidth: '220px',
+  maxWidth: '220px',
+  height: '100vh',
+  minHeight: '100vh',
+  maxHeight: '100vh',
+  boxSizing: 'border-box',
+  zIndex: 50,
+};
+
 export default function DashboardSidebar({ role = 'employee' }) {
   const sidebarRef = useRef(null);
   const safeRole = menuByRole[role] ? role : 'employee';
@@ -77,5 +92,5 @@ export default function DashboardSidebar({ role = 'employee' }) {
   const homePath = routes[safeRole]?.Dashboard || routes[safeRole]?.Overview || '/employee/dashboard';
   const label = safeRole === 'superAdmin' ? 'Super Admin Control' : safeRole === 'admin' ? 'Company Admin' : safeRole === 'manager' ? 'Manager Workspace' : 'Premium CRM';
   useEffect(() => { const nav = sidebarRef.current?.querySelector('.sfx-nav'); if (nav && nav.scrollTop < 4) nav.scrollTop = 0; });
-  return <aside className="sfx-sidebar" ref={sidebarRef}><div className="sfx-brand-row"><button className="sfx-brand sfx-brand-image sfx-brand-dark" onClick={() => navigateTo(homePath)} type="button"><SidebarBrand /></button><button className="sfx-menu" type="button" aria-label="Toggle menu"><Icon name="menu" /></button></div><nav className="sfx-nav">{items.map((item, index) => { const path = routes[safeRole]?.[item]; return <button key={item} type="button" className={isActive(item, path, currentPath, index) ? 'active' : ''} onClick={() => navigateTo(path)}><span className="sfx-nav-icon"><Icon name={iconByItem[item]} /></span><em>{item}</em></button>; })}</nav><div className="sfx-upgrade"><span>*</span><h3>{label}</h3><p>{safeRole === 'superAdmin' ? 'Platform companies, users, trials and system health.' : 'Clean CRM workspace with role based navigation.'}</p><button type="button" onClick={() => navigateTo(safeRole === 'superAdmin' ? '/super-admin/platform-settings' : '/settings')}>Open Settings</button></div><button className="sfx-help" type="button" onClick={() => navigateTo(safeRole === 'superAdmin' ? '/super-admin/notifications' : '/notifications')}><span>?</span><div><strong>{safeRole === 'superAdmin' ? 'Platform Alerts' : 'CRM Alerts'}</strong><small>Open Notifications</small></div></button></aside>;
+  return <aside className="sfx-sidebar" style={sidebarInlineStyle} ref={sidebarRef}><div className="sfx-brand-row"><button className="sfx-brand sfx-brand-image sfx-brand-dark" onClick={() => navigateTo(homePath)} type="button"><SidebarBrand /></button><button className="sfx-menu" type="button" aria-label="Toggle menu"><Icon name="menu" /></button></div><nav className="sfx-nav">{items.map((item, index) => { const path = routes[safeRole]?.[item]; return <button key={item} type="button" className={isActive(item, path, currentPath, index) ? 'active' : ''} onClick={() => navigateTo(path)}><span className="sfx-nav-icon"><Icon name={iconByItem[item]} /></span><em>{item}</em></button>; })}</nav><div className="sfx-upgrade"><span>*</span><h3>{label}</h3><p>{safeRole === 'superAdmin' ? 'Platform companies, users, trials and system health.' : 'Clean CRM workspace with role based navigation.'}</p><button type="button" onClick={() => navigateTo(safeRole === 'superAdmin' ? '/super-admin/platform-settings' : '/settings')}>Open Settings</button></div><button className="sfx-help" type="button" onClick={() => navigateTo(safeRole === 'superAdmin' ? '/super-admin/notifications' : '/notifications')}><span>?</span><div><strong>{safeRole === 'superAdmin' ? 'Platform Alerts' : 'CRM Alerts'}</strong><small>Open Notifications</small></div></button></aside>;
 }
