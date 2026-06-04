@@ -1,6 +1,6 @@
-import CompanyAdminPreview from '../../company-admin-new/CompanyAdminPreview.jsx';
-import '../../company-admin-new/companyAdminNewPolish.css';
+import CompanyAdminExact from '../../company-admin-exact/App.tsx';
+import '../../company-admin-exact/index.css';
 
 export default function AdminDashboard() {
-  return <CompanyAdminPreview />;
+  return <CompanyAdminExact />;
 }
