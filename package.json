@@ -21,7 +21,10 @@
     "clsx": "latest",
     "tailwind-merge": "latest",
     "class-variance-authority": "latest",
-    "tailwindcss": "latest"
+    "tailwindcss": "latest",
+    "@radix-ui/react-slot": "latest",
+    "@radix-ui/react-avatar": "latest",
+    "@radix-ui/react-tooltip": "latest"
   },
   "devDependencies": {}
 }
