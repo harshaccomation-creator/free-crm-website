@@ -12,5 +12,4 @@ function normalizeRole(role = '') {
 }
 
 async function getRequester(supabase, req) {
-  const auth = req.headers.authorization || '';
-  const token = auth.startsWith('Bearer ') ? auth
+  const auth =
