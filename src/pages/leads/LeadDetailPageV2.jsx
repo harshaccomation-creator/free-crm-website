@@ -1,3 +1,6 @@
 import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
 import { getLead as getMockLead } from './leadsData.js';
-export default function LeadDetailPageV2({leadId}){const l=getMockLead(leadId)||{};const go=()=>{history.pushState({},'','/leads');dispatchEvent(new Event('salesflow:navigate'))};return <div style={{display:'grid',gridTemplateColumns:'300px 1fr',minHeight:'100vh',background:'#f5f8fc'}}><DashboardSidebar role='employee'/><main style={{padding:24}}><button onClick={go}>← Back
+
+const S = 300;
+function nav(path){ window.history.pushState({},'',path); window.dispatchEvent(new Event('salesflow:navigate')); }
+function initials(name='Lead'){ return String(name).split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase() || 'LD
