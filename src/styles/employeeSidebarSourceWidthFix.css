@@ -29,3 +29,24 @@
     grid-column:1 !important;
   }
 }
+/* Force actual employee sidebar visual width */
+.emp-page .sfx-sidebar,
+.emp-page aside,
+.emp-page .dashboard-sidebar,
+.emp-page .sidebar {
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+}
+
+.emp-page {
+  grid-template-columns: 300px minmax(0, 1fr) !important;
+}
+
+.emp-page .sfx-nav,
+.emp-page .sfx-nav button,
+.emp-page .sfx-nav button.active {
+  width: calc(100% - 28px) !important;
+  max-width: calc(100% - 28px) !important;
+  box-sizing: border-box !important;
+}
