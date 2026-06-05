@@ -11,5 +11,6 @@ function normalizeRole(role = '') {
   return 'employee';
 }
 
-export default async function handler(req, res) {
-  if (req
+async function getRequester(supabase, req) {
+  const auth = req.headers.authorization || '';
+  const token = auth.startsWith('Bearer ') ? auth
