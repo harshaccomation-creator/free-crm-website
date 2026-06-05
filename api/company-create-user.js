@@ -1,21 +1,11 @@
-import { adminClient, json, readBody, normalizeEmail, isValidEmail } from './_lib.js';
+import { json } from './_lib.js';
 
-function makePassword() {
-  const code = Math.floor(100000 + Math.random() * 900000);
-  return 'SalesFlow@' + code;
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return json(res, 405, { ok: false, message: 'Method not allowed' });
+  }
+  return json(res, 501, {
+    ok: false,
+    message: 'Team member invite API setup pending. Team listing is safe to use.',
+  });
 }
-
-function normalizeRole(role = '') {
-  const value = String(role || '').toLowerCase().replace(/[\s-]+/g, '_');
-  return value === 'manager' ? 'manager' : 'employee';
-}
-
-async function getRequester(supabase, req) {
-  const auth = req.headers.authorization || '';
-  const token = auth.startsWith('Bearer ') ? auth.slice(7) : '';
-  if (!token) throw new Error('Login required.');
-  const { data, error } = await supabase.auth.getUser(token);
-  if (error || !data?.user) throw new Error('Invalid session.');
-  const { data: profile, error: profileError } = await supabase.from('profiles').select('*').eq('id', data.user.id).maybeSingle();
-  if (profileError) throw profileError;
-  if (!profile?.company_id) throw new Error('Company
