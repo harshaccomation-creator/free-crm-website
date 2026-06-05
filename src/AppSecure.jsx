@@ -8,4 +8,6 @@ import SuperAdminSectionPage from './pages/dashboards/SuperAdminSectionPage.jsx'
 import LeadListPage from './pages/leads/LeadListPage.jsx';
 import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
 import EmployeeReportsPage from './pages/employee/EmployeeReportsPage.jsx';
-import PremiumProfile
+import PremiumProfilePage from './pages/employee/ProfilePagePremium.jsx';
+import EmployeeActivitiesPage from './pages/employee/EmployeeActivitiesPage.jsx';
+import EmployeeCalendarPage from
