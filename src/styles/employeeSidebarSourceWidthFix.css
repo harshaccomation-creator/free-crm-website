@@ -1,4 +1,13 @@
 .emp-page{
+  grid-template-columns:300px minmax(0,1fr) !important;
+}
+
+.emp-page > .sfx-sidebar{
+  width:300px !important;
+  min-width:300px !important;
+  max-width:300px !important;
+}
+.emp-page{
   grid-template-columns:220px minmax(0,1fr) !important;
 }
 
