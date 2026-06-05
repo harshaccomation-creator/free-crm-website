@@ -1,6 +1,1 @@
-import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
-import { getLead as getMockLead } from './leadsData.js';
-
-const S = 300;
-function nav(path){ window.history.pushState({},'',path); window.dispatchEvent(new Event('salesflow:navigate')); }
-function initials(name='Lead'){ return String(name).split(' ').map(x=>x[0]).join('').slice(0,2).toUpperCase() || 'LD
+export default function LeadDetailPageV2(){return <div style={{padding:40}}><h1>Lead Details V2</h1><p>Safe redesign placeholder.</p></div>}
