@@ -7,5 +7,4 @@ import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
 export default function AppSecure() {
   const path = window.location.pathname;
 
-  if (path === '/login') return <LoginPage />;
- 
+  if (path === '/
