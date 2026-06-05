@@ -6,5 +6,13 @@ export default function AppSecure() {
   const rawPath = window.location.pathname || '/';
   const path = rawPath.replace(/\/+$/, '') || '/';
 
-  if (path.indexOf('/admin/dashboard') === 0) return <AdminDashboard />;
-  if (path === '/login' || path === '/signin' || path === '/auth/login')
+  if (path.indexOf('/admin/dashboard') === 0) {
+    return <AdminDashboard />;
+  }
+
+  if (path === '/login' || path === '/signin' || path === '/auth/login') {
+    return <LoginPage />;
+  }
+
+  return <LandingPage />;
+}
