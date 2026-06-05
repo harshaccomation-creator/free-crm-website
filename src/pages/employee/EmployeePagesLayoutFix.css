@@ -1,1 +1,22 @@
-.emp-page{display:grid!important;grid-template-columns:220px minmax(0,1fr)!important;min-height:100vh!important;background:#f5f8fc!important;overflow-x:hidden!important}.emp-page>.sfx-sidebar{grid-column:1!important}.emp-page>.emp-main{grid-column:2!important;min-width:0!important;padding:18px 22px 34px!important;box-sizing:border-box!important}.emp-container{width:100%!important;max-width:100%!important;margin:0!important;box-sizing:border-box!important}.emp-head{margin:0 0 14
+/* Build-safe employee layout fix */
+.emp-page {
+  display: grid !important;
+  grid-template-columns: 220px minmax(0, 1fr) !important;
+  min-height: 100vh !important;
+  background: #f5f8fc !important;
+  overflow-x: hidden !important;
+}
+
+.emp-page > .emp-main {
+  grid-column: 2 !important;
+  min-width: 0 !important;
+  padding: 18px 22px 34px !important;
+  box-sizing: border-box !important;
+}
+
+.emp-page .emp-container {
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 !important;
+  box-sizing: border-box !important;
+}
