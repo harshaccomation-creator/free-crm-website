@@ -4,5 +4,5 @@ import { getLead as getMockLead } from './leadsData.js';
 import { getLead as getRealLead, isBackendConfigured, listActivities, listTasks } from '../../services/crmApi.js';
 
 const SIDEBAR = 300;
-const css = {
-  page:{display:'grid',gridTemplateColumns:`${SIDEBAR}px minmax(0,
+function goBack(){ window.history.pushState({}, '', '/leads'); window.dispatchEvent(new Event('salesflow:navigate')); }
+function initials(name='Lead'){ return name.split(' ').
