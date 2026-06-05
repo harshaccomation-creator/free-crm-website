@@ -1,9 +1,2 @@
-function LeadDetailPage() {
-  return (
-    <div style={{ padding: 24 }}>
-      Lead Details
-    </div>
-  );
-}
-
-export default LeadDetailPage;
+const lead={name:'Jayraj Singh',company:'SalesFlow Hub',job:'Business Owner',email:'jayraj@example.com',phone:'+91 98765 43210',status:'Hot Lead',score:86,value:'₹ 2,45,000',follow:'Today 05:00 PM'};
+const acts=[['Call Completed','Discussed requirements and CRM workflow.','Today, 10:30 AM','Jayraj','done'],['Demo Scheduled','Product demo scheduled with decision maker.','Yesterday, 04:10 PM','Amit','soon'],['Lead Captured','Lead created from website contact form.','20 May, 10:30
