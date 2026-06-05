@@ -1,4 +1,1 @@
-const menuByRole = {
-  employee: ['Dashboard', 'My Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
-  manager: ['Dashboard', 'Team Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
-  admin: ['Dashboard', 'Leads', 'Contacts', 'Tasks', 'Activities', 'Reports',
+const menus={employee:['Dashboard','My Leads','Contacts','Won','Tasks','Calendar','Activities','Reports','Notifications','Profile','Settings'],manager:['Dashboard','Team Leads','Contacts','Won','Tasks','Calendar','Activities','Reports','Notifications','Profile','Settings'],admin:['Dashboard','Leads','Contacts','Tasks','Activities','Reports','Calendar','Users','Notifications','
