@@ -3,6 +3,8 @@ import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import EmployeeDashboard from './pages/dashboards/EmployeeDashboardV2.jsx';
 import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
-import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
-import SuperAdminSectionPage from './pages/dashboards/SuperAdminSectionPage.jsx';
-import LeadListPage from './pages
+import LeadListPage from './pages/leads/LeadListPage.jsx';
+import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
+
+function cleanPath(path) {
+  return (path || '/').replace
