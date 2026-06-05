@@ -1,16 +1,1 @@
-/* Employee pages layout lock - matches DashboardSidebar visual width */
-.emp-page {
-  display: grid !important;
-  grid-template-columns: 300px minmax(0, 1fr) !important;
-  min-height: 100vh !important;
-  background: #f5f8fc !important;
-  overflow-x: hidden !important;
-}
-
-.emp-page > .sfx-sidebar {
-  width: 300px !important;
-  min-width: 300px !important;
-  max-width: 300px !important;
-}
-
-.emp
+.emp-page{display:grid!important;grid-template-columns:300px minmax(0,1fr)!important;min-height:100vh!important;overflow-x:hidden!important;background:#f5f8fc!important}.emp-page>.sfx-sidebar{width:300px!important;min-width:300px!important;max-width:300px!important}.emp-page>.emp-main{grid-column:2!important;min-width:0!important;box-sizing:border-box!important}@media(max-width:760px){.emp-page{grid-template-columns:1fr
