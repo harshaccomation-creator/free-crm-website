@@ -1,12 +1,10 @@
-export default function Team() {
-  return (
-    <div className="space-y-6">
-      <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
-        <h2 className="text-xl font-bold text-slate-900">Team Members</h2>
-        <p className="mt-2 text-sm text-slate-500">
-          Team page temporarily restored. CRM connection will be applied in the next small update.
-        </p>
-      </div>
-    </div>
-  );
-}
+import { useEffect, useMemo, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Users, UserCheck, ShieldCheck, Plus, Mail, Phone, CheckCircle2 } from "lucide-react";
+import { getCurrentProfile, getCompanyUsers, listLeads } from "../../services/crmApi.js";
+
+function initials(name: string) {
+  return String(name || "U").split(" ").map((x) => x[0]).join("").slice
