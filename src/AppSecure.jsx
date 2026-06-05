@@ -68,6 +68,7 @@ import './styles/crmDesignSystemOverrides.css';
 import './styles/tasksFixedHardOverride.css';
 import './styles/activitiesFixedHardOverride.css';
 import './styles/appSidebarWidthFinalLock.css';
+import './styles/leadDetailsPageFinalLock.css';
 
 function isProtected(path) {
   return path.startsWith('/employee') ||
