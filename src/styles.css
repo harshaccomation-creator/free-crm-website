@@ -25,3 +25,13 @@ main {
   place-items: center;
   padding: 24px;
 }
+.sf-employee aside nav::-webkit-scrollbar,
+.sf-employee .overflow-y-auto::-webkit-scrollbar {
+  width: 0 !important;
+  display: none !important;
+}
+
+.sf-employee aside nav,
+.sf-employee .overflow-y-auto {
+  scrollbar-width: none !important;
+}
