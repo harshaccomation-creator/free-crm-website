@@ -1,236 +1,91 @@
-import { useEffect, useMemo, useState } from 'react';
-import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
-import { isBackendConfigured, listLeads, listTasks } from '../../services/crmApi.js';
-import './EmployeePages.css';
-import './EmployeePagesLayoutFix.css';
-import './EmployeeReportsPremiumFix.css';
-import './EmployeeCalendarClickFix.css';
-import './EmployeeCalendarFinalFix.css';
-import { CrmEmptyState, CrmLoadingPanel } from '../../components/crm/CrmUiStates.jsx';
+import { CalendarDays, Plus, Clock } from "lucide-react";
+import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 
-const SIDEBAR_WIDTH = 300;
-
-function Shell({ title, subtitle, children, actions }) {
-  return (
-    <div
-      className="calendar-hard-shell emp-calendar-page"
-      style={{
-        display: 'grid',
-        gridTemplateColumns: `${SIDEBAR_WIDTH}px minmax(0, 1fr)`,
-        width: '100vw',
-        maxWidth: '100vw',
-        minHeight: '100vh',
-        overflowX: 'hidden',
-        background: '#f5f8fc',
-      }}
-    >
-      <div style={{ gridColumn: '1 / 2', width: SIDEBAR_WIDTH }}>
-        <DashboardSidebar role="employee" />
-      </div>
-      <main
-        className="calendar-hard-main"
-        style={{
-          gridColumn: '2 / 3',
-          width: '100%',
-          maxWidth: '100%',
-          minWidth: 0,
-          minHeight: '100vh',
-          boxSizing: 'border-box',
-          padding: '18px 26px 34px',
-          overflowX: 'hidden',
-        }}
-      >
-        <div className="calendar-hard-container" style={{ width: '100%', maxWidth: '100%', margin: 0, boxSizing: 'border-box' }}>
-          <header className="emp-head calendar-hard-head">
-            <div>
-              <span className="emp-kicker">Employee Workspace</span>
-              <h1>{title}</h1>
-              <p>{subtitle}</p>
-            </div>
-            <div className="emp-actions">{actions}</div>
-          </header>
-          {children}
-        </div>
-      </main>
-    </div>
-  );
-}
-
-function formatDate(value) {
-  const date = value ? new Date(value) : null;
-  if (!date || Number.isNaN(date.getTime())) return '-';
-  return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-}
-
-function formatTime(value) {
-  const date = value ? new Date(value) : null;
-  if (!date || Number.isNaN(date.getTime())) return '-';
-  return date.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-}
-
-function isSameMonth(value, now = new Date()) {
-  const date = value ? new Date(value) : null;
-  if (!date || Number.isNaN(date.getTime())) return false;
-  return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth();
-}
-
-function normalizeTaskEvent(task) {
-  const due = task.due_at || task.dueAt;
-  return {
-    id: `task-${task.id}`,
-    title: task.title || 'Task',
-    lead: task.lead?.name || task.lead || 'Task',
-    leadId: task.lead_id || task.lead?.id || null,
-    dateTime: due,
-    date: formatDate(due),
-    time: formatTime(due),
-    tone: task.status === 'Overdue' ? 'orange' : task.status === 'Completed' ? 'green' : '',
-    source: 'Task',
-  };
-}
-
-function normalizeLeadEvents(lead) {
-  const events = [];
-  const leadName = lead.name || 'Lead';
-  const followUpAt = lead.next_follow_up || lead.follow_up_at || lead.nextFollowUp;
-  const demoAt = lead.demo_at || lead.demoAt;
-  if (followUpAt) {
-    events.push({
-      id: `lead-follow-${lead.id}`,
-      title: `Follow-up: ${leadName}`,
-      lead: leadName,
-      leadId: lead.id,
-      dateTime: followUpAt,
-      date: formatDate(followUpAt),
-      time: formatTime(followUpAt),
-      tone: 'green',
-      source: 'Lead Follow-up',
-    });
-  }
-  if (demoAt) {
-    events.push({
-      id: `lead-demo-${lead.id}`,
-      title: `Demo: ${leadName}`,
-      lead: leadName,
-      leadId: lead.id,
-      dateTime: demoAt,
-      date: formatDate(demoAt),
-      time: formatTime(demoAt),
-      tone: 'green',
-      source: 'Lead Demo',
-    });
-  }
-  return events;
-}
-
-function goToLead(event) {
-  if (!event?.leadId) return;
-  window.history.pushState({}, '', `/leads/${event.leadId}`);
-  window.dispatchEvent(new Event('salesflow:navigate'));
-}
-
-function useCalendarEvents() {
-  const [events, setEvents] = useState([]);
-  const [isLive, setIsLive] = useState(false);
-  const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(Boolean(isBackendConfigured));
-
-  useEffect(() => {
-    let alive = true;
-    async function load() {
-      if (!isBackendConfigured) {
-        setLoading(false);
-        setMessage('Demo mode: Supabase env missing.');
-        return;
-      }
-      try {
-        setLoading(true);
-        const [tasks, leads] = await Promise.all([listTasks({ limit: 300 }), listLeads({ limit: 500 })]);
-        if (!alive) return;
-        const taskEvents = (tasks || []).map(normalizeTaskEvent).filter((event) => event.dateTime);
-        const leadEvents = (leads || []).flatMap(normalizeLeadEvents).filter((event) => event.dateTime);
-        const allEvents = [...taskEvents, ...leadEvents].sort((a, b) => new Date(a.dateTime) - new Date(b.dateTime));
-        setEvents(allEvents);
-        setIsLive(true);
-        setMessage(allEvents.length ? 'Live Supabase connected.' : 'Live Supabase connected. No schedules found yet.');
-      } catch (error) {
-        if (!alive) return;
-        setIsLive(false);
-        setMessage(`Demo mode: ${error.message}`);
-      } finally {
-        if (alive) setLoading(false);
-      }
-    }
-    load();
-    return () => { alive = false; };
-  }, []);
-
-  return { events, isLive, message, loading };
-}
+const days = Array.from({ length: 30 }, (_, i) => i + 1);
 
 export default function EmployeeCalendarPage() {
-  const { events, isLive, message, loading } = useCalendarEvents();
-  const now = new Date();
-  const [selectedDay, setSelectedDay] = useState(now.getDate());
-  const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-  const days = Array.from({ length: daysInMonth }, (_, index) => index + 1);
-  const currentMonth = now.toLocaleString('en-IN', { month: 'long', year: 'numeric' });
-
-  const eventMap = useMemo(() => {
-    const map = {};
-    events.filter((event) => isSameMonth(event.dateTime, now)).forEach((event) => {
-      const day = new Date(event.dateTime).getDate();
-      map[day] = map[day] || [];
-      map[day].push(event);
-    });
-    return map;
-  }, [events]);
-
-  const selectedEvents = eventMap[selectedDay] || [];
-  const upcoming = useMemo(() => events.filter((event) => new Date(event.dateTime).getTime() >= Date.now()).slice(0, 8), [events]);
-  const rightPanelEvents = selectedEvents.length ? selectedEvents : upcoming;
-  const rightPanelTitle = selectedEvents.length ? `${selectedDay} ${currentMonth}` : 'Upcoming';
-
   return (
-    <Shell
-      title="Calendar"
-      subtitle="View and manage your lead follow-ups, demos and scheduled tasks."
-      actions={<button className="emp-btn primary" type="button" onClick={() => { window.history.pushState({}, '', '/employee/tasks'); window.dispatchEvent(new Event('salesflow:navigate')); }}>+ Schedule</button>}
-    >
-      {loading ? <CrmLoadingPanel label="Loading schedule..." compact /> : null}
-      <section className="calendar-wrap calendar-hard-wrap">
-        <article className="emp-card emp-section">
-          <div className="emp-section-head"><h2>{currentMonth}</h2><span className="emp-pill blue">{isLive ? 'Live Schedule' : 'Demo Schedule'}</span></div>
-          {message ? <div className={`emp-data-banner ${isLive ? 'live' : 'demo'}`}>{message}</div> : null}
-          <div className="calendar-grid">
-            {days.map((day) => (
-              <button type="button" className={`cal-day ${day === now.getDate() ? 'today' : ''} ${day === selectedDay ? 'selected' : ''}`} key={day} onClick={() => setSelectedDay(day)}>
-                <b>{day}</b>
-                {(eventMap[day] || []).slice(0, 3).map((event) => (
-                  <span className={`cal-event ${event.tone}`} key={event.id} onClick={(clickEvent) => { clickEvent.stopPropagation(); goToLead(event); }}>{event.title}</span>
-                ))}
-              </button>
-            ))}
+    <EmployeeShell>
+      <div className="space-y-5">
+        <div className="flex items-center justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">
+              Employee Workspace
+            </p>
+            <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">
+              Calendar
+            </h1>
+            <p className="text-sm text-slate-500 mt-1">
+              Manage meetings, demos and follow-ups.
+            </p>
           </div>
-        </article>
-        <article className="emp-card emp-section">
-          <div className="emp-section-head"><h2>{rightPanelTitle}</h2></div>
-          {rightPanelEvents.length ? rightPanelEvents.map((event) => (
-            <button type="button" className="task-row calendar-click-row" key={event.id} onClick={() => goToLead(event)}>
-              <span className="task-check" />
-              <div><strong>{event.title}</strong><small>{event.date} • {event.lead} • {event.source}</small></div>
-              <span className="task-time">{event.time}</span>
-            </button>
-          )) : (
-            <CrmEmptyState
-              title="Nothing scheduled"
-              text={selectedEvents.length ? 'No events on this date.' : 'No upcoming follow-ups or demos.'}
-              icon="📅"
-              action={<button type="button" className="crm-empty-cta" onClick={() => { window.history.pushState({}, '', '/employee/tasks'); window.dispatchEvent(new Event('salesflow:navigate')); }}>Schedule Task</button>}
-            />
-          )}
-        </article>
-      </section>
-    </Shell>
+
+          <button className="inline-flex items-center gap-2 px-4 h-10 rounded-xl bg-orange-500 text-white text-sm font-bold shadow-lg shadow-orange-500/20">
+            <Plus className="w-4 h-4" />
+            Schedule
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 xl:grid-cols-[1fr_340px] gap-5">
+          <section className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-lg font-bold text-slate-900">May 2025</h2>
+              <CalendarDays className="w-5 h-5 text-orange-500" />
+            </div>
+
+            <div className="grid grid-cols-7 gap-2 text-center">
+              {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+                <div key={d} className="text-xs font-bold text-slate-400 py-2">
+                  {d}
+                </div>
+              ))}
+
+              {days.map((d) => (
+                <div
+                  key={d}
+                  className={`min-h-[76px] rounded-xl border p-2 text-left ${
+                    [7, 13, 20].includes(d)
+                      ? "bg-orange-50 border-orange-200"
+                      : "bg-slate-50 border-slate-100"
+                  }`}
+                >
+                  <span className="text-sm font-bold text-slate-700">{d}</span>
+                  {[7, 13, 20].includes(d) ? (
+                    <p className="text-[11px] text-orange-700 font-bold mt-2">
+                      Follow-up
+                    </p>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <aside className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100">
+              <h2 className="text-lg font-bold text-slate-900">Upcoming</h2>
+              <p className="text-sm text-slate-500 mt-1">Next scheduled events.</p>
+            </div>
+
+            <div className="divide-y divide-slate-100">
+              {[
+                ["Demo with Amit", "Today, 03:00 PM"],
+                ["Call Priya", "Tomorrow, 11:30 AM"],
+                ["Payment follow-up", "Friday, 10:15 AM"]
+              ].map((item) => (
+                <div key={item[0]} className="px-5 py-4 flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 grid place-items-center">
+                    <Clock className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-slate-900">{item[0]}</h3>
+                    <p className="text-sm text-slate-500 mt-1">{item[1]}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </aside>
+        </div>
+      </div>
+    </EmployeeShell>
   );
 }
