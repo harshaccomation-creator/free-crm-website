@@ -1,3 +1,5 @@
+import EmployeeContactsPage from './pages/employee/EmployeeContactsPage.jsx';
+import EmployeeLeadActivityPage from './pages/employee/EmployeeLeadActivityPage.jsx';
 import { useEffect, useState } from 'react';
 import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
@@ -91,6 +93,8 @@ export default function AppSecure() {
   if (path === '/employee/tasks') return <TasksPageFixed />;
   if (path === '/employee/calendar') return <EmployeeCalendarPage />;
   if (path === '/employee/activities') return <EmployeeActivitiesPage />;
+  if (path === '/contacts') return <EmployeeContactsPage />;
+if (path === '/employee/lead-activity') return <EmployeeLeadActivityPage />;
   if (path === '/employee/reports') return <EmployeeReportsPage />;
   if (path === '/employee/profile') return <PremiumProfilePage />;
 
