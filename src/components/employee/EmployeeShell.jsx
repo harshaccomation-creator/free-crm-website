@@ -163,7 +163,7 @@ export default function EmployeeShell({ children }) {
   }}
 >
         <header
-          className="flex items-center gap-3 px-5 py-3 sticky top-0 z-20"
+          className="flex items-center gap-3 px-5 py-3 sticky top-0 z-20 w-full"
           style={{
             background: "#0d1626",
             borderBottom: "1px solid rgba(255,255,255,0.07)",
