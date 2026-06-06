@@ -154,9 +154,14 @@ export default function EmployeeShell({ children }) {
       </aside>
 
       <main
-        className="flex-1 min-h-screen lg:ml-[200px] flex flex-col"
-        style={{ background: "#f5f7fb" }}
-      >
+  className="flex-1 min-h-screen lg:ml-[200px] flex flex-col"
+  style={{
+    background: "#f5f7fb",
+    width: "calc(100vw - 200px)",
+    maxWidth: "calc(100vw - 200px)",
+    overflowX: "hidden"
+  }}
+>
         <header
           className="flex items-center gap-3 px-5 py-3 sticky top-0 z-20"
           style={{
