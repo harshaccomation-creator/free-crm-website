@@ -38,7 +38,7 @@ function colorFor(type) {
 export default function EmployeeActivitiesPage() {
   return (
     <EmployeeShell>
-      <div className="space-y-5">
+      <div className="space-y-5 max-w-none">
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">
