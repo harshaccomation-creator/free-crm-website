@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   LayoutDashboard, Users, Phone, Trophy, CheckSquare, Calendar,
   Activity, Zap, BarChart2, Bell, User, Settings, Menu, X,
-  LogOut, ChevronRight, Search
+  LogOut, Search
 } from "lucide-react";
 
 const navItems = [
@@ -137,35 +137,21 @@ export default function EmployeeShell({ children }) {
             );
           })}
         </nav>
-
-        <div
-          className="px-2 py-3"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <button
-            type="button"
-            onClick={() => navigate("/")}
-            className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-gray-500 hover:text-gray-300 hover:bg-white/5 transition-all"
-          >
-            <ChevronRight className="w-3 h-3 rotate-180" />
-            Back to Admin
-          </button>
-        </div>
       </aside>
 
-     <main
-  className="min-h-screen flex flex-col"
-  style={{
-    marginLeft: "200px",
-    width: "calc(100vw - 200px)",
-    maxWidth: "calc(100vw - 200px)",
-    background: "#f5f7fb",
-    overflowX: "hidden",
-    boxSizing: "border-box"
-  }}
->
+      <main
+        className="min-h-screen flex flex-col"
+        style={{
+          marginLeft: "200px",
+          width: "calc(100vw - 200px)",
+          maxWidth: "calc(100vw - 200px)",
+          background: "#f5f7fb",
+          overflowX: "hidden",
+          boxSizing: "border-box"
+        }}
+      >
         <header
-  className="flex items-center gap-3 px-5 py-3 sticky top-0 z-20"
+          className="flex items-center gap-3 px-5 py-3 sticky top-0 z-20"
           style={{
             background: "#0d1626",
             borderBottom: "1px solid rgba(255,255,255,0.07)",
@@ -231,15 +217,15 @@ export default function EmployeeShell({ children }) {
         </header>
 
         <div
-  className="flex-1"
-  style={{
-    padding: "24px 28px",
-    boxSizing: "border-box",
-    width: "100%"
-  }}
->
-  {children}
-</div>
+          className="flex-1"
+          style={{
+            padding: "24px 28px",
+            boxSizing: "border-box",
+            width: "100%"
+          }}
+        >
+          {children}
+        </div>
       </main>
     </div>
   );
