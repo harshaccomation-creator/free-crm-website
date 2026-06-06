@@ -153,17 +153,19 @@ export default function EmployeeShell({ children }) {
         </div>
       </aside>
 
-      <main
-  className="flex-1 min-h-screen lg:ml-[200px] flex flex-col"
+     <main
+  className="min-h-screen flex flex-col"
   style={{
-    background: "#f5f7fb",
+    marginLeft: "200px",
     width: "calc(100vw - 200px)",
     maxWidth: "calc(100vw - 200px)",
-    overflowX: "hidden"
+    background: "#f5f7fb",
+    overflowX: "hidden",
+    boxSizing: "border-box"
   }}
 >
         <header
-          className="flex items-center gap-3 px-5 py-3 sticky top-0 z-20 w-full"
+  className="flex items-center gap-3 px-5 py-3 sticky top-0 z-20"
           style={{
             background: "#0d1626",
             borderBottom: "1px solid rgba(255,255,255,0.07)",
@@ -228,7 +230,16 @@ export default function EmployeeShell({ children }) {
           </div>
         </header>
 
-        <div className="flex-1 px-6 py-6">{children}</div>
+        <div
+  className="flex-1"
+  style={{
+    padding: "24px 28px",
+    boxSizing: "border-box",
+    width: "100%"
+  }}
+>
+  {children}
+</div>
       </main>
     </div>
   );
