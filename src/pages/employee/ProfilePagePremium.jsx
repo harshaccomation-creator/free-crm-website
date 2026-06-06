@@ -1,85 +1,95 @@
-import { useEffect, useMemo, useState } from 'react';
-import DashboardSidebar from '../../components/dashboard/DashboardSidebar.jsx';
-import { getCurrentProfile, supabase } from '../../services/crmApi.js';
-import './ProfilePagePremium.css';
-import { CrmLoadingPanel } from '../../components/crm/CrmUiStates.jsx';
+import { User, Mail, Shield, Building2, Edit3, Crown } from "lucide-react";
+import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 
-function roleLabel(role) {
-  if (role === 'company_admin') return 'Company Admin';
-  if (role === 'manager') return 'Manager';
-  if (role === 'super_admin') return 'Super Admin';
-  return 'Sales Executive';
-}
-function toView(row = {}) {
-  return {
-    id: row.id || '',
-    name: row.full_name || row.email?.split('@')[0] || 'Employee User',
-    role: roleLabel(row.role),
-    email: row.email || '-',
-    phone: row.phone || '-',
-    team: row.team || 'Sales',
-    location: row.location || 'India',
-  };
-}
-
-export default function ProfilePage() {
-  const [profile, setProfile] = useState(toView());
-  const [draft, setDraft] = useState(toView());
-  const [showModal, setShowModal] = useState(false);
-  const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(true);
-  const initial = useMemo(() => (profile.name || profile.email || 'E').slice(0, 1).toUpperCase(), [profile.name, profile.email]);
-
-  async function loadProfile() {
-    setLoading(true);
-    try {
-      const row = await getCurrentProfile();
-      if (!row?.id) throw new Error('Authenticated profile not found. Please login again.');
-      const next = toView(row);
-      setProfile(next);
-      setDraft(next);
-    } catch (error) {
-      setMessage(error.message || 'Unable to load profile.');
-    } finally {
-      setLoading(false);
-    }
-  }
-  useEffect(() => { loadProfile(); }, []);
-
-  const openEdit = () => { setDraft(profile); setMessage(''); setShowModal(true); };
-  const saveProfile = async (event) => {
-    event.preventDefault();
-    setMessage('');
-    if (!draft.id) return setMessage('Profile id missing. Please login again.');
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .update({ full_name: draft.name.trim(), phone: draft.phone.trim() })
-        .eq('id', draft.id)
-        .select('id,full_name,email,phone,role')
-        .single();
-      if (error) throw error;
-      const next = toView(data);
-      setProfile(next);
-      setDraft(next);
-      setShowModal(false);
-      setMessage('Profile updated successfully.');
-    } catch (error) {
-      setMessage(error.message || 'Unable to update profile.');
-    }
-  };
-
+export default function ProfilePagePremium() {
   return (
-    <div className="sf-dashboard premium-profile-page">
-      <DashboardSidebar role="employee" />
-      <main className="profile-premium-main">
-        <header className="profile-premium-head"><div><span className="profile-kicker">Employee Workspace</span><h1>Profile</h1><p>Manage your account details and workspace identity.</p></div><button className="profile-edit-btn" type="button" onClick={openEdit} disabled={loading}>Edit Profile</button></header>
-        {loading ? <CrmLoadingPanel label="Loading profile..." compact /> : null}
-        <section className="profile-hero-card"><div className="profile-cover-glow" /><div className="profile-avatar-xl">{initial}</div><div className="profile-main-info"><span className="profile-status">Active Employee</span><h2>{profile.name}</h2><p>{profile.role}</p><div className="profile-actions-row"><button type="button" className="ghost" onClick={openEdit} disabled={loading}>Update Details</button></div></div></section>
-        {message && <div className="profile-success">{message}</div>}
-        <section className="profile-details-grid"><article><span>Email Address</span><strong>{profile.email}</strong><small>Read-only login email</small></article><article><span>Mobile Number</span><strong>{profile.phone}</strong><small>Internal communication</small></article><article><span>Team</span><strong>{profile.team}</strong><small>Your department</small></article><article><span>Location</span><strong>{profile.location}</strong><small>Workspace region</small></article></section>
-      </main>
-      {showModal && <div className="profile-modal-backdrop" onClick={() => setShowModal(false)}><form className="profile-modal" onSubmit={saveProfile} onClick={(event) => event.stopPropagation()}><div className="profile-modal-head"><div><h3>Edit Profile</h3><p>Update logged-in employee details.</p></div><button type="button" onClick={() => setShowModal(false)}>×</button></div><label>Full Name<input value={draft.name} onChange={(event) => setDraft({ ...draft, name: event.target.value })} /></label><label>Email<input type="email" value={draft.email} readOnly /></label><label>Phone<input value={draft.phone} onChange={(event) => setDraft({ ...draft, phone: event.target.value })} /></label><label>Team<input value={draft.team} readOnly /></label><label>Location<input value={draft.location} readOnly /></label><div className="profile-modal-actions"><button type="button" onClick={() => setShowModal(false)}>Cancel</button><button type="submit">Save Profile</button></div></form></div>}
-    </div>
+    <EmployeeShell>
+      <div className="space-y-5">
+        <div>
+          <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">
+            Employee Workspace
+          </p>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">
+            Profile
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Manage your account profile and workspace identity.
+          </p>
+        </div>
+
+        <section className="rounded-2xl bg-white border border-slate-200 shadow-sm p-6">
+          <div className="flex items-center gap-5">
+            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-blue-500 to-blue-700 text-white grid place-items-center text-3xl font-black">
+              J
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <h2 className="text-2xl font-bold text-slate-900">Jayraj</h2>
+              <p className="text-sm text-slate-500 mt-1">Sales Executive · SalesFlow Hub</p>
+
+              <div className="flex flex-wrap gap-2 mt-3">
+                <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
+                  Employee
+                </span>
+                <span className="px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-bold">
+                  Active
+                </span>
+              </div>
+            </div>
+
+            <button className="inline-flex items-center gap-2 h-10 px-4 rounded-xl bg-orange-500 text-white font-bold text-sm">
+              <Edit3 className="w-4 h-4" />
+              Edit Profile
+            </button>
+          </div>
+        </section>
+
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-5">
+          <section className="xl:col-span-2 rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100">
+              <h2 className="text-lg font-bold text-slate-900">Account Information</h2>
+              <p className="text-sm text-slate-500 mt-1">Personal and company details.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-5">
+              {[
+                ["Full Name", "Jayraj", User],
+                ["Email", "jayraj@example.com", Mail],
+                ["Role", "Sales Executive", Shield],
+                ["Company", "SalesFlow Hub", Building2],
+              ].map(([label, value, Icon]) => (
+                <div key={label} className="rounded-2xl bg-slate-50 border border-slate-100 p-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 grid place-items-center text-orange-600">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-slate-500 uppercase">{label}</p>
+                      <h3 className="font-bold text-slate-900 mt-1">{value}</h3>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
+            <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-600 grid place-items-center">
+              <Crown className="w-5 h-5" />
+            </div>
+
+            <h2 className="text-lg font-bold text-slate-900 mt-4">Trial Plan</h2>
+            <p className="text-sm text-slate-500 mt-1">
+              Your workspace is currently under active subscription/trial access.
+            </p>
+
+            <div className="mt-5 rounded-2xl bg-slate-50 border border-slate-100 p-4">
+              <p className="text-xs font-bold text-slate-500 uppercase">Status</p>
+              <h3 className="text-xl font-bold text-green-700 mt-1">Active</h3>
+            </div>
+          </section>
+        </div>
+      </div>
+    </EmployeeShell>
   );
 }
