@@ -150,13 +150,17 @@ export default function EmployeeShell({ children }) {
           boxSizing: "border-box"
         }}
       >
-        <header
-          className="flex items-center gap-3 px-5 py-3 sticky top-0 z-20"
-          style={{
-            background: "#0d1626",
-            borderBottom: "1px solid rgba(255,255,255,0.07)",
-          }}
-        >
+       <header
+  className="flex items-center gap-3 sticky top-0 z-20"
+  style={{
+    background: "#0d1626",
+    borderBottom: "1px solid rgba(255,255,255,0.07)",
+    width: "100%",
+    height: "64px",
+    padding: "0 24px",
+    boxSizing: "border-box"
+  }}
+>
           <button
             onClick={() => setMobileOpen(true)}
             className="lg:hidden text-gray-400 hover:text-white mr-1"
@@ -164,7 +168,7 @@ export default function EmployeeShell({ children }) {
             <Menu className="w-5 h-5" />
           </button>
 
-          <div className="flex-1 relative max-w-lg">
+          <div className="flex-1 relative" style={{ maxWidth: "560px" }}>
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
 
             <input
@@ -216,14 +220,14 @@ export default function EmployeeShell({ children }) {
           </div>
         </header>
 
-        <div
-          className="flex-1"
-          style={{
-            padding: "24px 28px",
-            boxSizing: "border-box",
-            width: "100%"
-          }}
-        >
+      <div
+  className="flex-1"
+  style={{
+    padding: "20px 28px 32px",
+    boxSizing: "border-box",
+    width: "100%"
+  }}
+>
           {children}
         </div>
       </main>
