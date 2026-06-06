@@ -1,125 +1,169 @@
-import EmployeeShell from '../../components/employee/EmployeeShell.jsx';
+import {
+  Activity,
+  Phone,
+  MessageCircle,
+  Calendar,
+  FileText,
+  Trophy,
+  Filter,
+  Plus,
+  MoreVertical
+} from "lucide-react";
+import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
+import { employeeActivities } from "../../data/employeeData.js";
 
 const stats = [
-  ['Total Activities', '128', 'All employee updates'],
-  ['Contacted', '42', 'Calls and WhatsApp'],
-  ['Proposal/Demo', '18', 'Qualified movement'],
-  ['Won', '9', 'Closed successfully'],
+  { label: "Total Activities", value: "128", icon: Activity, color: "#2563eb" },
+  { label: "Contacted", value: "42", icon: Phone, color: "#16a34a" },
+  { label: "Proposal / Demo", value: "18", icon: Calendar, color: "#f97316" },
+  { label: "Won", value: "9", icon: Trophy, color: "#7c3aed" }
 ];
 
-const timeline = [
-  ['Lead Created', 'Rohan Mehta captured from website form.', 'Today, 10:30 AM', 'New'],
-  ['Contacted', 'Call completed with Priya Sharma.', 'Yesterday, 03:15 PM', 'Call'],
-  ['Proposal Sent', 'Proposal shared with Amit Verma.', '18 May, 11:45 AM', 'Proposal'],
-  ['Negotiation', 'Budget discussion with Neha Singh.', '17 May, 04:20 PM', 'Deal'],
-  ['Won', 'Deepak Kumar converted successfully.', '16 May, 12:10 PM', 'Won'],
-];
+function iconFor(type) {
+  if (type === "call") return Phone;
+  if (type === "whatsapp") return MessageCircle;
+  if (type === "demo") return Calendar;
+  if (type === "won") return Trophy;
+  return FileText;
+}
+
+function colorFor(type) {
+  if (type === "call") return "#16a34a";
+  if (type === "whatsapp") return "#22c55e";
+  if (type === "demo") return "#f97316";
+  if (type === "won") return "#7c3aed";
+  return "#2563eb";
+}
 
 export default function EmployeeActivitiesPage() {
   return (
-    <EmployeeShell
-      title="Activities"
-      subtitle="Track your lead journey and recent CRM activity."
-    >
-      <div className="sf-kpi-grid">
-        {stats.map((item) => (
-          <article className="sf-card sf-kpi" key={item[0]}>
-            <small>{item[0]}</small>
-            <strong>{item[1]}</strong>
-            <p>{item[2]}</p>
-          </article>
-        ))}
-      </div>
-
-      <section className="sf-card" style={{ padding: 22 }}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: 12,
-            alignItems: 'center',
-            marginBottom: 12,
-          }}
-        >
+    <EmployeeShell>
+      <div className="space-y-5">
+        <div className="flex items-center justify-between gap-4">
           <div>
-            <h2 style={{ margin: 0, color: '#0f172a' }}>Activity Timeline</h2>
-            <p style={{ margin: '5px 0 0', color: '#64748b' }}>
-              Latest lead and task movement.
+            <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">
+              Employee Workspace
+            </p>
+            <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">
+              Activities
+            </h1>
+            <p className="text-sm text-slate-500 mt-1">
+              Track lead movement, calls, notes, demos and won updates.
             </p>
           </div>
 
           <button
             type="button"
-            style={{
-              height: 40,
-              border: 0,
-              borderRadius: 14,
-              background: 'linear-gradient(135deg,#2563eb,#f97316)',
-              color: '#fff',
-              padding: '0 16px',
-              fontWeight: 850,
-              cursor: 'pointer',
-            }}
+            className="inline-flex items-center gap-2 px-4 h-10 rounded-xl bg-orange-500 text-white text-sm font-bold shadow-lg shadow-orange-500/20"
           >
+            <Plus className="w-4 h-4" />
             Add Activity
           </button>
         </div>
 
-        {timeline.map((item, index) => (
-          <div
-            key={item[0]}
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '52px minmax(0,1fr) 120px',
-              gap: 14,
-              alignItems: 'center',
-              padding: '16px 0',
-              borderBottom:
-                index === timeline.length - 1 ? 0 : '1px solid #edf2f7',
-            }}
-          >
-            <span
-              style={{
-                width: 46,
-                height: 46,
-                borderRadius: 16,
-                display: 'grid',
-                placeItems: 'center',
-                background: '#eff6ff',
-                color: '#2563eb',
-                fontWeight: 900,
-                fontSize: 18,
-              }}
-            >
-              •
-            </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          {stats.map((item) => {
+            const Icon = item.icon;
 
-            <div>
-              <strong style={{ color: '#0f172a' }}>{item[0]}</strong>
-              <p style={{ margin: '5px 0 0', color: '#64748b' }}>{item[1]}</p>
-            </div>
-
-            <div style={{ textAlign: 'right' }}>
-              <small style={{ display: 'block', color: '#64748b' }}>
-                {item[2]}
-              </small>
-              <b
-                style={{
-                  display: 'inline-block',
-                  marginTop: 6,
-                  background: '#e0f2fe',
-                  color: '#0369a1',
-                  borderRadius: 999,
-                  padding: '4px 9px',
-                  fontSize: 11,
-                }}
+            return (
+              <div
+                key={item.label}
+                className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm"
               >
-                {item[3]}
-              </b>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">
+                      {item.label}
+                    </p>
+                    <h2 className="text-3xl font-bold text-slate-900 mt-2">
+                      {item.value}
+                    </h2>
+                  </div>
+
+                  <div
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center"
+                    style={{ background: `${item.color}18`, color: item.color }}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-bold text-slate-900">
+                Activity Timeline
+              </h2>
+              <p className="text-sm text-slate-500 mt-1">
+                Latest CRM activity from your assigned leads.
+              </p>
             </div>
+
+            <button
+              type="button"
+              className="inline-flex items-center gap-2 h-9 px-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+            >
+              <Filter className="w-4 h-4" />
+              Filter
+            </button>
           </div>
-        ))}
-      </section>
+
+          <div className="divide-y divide-slate-100">
+            {employeeActivities.map((item) => {
+              const Icon = iconFor(item.type);
+              const color = colorFor(item.type);
+
+              return (
+                <div
+                  key={item.id}
+                  className="px-5 py-4 flex items-start gap-4 hover:bg-slate-50 transition-colors"
+                >
+                  <div
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
+                    style={{ background: `${color}18`, color }}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-bold text-slate-900">
+                        {item.title}
+                      </h3>
+                      <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[11px] font-bold">
+                        {item.status}
+                      </span>
+                    </div>
+
+                    <p className="text-sm text-slate-600 mt-1">
+                      {item.description}
+                    </p>
+
+                    <div className="flex items-center gap-3 mt-2 text-xs text-slate-500">
+                      <span className="font-semibold text-slate-700">
+                        {item.lead}
+                      </span>
+                      <span>•</span>
+                      <span>{item.time}</span>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="w-9 h-9 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 grid place-items-center"
+                  >
+                    <MoreVertical className="w-4 h-4" />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </EmployeeShell>
   );
 }
