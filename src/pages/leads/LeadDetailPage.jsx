@@ -1,175 +1,138 @@
+import {
+  Phone,
+  MessageCircle,
+  Mail,
+  CheckSquare,
+  FileText,
+  CalendarClock,
+  IndianRupee,
+  Zap
+} from "lucide-react";
+import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
+
 export default function LeadDetailPage({ leadId }) {
-  const page = {
-    minHeight: '100vh',
-    background: '#f5f8fc',
-    padding: '28px',
-    boxSizing: 'border-box',
-  };
-
-  const card = {
-    background: '#ffffff',
-    border: '1px solid #dbeafe',
-    borderRadius: '22px',
-    padding: '22px',
-    boxShadow: '0 18px 40px rgba(15,23,42,0.06)',
-  };
-
-  const grid = {
-    display: 'grid',
-    gridTemplateColumns: 'minmax(0, 1.2fr) minmax(320px, 0.8fr)',
-    gap: '18px',
-    marginTop: '18px',
-  };
-
-  const stat = {
-    background: '#f8fbff',
-    border: '1px solid #e2e8f0',
-    borderRadius: '18px',
-    padding: '16px',
-  };
-
-  const timelineItem = {
-    display: 'grid',
-    gridTemplateColumns: '44px minmax(0, 1fr)',
-    gap: '12px',
-    padding: '14px 0',
-    borderBottom: '1px solid #eef2f7',
-  };
-
   return (
-    <main style={page}>
-      <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-        <div style={{ marginBottom: 16, color: '#64748b', fontWeight: 700 }}>
-          Leads › Lead Details
+    <EmployeeShell>
+      <div className="space-y-5">
+        <div>
+          <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">
+            Leads › Lead Details
+          </p>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">
+            Lead Details
+          </h1>
+          <p className="text-sm text-slate-500 mt-1">
+            Lead ID: {leadId || "N/A"} · Complete customer profile.
+          </p>
         </div>
 
-        <section style={card}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <div
-              style={{
-                width: 64,
-                height: 64,
-                borderRadius: 20,
-                background: 'linear-gradient(135deg,#2563eb,#7c3aed)',
-                color: '#fff',
-                display: 'grid',
-                placeItems: 'center',
-                fontSize: 24,
-                fontWeight: 900,
-              }}
-            >
-              L
+        <section className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
+          <div className="flex items-center gap-5">
+            <div className="w-16 h-16 rounded-3xl bg-gradient-to-br from-blue-500 to-blue-700 text-white grid place-items-center text-2xl font-black">
+              P
             </div>
 
-            <div style={{ minWidth: 0 }}>
-              <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-                <h1 style={{ margin: 0, fontSize: 30, color: '#0f172a' }}>
-                  Lead Details
-                </h1>
-                <span
-                  style={{
-                    background: '#e0f2fe',
-                    color: '#0369a1',
-                    padding: '6px 12px',
-                    borderRadius: 999,
-                    fontWeight: 800,
-                    fontSize: 12,
-                  }}
-                >
-                  Active
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h2 className="text-2xl font-bold text-slate-900">Priya Sharma</h2>
+                <span className="px-3 py-1 rounded-full bg-green-50 text-green-700 text-xs font-bold">
+                  Contacted
                 </span>
               </div>
-              <p style={{ margin: '6px 0 0', color: '#64748b', fontSize: 15 }}>
-                Lead ID: {leadId || 'N/A'} · SalesFlow CRM
+              <p className="text-sm text-slate-500 mt-1">
+                Sharma Textiles · priya@example.com · +91 98765 43210
+              </p>
+              <p className="text-sm text-slate-500 mt-1">
+                Source: Website · Owner: Jayraj
               </p>
             </div>
           </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-5">
+            {[
+              ["Call", Phone],
+              ["WhatsApp", MessageCircle],
+              ["Email", Mail],
+              ["Add Task", CheckSquare],
+              ["Add Note", FileText]
+            ].map(([label, Icon]) => (
+              <button key={label} className="h-11 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 font-bold flex items-center justify-center gap-2 hover:bg-white">
+                <Icon className="w-4 h-4" />
+                {label}
+              </button>
+            ))}
+          </div>
         </section>
 
-        <div style={grid}>
-          <section style={card}>
-            <h2 style={{ margin: '0 0 14px', color: '#0f172a' }}>
-              Activity Timeline
-            </h2>
-
-            {[
-              ['📞', 'Call scheduled', 'Follow-up call planned with this lead.', 'Today'],
-              ['✅', 'Lead created', 'Lead was added to SalesFlow pipeline.', 'Recently'],
-              ['📝', 'Note added', 'Initial lead details are ready for review.', 'Recently'],
-            ].map((item, index) => (
-              <div style={timelineItem} key={index}>
-                <div
-                  style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 15,
-                    background: '#eff6ff',
-                    display: 'grid',
-                    placeItems: 'center',
-                    fontSize: 20,
-                  }}
-                >
-                  {item[0]}
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[
+            ["Lead Score", "72%", Zap, "#2563eb"],
+            ["Pipeline Stage", "Demo", CalendarClock, "#f97316"],
+            ["Next Follow-up", "Pending", CheckSquare, "#16a34a"],
+            ["Deal Value", "₹24,000", IndianRupee, "#7c3aed"]
+          ].map(([label, value, Icon, color]) => (
+            <section key={label} className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
+              <div className="flex items-center justify-between">
                 <div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      gap: 12,
-                    }}
-                  >
-                    <strong style={{ color: '#0f172a' }}>{item[1]}</strong>
-                    <small style={{ color: '#64748b', fontWeight: 700 }}>
-                      {item[3]}
-                    </small>
-                  </div>
-                  <p style={{ margin: '6px 0 0', color: '#64748b' }}>
-                    {item[2]}
-                  </p>
+                  <p className="text-xs font-bold text-slate-500 uppercase">{label}</p>
+                  <h3 className="text-2xl font-bold text-slate-900 mt-2">{value}</h3>
+                </div>
+                <div className="w-11 h-11 rounded-2xl grid place-items-center" style={{ background: `${color}18`, color }}>
+                  <Icon className="w-5 h-5" />
                 </div>
               </div>
+            </section>
+          ))}
+        </div>
+
+        <section className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+          <div className="px-5 py-4 border-b border-slate-100 flex gap-2 overflow-x-auto">
+            {["Overview", "Activity", "Tasks", "Notes", "Documents", "Email History", "WhatsApp History"].map((tab, i) => (
+              <button
+                key={tab}
+                className={`h-9 px-3 rounded-xl text-sm font-bold ${
+                  i === 0 ? "bg-orange-500 text-white" : "bg-slate-50 text-slate-600"
+                }`}
+              >
+                {tab}
+              </button>
             ))}
-          </section>
+          </div>
 
-          <aside style={{ display: 'grid', gap: 14 }}>
-            <div style={stat}>
-              <small style={{ color: '#64748b', fontWeight: 800 }}>
-                Lead Score
-              </small>
-              <h3 style={{ margin: '8px 0 0', fontSize: 26 }}>72%</h3>
-            </div>
-
-            <div style={stat}>
-              <small style={{ color: '#64748b', fontWeight: 800 }}>
-                Next Follow-up
-              </small>
-              <h3 style={{ margin: '8px 0 0', fontSize: 22 }}>Pending</h3>
-            </div>
-
-            <div style={card}>
-              <h3 style={{ margin: '0 0 12px' }}>Quick Actions</h3>
-              <div style={{ display: 'grid', gap: 10 }}>
-                <button style={buttonStyle('#2563eb')}>Call Lead</button>
-                <button style={buttonStyle('#16a34a')}>WhatsApp</button>
-                <button style={buttonStyle('#f97316')}>Add Activity</button>
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 p-5">
+            <div className="rounded-2xl bg-slate-50 border border-slate-100 p-5">
+              <h3 className="font-bold text-slate-900">Lead Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4 text-sm">
+                {[
+                  ["Company", "Sharma Textiles"],
+                  ["Email", "priya@example.com"],
+                  ["Phone", "+91 98765 43210"],
+                  ["Source", "Website"],
+                  ["Owner", "Jayraj"],
+                  ["Status", "Contacted"]
+                ].map(([k, v]) => (
+                  <div key={k}>
+                    <p className="text-slate-500 font-bold text-xs uppercase">{k}</p>
+                    <p className="text-slate-900 font-semibold mt-1">{v}</p>
+                  </div>
+                ))}
               </div>
             </div>
-          </aside>
-        </div>
-      </div>
-    </main>
-  );
-}
 
-function buttonStyle(bg) {
-  return {
-    height: 42,
-    border: 0,
-    borderRadius: 13,
-    background: bg,
-    color: '#fff',
-    fontWeight: 800,
-    cursor: 'pointer',
-  };
+            <div className="rounded-2xl bg-slate-50 border border-slate-100 p-5">
+              <h3 className="font-bold text-slate-900">Upcoming Tasks</h3>
+              <div className="space-y-3 mt-4">
+                {["Call for demo confirmation", "Send pricing proposal", "WhatsApp reminder"].map((task) => (
+                  <div key={task} className="rounded-xl bg-white border border-slate-100 p-3">
+                    <h4 className="font-bold text-slate-900 text-sm">{task}</h4>
+                    <p className="text-xs text-slate-500 mt-1">Pending</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </EmployeeShell>
+  );
 }
