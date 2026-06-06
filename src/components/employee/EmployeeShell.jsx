@@ -1,17 +1,19 @@
 import './EmployeeShell.css';
 
 const menu = [
-  ['Dashboard','/employee/dashboard','▦'],
-  ['My Leads','/leads','♙'],
-  ['Contacts','/contacts','☎'],
-  ['Won','/employee/won','✓'],
-  ['Tasks','/employee/tasks','☑'],
-  ['Calendar','/employee/calendar','▣'],
-  ['Activities','/employee/activities','☷'],
-  ['Reports','/employee/reports','▥'],
-  ['Notifications','/notifications','♢'],
-  ['Profile','/employee/profile','♙'],
-  ['Settings','/settings','∘']
+  ['Dashboard','/employee/dashboard','D'],
+  ['My Leads','/leads','L'],
+  ['Contacts','/contacts','C'],
+  ['Won','/employee/won','W'],
+  ['Tasks','/employee/tasks','T'],
+  ['Calendar','/employee/calendar','Cal'],
+  ['Activities','/employee/activities','A'],
+  ['Reports','/employee/reports','R'],
+  ['Notifications','/notifications','N'],
+  ['Profile','/employee/profile','P'],
+  ['Settings','/settings','S']
 ];
 
-function go
+function go(path){
+  window.history.pushState({},'',path);
+  window.dispatchEvent(new
