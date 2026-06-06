@@ -228,7 +228,7 @@ export default function EmployeeShell({ children }) {
           </div>
         </header>
 
-        <div className="flex-1 p-5">{children}</div>
+        <div className="flex-1 px-6 py-6">{children}</div>
       </main>
     </div>
   );
