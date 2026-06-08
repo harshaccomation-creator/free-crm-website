@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ChevronLeft, ChevronRight, Eye, MessageCircle, Phone, Plus, Search } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 import { empLeads } from "../../data/employeeData.js";
 
@@ -11,4 +10,5 @@ function go(path) {
 }
 
 export default function LeadListPage() {
- 
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil
