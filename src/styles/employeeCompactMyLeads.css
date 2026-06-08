@@ -1,0 +1,111 @@
+/* Compact Employee My Leads page */
+.sf-employee main {
+  font-size: 14px;
+}
+
+.sf-employee main > div:last-child {
+  padding: 18px 24px !important;
+}
+
+.sf-employee h1 {
+  font-size: 28px !important;
+  line-height: 1.15 !important;
+  margin: 0 !important;
+}
+
+.sf-employee h1 + p {
+  font-size: 14px !important;
+  margin-top: 6px !important;
+}
+
+.sf-employee .space-y-6 > * + * {
+  margin-top: 16px !important;
+}
+
+.sf-employee .grid.gap-5 {
+  gap: 14px !important;
+}
+
+.sf-employee .rounded-xl.bg-white.border {
+  border-radius: 12px !important;
+}
+
+.sf-employee .rounded-xl.p-6,
+.sf-employee .p-6 {
+  padding: 14px !important;
+}
+
+.sf-employee .w-16.h-16 {
+  width: 42px !important;
+  height: 42px !important;
+}
+
+.sf-employee .w-7.h-7 {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.sf-employee .text-4xl {
+  font-size: 26px !important;
+  line-height: 1.1 !important;
+}
+
+.sf-employee .text-lg {
+  font-size: 14px !important;
+}
+
+.sf-employee .pb-5 {
+  padding-bottom: 12px !important;
+}
+
+.sf-employee .px-6 {
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+.sf-employee .py-5 {
+  padding-top: 12px !important;
+  padding-bottom: 12px !important;
+}
+
+.sf-employee .h-12 {
+  height: 40px !important;
+}
+
+.sf-employee table th {
+  padding: 10px 18px !important;
+  font-size: 12px !important;
+}
+
+.sf-employee table td {
+  padding: 12px 18px !important;
+  font-size: 14px !important;
+}
+
+.sf-employee .w-14.h-14 {
+  width: 38px !important;
+  height: 38px !important;
+}
+
+.sf-employee .w-12.h-12 {
+  width: 38px !important;
+  height: 38px !important;
+}
+
+.sf-employee table .text-lg {
+  font-size: 14px !important;
+}
+
+.sf-employee table .text-slate-500 {
+  font-size: 13px !important;
+}
+
+.sf-employee table td:nth-child(2) {
+  min-width: 190px;
+  white-space: normal;
+}
+
+.sf-employee table td:last-child,
+.sf-employee table th:last-child {
+  padding-right: 90px !important;
+}
