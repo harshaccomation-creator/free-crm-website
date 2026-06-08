@@ -21,28 +21,4 @@ body {
 :root {
   font-family: Inter, system-ui, Arial, sans-serif;
   color: #172033;
-  background: #f5f7fb;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-/* Important: only non-employee main should stay centered */
-body:not(.sf-employee-body) main:not(.sf-emp-main) {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  padding: 24px;
-}
-
-.sf-employee aside nav::-webkit-scrollbar,
-.sf-employee .overflow-y-auto::-webkit-scrollbar {
-  width: 0 !important;
-  display: none !important;
-}
-
-.sf-employee aside nav,
-.sf-employee .overflow-y-auto {
-  scrollbar-width: none !important;
-}
+  background
