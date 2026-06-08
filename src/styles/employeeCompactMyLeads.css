@@ -276,3 +276,189 @@
 .sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] > section:last-child .space-y-4 {
   max-height: none !important;
 }
+.sf-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(10px);
+}
+
+.sf-add-lead-modal {
+  width: min(980px, 100%);
+  max-height: 92vh;
+  overflow: auto;
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.28);
+  border: 1px solid rgba(226, 232, 240, 0.95);
+}
+
+.sf-add-lead-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 26px 28px 20px;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.sf-add-lead-header h2 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.2;
+  color: #0f172a;
+  font-weight: 800;
+}
+
+.sf-add-lead-header span {
+  display: block;
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.sf-modal-kicker {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #f97316;
+}
+
+.sf-modal-close {
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 14px;
+  background: #f8fafc;
+  color: #334155;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.sf-modal-close:hover {
+  background: #fff7ed;
+  color: #f97316;
+}
+
+.sf-add-lead-form {
+  padding: 24px 28px 28px;
+}
+
+.sf-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.sf-form-grid label,
+.sf-form-full {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #334155;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.sf-form-grid input,
+.sf-form-grid select,
+.sf-form-full textarea {
+  width: 100%;
+  border: 1px solid #dbe3ef;
+  border-radius: 16px;
+  padding: 13px 14px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 14px;
+  outline: none;
+}
+
+.sf-form-grid input:focus,
+.sf-form-grid select:focus,
+.sf-form-full textarea:focus {
+  border-color: #fb923c;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.12);
+}
+
+.sf-form-grid small {
+  color: #ef4444;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.sf-form-full {
+  margin-top: 18px;
+}
+
+.sf-add-lead-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.sf-btn-secondary,
+.sf-btn-primary {
+  min-height: 44px;
+  border: 0;
+  border-radius: 14px;
+  padding: 0 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sf-btn-secondary {
+  background: #f1f5f9;
+  color: #334155;
+}
+
+.sf-btn-primary {
+  background: linear-gradient(135deg, #f97316, #fb923c);
+  color: white;
+  box-shadow: 0 12px 26px rgba(249, 115, 22, 0.28);
+}
+
+.sf-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+@media (max-width: 760px) {
+  .sf-modal-backdrop {
+    align-items: flex-end;
+    padding: 12px;
+  }
+
+  .sf-add-lead-modal {
+    border-radius: 24px 24px 18px 18px;
+    max-height: 94vh;
+  }
+
+  .sf-add-lead-header,
+  .sf-add-lead-form {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .sf-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sf-add-lead-actions {
+    flex-direction: column-reverse;
+  }
+
+  .sf-btn-secondary,
+  .sf-btn-primary {
+    width: 100%;
+  }
+}
