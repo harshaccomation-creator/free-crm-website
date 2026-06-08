@@ -1,6 +1,15 @@
-import EmployeeShell from '../../components/employee/EmployeeShell.jsx';
+import { useState } from "react";
+import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
+import { empContacts } from "../../data/employeeData.js";
 
 export default function EmployeeContactsPage() {
+  const [page, setPage] = useState(1);
+  const size = 10;
+
+  const totalPages = Math.max(1, Math.ceil(empContacts.length / size));
+  const start = (page - 1) * size;
+  const contacts = empContacts.slice(start, start + size);
+
   return (
     <EmployeeShell>
       <div className="space-y-5">
@@ -8,49 +17,83 @@ export default function EmployeeContactsPage() {
           <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">
             Employee Workspace
           </p>
+
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">
             Contacts
           </h1>
+
           <p className="text-sm text-slate-500 mt-1">
-            Manage CRM contacts and customer communication.
+            Showing 10 contacts per page.
           </p>
         </div>
 
-        <div className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+        <section className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-100">
-            <h2 className="text-lg font-bold text-slate-900">All Contacts</h2>
+            <h2 className="text-lg font-bold text-slate-900">
+              All Contacts
+            </h2>
+
             <p className="text-sm text-slate-500 mt-1">
-              Your assigned customer contacts.
+              Showing {empContacts.length === 0 ? 0 : start + 1}-
+              {Math.min(start + size, empContacts.length)} of {empContacts.length}
             </p>
           </div>
 
           <div className="divide-y divide-slate-100">
-            {[
-              ['Priya Sharma', 'Sharma Textiles', '+91 98765 43210', 'priya@example.com', 'Active'],
-              ['Rohan Mehta', 'Mehta Associates', '+91 99887 77665', 'rohan@example.com', 'New'],
-              ['Amit Verma', 'AV Enterprises', '+91 91234 56789', 'amit@example.com', 'Demo'],
-            ].map((item) => (
-              <div key={item[0]} className="px-5 py-4 flex items-center justify-between gap-4">
+            {contacts.map((contact) => (
+              <div
+                key={contact.id}
+                className="px-5 py-4 flex items-center justify-between gap-4 hover:bg-slate-50"
+              >
                 <div>
-                  <h3 className="font-bold text-slate-900">{item[0]}</h3>
-                  <p className="text-sm text-slate-500">{item[1]}</p>
+                  <h3 className="font-bold text-slate-900">
+                    {contact.name}
+                  </h3>
+
+                  <p className="text-sm text-slate-500">
+                    {contact.company} · {contact.role}
+                  </p>
                 </div>
 
-                <div className="text-sm text-slate-600 hidden md:block">
-                  {item[2]}
+                <div className="hidden md:block text-sm text-slate-600">
+                  {contact.phone}
                 </div>
 
-                <div className="text-sm text-slate-600 hidden lg:block">
-                  {item[3]}
+                <div className="hidden lg:block text-sm text-slate-600">
+                  {contact.email}
                 </div>
 
                 <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">
-                  {item[4]}
+                  {contact.status}
                 </span>
               </div>
             ))}
           </div>
-        </div>
+
+          <div className="px-5 py-4 border-t border-slate-100 flex items-center justify-between">
+            <button
+              type="button"
+              disabled={page === 1}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              className="h-9 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 disabled:opacity-40"
+            >
+              Previous
+            </button>
+
+            <span className="text-sm font-bold text-slate-600">
+              Page {page} of {totalPages}
+            </span>
+
+            <button
+              type="button"
+              disabled={page === totalPages}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              className="h-9 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 disabled:opacity-40"
+            >
+              Next
+            </button>
+          </div>
+        </section>
       </div>
     </EmployeeShell>
   );
