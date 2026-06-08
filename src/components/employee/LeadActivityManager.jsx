@@ -13,7 +13,8 @@ import {
   X,
   ArrowRight,
   User,
-  Clock
+  Clock,
+  ClipboardList
 } from "lucide-react";
 
 const DISPOSITIONS = {
@@ -98,14 +99,33 @@ const COLORS = {
   Lost: "#64748b"
 };
 
-function getNow() {
-  return new Date().toLocaleString("en-IN", {
+function getNowDate() {
+  return new Date();
+}
+
+function formatDisplayDate(date) {
+  return new Date(date).toLocaleString("en-IN", {
     day: "2-digit",
     month: "short",
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit"
   });
+}
+
+function formatInputDate(date) {
+  const d = new Date(date);
+  const pad = (n) => String(n).padStart(2, "0");
+
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(
+    d.getHours()
+  )}:${pad(d.getMinutes())}`;
+}
+
+function addHours(date, hours) {
+  const d = new Date(date);
+  d.setHours(d.getHours() + hours);
+  return d;
 }
 
 function getDefaultToStage(disposition) {
@@ -119,17 +139,23 @@ function getDefaultToStage(disposition) {
   return "Contacted";
 }
 
+function needsTaskDate(disposition) {
+  return disposition === "Demo Booked" || disposition === "Follow Up";
+}
+
 function emptyForm(currentStage = "New") {
   const disposition = "Call Connected";
+  const now = getNowDate();
 
   return {
     disposition,
     subDisposition: DISPOSITIONS[disposition][0],
     note: "",
     owner: "Jayraj",
-    createdOn: getNow(),
+    createdOn: formatDisplayDate(now),
     fromStage: currentStage,
-    toStage: getDefaultToStage(disposition)
+    toStage: getDefaultToStage(disposition),
+    taskDueAt: formatInputDate(addHours(now, 24))
   };
 }
 
@@ -149,11 +175,13 @@ export default function LeadActivityManager({
       subDisposition: "Need Follow Up",
       note: "Customer asked to share demo details and pricing.",
       owner: "Jayraj",
-      createdOn: getNow(),
+      createdOn: formatDisplayDate(getNowDate()),
       fromStage: "New",
       toStage: "Contacted"
     }
   ]);
+
+  const [tasks, setTasks] = useState([]);
 
   const openAddModal = () => {
     setEditingId(null);
@@ -162,30 +190,88 @@ export default function LeadActivityManager({
   };
 
   const changeDisposition = (value) => {
+    const now = getNowDate();
+
     setForm((old) => ({
       ...old,
       disposition: value,
       subDisposition: DISPOSITIONS[value][0],
       toStage: getDefaultToStage(value),
-      createdOn: getNow()
+      createdOn: formatDisplayDate(now),
+      taskDueAt:
+        value === "Not Connected"
+          ? formatInputDate(addHours(now, 2))
+          : formatInputDate(addHours(now, 24))
     }));
   };
 
+  const buildAutoTask = (activity) => {
+    if (activity.disposition === "Not Connected") {
+      return {
+        id: Date.now() + 1,
+        title: "Auto follow-up after not connected",
+        leadName,
+        type: "Follow Up",
+        owner: activity.owner,
+        dueAt: formatDisplayDate(addHours(getNowDate(), 2)),
+        sourceActivityId: activity.id,
+        status: "Pending"
+      };
+    }
+
+    if (activity.disposition === "Demo Booked") {
+      return {
+        id: Date.now() + 2,
+        title: "Demo scheduled",
+        leadName,
+        type: "Demo",
+        owner: activity.owner,
+        dueAt: formatDisplayDate(activity.taskDueAt),
+        sourceActivityId: activity.id,
+        status: "Pending"
+      };
+    }
+
+    if (activity.disposition === "Follow Up") {
+      return {
+        id: Date.now() + 3,
+        title: "Follow-up scheduled",
+        leadName,
+        type: "Follow Up",
+        owner: activity.owner,
+        dueAt: formatDisplayDate(activity.taskDueAt),
+        sourceActivityId: activity.id,
+        status: "Pending"
+      };
+    }
+
+    return null;
+  };
+
   const saveActivity = () => {
+    const activityId = editingId || Date.now();
+
     const payload = {
+      id: activityId,
       ...form,
       note: form.note.trim() || "No note added",
-      createdOn: form.createdOn || getNow()
+      createdOn: form.createdOn || formatDisplayDate(getNowDate())
     };
 
     if (editingId) {
       setActivities((rows) =>
-        rows.map((row) =>
-          row.id === editingId ? { ...row, ...payload } : row
-        )
+        rows.map((row) => (row.id === editingId ? { ...row, ...payload } : row))
       );
+
+      setTasks((rows) => rows.filter((task) => task.sourceActivityId !== editingId));
     } else {
-      setActivities((rows) => [{ id: Date.now(), ...payload }, ...rows]);
+      setActivities((rows) => [payload, ...rows]);
+    }
+
+    const autoTask = buildAutoTask(payload);
+
+    if (autoTask) {
+      setTasks((rows) => [autoTask, ...rows]);
     }
 
     setLatestStage(payload.toStage);
@@ -203,7 +289,8 @@ export default function LeadActivityManager({
       owner: activity.owner,
       createdOn: activity.createdOn,
       fromStage: activity.fromStage,
-      toStage: activity.toStage
+      toStage: activity.toStage,
+      taskDueAt: activity.taskDueAt || formatInputDate(addHours(getNowDate(), 24))
     });
     setShowModal(true);
   };
@@ -222,7 +309,7 @@ export default function LeadActivityManager({
             Activity Timeline
           </h2>
           <p className="text-sm text-slate-500 mt-1">
-            Track disposition, stage change, owner and notes.
+            Track disposition, stage change, owner and auto tasks.
           </p>
         </div>
 
@@ -285,7 +372,7 @@ export default function LeadActivityManager({
                       setForm((old) => ({
                         ...old,
                         subDisposition: e.target.value,
-                        createdOn: getNow()
+                        createdOn: formatDisplayDate(getNowDate())
                       }))
                     }
                     className="mt-2 w-full h-11 rounded-lg border border-slate-200 bg-white px-3 text-sm font-semibold outline-none"
@@ -303,10 +390,7 @@ export default function LeadActivityManager({
                   <select
                     value={form.fromStage}
                     onChange={(e) =>
-                      setForm((old) => ({
-                        ...old,
-                        fromStage: e.target.value
-                      }))
+                      setForm((old) => ({ ...old, fromStage: e.target.value }))
                     }
                     className="mt-2 w-full h-11 rounded-lg border border-slate-200 bg-white px-3 text-sm font-semibold outline-none"
                   >
@@ -323,10 +407,7 @@ export default function LeadActivityManager({
                   <select
                     value={form.toStage}
                     onChange={(e) =>
-                      setForm((old) => ({
-                        ...old,
-                        toStage: e.target.value
-                      }))
+                      setForm((old) => ({ ...old, toStage: e.target.value }))
                     }
                     className="mt-2 w-full h-11 rounded-lg border border-slate-200 bg-white px-3 text-sm font-semibold outline-none"
                   >
@@ -359,6 +440,29 @@ export default function LeadActivityManager({
                     className="mt-2 w-full h-11 rounded-lg border border-slate-200 bg-slate-50 px-3 text-sm font-semibold outline-none text-slate-500"
                   />
                 </label>
+
+                {(needsTaskDate(form.disposition) ||
+                  form.disposition === "Not Connected") && (
+                  <label className="block md:col-span-2">
+                    <span className="text-sm font-bold text-slate-600">
+                      Auto Task Due Date / Time
+                    </span>
+                    <input
+                      type="datetime-local"
+                      value={form.taskDueAt}
+                      disabled={form.disposition === "Not Connected"}
+                      onChange={(e) =>
+                        setForm((old) => ({ ...old, taskDueAt: e.target.value }))
+                      }
+                      className="mt-2 w-full h-11 rounded-lg border border-slate-200 bg-white px-3 text-sm font-semibold outline-none disabled:bg-slate-100 disabled:text-slate-500"
+                    />
+                    <p className="text-xs text-slate-500 mt-1">
+                      {form.disposition === "Not Connected"
+                        ? "Not Connected par follow-up task automatically 2 hours baad banega."
+                        : "Save karte hi selected date/time ka task auto create hoga."}
+                    </p>
+                  </label>
+                )}
 
                 <label className="block md:col-span-2">
                   <span className="text-sm font-bold text-slate-600">
@@ -399,17 +503,46 @@ export default function LeadActivityManager({
         </div>
       )}
 
+      {tasks.length > 0 && (
+        <section className="rounded-xl border border-orange-100 bg-orange-50/50 p-4 mb-5">
+          <div className="flex items-center gap-2 mb-3">
+            <ClipboardList className="w-5 h-5 text-orange-600" />
+            <h3 className="font-black text-slate-900">Auto Created Tasks</h3>
+          </div>
+
+          <div className="space-y-2">
+            {tasks.map((task) => (
+              <div
+                key={task.id}
+                className="rounded-lg bg-white border border-orange-100 p-3 flex flex-wrap items-center justify-between gap-3"
+              >
+                <div>
+                  <h4 className="font-bold text-slate-900">{task.title}</h4>
+                  <p className="text-xs text-slate-500 mt-1">
+                    {task.type} · Owner: {task.owner} · Due: {task.dueAt}
+                  </p>
+                </div>
+
+                <span className="px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-black">
+                  {task.status}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <div className="relative pl-14 space-y-4">
-        <div className="absolute left-5 top-6 bottom-0 w-0.5 bg-slate-200" />
+        <div className="absolute left-5 top-8 bottom-8 w-0.5 bg-slate-200 z-0" />
 
         {activities.map((activity) => {
           const Icon = ICONS[activity.disposition] || PhoneCall;
           const color = COLORS[activity.disposition] || "#64748b";
 
           return (
-            <div key={activity.id} className="relative">
+            <div key={activity.id} className="relative z-10">
               <div
-                className="absolute -left-14 top-1 w-10 h-10 rounded-full grid place-items-center"
+                className="absolute -left-14 top-1 w-10 h-10 rounded-full grid place-items-center border-4 border-white z-20"
                 style={{ background: `${color}18`, color }}
               >
                 <Icon className="w-5 h-5" />
