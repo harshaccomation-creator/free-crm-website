@@ -87,3 +87,16 @@ body {
   width: 40px !important;
   height: 40px !important;
 }
+/* Keep chatbot away from employee table actions */
+.sf-employee .fixed.bottom-6.right-6,
+.sf-employee .fixed.bottom-5.right-5,
+.sf-employee [class*="chat"] {
+  right: 28px !important;
+  bottom: 28px !important;
+  z-index: 30 !important;
+}
+
+.sf-employee table td:last-child,
+.sf-employee table th:last-child {
+  padding-right: 80px !important;
+}
