@@ -532,23 +532,27 @@ export default function LeadActivityManager({
         </section>
       )}
 
-      <div className="relative pl-14 space-y-4">
-        <div className="absolute left-5 top-8 bottom-8 w-0.5 bg-slate-200 z-0" />
-
-        {activities.map((activity) => {
+  <div className="space-y-4">
+  {activities.map((activity, index) => {
           const Icon = ICONS[activity.disposition] || PhoneCall;
           const color = COLORS[activity.disposition] || "#64748b";
 
           return (
-            <div key={activity.id} className="relative z-10">
-              <div
-                className="absolute -left-14 top-1 w-10 h-10 rounded-full grid place-items-center border-4 border-white z-20"
-                style={{ background: `${color}18`, color }}
-              >
-                <Icon className="w-5 h-5" />
-              </div>
+  <div key={activity.id} className="relative flex gap-4">
+  <div className="relative flex flex-col items-center shrink-0">
+    <div
+      className="w-10 h-10 rounded-full grid place-items-center border-4 border-white z-20"
+      style={{ background: `${color}18`, color }}
+    >
+      <Icon className="w-5 h-5" />
+    </div>
 
-              <div className="rounded-xl border border-slate-200 bg-white p-4">
+    {index !== activities.length - 1 && (
+      <div className="w-0.5 flex-1 min-h-16 bg-slate-200 mt-2" />
+    )}
+  </div>
+
+  <div className="rounded-xl border border-slate-200 bg-white p-4 flex-1">
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 flex-wrap">
