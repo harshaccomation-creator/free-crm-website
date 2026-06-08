@@ -1,3 +1,4 @@
+import AddLeadModal from "../../components/employee/AddLeadModal";
 import { useMemo, useState } from "react";
 import {
   Search,
