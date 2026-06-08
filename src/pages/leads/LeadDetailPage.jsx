@@ -1,3 +1,4 @@
+import LeadActivityManager from "../../components/employee/LeadActivityManager.jsx";
 import { useMemo, useState } from "react";
 import {
   Mail,
@@ -245,70 +246,9 @@ export default function LeadDetailPage({ leadId }) {
             </div>
 
             <div className="p-6">
-              {activeTab === "Activity Timeline" && (
-                <div>
-                  <div className="flex flex-wrap items-center gap-3 mb-6">
-                    <button
-                      type="button"
-                      onClick={() => addActivity("Call", `Call completed with ${currentLead.name}`)}
-                      className="h-10 px-4 rounded-lg border border-slate-900 text-slate-900 font-bold inline-flex items-center gap-2"
-                    >
-                      <Phone className="w-4 h-4" />
-                      Log Call
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => addActivity("Email", `Email sent to ${currentLead.email}`)}
-                      className="h-10 px-4 rounded-lg border border-slate-900 text-slate-900 font-bold inline-flex items-center gap-2"
-                    >
-                      <Mail className="w-4 h-4" />
-                      Email
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => addActivity("Meeting", `Meeting scheduled with ${currentLead.name}`)}
-                      className="h-10 px-4 rounded-lg border border-slate-900 text-slate-900 font-bold inline-flex items-center gap-2"
-                    >
-                      <Clock className="w-4 h-4" />
-                      Meeting
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => addActivity("WhatsApp", `WhatsApp follow-up sent to ${currentLead.name}`)}
-                      className="h-10 px-4 rounded-lg border border-green-600 text-green-700 font-bold inline-flex items-center gap-2"
-                    >
-                      <MessageCircle className="w-4 h-4" />
-                      WhatsApp
-                    </button>
-                  </div>
-
-                  <div className="relative pl-16 space-y-4">
-                    <div className="absolute left-6 top-6 bottom-0 w-0.5 bg-slate-200" />
-
-                    {activities.map((item) => (
-                      <div key={item.id} className="relative">
-                        <div className="absolute -left-16 top-1 w-12 h-12 rounded-full bg-slate-100 border border-slate-100" />
-
-                        <div className="rounded-lg border border-slate-200 p-5 bg-white">
-                          <div className="flex items-center justify-between gap-4">
-                            <h3 className="font-black text-slate-900">
-                              {item.type}
-                            </h3>
-                            <span className="text-sm text-slate-500">
-                              {item.time}
-                            </span>
-                          </div>
-
-                          <p className="text-slate-900 mt-3">{item.text}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+{activeTab === "Activity Timeline" && (
+  <LeadActivityManager leadName={currentLead.name} />
+)}
 
               {activeTab === "Notes" && (
                 <div className="space-y-4">
