@@ -19,4 +19,4 @@ body {
 }
 
 :root {
-  font-family: Inter,
+  font-family: Inter, system-ui, Arial, sans-serif;
