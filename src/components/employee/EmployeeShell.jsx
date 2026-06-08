@@ -139,8 +139,8 @@ export default function EmployeeShell({ children }) {
         </nav>
       </aside>
 
-      <main
-        className="min-h-screen flex flex-col"
+     <main
+  className="sf-emp-main min-h-screen flex flex-col"
         style={{
           marginLeft: "200px",
           width: "calc(100vw - 200px)",
