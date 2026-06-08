@@ -210,3 +210,46 @@
 .sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] section:last-child {
   padding-right: 72px !important;
 }
+/* Employee sidebar proper alignment */
+.sf-employee aside nav a,
+.sf-employee aside nav button,
+.sf-employee aside [role="button"] {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 14px !important;
+  text-align: left !important;
+}
+
+.sf-employee aside nav a svg,
+.sf-employee aside nav button svg,
+.sf-employee aside [role="button"] svg {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  flex-shrink: 0 !important;
+}
+
+.sf-employee aside nav a span,
+.sf-employee aside nav button span,
+.sf-employee aside [role="button"] span {
+  text-align: left !important;
+  flex: 1 !important;
+  justify-content: flex-start !important;
+}
+
+/* menu item spacing */
+.sf-employee aside nav a,
+.sf-employee aside nav button {
+  width: 100% !important;
+  min-height: 46px !important;
+  padding: 0 18px !important;
+  border-radius: 12px !important;
+}
+
+/* notification badge right side */
+.sf-employee aside nav a .rounded-full,
+.sf-employee aside nav button .rounded-full {
+  margin-left: auto !important;
+  flex: 0 0 auto !important;
+}
