@@ -253,3 +253,26 @@
   margin-left: auto !important;
   flex: 0 0 auto !important;
 }
+/* Lead detail: keep About card only as tall as its content */
+.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] {
+  align-items: flex-start !important;
+}
+
+.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] > section:first-child {
+  height: auto !important;
+  min-height: 0 !important;
+  align-self: flex-start !important;
+  position: sticky;
+  top: 90px;
+}
+
+.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] > section:last-child {
+  height: auto !important;
+  min-height: 0 !important;
+  align-self: flex-start !important;
+}
+
+/* Activity side can grow independently */
+.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] > section:last-child .space-y-4 {
+  max-height: none !important;
+}
