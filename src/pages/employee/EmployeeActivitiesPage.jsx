@@ -44,7 +44,7 @@ function iconFor(type) {
   const key = normalizeType(type);
   if (key === "call") return Phone;
   if (key === "whatsapp") return MessageCircle;
-  if (key === "email") return FileText;
+  if (key === "email" || key === "note") return FileText;
   if (key === "task") return Calendar;
   if (key === "won") return Trophy;
   if (key === "not-connected") return PhoneOff;
@@ -52,30 +52,16 @@ function iconFor(type) {
   return FileText;
 }
 
-function colorFor(type) {
-  const key = normalizeType(type);
-  if (key === "call" || key === "whatsapp") return "#16a34a";
-  if (key === "email") return "#2563eb";
-  if (key === "task") return "#7c3aed";
-  if (key === "won") return "#16a34a";
-  if (key === "not-connected") return "#dc2626";
-  if (key === "lost") return "#dc2626";
-  return "#64748b";
-}
-
 function activityTypeFor(item) {
   const key = normalizeType(item.type);
   const title = String(item.title || "").toLowerCase();
   const status = String(item.status || "").toLowerCase();
 
-  if (key === "call") return "Call";
-  if (key === "whatsapp") return "Call";
-  if (key === "email") return "Note";
+  if (key === "call" || key === "whatsapp" || key === "not-connected" || key === "lost") return "Call";
+  if (key === "email" || key === "note") return "Note";
   if (key === "task" && title.includes("demo")) return "Demo";
   if (key === "task") return "Demo";
   if (key === "won" || status.includes("won")) return "Demo Done";
-  if (key === "not-connected") return "Call";
-  if (key === "lost") return "Call";
   return item.type || "Activity";
 }
 
@@ -98,7 +84,7 @@ function dispositionFor(item) {
   if (key === "lost" || status.includes("lost") || title.includes("lost")) return "Not Connected";
   if (key === "call") return status.includes("missed") ? "Not Connected" : "Connected";
   if (key === "whatsapp") return "Follow Up";
-  if (key === "email") return "Follow Up";
+  if (key === "email" || key === "note") return "Follow Up";
   if (key === "task" && (title.includes("demo") || description.includes("demo"))) return "Demo Booked";
   if (key === "task") return "Follow Up";
   if (key === "won") return "Demo Booked";
@@ -238,8 +224,8 @@ export default function EmployeeActivitiesPage() {
           </div>
 
           <div className="overflow-x-auto">
-            <div className="min-w-[1080px]">
-              <div className="hidden lg:grid grid-cols-[1.05fr_1.15fr_2.1fr_1.05fr_1.2fr_0.95fr_56px] gap-4 px-5 py-3 bg-slate-50 border-b border-slate-200 text-[12px] font-bold uppercase tracking-wide text-slate-500">
+            <div className="min-w-[1060px]">
+              <div className="hidden lg:grid grid-cols-[1.05fr_1.15fr_2.35fr_1fr_1.15fr_0.9fr_52px] gap-4 px-5 py-3 bg-slate-50 border-b border-slate-200 text-[12px] font-bold uppercase tracking-wide text-slate-500">
                 <div>Activity Time</div>
                 <div>Lead Name</div>
                 <div>Activity</div>
@@ -251,15 +237,13 @@ export default function EmployeeActivitiesPage() {
 
               <div className="divide-y divide-slate-100">
                 {rows.map((item) => {
-                  const Icon = iconFor(item.type);
-                  const color = colorFor(item.type);
                   const activityType = activityTypeFor(item);
                   const disposition = dispositionFor(item);
 
                   return (
                     <div
                       key={item.id}
-                      className="grid grid-cols-1 lg:grid-cols-[1.05fr_1.15fr_2.1fr_1.05fr_1.2fr_0.95fr_56px] gap-4 px-5 py-4 items-start hover:bg-slate-50 transition-colors"
+                      className="grid grid-cols-1 lg:grid-cols-[1.05fr_1.15fr_2.35fr_1fr_1.15fr_0.9fr_52px] gap-4 px-5 py-4 items-start hover:bg-slate-50 transition-colors"
                     >
                       <div className="text-sm text-slate-600">
                         <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
@@ -275,30 +259,23 @@ export default function EmployeeActivitiesPage() {
                         {item.lead}
                       </div>
 
-                      <div className="flex items-start gap-4 min-w-0">
-                        <div
-                          className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
-                          style={{ background: `${color}18`, color }}
-                        >
-                          <Icon className="w-5 h-5" />
-                        </div>
-
-                        <div className="min-w-0">
-                          <h3 className="font-bold text-slate-900">
-                            {item.title}
-                          </h3>
-
-                          <p className="text-sm text-slate-600 mt-1">
-                            {item.description}
-                          </p>
-                        </div>
+                      <div className="min-w-0">
+                        <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
+                          Activity
+                        </span>
+                        <h3 className="font-bold text-slate-900 leading-snug">
+                          {item.title}
+                        </h3>
+                        <p className="text-sm text-slate-600 mt-1 leading-snug max-w-[420px]">
+                          {item.description}
+                        </p>
                       </div>
 
                       <div>
                         <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
                           Activity Type
                         </span>
-                        <span className={`inline-flex px-2.5 py-1 rounded-full border text-[11px] font-bold ${activityTypeClass(activityType)}`}>
+                        <span className={`inline-flex px-2.5 py-1 rounded-full border text-[11px] font-bold capitalize ${activityTypeClass(activityType)}`}>
                           {activityType}
                         </span>
                       </div>
@@ -316,7 +293,7 @@ export default function EmployeeActivitiesPage() {
                         <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
                           Status
                         </span>
-                        <span className={`inline-flex px-2.5 py-1 rounded-full border text-[11px] font-bold ${statusClass(item.status)}`}>
+                        <span className={`inline-flex px-2.5 py-1 rounded-full border text-[11px] font-bold capitalize ${statusClass(item.status)}`}>
                           {item.status}
                         </span>
                       </div>
