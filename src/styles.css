@@ -5,6 +5,7 @@
 @import './styles/salesflowLogoEverywhere.css';
 @import './styles/zzLogoForce.css';
 @import './styles/hideEmployeeNotificationBadge.css';
+@import './styles/tasksPremiumTable.css';
 
 html,
 body,
@@ -28,85 +29,4 @@ body {
 
 * {
   box-sizing: border-box;
-}
-
-/* Employee pages should not inherit centered public-page layout */
-.sf-employee main,
-.sf-emp-main {
-  display: flex !important;
-  place-items: initial !important;
-}
-
-.sf-employee aside nav::-webkit-scrollbar,
-.sf-employee .overflow-y-auto::-webkit-scrollbar {
-  width: 0 !important;
-  display: none !important;
-}
-
-.sf-employee aside nav,
-.sf-employee .overflow-y-auto {
-  scrollbar-width: none !important;
-}
-
-/* Compact My Leads sizing */
-.sf-employee h1.text-4xl {
-  font-size: 30px !important;
-  line-height: 1.15 !important;
-}
-
-.sf-employee p.text-lg {
-  font-size: 14px !important;
-}
-
-.sf-employee .rounded-xl.p-6 {
-  padding: 16px !important;
-}
-
-.sf-employee .w-16.h-16 {
-  width: 48px !important;
-  height: 48px !important;
-}
-
-.sf-employee .w-7.h-7 {
-  width: 20px !important;
-  height: 20px !important;
-}
-
-.sf-employee .text-4xl.font-black {
-  font-size: 30px !important;
-  line-height: 1.1 !important;
-}
-
-.sf-employee table th {
-  padding: 12px 20px !important;
-}
-
-.sf-employee table td {
-  padding: 14px 20px !important;
-}
-
-.sf-employee .w-14.h-14 {
-  width: 40px !important;
-  height: 40px !important;
-}
-/* Keep chatbot away from employee table actions */
-.sf-employee .fixed.bottom-6.right-6,
-.sf-employee .fixed.bottom-5.right-5,
-.sf-employee [class*="chat"] {
-  right: 28px !important;
-  bottom: 28px !important;
-  z-index: 30 !important;
-}
-
-/* Hide chatbot unread red count bubble only */
-.sf-employee .fixed.bottom-6.right-6 span.absolute,
-.sf-employee .fixed.bottom-5.right-5 span.absolute,
-.sf-employee [class*="chat"] span.absolute,
-.sf-employee [class*="Chat"] span.absolute {
-  display: none !important;
-}
-
-.sf-employee table td:last-child,
-.sf-employee table th:last-child {
-  padding-right: 80px !important;
 }
