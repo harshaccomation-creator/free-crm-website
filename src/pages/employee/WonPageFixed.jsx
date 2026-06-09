@@ -1,17 +1,39 @@
 import { useMemo, useState } from "react";
 import { Trophy, IndianRupee, Download, Search, CalendarDays, Filter, Eye } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
-import { wonLeads, empLeads } from "../../data/employeeData.js";
+import { wonLeads } from "../../data/employeeData.js";
+
+const leadSourceOptions = [
+  "Website",
+  "LinkedIn",
+  "Referral",
+  "Facebook",
+  "Instagram",
+  "Google Ads",
+  "Event",
+  "Cold Call",
+  "WhatsApp",
+  "Other"
+];
 
 const enrichedWonLeads = wonLeads.map((lead, index) => ({
   ...lead,
   closeDate: lead.closeDate || lead.created || "May 28, 2025",
+  closeDateISO: lead.closeDateISO || "2025-05-28",
   owner: lead.owner || "Jayraj",
-  source: lead.source || (index % 2 === 0 ? "Website" : "LinkedIn")
+  source: lead.source || leadSourceOptions[index % leadSourceOptions.length]
 }));
 
-function toMonthKey(dateText = "") {
-  return String(dateText).toLowerCase().includes("may") ? "2025-05" : "all";
+function todayISO() {
+  return "2025-05-28";
+}
+
+function yesterdayISO() {
+  return "2025-05-27";
+}
+
+function isThisMonth(dateISO = "") {
+  return String(dateISO).startsWith("2025-05");
 }
 
 function openLead(leadId) {
@@ -21,17 +43,28 @@ function openLead(leadId) {
 
 export default function WonPageFixed() {
   const [page, setPage] = useState(1);
-  const [filters, setFilters] = useState({ date: "all", source: "all", query: "" });
+  const [filters, setFilters] = useState({
+    date: "all",
+    fromDate: "",
+    toDate: "",
+    source: "all",
+    query: ""
+  });
   const size = 10;
-
-  const sources = useMemo(() => ["all", ...new Set(enrichedWonLeads.map((lead) => lead.source).filter(Boolean))], []);
 
   const filteredWon = useMemo(() => {
     const query = filters.query.trim().toLowerCase();
 
     return enrichedWonLeads.filter((lead) => {
       if (filters.source !== "all" && lead.source !== filters.source) return false;
-      if (filters.date !== "all" && toMonthKey(lead.closeDate) !== filters.date) return false;
+
+      if (filters.date === "today" && lead.closeDateISO !== todayISO()) return false;
+      if (filters.date === "yesterday" && lead.closeDateISO !== yesterdayISO()) return false;
+      if (filters.date === "this-month" && !isThisMonth(lead.closeDateISO)) return false;
+      if (filters.date === "custom") {
+        if (filters.fromDate && lead.closeDateISO < filters.fromDate) return false;
+        if (filters.toDate && lead.closeDateISO > filters.toDate) return false;
+      }
 
       if (!query) return true;
 
@@ -43,7 +76,7 @@ export default function WonPageFixed() {
   }, [filters]);
 
   const totalRevenue = enrichedWonLeads.reduce((sum, lead) => sum + Number(lead.value || 0), 0);
-  const wonThisMonth = enrichedWonLeads.filter((lead) => toMonthKey(lead.closeDate) === "2025-05").length;
+  const wonThisMonth = enrichedWonLeads.filter((lead) => isThisMonth(lead.closeDateISO)).length;
   const averageDeal = enrichedWonLeads.length ? Math.round(totalRevenue / enrichedWonLeads.length) : 0;
 
   const stats = [
@@ -60,6 +93,11 @@ export default function WonPageFixed() {
 
   const updateFilter = (key, value) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
+    setPage(1);
+  };
+
+  const resetFilters = () => {
+    setFilters({ date: "all", fromDate: "", toDate: "", source: "all", query: "" });
     setPage(1);
   };
 
@@ -83,13 +121,13 @@ export default function WonPageFixed() {
           {stats.map((item) => {
             const Icon = item.icon;
             return (
-              <div key={item.label} className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">{item.label}</p>
-                    <h2 className="text-3xl font-bold text-slate-900 mt-2">{item.value}</h2>
+              <div key={item.label} className="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm min-h-[112px]">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wide leading-tight">{item.label}</p>
+                    <h2 className="text-[30px] leading-tight font-black text-slate-900 mt-2 truncate">{item.value}</h2>
                   </div>
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: `${item.color}18`, color: item.color }}>
+                  <div className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style={{ background: `${item.color}18`, color: item.color }}>
                     <Icon className="w-5 h-5" />
                   </div>
                 </div>
@@ -105,25 +143,43 @@ export default function WonPageFixed() {
                 <h2 className="text-lg font-bold text-slate-900">Won List</h2>
                 <p className="text-sm text-slate-500 mt-1">Showing {filteredWon.length === 0 ? 0 : start + 1}-{Math.min(start + size, filteredWon.length)} of {filteredWon.length}</p>
               </div>
-              <div className="inline-flex items-center gap-2 text-sm font-bold text-slate-600">
+              <button type="button" onClick={resetFilters} className="inline-flex items-center gap-2 h-10 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50">
                 <Filter className="w-4 h-4 text-orange-600" />
-                Filters
-              </div>
+                Reset Filters
+              </button>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-[180px_180px_1fr] gap-3">
+            <div className={`grid grid-cols-1 ${filters.date === "custom" ? "xl:grid-cols-[170px_160px_160px_190px_1fr]" : "xl:grid-cols-[170px_190px_1fr]"} gap-3`}>
               <label className="block">
                 <span className="text-xs font-black text-slate-500 uppercase">Date</span>
                 <select value={filters.date} onChange={(event) => updateFilter("date", event.target.value)} className="mt-1 w-full h-11 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
                   <option value="all">All Dates</option>
-                  <option value="2025-05">This Month</option>
+                  <option value="today">Today</option>
+                  <option value="yesterday">Yesterday</option>
+                  <option value="this-month">This Month</option>
+                  <option value="custom">Custom Range</option>
                 </select>
               </label>
+
+              {filters.date === "custom" && (
+                <>
+                  <label className="block">
+                    <span className="text-xs font-black text-slate-500 uppercase">From Date</span>
+                    <input type="date" value={filters.fromDate} onChange={(event) => updateFilter("fromDate", event.target.value)} className="mt-1 w-full h-11 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                  </label>
+
+                  <label className="block">
+                    <span className="text-xs font-black text-slate-500 uppercase">To Date</span>
+                    <input type="date" value={filters.toDate} onChange={(event) => updateFilter("toDate", event.target.value)} className="mt-1 w-full h-11 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                  </label>
+                </>
+              )}
 
               <label className="block">
                 <span className="text-xs font-black text-slate-500 uppercase">Lead Source</span>
                 <select value={filters.source} onChange={(event) => updateFilter("source", event.target.value)} className="mt-1 w-full h-11 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
-                  {sources.map((source) => <option key={source} value={source}>{source === "all" ? "All Sources" : source}</option>)}
+                  <option value="all">All Sources</option>
+                  {leadSourceOptions.map((source) => <option key={source} value={source}>{source}</option>)}
                 </select>
               </label>
 
