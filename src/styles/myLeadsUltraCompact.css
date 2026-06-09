@@ -1,0 +1,99 @@
+/* My Leads table ultra compact demo layout */
+.sf-employee section table:has(th:nth-child(7)) {
+  table-layout: fixed !important;
+  width: 100% !important;
+  min-width: 1040px !important;
+  border-collapse: collapse !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) thead th {
+  padding: 8px 14px !important;
+  height: 36px !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) tbody tr {
+  height: 56px !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) tbody td {
+  padding: 6px 14px !important;
+  height: 56px !important;
+  vertical-align: middle !important;
+  font-size: 13.5px !important;
+  line-height: 1.1 !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) th:nth-child(1),
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(1) { width: 25% !important; }
+.sf-employee section table:has(th:nth-child(7)) th:nth-child(2),
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(2) { width: 18% !important; }
+.sf-employee section table:has(th:nth-child(7)) th:nth-child(3),
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(3) { width: 14% !important; }
+.sf-employee section table:has(th:nth-child(7)) th:nth-child(4),
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(4) { width: 14% !important; }
+.sf-employee section table:has(th:nth-child(7)) th:nth-child(5),
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(5) { width: 14% !important; }
+.sf-employee section table:has(th:nth-child(7)) th:nth-child(6),
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(6) { width: 8% !important; }
+.sf-employee section table:has(th:nth-child(7)) th:nth-child(7),
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(7) { width: 7% !important; }
+
+.sf-employee section table:has(th:nth-child(7)) td .flex.items-center.gap-4 {
+  gap: 10px !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) td .w-12.h-12,
+.sf-employee section table:has(th:nth-child(7)) td .w-12.h-12.rounded-full {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  font-size: 12px !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) td .text-lg,
+.sf-employee section table:has(th:nth-child(7)) td button.text-lg {
+  font-size: 13.5px !important;
+  line-height: 1.1 !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) td p,
+.sf-employee section table:has(th:nth-child(7)) td .text-slate-500 {
+  font-size: 12px !important;
+  line-height: 1.1 !important;
+  margin-top: 2px !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(2),
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(3),
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(5) {
+  font-size: 13.5px !important;
+  line-height: 1.1 !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(4) span {
+  padding: 4px 9px !important;
+  font-size: 11px !important;
+  line-height: 1 !important;
+  border-radius: 9px !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(6) span {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  font-size: 12px !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) td:nth-child(7) button {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 10px !important;
+}
+
+.sf-employee section table:has(th:nth-child(7)) td:last-child,
+.sf-employee section table:has(th:nth-child(7)) th:last-child {
+  padding-right: 12px !important;
+  min-width: 0 !important;
+}
