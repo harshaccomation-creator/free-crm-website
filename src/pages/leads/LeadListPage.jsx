@@ -39,10 +39,6 @@ function initials(name = "") {
   return String(name).split(" ").map((part) => part[0]).join("").slice(0, 2).toUpperCase();
 }
 
-function money(value) {
-  return Number(value || 0).toLocaleString("en-IN");
-}
-
 function scoreNumber(score) {
   if (typeof score === "number") return score;
   if (score === "Hot") return 90;
@@ -92,6 +88,7 @@ export default function LeadListPage() {
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [page, setPage] = useState(1);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isAddLeadOpen, setIsAddLeadOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [errors, setErrors] = useState({});
@@ -133,6 +130,8 @@ export default function LeadListPage() {
   const start = (page - 1) * PAGE_SIZE;
   const pageRows = filteredLeads.slice(start, start + PAGE_SIZE);
 
+  const hasActiveFilter = statusFilter !== "All" || sourceFilter !== "All" || dateFilter !== "All Dates" || search.trim();
+
   const updateForm = (field, value) => {
     setForm((old) => ({ ...old, [field]: value }));
     setErrors((old) => ({ ...old, [field]: "" }));
@@ -147,6 +146,17 @@ export default function LeadListPage() {
   const closeAddLead = () => {
     setIsAddLeadOpen(false);
     setErrors({});
+  };
+
+  const resetFilters = () => {
+    setActiveTab("All");
+    setStatusFilter("All");
+    setSourceFilter("All");
+    setDateFilter("All Dates");
+    setFromDate("");
+    setToDate("");
+    setSearch("");
+    setPage(1);
   };
 
   const saveLead = (event) => {
@@ -179,26 +189,8 @@ export default function LeadListPage() {
     };
 
     setLocalLeads((prev) => [newLead, ...prev]);
-    setActiveTab("All");
-    setStatusFilter("All");
-    setSourceFilter("All");
-    setDateFilter("All Dates");
-    setFromDate("");
-    setToDate("");
-    setSearch("");
-    setPage(1);
+    resetFilters();
     closeAddLead();
-  };
-
-  const resetFilters = () => {
-    setActiveTab("All");
-    setStatusFilter("All");
-    setSourceFilter("All");
-    setDateFilter("All Dates");
-    setFromDate("");
-    setToDate("");
-    setSearch("");
-    setPage(1);
   };
 
   return (
@@ -226,76 +218,86 @@ export default function LeadListPage() {
 
         <section className="rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden">
           <div className="px-6 pt-5 border-b border-slate-200">
-            <div className="flex items-center gap-8 overflow-x-auto">
-              {tabs.map((tab) => (
-                <button key={tab} type="button" onClick={() => { setActiveTab(tab); setPage(1); }} className={`pb-5 text-lg font-semibold flex items-center gap-2 border-b-2 whitespace-nowrap ${activeTab === tab ? "text-orange-600 border-orange-600" : "text-slate-500 border-transparent"}`}>
-                  {tab}
-                  <span className="px-2 py-0.5 rounded-full text-sm bg-slate-100 text-slate-500">{counts[tab]}</span>
+            <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+              <div className="flex items-center gap-8 overflow-x-auto">
+                {tabs.map((tab) => (
+                  <button key={tab} type="button" onClick={() => { setActiveTab(tab); setPage(1); }} className={`pb-5 text-lg font-semibold flex items-center gap-2 border-b-2 whitespace-nowrap ${activeTab === tab ? "text-orange-600 border-orange-600" : "text-slate-500 border-transparent"}`}>
+                    {tab}
+                    <span className="px-2 py-0.5 rounded-full text-sm bg-slate-100 text-slate-500">{counts[tab]}</span>
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-3 pb-4 xl:pb-5 w-full xl:w-auto">
+                <label className="relative flex-1 xl:w-[340px]">
+                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-600" />
+                  <input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search leads, company, source..." className="w-full h-11 rounded-xl border border-slate-200 bg-white pl-11 pr-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20 shadow-sm" />
+                </label>
+
+                <button type="button" onClick={() => setIsFilterOpen((prev) => !prev)} className={`h-11 px-5 rounded-xl border font-black inline-flex items-center gap-2 ${isFilterOpen || hasActiveFilter ? "bg-orange-600 text-white border-orange-600 shadow-lg shadow-orange-500/20" : "bg-white text-slate-700 border-slate-200"}`}>
+                  <Filter className="w-4 h-4" /> Filter
                 </button>
-              ))}
+              </div>
             </div>
           </div>
 
-          <div className="px-6 py-5 border-b border-slate-200">
-            <div className={`grid grid-cols-1 ${dateFilter === "Custom Range" ? "xl:grid-cols-[1fr_170px_170px_170px_150px_150px_auto]" : "xl:grid-cols-[1fr_190px_190px_190px_auto]"} gap-4 items-end`}>
-              <label>
-                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><Search className="w-4 h-4 text-orange-600" />Search</span>
-                <input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search leads, company, source..." className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20 shadow-sm" />
-              </label>
+          {isFilterOpen && (
+            <div className="px-6 py-5 border-b border-slate-200 bg-slate-50/60">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-end">
+                <label>
+                  <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><Filter className="w-4 h-4 text-orange-600" />Status</span>
+                  <select value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
+                    <option>All</option>
+                    {statusOptions.map((item) => <option key={item}>{item}</option>)}
+                  </select>
+                </label>
 
-              <label>
-                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><Filter className="w-4 h-4 text-orange-600" />Status</span>
-                <select value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
-                  <option>All</option>
-                  {statusOptions.map((item) => <option key={item}>{item}</option>)}
-                </select>
-              </label>
+                <label>
+                  <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><Filter className="w-4 h-4 text-orange-600" />Source</span>
+                  <select value={sourceFilter} onChange={(event) => { setSourceFilter(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
+                    <option>All</option>
+                    {sourceOptions.map((item) => <option key={item}>{item}</option>)}
+                  </select>
+                </label>
 
-              <label>
-                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><Filter className="w-4 h-4 text-orange-600" />Source</span>
-                <select value={sourceFilter} onChange={(event) => { setSourceFilter(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
-                  <option>All</option>
-                  {sourceOptions.map((item) => <option key={item}>{item}</option>)}
-                </select>
-              </label>
+                <label>
+                  <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />Date</span>
+                  <select
+                    value={dateFilter}
+                    onChange={(event) => {
+                      const value = event.target.value;
+                      setDateFilter(value);
+                      if (value !== "Custom Range") {
+                        setFromDate("");
+                        setToDate("");
+                      }
+                      setPage(1);
+                    }}
+                    className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20"
+                  >
+                    {dateOptions.map((item) => <option key={item}>{item}</option>)}
+                  </select>
+                </label>
 
-              <label>
-                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />Date</span>
-                <select
-                  value={dateFilter}
-                  onChange={(event) => {
-                    const value = event.target.value;
-                    setDateFilter(value);
-                    if (value !== "Custom Range") {
-                      setFromDate("");
-                      setToDate("");
-                    }
-                    setPage(1);
-                  }}
-                  className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20"
-                >
-                  {dateOptions.map((item) => <option key={item}>{item}</option>)}
-                </select>
-              </label>
+                <button type="button" onClick={resetFilters} className="h-12 px-5 rounded-xl border border-slate-200 bg-white text-slate-700 font-black inline-flex items-center justify-center gap-2 hover:bg-slate-50">
+                  <RotateCcw className="w-4 h-4" /> Reset
+                </button>
+              </div>
 
               {dateFilter === "Custom Range" && (
-                <>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                   <label>
-                    <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />From</span>
+                    <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />From Date</span>
                     <input type="date" value={fromDate} onChange={(event) => { setFromDate(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
                   </label>
                   <label>
-                    <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />To</span>
+                    <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />To Date</span>
                     <input type="date" value={toDate} onChange={(event) => { setToDate(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
                   </label>
-                </>
+                </div>
               )}
-
-              <button type="button" onClick={resetFilters} className="h-12 px-5 rounded-xl border border-slate-200 bg-white text-slate-700 font-black inline-flex items-center gap-2 hover:bg-slate-50">
-                <RotateCcw className="w-4 h-4" /> Reset
-              </button>
             </div>
-          </div>
+          )}
 
           <div className="overflow-x-auto">
             <table className="w-full text-left">
@@ -305,7 +307,6 @@ export default function LeadListPage() {
                   <th className="px-6 py-4 font-black">Company</th>
                   <th className="px-6 py-4 font-black">Source</th>
                   <th className="px-6 py-4 font-black">Status</th>
-                  <th className="px-6 py-4 font-black">Value</th>
                   <th className="px-6 py-4 font-black">Score</th>
                   <th className="px-6 py-4 font-black">Actions</th>
                 </tr>
@@ -317,12 +318,11 @@ export default function LeadListPage() {
                     <td className="px-6 py-5 text-lg text-slate-900">{lead.company}</td>
                     <td className="px-6 py-5 text-lg text-slate-500">{lead.source}</td>
                     <td className="px-6 py-5"><span className="px-3 py-1 rounded-md border text-sm font-black bg-orange-50 text-orange-700 border-orange-100">{lead.status}</span></td>
-                    <td className="px-6 py-5 text-lg font-black text-slate-900">₹{money(lead.value)}</td>
                     <td className="px-6 py-5"><span className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 grid place-items-center font-black">{lead.score}</span></td>
                     <td className="px-6 py-5"><button type="button" onClick={() => go(`/leads/${lead.id}`)} className="w-10 h-10 rounded-xl border border-slate-200 text-slate-600 hover:text-blue-600 hover:bg-slate-50 inline-flex items-center justify-center"><Eye className="w-5 h-5" /></button></td>
                   </tr>
                 ))}
-                {pageRows.length === 0 && <tr><td colSpan="7" className="px-6 py-12 text-center text-slate-500">No leads found.</td></tr>}
+                {pageRows.length === 0 && <tr><td colSpan="6" className="px-6 py-12 text-center text-slate-500">No leads found.</td></tr>}
               </tbody>
             </table>
           </div>
