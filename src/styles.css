@@ -98,6 +98,14 @@ body {
   z-index: 30 !important;
 }
 
+/* Hide chatbot unread red count bubble only */
+.sf-employee .fixed.bottom-6.right-6 span.absolute,
+.sf-employee .fixed.bottom-5.right-5 span.absolute,
+.sf-employee [class*="chat"] span.absolute,
+.sf-employee [class*="Chat"] span.absolute {
+  display: none !important;
+}
+
 .sf-employee table td:last-child,
 .sf-employee table th:last-child {
   padding-right: 80px !important;
