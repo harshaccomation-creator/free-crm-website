@@ -78,3 +78,80 @@
   background: rgba(148, 163, 184, 0.45) !important;
   border-radius: 999px !important;
 }
+
+/* Add Lead modal: prevent footer overlap and keep all fields visible */
+.sf-employee .fixed.inset-0.z-\[99999\] {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 22px !important;
+  overflow: hidden !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[99999\] > .max-w-4xl {
+  display: flex !important;
+  flex-direction: column !important;
+  width: min(980px, calc(100vw - 56px)) !important;
+  max-width: min(980px, calc(100vw - 56px)) !important;
+  height: auto !important;
+  max-height: calc(100vh - 64px) !important;
+  overflow: hidden !important;
+  border-radius: 24px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[99999\] > .max-w-4xl > div:first-child {
+  flex: 0 0 auto !important;
+  padding: 18px 24px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[99999\] form {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[99999\] form > .grid {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 20px 24px 24px !important;
+  gap: 14px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[99999\] form > .sticky {
+  position: static !important;
+  bottom: auto !important;
+  flex: 0 0 auto !important;
+  margin: 0 !important;
+  padding: 14px 24px !important;
+  border-top: 1px solid #e2e8f0 !important;
+  background: #f8fafc !important;
+  backdrop-filter: none !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[99999\] input,
+.sf-employee .fixed.inset-0.z-\[99999\] select {
+  height: 42px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[99999\] textarea {
+  min-height: 84px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[99999\] ::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[99999\] ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.42) !important;
+  border-radius: 999px !important;
+}
