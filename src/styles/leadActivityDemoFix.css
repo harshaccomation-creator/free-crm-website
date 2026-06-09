@@ -1,0 +1,70 @@
+/* Lead Details / Lead Activity demo polish */
+.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] > section:last-child {
+  overflow: visible !important;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07) !important;
+}
+
+.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] > section:last-child > div {
+  overflow: visible !important;
+}
+
+.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] > section:last-child * {
+  scrollbar-width: thin;
+}
+
+.sf-employee .fixed.inset-0.z-\[999\] {
+  padding: 18px !important;
+  align-items: center !important;
+  background: rgba(2, 8, 23, 0.48) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[999\] > .max-w-3xl {
+  width: min(820px, calc(100vw - 48px)) !important;
+  max-height: calc(100vh - 56px) !important;
+  overflow: hidden !important;
+  border-radius: 22px !important;
+  box-shadow: 0 28px 80px rgba(2, 8, 23, 0.28) !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[999\] > .max-w-3xl > .p-5 {
+  max-height: calc(100vh - 210px) !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 18px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[999\] .grid.grid-cols-1.md\:grid-cols-2 {
+  gap: 14px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[999\] label span {
+  font-size: 12px !important;
+  color: #475569 !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[999\] input,
+.sf-employee .fixed.inset-0.z-\[999\] select {
+  height: 42px !important;
+  border-radius: 12px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[999\] textarea {
+  min-height: 92px !important;
+  border-radius: 12px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[999\] > .max-w-3xl > div:first-child,
+.sf-employee .fixed.inset-0.z-\[999\] > .max-w-3xl > div:last-child {
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[999\] ::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.sf-employee .fixed.inset-0.z-\[999\] ::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.45) !important;
+  border-radius: 999px !important;
+}
