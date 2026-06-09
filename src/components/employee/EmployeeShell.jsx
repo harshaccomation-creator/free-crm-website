@@ -63,26 +63,14 @@ export default function EmployeeShell({ children }) {
         }}
       >
         <div
-          className="flex items-center gap-2.5 px-4 py-4"
+          className="flex items-center px-4 py-4"
           style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}
         >
-          <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 overflow-hidden"
-            style={{ background: "linear-gradient(135deg, #f97316, #ea580c)" }}
-          >
-            <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-            </svg>
-          </div>
-
-          <div>
-            <p className="text-sm font-bold text-white leading-tight">
-              SalesFlow
-            </p>
-            <p className="text-[10px] text-orange-400 font-bold uppercase tracking-widest">
-              HUB
-            </p>
-          </div>
+          <img
+            src="/assets/salesflow-hub-logo-transparent.png"
+            alt="SalesFlow Hub"
+            className="h-10 w-auto object-contain"
+          />
 
           <button
             className="ml-auto lg:hidden text-gray-400 hover:text-white"
