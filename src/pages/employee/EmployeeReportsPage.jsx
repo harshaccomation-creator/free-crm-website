@@ -1,5 +1,6 @@
 import { BarChart2, TrendingUp, Users, Trophy, Activity } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
+import ReportsDateFilter from "../../components/employee/ReportsDateFilter.jsx";
 
 const stats = [
   { label: "Lead Growth", value: "+18%", icon: TrendingUp, color: "#16a34a" },
@@ -12,10 +13,13 @@ export default function EmployeeReportsPage() {
   return (
     <EmployeeShell>
       <div className="space-y-5">
-        <div>
-          <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">Employee Workspace</p>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">Reports</h1>
-          <p className="text-sm text-slate-500 mt-1">Your sales performance and activity reports.</p>
+        <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">Employee Workspace</p>
+            <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">Reports</h1>
+            <p className="text-sm text-slate-500 mt-1">Your sales performance and activity reports.</p>
+          </div>
+          <ReportsDateFilter />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
