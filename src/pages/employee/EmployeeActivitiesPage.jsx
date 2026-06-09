@@ -71,7 +71,23 @@ function statusClass(status = "") {
   if (key.includes("won")) return "bg-purple-50 text-purple-700";
   if (key.includes("completed")) return "bg-green-50 text-green-700";
   if (key.includes("sent")) return "bg-blue-50 text-blue-700";
+  if (key.includes("missed")) return "bg-orange-50 text-orange-700";
+  if (key.includes("done")) return "bg-emerald-50 text-emerald-700";
   return "bg-slate-100 text-slate-600";
+}
+
+function dispositionFor(item) {
+  const key = normalizeType(item.type);
+  const status = String(item.status || "").toLowerCase();
+
+  if (key === "not-connected" || status.includes("not connected")) return "Not Connected";
+  if (key === "lost" || status.includes("lost")) return "Lost";
+  if (key === "call") return status.includes("missed") ? "Missed Call" : "Call Connected";
+  if (key === "whatsapp") return "WhatsApp Follow-up";
+  if (key === "email") return "Proposal / Email";
+  if (key === "task") return "Task Update";
+  if (key === "won") return "Won";
+  return item.status || "-";
 }
 
 export default function EmployeeActivitiesPage() {
@@ -182,62 +198,96 @@ export default function EmployeeActivitiesPage() {
             </button>
           </div>
 
-          <div className="divide-y divide-slate-100">
-            {rows.map((item) => {
-              const Icon = iconFor(item.type);
-              const color = colorFor(item.type);
-
-              return (
-                <div
-                  key={item.id}
-                  className="px-5 py-4 flex items-start gap-4 hover:bg-slate-50 transition-colors"
-                >
-                  <div
-                    className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
-                    style={{ background: `${color}18`, color }}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-bold text-slate-900">
-                        {item.title}
-                      </h3>
-
-                      <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${statusClass(item.status)}`}>
-                        {item.status}
-                      </span>
-                    </div>
-
-                    <p className="text-sm text-slate-600 mt-1">
-                      {item.description}
-                    </p>
-
-                    <div className="flex items-center gap-3 mt-2 text-xs text-slate-500">
-                      <span className="font-semibold text-slate-700">
-                        {item.lead}
-                      </span>
-                      <span>•</span>
-                      <span>{item.time}</span>
-                    </div>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="w-9 h-9 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 grid place-items-center"
-                  >
-                    <MoreVertical className="w-4 h-4" />
-                  </button>
-                </div>
-              );
-            })}
-
-            {rows.length === 0 && (
-              <div className="px-5 py-10 text-center text-slate-500">
-                No activities found.
+          <div className="overflow-x-auto">
+            <div className="min-w-[980px]">
+              <div className="hidden lg:grid grid-cols-[2.3fr_1.1fr_1.1fr_1.25fr_0.9fr_56px] gap-4 px-5 py-3 bg-slate-50 border-b border-slate-200 text-[12px] font-bold uppercase tracking-wide text-slate-500">
+                <div>Activity</div>
+                <div>Lead Name</div>
+                <div>Activity Time</div>
+                <div>Disposition</div>
+                <div>Status</div>
+                <div className="text-center">Action</div>
               </div>
-            )}
+
+              <div className="divide-y divide-slate-100">
+                {rows.map((item) => {
+                  const Icon = iconFor(item.type);
+                  const color = colorFor(item.type);
+                  const disposition = dispositionFor(item);
+
+                  return (
+                    <div
+                      key={item.id}
+                      className="grid grid-cols-1 lg:grid-cols-[2.3fr_1.1fr_1.1fr_1.25fr_0.9fr_56px] gap-4 px-5 py-4 items-start hover:bg-slate-50 transition-colors"
+                    >
+                      <div className="flex items-start gap-4 min-w-0">
+                        <div
+                          className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
+                          style={{ background: `${color}18`, color }}
+                        >
+                          <Icon className="w-5 h-5" />
+                        </div>
+
+                        <div className="min-w-0">
+                          <h3 className="font-bold text-slate-900">
+                            {item.title}
+                          </h3>
+
+                          <p className="text-sm text-slate-600 mt-1">
+                            {item.description}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="text-sm font-semibold text-slate-700">
+                        <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
+                          Lead Name
+                        </span>
+                        {item.lead}
+                      </div>
+
+                      <div className="text-sm text-slate-600">
+                        <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
+                          Activity Time
+                        </span>
+                        {item.time}
+                      </div>
+
+                      <div className="text-sm font-semibold text-slate-700">
+                        <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
+                          Disposition
+                        </span>
+                        {disposition}
+                      </div>
+
+                      <div>
+                        <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
+                          Status
+                        </span>
+                        <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold ${statusClass(item.status)}`}>
+                          {item.status}
+                        </span>
+                      </div>
+
+                      <div className="flex lg:justify-center">
+                        <button
+                          type="button"
+                          className="w-9 h-9 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 grid place-items-center"
+                        >
+                          <MoreVertical className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {rows.length === 0 && (
+                  <div className="px-5 py-10 text-center text-slate-500">
+                    No activities found.
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="px-5 py-4 border-t border-slate-100 flex items-center justify-between">
