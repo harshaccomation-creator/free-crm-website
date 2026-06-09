@@ -9,7 +9,7 @@ const extraActivities = [
 ];
 
 const leadIds = { "Rajesh Kumar": "1", "Priya Sharma": "2", "Aditya Mehta": "3", "Sunita Patel": "4", "Vikram Nair": "5", "Neha Gupta": "6", Motilal: "7" };
-const typeOptions = ["All", "Call", "Demo", "Note", "Demo Done"];
+const typeOptions = ["All", "Call", "Demo", "Note", "Post Demo Follow Up"];
 const dispositionOptions = ["All", "Connected", "Follow Up", "Demo Booked", "Not Connected"];
 const statusOptions = ["All", "Completed", "Pending", "Done", "Sent", "Won", "Lost", "Note", "Missed"];
 
@@ -32,7 +32,7 @@ function activityTypeFor(item) {
   const status = lower(item.status);
   if (["call", "whatsapp", "not-connected", "lost"].includes(key)) return "Call";
   if (["email", "note"].includes(key)) return "Note";
-  if (key === "won" || status.includes("won")) return "Demo Done";
+  if (key === "won" || status.includes("won")) return "Post Demo Follow Up";
   if (key === "task" || title.includes("demo")) return "Demo";
   return item.type || "Activity";
 }
@@ -55,7 +55,7 @@ function pill(kind, value = "") {
   const key = lower(value);
   if (kind === "type") {
     if (key.includes("call")) return "bg-green-50 text-green-700 border-green-100";
-    if (key.includes("demo done")) return "bg-emerald-50 text-emerald-700 border-emerald-100";
+    if (key.includes("post demo follow up")) return "bg-emerald-50 text-emerald-700 border-emerald-100";
     if (key.includes("demo")) return "bg-purple-50 text-purple-700 border-purple-100";
     if (key.includes("note")) return "bg-blue-50 text-blue-700 border-blue-100";
   }
