@@ -139,63 +139,40 @@ export default function TasksPageFixed() {
                 <p className="text-sm text-slate-500 mt-1">Showing {filteredTasks.length} of {tasks.length} pending tasks.</p>
               </div>
 
-              <button
-                type="button"
-                onClick={resetFilters}
-                className="h-10 px-4 rounded-xl border border-slate-200 text-slate-700 font-black text-sm hover:bg-slate-50"
-              >
+              <button type="button" onClick={resetFilters} className="h-10 px-4 rounded-xl border border-slate-200 text-slate-700 font-black text-sm hover:bg-slate-50">
                 Reset Filter
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className={`grid grid-cols-1 ${dateFilter === "custom" ? "md:grid-cols-3" : "md:grid-cols-2"} gap-4`}>
               <label className="space-y-2">
-                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600">
-                  <Filter className="w-4 h-4 text-orange-600" />
-                  Type / Status
-                </span>
-                <select
-                  value={typeFilter}
-                  onChange={(event) => setTypeFilter(event.target.value)}
-                  className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20"
-                >
-                  {typeFilters.map((filter) => (
-                    <option key={filter.value} value={filter.value}>{filter.label}</option>
-                  ))}
+                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600"><Filter className="w-4 h-4 text-orange-600" />Type / Status</span>
+                <select value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20">
+                  {typeFilters.map((filter) => <option key={filter.value} value={filter.value}>{filter.label}</option>)}
                 </select>
               </label>
 
               <label className="space-y-2">
-                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600">
-                  <CalendarDays className="w-4 h-4 text-orange-600" />
-                  Date
-                </span>
+                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600"><CalendarDays className="w-4 h-4 text-orange-600" />Date</span>
                 <select
                   value={dateFilter}
-                  onChange={(event) => setDateFilter(event.target.value)}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    setDateFilter(value);
+                    if (value !== "custom") setCustomDate("");
+                  }}
                   className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20"
                 >
-                  {dateFilters.map((filter) => (
-                    <option key={filter.value} value={filter.value}>{filter.label}</option>
-                  ))}
+                  {dateFilters.map((filter) => <option key={filter.value} value={filter.value}>{filter.label}</option>)}
                 </select>
               </label>
 
-              <label className="space-y-2">
-                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600">
-                  <CalendarClock className="w-4 h-4 text-orange-600" />
-                  Custom Date
-                </span>
-                <input
-                  type="date"
-                  value={customDate}
-                  onChange={(event) => {
-                    setCustomDate(event.target.value);
-                    setDateFilter("custom");
-                  }}
-                  className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20"
-                />
-              </label>
+              {dateFilter === "custom" && (
+                <label className="space-y-2">
+                  <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600"><CalendarClock className="w-4 h-4 text-orange-600" />Custom Date</span>
+                  <input type="date" value={customDate} onChange={(event) => setCustomDate(event.target.value)} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20" />
+                </label>
+              )}
             </div>
           </div>
 
@@ -210,20 +187,12 @@ export default function TasksPageFixed() {
                   <th className="px-6 py-4 font-black">Action</th>
                 </tr>
               </thead>
-
               <tbody className="divide-y divide-slate-200">
                 {filteredTasks.map((task) => (
                   <tr key={task.id} onClick={() => setSelectedTask(task)} className={`${taskRowClass(task.status)} cursor-pointer transition-colors`}>
-                    <td className="px-6 py-5">
-                      <h3 className="font-black text-slate-900">{task.title}</h3>
-                      <p className="text-sm text-slate-500 mt-1">Lead: {task.lead}</p>
-                    </td>
-                    <td className="px-6 py-5">
-                      <span className={`px-3 py-1 rounded-full border text-xs font-black ${taskBadgeClass(task.status)}`}>{task.type}</span>
-                    </td>
-                    <td className="px-6 py-5 text-sm font-bold text-slate-700 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-2"><CalendarClock className="w-4 h-4 text-slate-400" />{task.due}</div>
-                    </td>
+                    <td className="px-6 py-5"><h3 className="font-black text-slate-900">{task.title}</h3><p className="text-sm text-slate-500 mt-1">Lead: {task.lead}</p></td>
+                    <td className="px-6 py-5"><span className={`px-3 py-1 rounded-full border text-xs font-black ${taskBadgeClass(task.status)}`}>{task.type}</span></td>
+                    <td className="px-6 py-5 text-sm font-bold text-slate-700 whitespace-nowrap"><div className="inline-flex items-center gap-2"><CalendarClock className="w-4 h-4 text-slate-400" />{task.due}</div></td>
                     <td className={`px-6 py-5 text-sm ${task.status === "overdue" ? "text-red-600 font-bold" : "text-slate-600"}`}>{task.reason}</td>
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3" onClick={(event) => event.stopPropagation()}>
@@ -233,10 +202,7 @@ export default function TasksPageFixed() {
                     </td>
                   </tr>
                 ))}
-
-                {filteredTasks.length === 0 && (
-                  <tr><td colSpan="5" className="px-6 py-12 text-center text-slate-500">No tasks found for selected filters.</td></tr>
-                )}
+                {filteredTasks.length === 0 && <tr><td colSpan="5" className="px-6 py-12 text-center text-slate-500">No tasks found for selected filters.</td></tr>}
               </tbody>
             </table>
           </div>
@@ -246,13 +212,9 @@ export default function TasksPageFixed() {
           <div className="fixed inset-0 z-[9999] bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-6">
             <div className="w-full max-w-xl rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
               <div className="px-6 py-5 border-b border-slate-200 flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-orange-600">Task Details</p>
-                  <h2 className="text-2xl font-black text-slate-900 mt-1">{selectedTask.title}</h2>
-                </div>
+                <div><p className="text-xs font-black uppercase tracking-widest text-orange-600">Task Details</p><h2 className="text-2xl font-black text-slate-900 mt-1">{selectedTask.title}</h2></div>
                 <button type="button" onClick={() => setSelectedTask(null)} className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 grid place-items-center"><X className="w-5 h-5" /></button>
               </div>
-
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Lead</p><p className="font-bold text-slate-900 mt-1">{selectedTask.lead}</p></div>
@@ -260,14 +222,8 @@ export default function TasksPageFixed() {
                   <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Due</p><p className="font-bold text-slate-900 mt-1">{selectedTask.due}</p></div>
                   <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Status</p><p className="font-bold text-slate-900 mt-1 capitalize">{selectedTask.status}</p></div>
                 </div>
-
-                <div className="rounded-xl bg-orange-50 border border-orange-100 p-4">
-                  <p className="text-xs font-black uppercase text-orange-700">Why this task?</p>
-                  <p className="font-bold text-slate-900 mt-1">{selectedTask.reason}</p>
-                  <p className="text-sm text-slate-600 mt-2">{selectedTask.note}</p>
-                </div>
+                <div className="rounded-xl bg-orange-50 border border-orange-100 p-4"><p className="text-xs font-black uppercase text-orange-700">Why this task?</p><p className="font-bold text-slate-900 mt-1">{selectedTask.reason}</p><p className="text-sm text-slate-600 mt-2">{selectedTask.note}</p></div>
               </div>
-
               <div className="px-6 py-4 border-t border-slate-200 flex justify-end gap-3">
                 <button type="button" onClick={() => setSelectedTask(null)} className="h-10 px-4 rounded-xl border border-slate-200 text-slate-700 font-bold">Close</button>
                 <button type="button" onClick={() => markDone(selectedTask.id)} className="h-10 px-4 rounded-xl bg-green-600 text-white font-bold">Mark Done</button>
