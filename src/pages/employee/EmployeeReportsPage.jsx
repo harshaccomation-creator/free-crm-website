@@ -62,7 +62,7 @@ export default function EmployeeReportsPage() {
   }, [fromDate, toDate]);
 
   const chartWidth = 720;
-  const chartHeight = 150;
+  const chartHeight = 96;
   const maxValue = Math.max(1, ...chartRows.flatMap((row) => [row.connected, row.calls, row.demos, row.won]));
 
   const resetChart = () => {
@@ -75,15 +75,9 @@ export default function EmployeeReportsPage() {
     <EmployeeShell>
       <div className="space-y-5">
         <div>
-          <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">
-            Employee Workspace
-          </p>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">
-            Reports
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Your sales performance and activity reports.
-          </p>
+          <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">Employee Workspace</p>
+          <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">Reports</h1>
+          <p className="text-sm text-slate-500 mt-1">Your sales performance and activity reports.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -105,77 +99,63 @@ export default function EmployeeReportsPage() {
           })}
         </div>
 
-        <section className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
-          <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+        <section className="rounded-2xl bg-white border border-slate-200 shadow-sm px-5 py-4">
+          <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-3">
             <div>
-              <h2 className="text-lg font-bold text-slate-900">Performance Trend</h2>
-              <p className="text-sm text-slate-500 mt-1">Hover on chart point to see number.</p>
+              <h2 className="text-base font-black text-slate-900">Performance Trend</h2>
+              <p className="text-xs text-slate-500 mt-1">Hover any point for exact number.</p>
+              <div className="flex flex-wrap items-center gap-3 mt-3 text-[11px] font-bold text-slate-600">
+                {Object.entries(lineMeta).map(([key, meta]) => (
+                  <span key={key} className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full" style={{ background: meta.color }} />{meta.label}</span>
+                ))}
+              </div>
             </div>
 
-            <div className="flex flex-col md:flex-row md:items-end gap-3">
+            <div className="flex flex-col md:flex-row md:items-end gap-2">
               <label>
-                <span className="text-[11px] font-black text-slate-500 uppercase">From</span>
-                <input type="date" value={fromDate} onChange={(event) => setFromDate(event.target.value)} className="mt-1 h-10 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                <span className="text-[10px] font-black text-slate-500 uppercase">From</span>
+                <input type="date" value={fromDate} onChange={(event) => setFromDate(event.target.value)} className="mt-1 h-9 rounded-xl border border-slate-200 px-3 text-xs font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
               </label>
               <label>
-                <span className="text-[11px] font-black text-slate-500 uppercase">To</span>
-                <input type="date" value={toDate} onChange={(event) => setToDate(event.target.value)} className="mt-1 h-10 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                <span className="text-[10px] font-black text-slate-500 uppercase">To</span>
+                <input type="date" value={toDate} onChange={(event) => setToDate(event.target.value)} className="mt-1 h-9 rounded-xl border border-slate-200 px-3 text-xs font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
               </label>
-              <button type="button" onClick={resetChart} className="h-10 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50 inline-flex items-center gap-2">
-                <RotateCcw className="w-4 h-4" />
+              <button type="button" onClick={resetChart} className="h-9 px-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 inline-flex items-center gap-2">
+                <RotateCcw className="w-3.5 h-3.5" />
                 Reset
               </button>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 mt-4 text-xs font-bold text-slate-600">
-            {Object.entries(lineMeta).map(([key, meta]) => (
-              <span key={key} className="inline-flex items-center gap-2"><span className="w-3 h-3 rounded-full" style={{ background: meta.color }} />{meta.label}</span>
-            ))}
-          </div>
-
-          <div className="mt-4 overflow-x-auto">
-            <div className="min-w-[760px] relative">
+          <div className="mt-2 overflow-x-auto">
+            <div className="min-w-[720px] relative">
               {hoverPoint && (
-                <div
-                  className="absolute z-20 -translate-x-1/2 -translate-y-full rounded-xl bg-slate-900 text-white px-3 py-2 text-xs font-bold shadow-xl pointer-events-none"
-                  style={{ left: `${hoverPoint.x + 36}px`, top: `${hoverPoint.y + 8}px` }}
-                >
+                <div className="absolute z-20 -translate-x-1/2 -translate-y-full rounded-lg bg-slate-900 text-white px-2.5 py-1.5 text-[11px] font-bold shadow-xl pointer-events-none" style={{ left: `${hoverPoint.x + 30}px`, top: `${hoverPoint.y + 6}px` }}>
                   <div>{hoverPoint.label}</div>
                   <div>{hoverPoint.date}: {hoverPoint.value}</div>
                 </div>
               )}
 
-              <div className="grid grid-cols-[36px_1fr] gap-2">
-                <div className="h-[180px] relative text-[11px] font-bold text-slate-400">
+              <div className="grid grid-cols-[30px_1fr] gap-2">
+                <div className="h-[125px] relative text-[10px] font-bold text-slate-400">
                   {[maxValue, Math.round(maxValue / 2), 0].map((tick, index) => (
-                    <span key={`${tick}-${index}`} className="absolute right-1" style={{ top: `${index * 75}px` }}>{tick}</span>
+                    <span key={`${tick}-${index}`} className="absolute right-1" style={{ top: `${index * 48}px` }}>{tick}</span>
                   ))}
                 </div>
 
                 <div>
-                  <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-[180px] overflow-visible">
+                  <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-[125px] overflow-visible">
                     {[0, 0.5, 1].map((line) => (
                       <line key={line} x1="0" x2={chartWidth} y1={chartHeight * line} y2={chartHeight * line} stroke="#e2e8f0" strokeWidth="1" />
                     ))}
                     {Object.entries(lineMeta).map(([key, meta]) => (
-                      <polyline key={key} points={makePoints(chartRows, key, chartWidth, chartHeight, maxValue)} fill="none" stroke={meta.color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                      <polyline key={key} points={makePoints(chartRows, key, chartWidth, chartHeight, maxValue)} fill="none" stroke={meta.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
                     ))}
                     {Object.entries(lineMeta).flatMap(([key, meta]) => pointList(chartRows, key, chartWidth, chartHeight, maxValue).map((point) => (
-                      <circle
-                        key={`${key}-${point.row.date}`}
-                        cx={point.x}
-                        cy={point.y}
-                        r="5"
-                        fill="white"
-                        stroke={meta.color}
-                        strokeWidth="3"
-                        onMouseEnter={() => setHoverPoint({ x: point.x, y: point.y, value: point.value, date: point.row.label, label: meta.label })}
-                        onMouseLeave={() => setHoverPoint(null)}
-                      />
+                      <circle key={`${key}-${point.row.date}`} cx={point.x} cy={point.y} r="3.8" fill="white" stroke={meta.color} strokeWidth="2.5" onMouseEnter={() => setHoverPoint({ x: point.x, y: point.y, value: point.value, date: point.row.label, label: meta.label })} onMouseLeave={() => setHoverPoint(null)} />
                     )))}
                   </svg>
-                  <div className="grid text-[11px] font-bold text-slate-500" style={{ gridTemplateColumns: `repeat(${Math.max(chartRows.length, 1)}, minmax(0, 1fr))` }}>
+                  <div className="grid text-[10px] font-bold text-slate-500 -mt-1" style={{ gridTemplateColumns: `repeat(${Math.max(chartRows.length, 1)}, minmax(0, 1fr))` }}>
                     {chartRows.map((row) => <span key={row.date} className="text-center">{row.label}</span>)}
                   </div>
                 </div>
@@ -195,12 +175,7 @@ export default function EmployeeReportsPage() {
             </div>
 
             <div className="mt-6 space-y-4">
-              {[
-                ["New", "72%"],
-                ["Contacted", "58%"],
-                ["Demo", "36%"],
-                ["Won", "24%"]
-              ].map((item) => (
+              {[["New", "72%"], ["Contacted", "58%"], ["Demo", "36%"], ["Won", "24%"]].map((item) => (
                 <div key={item[0]}>
                   <div className="flex items-center justify-between text-sm mb-2">
                     <span className="font-bold text-slate-700">{item[0]}</span>
@@ -219,12 +194,7 @@ export default function EmployeeReportsPage() {
             <p className="text-sm text-slate-500 mt-1">Calls, WhatsApp and follow-ups.</p>
 
             <div className="grid grid-cols-2 gap-4 mt-6">
-              {[
-                ["Calls", "84"],
-                ["WhatsApp", "96"],
-                ["Emails", "28"],
-                ["Notes", "32"]
-              ].map((item) => (
+              {[["Calls", "84"], ["WhatsApp", "96"], ["Emails", "28"], ["Notes", "32"]].map((item) => (
                 <div key={item[0]} className="rounded-2xl bg-slate-50 border border-slate-100 p-4">
                   <p className="text-xs font-bold text-slate-500 uppercase">{item[0]}</p>
                   <h3 className="text-2xl font-bold text-slate-900 mt-2">{item[1]}</h3>
