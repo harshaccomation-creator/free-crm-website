@@ -62,7 +62,7 @@ export default function EmployeeReportsPage() {
   }, [fromDate, toDate]);
 
   const chartWidth = 720;
-  const chartHeight = 96;
+  const chartHeight = 64;
   const maxValue = Math.max(1, ...chartRows.flatMap((row) => [row.connected, row.calls, row.demos, row.won]));
 
   const resetChart = () => {
@@ -99,63 +99,63 @@ export default function EmployeeReportsPage() {
           })}
         </div>
 
-        <section className="rounded-2xl bg-white border border-slate-200 shadow-sm px-5 py-4">
-          <div className="flex flex-col xl:flex-row xl:items-start xl:justify-between gap-3">
-            <div>
-              <h2 className="text-base font-black text-slate-900">Performance Trend</h2>
-              <p className="text-xs text-slate-500 mt-1">Hover any point for exact number.</p>
-              <div className="flex flex-wrap items-center gap-3 mt-3 text-[11px] font-bold text-slate-600">
+        <section className="rounded-2xl bg-white border border-slate-200 shadow-sm px-4 py-3">
+          <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-2">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+              <div>
+                <h2 className="text-sm font-black text-slate-900">Performance Trend</h2>
+                <p className="text-[11px] text-slate-500 mt-0.5">Hover point for number.</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold text-slate-600">
                 {Object.entries(lineMeta).map(([key, meta]) => (
-                  <span key={key} className="inline-flex items-center gap-1.5"><span className="w-2.5 h-2.5 rounded-full" style={{ background: meta.color }} />{meta.label}</span>
+                  <span key={key} className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full" style={{ background: meta.color }} />{meta.label}</span>
                 ))}
               </div>
             </div>
 
-            <div className="flex flex-col md:flex-row md:items-end gap-2">
-              <label>
+            <div className="flex flex-wrap items-end gap-1.5">
+              <label className="flex items-center gap-1">
                 <span className="text-[10px] font-black text-slate-500 uppercase">From</span>
-                <input type="date" value={fromDate} onChange={(event) => setFromDate(event.target.value)} className="mt-1 h-9 rounded-xl border border-slate-200 px-3 text-xs font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                <input type="date" value={fromDate} onChange={(event) => setFromDate(event.target.value)} className="h-8 rounded-lg border border-slate-200 px-2 text-[11px] font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
               </label>
-              <label>
+              <label className="flex items-center gap-1">
                 <span className="text-[10px] font-black text-slate-500 uppercase">To</span>
-                <input type="date" value={toDate} onChange={(event) => setToDate(event.target.value)} className="mt-1 h-9 rounded-xl border border-slate-200 px-3 text-xs font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                <input type="date" value={toDate} onChange={(event) => setToDate(event.target.value)} className="h-8 rounded-lg border border-slate-200 px-2 text-[11px] font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
               </label>
-              <button type="button" onClick={resetChart} className="h-9 px-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-700 hover:bg-slate-50 inline-flex items-center gap-2">
-                <RotateCcw className="w-3.5 h-3.5" />
-                Reset
+              <button type="button" onClick={resetChart} className="h-8 px-2.5 rounded-lg border border-slate-200 text-[11px] font-bold text-slate-700 hover:bg-slate-50 inline-flex items-center gap-1">
+                <RotateCcw className="w-3 h-3" /> Reset
               </button>
             </div>
           </div>
 
-          <div className="mt-2 overflow-x-auto">
+          <div className="mt-1 overflow-x-auto">
             <div className="min-w-[720px] relative">
               {hoverPoint && (
-                <div className="absolute z-20 -translate-x-1/2 -translate-y-full rounded-lg bg-slate-900 text-white px-2.5 py-1.5 text-[11px] font-bold shadow-xl pointer-events-none" style={{ left: `${hoverPoint.x + 30}px`, top: `${hoverPoint.y + 6}px` }}>
-                  <div>{hoverPoint.label}</div>
-                  <div>{hoverPoint.date}: {hoverPoint.value}</div>
+                <div className="absolute z-20 -translate-x-1/2 -translate-y-full rounded-md bg-slate-900 text-white px-2 py-1 text-[10px] font-bold shadow-xl pointer-events-none" style={{ left: `${hoverPoint.x + 24}px`, top: `${hoverPoint.y + 5}px` }}>
+                  {hoverPoint.label}: {hoverPoint.value}
                 </div>
               )}
 
-              <div className="grid grid-cols-[30px_1fr] gap-2">
-                <div className="h-[125px] relative text-[10px] font-bold text-slate-400">
+              <div className="grid grid-cols-[24px_1fr] gap-1">
+                <div className="h-[82px] relative text-[9px] font-bold text-slate-400">
                   {[maxValue, Math.round(maxValue / 2), 0].map((tick, index) => (
-                    <span key={`${tick}-${index}`} className="absolute right-1" style={{ top: `${index * 48}px` }}>{tick}</span>
+                    <span key={`${tick}-${index}`} className="absolute right-1" style={{ top: `${index * 30}px` }}>{tick}</span>
                   ))}
                 </div>
 
                 <div>
-                  <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-[125px] overflow-visible">
+                  <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-[82px] overflow-visible">
                     {[0, 0.5, 1].map((line) => (
                       <line key={line} x1="0" x2={chartWidth} y1={chartHeight * line} y2={chartHeight * line} stroke="#e2e8f0" strokeWidth="1" />
                     ))}
                     {Object.entries(lineMeta).map(([key, meta]) => (
-                      <polyline key={key} points={makePoints(chartRows, key, chartWidth, chartHeight, maxValue)} fill="none" stroke={meta.color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <polyline key={key} points={makePoints(chartRows, key, chartWidth, chartHeight, maxValue)} fill="none" stroke={meta.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     ))}
                     {Object.entries(lineMeta).flatMap(([key, meta]) => pointList(chartRows, key, chartWidth, chartHeight, maxValue).map((point) => (
-                      <circle key={`${key}-${point.row.date}`} cx={point.x} cy={point.y} r="3.8" fill="white" stroke={meta.color} strokeWidth="2.5" onMouseEnter={() => setHoverPoint({ x: point.x, y: point.y, value: point.value, date: point.row.label, label: meta.label })} onMouseLeave={() => setHoverPoint(null)} />
+                      <circle key={`${key}-${point.row.date}`} cx={point.x} cy={point.y} r="3" fill="white" stroke={meta.color} strokeWidth="2" onMouseEnter={() => setHoverPoint({ x: point.x, y: point.y, value: point.value, date: point.row.label, label: meta.label })} onMouseLeave={() => setHoverPoint(null)} />
                     )))}
                   </svg>
-                  <div className="grid text-[10px] font-bold text-slate-500 -mt-1" style={{ gridTemplateColumns: `repeat(${Math.max(chartRows.length, 1)}, minmax(0, 1fr))` }}>
+                  <div className="grid text-[9px] font-bold text-slate-500 -mt-2" style={{ gridTemplateColumns: `repeat(${Math.max(chartRows.length, 1)}, minmax(0, 1fr))` }}>
                     {chartRows.map((row) => <span key={row.date} className="text-center">{row.label}</span>)}
                   </div>
                 </div>
