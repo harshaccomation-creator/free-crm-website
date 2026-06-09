@@ -54,15 +54,15 @@ function statusLabel(status) {
 }
 
 function statusBadgeClass(status) {
-  if (status === "overdue") return "bg-red-600 text-white border-red-600 shadow-sm shadow-red-600/20";
-  if (status === "today") return "bg-blue-600 text-white border-blue-600 shadow-sm shadow-blue-600/20";
-  return "bg-yellow-100 text-yellow-800 border-yellow-200";
+  if (status === "overdue") return "bg-red-50 text-red-700 border-red-200";
+  if (status === "today") return "bg-blue-50 text-blue-700 border-blue-200";
+  return "bg-yellow-50 text-yellow-800 border-yellow-200";
 }
 
-function taskRowClass(status) {
-  if (status === "incoming") return "bg-yellow-50/70 hover:bg-yellow-100/80";
-  if (status === "overdue") return "bg-red-50/50 hover:bg-red-50 border-l-4 border-l-red-500";
-  return "hover:bg-slate-50 border-l-4 border-l-transparent";
+function rowClass(status) {
+  if (status === "overdue") return "border-l-red-500 bg-gradient-to-r from-red-50/80 to-white";
+  if (status === "incoming") return "border-l-yellow-400 bg-gradient-to-r from-yellow-50/70 to-white";
+  return "border-l-transparent bg-white";
 }
 
 function filterByType(tasks, value) {
@@ -123,11 +123,9 @@ export default function TasksPageFixed() {
   return (
     <EmployeeShell>
       <div className="space-y-6">
-        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-          <div>
-            <h1 className="text-4xl font-black text-slate-900 tracking-tight">Tasks</h1>
-            <p className="text-lg text-slate-500 mt-2">Track follow-ups, calls, demo schedules and pending actions.</p>
-          </div>
+        <div>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tight">Tasks</h1>
+          <p className="text-lg text-slate-500 mt-2">Track follow-ups, calls, demo schedules and pending actions.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -156,7 +154,6 @@ export default function TasksPageFixed() {
                 <h2 className="text-xl font-black text-slate-900">All Tasks</h2>
                 <p className="text-sm text-slate-500 mt-1">Showing {filteredTasks.length} of {tasks.length} pending tasks.</p>
               </div>
-
               <button type="button" onClick={resetFilters} className="h-10 px-4 rounded-xl border border-slate-200 text-slate-700 font-black text-sm hover:bg-slate-50">
                 Reset Filter
               </button>
@@ -194,7 +191,6 @@ export default function TasksPageFixed() {
                     <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600"><CalendarClock className="w-4 h-4 text-orange-600" />From Date</span>
                     <input type="date" value={customFromDate} onChange={(event) => setCustomFromDate(event.target.value)} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20" />
                   </label>
-
                   <label className="space-y-2">
                     <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600"><CalendarClock className="w-4 h-4 text-orange-600" />To Date</span>
                     <input type="date" value={customToDate} onChange={(event) => setCustomToDate(event.target.value)} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20" />
@@ -205,36 +201,58 @@ export default function TasksPageFixed() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead className="bg-slate-50 text-slate-500 uppercase text-sm">
-                <tr>
-                  <th className="px-6 py-4 font-black">Task</th>
-                  <th className="px-6 py-4 font-black">Type</th>
-                  <th className="px-6 py-4 font-black">Status</th>
-                  <th className="px-6 py-4 font-black">Due</th>
-                  <th className="px-6 py-4 font-black">Reason</th>
-                  <th className="px-6 py-4 font-black">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
+            <div className="min-w-[1180px]">
+              <div className="grid grid-cols-[1.55fr_130px_130px_190px_1.65fr_112px] gap-4 px-6 py-4 bg-slate-50 border-b border-slate-200 text-xs font-black uppercase tracking-wide text-slate-500">
+                <div>Task</div>
+                <div>Type</div>
+                <div>Status</div>
+                <div>Due</div>
+                <div>Reason</div>
+                <div>Action</div>
+              </div>
+
+              <div className="divide-y divide-slate-200">
                 {filteredTasks.map((task) => (
-                  <tr key={task.id} onClick={() => setSelectedTask(task)} className={`${taskRowClass(task.status)} cursor-pointer transition-colors`}>
-                    <td className="px-6 py-5"><h3 className="font-black text-slate-900">{task.title}</h3><p className="text-sm text-slate-500 mt-1">Lead: {task.lead}</p></td>
-                    <td className="px-6 py-5"><span className={`px-3 py-1 rounded-full border text-xs font-black ${taskBadgeClass(task.status)}`}>{task.type}</span></td>
-                    <td className="px-6 py-5"><span className={`inline-flex items-center px-3 py-1.5 rounded-full border text-xs font-black tracking-wide ${statusBadgeClass(task.status)}`}>{statusLabel(task.status)}</span></td>
-                    <td className={`px-6 py-5 text-sm font-bold whitespace-nowrap ${task.status === "overdue" ? "text-red-700" : "text-slate-700"}`}><div className="inline-flex items-center gap-2"><CalendarClock className={`w-4 h-4 ${task.status === "overdue" ? "text-red-500" : "text-slate-400"}`} />{task.due}{task.status === "overdue" && <span className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-black text-red-700">Overdue</span>}</div></td>
-                    <td className={`px-6 py-5 text-sm ${task.status === "overdue" ? "text-red-600 font-bold" : "text-slate-600"}`}>{task.reason}</td>
-                    <td className="px-6 py-5">
+                  <div key={task.id} onClick={() => setSelectedTask(task)} className={`grid grid-cols-[1.55fr_130px_130px_190px_1.65fr_112px] gap-4 px-6 py-5 items-center border-l-4 cursor-pointer hover:bg-slate-50 transition-colors ${rowClass(task.status)}`}>
+                    <div className="min-w-0">
+                      <h3 className="font-black text-slate-900 text-[15px] leading-snug">{task.title}</h3>
+                      <p className="text-sm text-slate-500 mt-1">Lead: {task.lead}</p>
+                    </div>
+
+                    <div>
+                      <span className={`inline-flex items-center justify-center min-w-[92px] max-w-[118px] px-3 py-1.5 rounded-full border text-[11px] font-black text-center leading-tight ${taskBadgeClass(task.status)}`}>
+                        {task.type}
+                      </span>
+                    </div>
+
+                    <div>
+                      <span className={`inline-flex items-center justify-center min-w-[94px] px-3 py-1.5 rounded-full border text-[11px] font-black tracking-wide ${statusBadgeClass(task.status)}`}>
+                        {statusLabel(task.status)}
+                      </span>
+                    </div>
+
+                    <div className={`text-sm font-black whitespace-nowrap ${task.status === "overdue" ? "text-red-700" : "text-slate-700"}`}>
+                      <span className="inline-flex items-center gap-2">
+                        <CalendarClock className={`w-4 h-4 ${task.status === "overdue" ? "text-red-500" : "text-slate-400"}`} />
+                        {task.due}
+                      </span>
+                    </div>
+
+                    <div className={`text-sm leading-snug max-w-[360px] ${task.status === "overdue" ? "text-red-600 font-bold" : "text-slate-600"}`}>
+                      {task.reason}
+                    </div>
+
+                    <div>
                       <div className="flex items-center gap-2" onClick={(event) => event.stopPropagation()}>
-                        <button type="button" title="Open Task" aria-label="Open Task" onClick={() => setSelectedTask(task)} className="w-10 h-10 rounded-xl border border-slate-200 text-slate-700 inline-flex items-center justify-center hover:bg-slate-50 hover:text-blue-600 transition-colors"><Eye className="w-4 h-4" /></button>
-                        <button type="button" title="Mark Done" aria-label="Mark Done" onClick={() => markDone(task.id)} className="w-10 h-10 rounded-xl bg-green-50 text-green-700 inline-flex items-center justify-center hover:bg-green-100 transition-colors"><CheckCircle2 className="w-4 h-4" /></button>
+                        <button type="button" title="Open Task" aria-label="Open Task" onClick={() => setSelectedTask(task)} className="w-9 h-9 rounded-xl border border-slate-200 text-slate-700 inline-flex items-center justify-center hover:bg-slate-50 hover:text-blue-600 transition-colors"><Eye className="w-4 h-4" /></button>
+                        <button type="button" title="Mark Done" aria-label="Mark Done" onClick={() => markDone(task.id)} className="w-9 h-9 rounded-xl bg-green-50 text-green-700 inline-flex items-center justify-center hover:bg-green-100 transition-colors"><CheckCircle2 className="w-4 h-4" /></button>
                       </div>
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 ))}
-                {filteredTasks.length === 0 && <tr><td colSpan="6" className="px-6 py-12 text-center text-slate-500">No tasks found for selected filters.</td></tr>}
-              </tbody>
-            </table>
+                {filteredTasks.length === 0 && <div className="px-6 py-12 text-center text-slate-500">No tasks found for selected filters.</div>}
+              </div>
+            </div>
           </div>
         </section>
 
