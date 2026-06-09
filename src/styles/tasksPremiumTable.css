@@ -1,0 +1,116 @@
+/* Premium Tasks table polish */
+.sf-employee table:has(th:nth-child(6)) {
+  table-layout: fixed !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) th,
+.sf-employee table:has(th:nth-child(6)) td {
+  padding: 14px 20px !important;
+  vertical-align: middle !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) th {
+  font-size: 12px !important;
+  letter-spacing: .04em !important;
+  color: #64748b !important;
+  background: #f8fafc !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) th:nth-child(1),
+.sf-employee table:has(th:nth-child(6)) td:nth-child(1) { width: 23% !important; }
+.sf-employee table:has(th:nth-child(6)) th:nth-child(2),
+.sf-employee table:has(th:nth-child(6)) td:nth-child(2) { width: 12% !important; }
+.sf-employee table:has(th:nth-child(6)) th:nth-child(3),
+.sf-employee table:has(th:nth-child(6)) td:nth-child(3) { width: 12% !important; }
+.sf-employee table:has(th:nth-child(6)) th:nth-child(4),
+.sf-employee table:has(th:nth-child(6)) td:nth-child(4) { width: 17% !important; }
+.sf-employee table:has(th:nth-child(6)) th:nth-child(5),
+.sf-employee table:has(th:nth-child(6)) td:nth-child(5) { width: 24% !important; }
+.sf-employee table:has(th:nth-child(6)) th:nth-child(6),
+.sf-employee table:has(th:nth-child(6)) td:nth-child(6) { width: 12% !important; }
+
+.sf-employee table:has(th:nth-child(6)) td h3 {
+  font-size: 15px !important;
+  line-height: 1.25 !important;
+  max-width: 220px !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) td p {
+  font-size: 13px !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) tr {
+  background: #ffffff !important;
+  border-left-width: 3px !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) tr.bg-red-50\/50,
+.sf-employee table:has(th:nth-child(6)) tr.bg-red-50\/40 {
+  background: linear-gradient(90deg, #fff5f5 0%, #ffffff 30%) !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) tr.bg-yellow-50\/70 {
+  background: linear-gradient(90deg, #fffbea 0%, #ffffff 30%) !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) td:nth-child(3) span {
+  min-width: 82px !important;
+  justify-content: center !important;
+  padding: 6px 10px !important;
+  font-size: 10px !important;
+  letter-spacing: .08em !important;
+  box-shadow: none !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) td:nth-child(3) span.bg-red-600 {
+  background: #fff1f2 !important;
+  color: #be123c !important;
+  border-color: #fecdd3 !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) td:nth-child(3) span.bg-blue-600 {
+  background: #eff6ff !important;
+  color: #1d4ed8 !important;
+  border-color: #bfdbfe !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) td:nth-child(4) {
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) td:nth-child(4) span.bg-red-100 {
+  background: #fff1f2 !important;
+  color: #be123c !important;
+  border: 1px solid #fecdd3 !important;
+  padding: 2px 8px !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) td:nth-child(5) {
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+  max-width: 260px !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) td:nth-child(5) {
+  overflow-wrap: normal !important;
+  word-break: normal !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) td:nth-child(6) .w-10 {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 12px !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) td:nth-child(6) > div {
+  gap: 8px !important;
+}
+
+@media (max-width: 1200px) {
+  .sf-employee table:has(th:nth-child(6)) {
+    min-width: 1100px !important;
+  }
+}
