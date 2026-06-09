@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import {
   Activity,
   Phone,
@@ -8,58 +8,98 @@ import {
   Trophy,
   Filter,
   Plus,
-  MoreVertical
+  MoreVertical,
+  PhoneOff,
+  XCircle
 } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
-import { employeeActivities, empActivities } from "../../data/employeeData.js";
+import { employeeActivities } from "../../data/employeeData.js";
 
-const stats = [
-  { label: "Total Activities", value: empActivities.length, icon: Activity, color: "#2563eb" },
+const crmActivityFallback = [
   {
-    label: "Contacted",
-    value: empActivities.filter((a) => a.type === "Call" || a.type === "WhatsApp").length,
-    icon: Phone,
-    color: "#16a34a"
+    id: "not-connected-1",
+    type: "not-connected",
+    title: "Not Connected — Motilal client",
+    description: "Call not picked. Auto follow-up task should be created for 2 hours later.",
+    status: "Not Connected",
+    lead: "Motilal",
+    time: "Jun 12, 04:10 PM"
   },
   {
-    label: "Proposal / Demo",
-    value: empActivities.filter((a) => a.type === "Email" || a.type === "Task").length,
-    icon: Calendar,
-    color: "#f97316"
-  },
-  {
-    label: "Won",
-    value: empActivities.filter((a) => a.status === "Won").length,
-    icon: Trophy,
-    color: "#7c3aed"
+    id: "lost-1",
+    type: "lost",
+    title: "Lost — Budget not approved",
+    description: "Lead marked as lost after final discussion. Reason: budget not approved.",
+    status: "Lost",
+    lead: "Priya Sharma",
+    time: "Jun 12, 05:20 PM"
   }
 ];
 
+function normalizeType(type = "") {
+  return String(type).toLowerCase();
+}
+
 function iconFor(type) {
-  if (type === "call") return Phone;
-  if (type === "whatsapp") return MessageCircle;
-  if (type === "email") return FileText;
-  if (type === "task") return Calendar;
-  if (type === "won") return Trophy;
+  const key = normalizeType(type);
+  if (key === "call") return Phone;
+  if (key === "whatsapp") return MessageCircle;
+  if (key === "email") return FileText;
+  if (key === "task") return Calendar;
+  if (key === "won") return Trophy;
+  if (key === "not-connected") return PhoneOff;
+  if (key === "lost") return XCircle;
   return FileText;
 }
 
 function colorFor(type) {
-  if (type === "call") return "#16a34a";
-  if (type === "whatsapp") return "#22c55e";
-  if (type === "email") return "#2563eb";
-  if (type === "task") return "#f97316";
-  if (type === "won") return "#7c3aed";
+  const key = normalizeType(type);
+  if (key === "call") return "#16a34a";
+  if (key === "whatsapp") return "#22c55e";
+  if (key === "email") return "#2563eb";
+  if (key === "task") return "#f97316";
+  if (key === "won") return "#7c3aed";
+  if (key === "not-connected") return "#f59e0b";
+  if (key === "lost") return "#dc2626";
   return "#64748b";
+}
+
+function statusClass(status = "") {
+  const key = status.toLowerCase();
+  if (key.includes("not connected")) return "bg-yellow-50 text-yellow-800";
+  if (key.includes("lost")) return "bg-red-50 text-red-700";
+  if (key.includes("won")) return "bg-purple-50 text-purple-700";
+  if (key.includes("completed")) return "bg-green-50 text-green-700";
+  if (key.includes("sent")) return "bg-blue-50 text-blue-700";
+  return "bg-slate-100 text-slate-600";
 }
 
 export default function EmployeeActivitiesPage() {
   const [page, setPage] = useState(1);
   const size = 10;
 
-  const totalPages = Math.max(1, Math.ceil(employeeActivities.length / size));
+  const allActivities = useMemo(() => {
+    const hasNotConnected = employeeActivities.some((item) => item.status === "Not Connected" || item.type === "not-connected");
+    const hasLost = employeeActivities.some((item) => item.status === "Lost" || item.type === "lost");
+    return [
+      ...employeeActivities,
+      ...(hasNotConnected ? [] : [crmActivityFallback[0]]),
+      ...(hasLost ? [] : [crmActivityFallback[1]])
+    ];
+  }, []);
+
+  const stats = useMemo(() => [
+    { label: "Total Activities", value: allActivities.length, icon: Activity, color: "#2563eb" },
+    { label: "Contacted", value: allActivities.filter((a) => ["Call", "WhatsApp"].includes(a.type)).length, icon: Phone, color: "#16a34a" },
+    { label: "Not Connected", value: allActivities.filter((a) => a.status === "Not Connected" || a.type === "not-connected").length, icon: PhoneOff, color: "#f59e0b" },
+    { label: "Proposal / Demo", value: allActivities.filter((a) => a.type === "Email" || a.type === "Task").length, icon: Calendar, color: "#f97316" },
+    { label: "Won", value: allActivities.filter((a) => a.status === "Won").length, icon: Trophy, color: "#7c3aed" },
+    { label: "Lost", value: allActivities.filter((a) => a.status === "Lost" || a.type === "lost").length, icon: XCircle, color: "#dc2626" }
+  ], [allActivities]);
+
+  const totalPages = Math.max(1, Math.ceil(allActivities.length / size));
   const start = (page - 1) * size;
-  const rows = employeeActivities.slice(start, start + size);
+  const rows = allActivities.slice(start, start + size);
 
   return (
     <EmployeeShell>
@@ -88,7 +128,7 @@ export default function EmployeeActivitiesPage() {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4">
           {stats.map((item) => {
             const Icon = item.icon;
 
@@ -128,8 +168,8 @@ export default function EmployeeActivitiesPage() {
               </h2>
 
               <p className="text-sm text-slate-500 mt-1">
-                Showing {employeeActivities.length === 0 ? 0 : start + 1}-
-                {Math.min(start + size, employeeActivities.length)} of {employeeActivities.length}
+                Showing {allActivities.length === 0 ? 0 : start + 1}-
+                {Math.min(start + size, allActivities.length)} of {allActivities.length}
               </p>
             </div>
 
@@ -165,7 +205,7 @@ export default function EmployeeActivitiesPage() {
                         {item.title}
                       </h3>
 
-                      <span className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 text-[11px] font-bold">
+                      <span className={`px-2 py-0.5 rounded-full text-[11px] font-bold ${statusClass(item.status)}`}>
                         {item.status}
                       </span>
                     </div>
