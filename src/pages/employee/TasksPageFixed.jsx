@@ -38,7 +38,7 @@ const dateFilters = [
   { label: "Yesterday", value: "yesterday" },
   { label: "Today", value: "today" },
   { label: "Tomorrow", value: "tomorrow" },
-  { label: "Custom Date", value: "custom" },
+  { label: "Custom Range", value: "custom" },
 ];
 
 function taskBadgeClass(status) {
@@ -62,12 +62,16 @@ function filterByType(tasks, value) {
   return tasks;
 }
 
-function filterTasks(tasks, typeFilter, dateFilter, customDate) {
+function filterTasks(tasks, typeFilter, dateFilter, customFromDate, customToDate) {
   let rows = filterByType(tasks, typeFilter);
   if (dateFilter === "all") return rows;
   if (dateFilter === "custom") {
-    if (!customDate) return rows;
-    return rows.filter((task) => task.dueDate === customDate);
+    if (!customFromDate && !customToDate) return rows;
+    return rows.filter((task) => {
+      if (customFromDate && task.dueDate < customFromDate) return false;
+      if (customToDate && task.dueDate > customToDate) return false;
+      return true;
+    });
   }
   return rows.filter((task) => task.dateKey === dateFilter);
 }
@@ -77,7 +81,8 @@ export default function TasksPageFixed() {
   const [selectedTask, setSelectedTask] = useState(null);
   const [typeFilter, setTypeFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
-  const [customDate, setCustomDate] = useState("");
+  const [customFromDate, setCustomFromDate] = useState("");
+  const [customToDate, setCustomToDate] = useState("");
 
   const stats = useMemo(() => [
     { label: "Today Tasks", value: tasks.filter((task) => task.status === "today").length, icon: CheckSquare, color: "#2563eb" },
@@ -88,8 +93,8 @@ export default function TasksPageFixed() {
 
   const filteredTasks = useMemo(() => {
     const order = { overdue: 1, today: 2, incoming: 3 };
-    return filterTasks(tasks, typeFilter, dateFilter, customDate).sort((a, b) => order[a.status] - order[b.status]);
-  }, [tasks, typeFilter, dateFilter, customDate]);
+    return filterTasks(tasks, typeFilter, dateFilter, customFromDate, customToDate).sort((a, b) => order[a.status] - order[b.status]);
+  }, [tasks, typeFilter, dateFilter, customFromDate, customToDate]);
 
   const markDone = (taskId) => {
     setTasks((prev) => prev.filter((task) => task.id !== taskId));
@@ -99,7 +104,8 @@ export default function TasksPageFixed() {
   const resetFilters = () => {
     setTypeFilter("all");
     setDateFilter("all");
-    setCustomDate("");
+    setCustomFromDate("");
+    setCustomToDate("");
   };
 
   return (
@@ -144,7 +150,7 @@ export default function TasksPageFixed() {
               </button>
             </div>
 
-            <div className={`grid grid-cols-1 ${dateFilter === "custom" ? "md:grid-cols-3" : "md:grid-cols-2"} gap-4`}>
+            <div className={`grid grid-cols-1 ${dateFilter === "custom" ? "md:grid-cols-4" : "md:grid-cols-2"} gap-4`}>
               <label className="space-y-2">
                 <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600"><Filter className="w-4 h-4 text-orange-600" />Type / Status</span>
                 <select value={typeFilter} onChange={(event) => setTypeFilter(event.target.value)} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20">
@@ -159,7 +165,10 @@ export default function TasksPageFixed() {
                   onChange={(event) => {
                     const value = event.target.value;
                     setDateFilter(value);
-                    if (value !== "custom") setCustomDate("");
+                    if (value !== "custom") {
+                      setCustomFromDate("");
+                      setCustomToDate("");
+                    }
                   }}
                   className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20"
                 >
@@ -168,10 +177,17 @@ export default function TasksPageFixed() {
               </label>
 
               {dateFilter === "custom" && (
-                <label className="space-y-2">
-                  <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600"><CalendarClock className="w-4 h-4 text-orange-600" />Custom Date</span>
-                  <input type="date" value={customDate} onChange={(event) => setCustomDate(event.target.value)} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20" />
-                </label>
+                <>
+                  <label className="space-y-2">
+                    <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600"><CalendarClock className="w-4 h-4 text-orange-600" />From Date</span>
+                    <input type="date" value={customFromDate} onChange={(event) => setCustomFromDate(event.target.value)} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20" />
+                  </label>
+
+                  <label className="space-y-2">
+                    <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600"><CalendarClock className="w-4 h-4 text-orange-600" />To Date</span>
+                    <input type="date" value={customToDate} onChange={(event) => setCustomToDate(event.target.value)} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20" />
+                  </label>
+                </>
               )}
             </div>
           </div>
