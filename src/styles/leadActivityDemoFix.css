@@ -156,53 +156,57 @@
   border-radius: 999px !important;
 }
 
-/* My Leads: move search beside status tabs and keep custom date row clean */
-.sf-employee section > div:nth-child(2) {
-  position: relative !important;
-}
-
-.sf-employee section > div:nth-child(2) > div > label:first-child:has(input[placeholder*="Search leads"]) {
+/* My Leads filter clean layout */
+.sf-employee label:has(input[placeholder*="Search leads"]):not(header label) {
   position: absolute !important;
   right: 24px !important;
-  top: -86px !important;
-  width: 340px !important;
-  z-index: 5 !important;
+  top: -84px !important;
+  width: 360px !important;
+  z-index: 20 !important;
+  padding: 0 !important;
 }
 
-.sf-employee section > div:nth-child(2) > div > label:first-child:has(input[placeholder*="Search leads"]) > span {
+.sf-employee label:has(input[placeholder*="Search leads"]):not(header label) > span {
   display: none !important;
 }
 
-.sf-employee section > div:nth-child(2) > div > label:first-child:has(input[placeholder*="Search leads"]) input {
+.sf-employee label:has(input[placeholder*="Search leads"]):not(header label) input {
   height: 42px !important;
-  padding-left: 42px !important;
   border-radius: 14px !important;
+  padding-left: 44px !important;
 }
 
-.sf-employee section > div:nth-child(2) > div:has(label:first-child input[placeholder*="Search leads"]) {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 16px !important;
+.sf-employee div:has(> label input[placeholder*="Search leads"]) {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: repeat(5, minmax(150px, 1fr)) 130px !important;
+  gap: 14px !important;
   align-items: end !important;
+  padding-right: 0 !important;
 }
 
-.sf-employee section > div:nth-child(2) > div:has(label:first-child input[placeholder*="Search leads"]) > label:not(:first-child) {
-  flex: 1 1 190px !important;
-  max-width: 230px !important;
+.sf-employee div:has(> label input[placeholder*="Search leads"]) > label:first-child {
+  grid-column: auto !important;
 }
 
-.sf-employee section > div:nth-child(2) > div:has(label:first-child input[placeholder*="Search leads"]) > button {
-  flex: 0 0 auto !important;
-  min-width: 128px !important;
+.sf-employee div:has(> label input[placeholder*="Search leads"]) > label:not(:first-child),
+.sf-employee div:has(> label input[placeholder*="Search leads"]) > button {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0 !important;
 }
 
-@media (max-width: 1280px) {
-  .sf-employee section > div:nth-child(2) > div > label:first-child:has(input[placeholder*="Search leads"]) {
-    position: static !important;
-    width: 100% !important;
+.sf-employee div:has(> label input[placeholder*="Search leads"]) > button {
+  justify-content: center !important;
+}
+
+@media (max-width: 1500px) {
+  .sf-employee label:has(input[placeholder*="Search leads"]):not(header label) {
+    top: -78px !important;
+    width: 320px !important;
   }
 
-  .sf-employee section > div:nth-child(2) > div > label:first-child:has(input[placeholder*="Search leads"]) > span {
-    display: inline-flex !important;
+  .sf-employee div:has(> label input[placeholder*="Search leads"]) {
+    grid-template-columns: repeat(3, minmax(180px, 1fr)) !important;
   }
 }
