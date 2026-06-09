@@ -1,4 +1,10 @@
-/* Lead Details / Lead Activity demo polish */
+/* Lead Details / Lead Activity popup restore */
+.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] > section {
+  backdrop-filter: none !important;
+  transform: none !important;
+  contain: none !important;
+}
+
 .sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] > section:last-child {
   overflow: visible !important;
   box-shadow: 0 14px 34px rgba(15, 23, 42, 0.07) !important;
@@ -8,27 +14,31 @@
   overflow: visible !important;
 }
 
-.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] > section:last-child * {
-  scrollbar-width: thin;
-}
-
 .sf-employee .fixed.inset-0.z-\[999\] {
-  padding: 18px !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999 !important;
+  display: flex !important;
   align-items: center !important;
-  background: rgba(2, 8, 23, 0.48) !important;
-  backdrop-filter: blur(10px) !important;
+  justify-content: center !important;
+  padding: 24px !important;
+  background: rgba(2, 8, 23, 0.52) !important;
+  backdrop-filter: blur(8px) !important;
 }
 
 .sf-employee .fixed.inset-0.z-\[999\] > .max-w-3xl {
-  width: min(820px, calc(100vw - 48px)) !important;
-  max-height: calc(100vh - 56px) !important;
+  width: min(760px, calc(100vw - 48px)) !important;
+  max-width: min(760px, calc(100vw - 48px)) !important;
+  max-height: calc(100vh - 72px) !important;
+  margin: auto !important;
   overflow: hidden !important;
   border-radius: 22px !important;
-  box-shadow: 0 28px 80px rgba(2, 8, 23, 0.28) !important;
+  box-shadow: 0 28px 80px rgba(2, 8, 23, 0.32) !important;
+  transform: none !important;
 }
 
 .sf-employee .fixed.inset-0.z-\[999\] > .max-w-3xl > .p-5 {
-  max-height: calc(100vh - 210px) !important;
+  max-height: calc(100vh - 230px) !important;
   overflow-y: auto !important;
   overflow-x: hidden !important;
   padding: 18px !important;
