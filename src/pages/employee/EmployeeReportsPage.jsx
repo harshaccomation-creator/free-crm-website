@@ -1,4 +1,5 @@
-import { BarChart2, TrendingUp, Users, Trophy, Activity } from "lucide-react";
+import { useMemo, useState } from "react";
+import { BarChart2, TrendingUp, Users, Trophy, Activity, RotateCcw } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 
 const stats = [
@@ -8,7 +9,68 @@ const stats = [
   { label: "Activities", value: "240", icon: Activity, color: "#7c3aed" }
 ];
 
+const trendRows = [
+  { date: "2026-06-01", label: "Jun 1", connected: 5, calls: 8, demos: 1, won: 0 },
+  { date: "2026-06-02", label: "Jun 2", connected: 7, calls: 11, demos: 2, won: 1 },
+  { date: "2026-06-03", label: "Jun 3", connected: 6, calls: 9, demos: 1, won: 0 },
+  { date: "2026-06-04", label: "Jun 4", connected: 9, calls: 14, demos: 3, won: 1 },
+  { date: "2026-06-05", label: "Jun 5", connected: 6, calls: 10, demos: 2, won: 0 },
+  { date: "2026-06-06", label: "Jun 6", connected: 10, calls: 15, demos: 4, won: 2 },
+  { date: "2026-06-07", label: "Jun 7", connected: 8, calls: 12, demos: 2, won: 1 },
+  { date: "2026-06-08", label: "Jun 8", connected: 11, calls: 16, demos: 3, won: 1 },
+  { date: "2026-06-09", label: "Jun 9", connected: 12, calls: 18, demos: 4, won: 2 },
+  { date: "2026-06-10", label: "Jun 10", connected: 9, calls: 13, demos: 2, won: 1 }
+];
+
+const lineMeta = {
+  connected: { label: "Connected", color: "#16a34a" },
+  calls: { label: "Calls", color: "#2563eb" },
+  demos: { label: "Demos", color: "#7c3aed" },
+  won: { label: "Won", color: "#eab308" }
+};
+
+function makePoints(rows, key, width, height, maxValue) {
+  if (!rows.length) return "";
+  const step = rows.length === 1 ? 0 : width / (rows.length - 1);
+  return rows.map((row, index) => {
+    const x = rows.length === 1 ? width / 2 : index * step;
+    const y = height - (Number(row[key] || 0) / maxValue) * height;
+    return `${x},${y}`;
+  }).join(" ");
+}
+
+function pointList(rows, key, width, height, maxValue) {
+  if (!rows.length) return [];
+  const step = rows.length === 1 ? 0 : width / (rows.length - 1);
+  return rows.map((row, index) => ({
+    row,
+    x: rows.length === 1 ? width / 2 : index * step,
+    y: height - (Number(row[key] || 0) / maxValue) * height,
+    value: Number(row[key] || 0)
+  }));
+}
+
 export default function EmployeeReportsPage() {
+  const [fromDate, setFromDate] = useState("2026-06-01");
+  const [toDate, setToDate] = useState("2026-06-10");
+  const [hoverPoint, setHoverPoint] = useState(null);
+
+  const chartRows = useMemo(() => {
+    return trendRows
+      .filter((row) => (!fromDate || row.date >= fromDate) && (!toDate || row.date <= toDate))
+      .slice(-10);
+  }, [fromDate, toDate]);
+
+  const chartWidth = 720;
+  const chartHeight = 150;
+  const maxValue = Math.max(1, ...chartRows.flatMap((row) => [row.connected, row.calls, row.demos, row.won]));
+
+  const resetChart = () => {
+    setFromDate("2026-06-01");
+    setToDate("2026-06-10");
+    setHoverPoint(null);
+  };
+
   return (
     <EmployeeShell>
       <div className="space-y-5">
@@ -42,6 +104,85 @@ export default function EmployeeReportsPage() {
             );
           })}
         </div>
+
+        <section className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
+          <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-bold text-slate-900">Performance Trend</h2>
+              <p className="text-sm text-slate-500 mt-1">Hover on chart point to see number.</p>
+            </div>
+
+            <div className="flex flex-col md:flex-row md:items-end gap-3">
+              <label>
+                <span className="text-[11px] font-black text-slate-500 uppercase">From</span>
+                <input type="date" value={fromDate} onChange={(event) => setFromDate(event.target.value)} className="mt-1 h-10 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+              </label>
+              <label>
+                <span className="text-[11px] font-black text-slate-500 uppercase">To</span>
+                <input type="date" value={toDate} onChange={(event) => setToDate(event.target.value)} className="mt-1 h-10 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+              </label>
+              <button type="button" onClick={resetChart} className="h-10 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50 inline-flex items-center gap-2">
+                <RotateCcw className="w-4 h-4" />
+                Reset
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-4 mt-4 text-xs font-bold text-slate-600">
+            {Object.entries(lineMeta).map(([key, meta]) => (
+              <span key={key} className="inline-flex items-center gap-2"><span className="w-3 h-3 rounded-full" style={{ background: meta.color }} />{meta.label}</span>
+            ))}
+          </div>
+
+          <div className="mt-4 overflow-x-auto">
+            <div className="min-w-[760px] relative">
+              {hoverPoint && (
+                <div
+                  className="absolute z-20 -translate-x-1/2 -translate-y-full rounded-xl bg-slate-900 text-white px-3 py-2 text-xs font-bold shadow-xl pointer-events-none"
+                  style={{ left: `${hoverPoint.x + 36}px`, top: `${hoverPoint.y + 8}px` }}
+                >
+                  <div>{hoverPoint.label}</div>
+                  <div>{hoverPoint.date}: {hoverPoint.value}</div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-[36px_1fr] gap-2">
+                <div className="h-[180px] relative text-[11px] font-bold text-slate-400">
+                  {[maxValue, Math.round(maxValue / 2), 0].map((tick, index) => (
+                    <span key={`${tick}-${index}`} className="absolute right-1" style={{ top: `${index * 75}px` }}>{tick}</span>
+                  ))}
+                </div>
+
+                <div>
+                  <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-[180px] overflow-visible">
+                    {[0, 0.5, 1].map((line) => (
+                      <line key={line} x1="0" x2={chartWidth} y1={chartHeight * line} y2={chartHeight * line} stroke="#e2e8f0" strokeWidth="1" />
+                    ))}
+                    {Object.entries(lineMeta).map(([key, meta]) => (
+                      <polyline key={key} points={makePoints(chartRows, key, chartWidth, chartHeight, maxValue)} fill="none" stroke={meta.color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+                    ))}
+                    {Object.entries(lineMeta).flatMap(([key, meta]) => pointList(chartRows, key, chartWidth, chartHeight, maxValue).map((point) => (
+                      <circle
+                        key={`${key}-${point.row.date}`}
+                        cx={point.x}
+                        cy={point.y}
+                        r="5"
+                        fill="white"
+                        stroke={meta.color}
+                        strokeWidth="3"
+                        onMouseEnter={() => setHoverPoint({ x: point.x, y: point.y, value: point.value, date: point.row.label, label: meta.label })}
+                        onMouseLeave={() => setHoverPoint(null)}
+                      />
+                    )))}
+                  </svg>
+                  <div className="grid text-[11px] font-bold text-slate-500" style={{ gridTemplateColumns: `repeat(${Math.max(chartRows.length, 1)}, minmax(0, 1fr))` }}>
+                    {chartRows.map((row) => <span key={row.date} className="text-center">{row.label}</span>)}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           <section className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
