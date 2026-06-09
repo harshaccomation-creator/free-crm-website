@@ -1,39 +1,156 @@
-import { CheckSquare, Clock, AlertTriangle, Phone, CheckCircle2 } from "lucide-react";
+import { useMemo, useState } from "react";
+import { CheckSquare, Clock, AlertTriangle, Phone, CheckCircle2, CalendarClock, Eye, X } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
-import { employeeTasks } from "../../data/employeeData.js";
 
-const stats = [
-  { label: "Today Tasks", value: "12", icon: CheckSquare, color: "#2563eb" },
-  { label: "Overdue", value: "4", icon: AlertTriangle, color: "#dc2626" },
-  { label: "Calls", value: "8", icon: Phone, color: "#16a34a" },
-  { label: "Total Tasks", value: "36", icon: Clock, color: "#f97316" }
+const initialTasks = [
+  {
+    id: "task-1",
+    title: "Follow up with Rajesh Kumar",
+    lead: "Rajesh Kumar",
+    type: "Follow Up",
+    due: "Today, 3:00 PM",
+    status: "today",
+    reason: "Follow-up reminder after lead discussion",
+    note: "Call and confirm next step for proposal.",
+  },
+  {
+    id: "task-2",
+    title: "Send proposal to Aditya Mehta",
+    lead: "Aditya Mehta",
+    type: "Proposal",
+    due: "Today, 5:00 PM",
+    status: "today",
+    reason: "Proposal pending after qualification",
+    note: "Share updated CRM pricing proposal.",
+  },
+  {
+    id: "task-3",
+    title: "Demo call with Priya Sharma",
+    lead: "Priya Sharma",
+    type: "Demo Schedule",
+    due: "Tomorrow, 11:00 AM",
+    status: "incoming",
+    reason: "Demo scheduled for tomorrow",
+    note: "Prepare product demo and checklist.",
+  },
+  {
+    id: "task-4",
+    title: "Update lead notes for Sunita Patel",
+    lead: "Sunita Patel",
+    type: "Note Update",
+    due: "Jun 9, 2:00 PM",
+    status: "incoming",
+    reason: "Incoming task assigned by manager",
+    note: "Add latest discussion summary.",
+  },
+  {
+    id: "task-5",
+    title: "Call Motilal client",
+    lead: "Motilal",
+    type: "Call",
+    due: "Yesterday, 4:00 PM",
+    status: "overdue",
+    reason: "Call follow-up overdue from yesterday",
+    note: "Client had e-way bill issue after login.",
+  },
+  {
+    id: "task-6",
+    title: "Send CRM demo link",
+    lead: "CRM Demo Lead",
+    type: "Demo Link",
+    due: "Yesterday, 6:00 PM",
+    status: "overdue",
+    reason: "Demo schedule link was not sent on time",
+    note: "Send meeting/demo link and confirm availability.",
+  },
+  {
+    id: "task-7",
+    title: "Update lead status",
+    lead: "Open Lead",
+    type: "Lead Status",
+    due: "Yesterday, 7:00 PM",
+    status: "overdue",
+    reason: "Lead status update overdue after activity",
+    note: "Update disposition and current stage.",
+  },
 ];
 
+function taskBadgeClass(status) {
+  if (status === "overdue") return "bg-red-50 text-red-700 border-red-100";
+  if (status === "incoming") return "bg-yellow-50 text-yellow-800 border-yellow-200";
+  return "bg-blue-50 text-blue-700 border-blue-100";
+}
+
+function taskRowClass(status) {
+  if (status === "incoming") return "bg-yellow-50/70 hover:bg-yellow-100/80";
+  if (status === "overdue") return "bg-red-50/40 hover:bg-red-50";
+  return "hover:bg-slate-50";
+}
+
 export default function TasksPageFixed() {
+  const [tasks, setTasks] = useState(initialTasks);
+  const [selectedTask, setSelectedTask] = useState(null);
+
+  const stats = useMemo(() => {
+    return [
+      {
+        label: "Today Tasks",
+        value: tasks.filter((task) => task.status === "today").length,
+        icon: CheckSquare,
+        color: "#2563eb",
+      },
+      {
+        label: "Overdue",
+        value: tasks.filter((task) => task.status === "overdue").length,
+        icon: AlertTriangle,
+        color: "#dc2626",
+      },
+      {
+        label: "Calls",
+        value: tasks.filter((task) => task.type.toLowerCase().includes("call")).length,
+        icon: Phone,
+        color: "#16a34a",
+      },
+      {
+        label: "Total Tasks",
+        value: tasks.length,
+        icon: Clock,
+        color: "#f97316",
+      },
+    ];
+  }, [tasks]);
+
+  const sortedTasks = useMemo(() => {
+    const order = { overdue: 1, today: 2, incoming: 3 };
+    return [...tasks].sort((a, b) => order[a.status] - order[b.status]);
+  }, [tasks]);
+
+  const markDone = (taskId) => {
+    setTasks((prev) => prev.filter((task) => task.id !== taskId));
+    setSelectedTask((prev) => (prev?.id === taskId ? null : prev));
+  };
+
   return (
     <EmployeeShell>
-      <div className="space-y-5">
-        <div>
-          <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">
-            Employee Workspace
-          </p>
-          <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">
-            Tasks
-          </h1>
-          <p className="text-sm text-slate-500 mt-1">
-            Track follow-ups, calls and pending actions.
-          </p>
+      <div className="space-y-6">
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+          <div>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tight">Tasks</h1>
+            <p className="text-lg text-slate-500 mt-2">
+              Track follow-ups, calls, demo schedules and pending actions.
+            </p>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           {stats.map((item) => {
             const Icon = item.icon;
             return (
-              <div key={item.label} className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
+              <div key={item.label} className="rounded-xl bg-white border border-slate-200 p-5 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">{item.label}</p>
-                    <h2 className="text-3xl font-bold text-slate-900 mt-2">{item.value}</h2>
+                    <p className="text-xs font-black text-slate-500 uppercase tracking-wide">{item.label}</p>
+                    <h2 className="text-3xl font-black text-slate-900 mt-2">{item.value}</h2>
                   </div>
                   <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: `${item.color}18`, color: item.color }}>
                     <Icon className="w-5 h-5" />
@@ -44,50 +161,157 @@ export default function TasksPageFixed() {
           })}
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-          <section className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-100">
-              <h2 className="text-lg font-bold text-slate-900">Today</h2>
-              <p className="text-sm text-slate-500 mt-1">Tasks scheduled for today.</p>
+        <section className="rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+          <div className="px-6 py-5 border-b border-slate-200 flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-black text-slate-900">All Tasks</h2>
+              <p className="text-sm text-slate-500 mt-1">
+                Today, overdue and incoming tasks in one list.
+              </p>
             </div>
 
-            <div className="divide-y divide-slate-100">
-              {employeeTasks.map((task) => (
-                <div key={task.id} className="px-5 py-4 flex items-center justify-between gap-4">
-                  <div>
-                    <h3 className="font-bold text-slate-900">{task.title}</h3>
-                    <p className="text-sm text-slate-500 mt-1">{task.due}</p>
-                  </div>
-                  <button className="inline-flex items-center gap-2 h-9 px-3 rounded-xl bg-green-50 text-green-700 font-bold text-sm">
-                    <CheckCircle2 className="w-4 h-4" />
-                    Done
-                  </button>
+            <div className="hidden md:flex items-center gap-2 text-xs font-bold text-slate-500">
+              <span className="px-3 py-1 rounded-full bg-red-50 text-red-700">Overdue</span>
+              <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700">Today</span>
+              <span className="px-3 py-1 rounded-full bg-yellow-50 text-yellow-800">Incoming</span>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead className="bg-slate-50 text-slate-500 uppercase text-sm">
+                <tr>
+                  <th className="px-6 py-4 font-black">Task</th>
+                  <th className="px-6 py-4 font-black">Type</th>
+                  <th className="px-6 py-4 font-black">Due</th>
+                  <th className="px-6 py-4 font-black">Reason</th>
+                  <th className="px-6 py-4 font-black">Action</th>
+                </tr>
+              </thead>
+
+              <tbody className="divide-y divide-slate-200">
+                {sortedTasks.map((task) => (
+                  <tr
+                    key={task.id}
+                    onClick={() => setSelectedTask(task)}
+                    className={`${taskRowClass(task.status)} cursor-pointer transition-colors`}
+                  >
+                    <td className="px-6 py-5">
+                      <h3 className="font-black text-slate-900">{task.title}</h3>
+                      <p className="text-sm text-slate-500 mt-1">Lead: {task.lead}</p>
+                    </td>
+                    <td className="px-6 py-5">
+                      <span className={`px-3 py-1 rounded-full border text-xs font-black ${taskBadgeClass(task.status)}`}>
+                        {task.type}
+                      </span>
+                    </td>
+                    <td className="px-6 py-5 text-sm font-bold text-slate-700 whitespace-nowrap">
+                      <div className="inline-flex items-center gap-2">
+                        <CalendarClock className="w-4 h-4 text-slate-400" />
+                        {task.due}
+                      </div>
+                    </td>
+                    <td className={`px-6 py-5 text-sm ${task.status === "overdue" ? "text-red-600 font-bold" : "text-slate-600"}`}>
+                      {task.reason}
+                    </td>
+                    <td className="px-6 py-5">
+                      <div className="flex items-center gap-3" onClick={(event) => event.stopPropagation()}>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedTask(task)}
+                          className="h-9 px-3 rounded-xl border border-slate-200 text-slate-700 font-bold text-sm inline-flex items-center gap-2"
+                        >
+                          <Eye className="w-4 h-4" />
+                          Open
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => markDone(task.id)}
+                          className="h-9 px-3 rounded-xl bg-green-50 text-green-700 font-bold text-sm inline-flex items-center gap-2"
+                        >
+                          <CheckCircle2 className="w-4 h-4" />
+                          Mark Done
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+
+                {sortedTasks.length === 0 && (
+                  <tr>
+                    <td colSpan="5" className="px-6 py-12 text-center text-slate-500">
+                      No pending tasks. Completed tasks are removed from this list.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        {selectedTask && (
+          <div className="fixed inset-0 z-[9999] bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-6">
+            <div className="w-full max-w-xl rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
+              <div className="px-6 py-5 border-b border-slate-200 flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-widest text-orange-600">Task Details</p>
+                  <h2 className="text-2xl font-black text-slate-900 mt-1">{selectedTask.title}</h2>
                 </div>
-              ))}
-            </div>
-          </section>
+                <button
+                  type="button"
+                  onClick={() => setSelectedTask(null)}
+                  className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 grid place-items-center"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
 
-          <section className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-            <div className="px-5 py-4 border-b border-slate-100">
-              <h2 className="text-lg font-bold text-slate-900">Overdue</h2>
-              <p className="text-sm text-slate-500 mt-1">Needs quick attention.</p>
-            </div>
-
-            <div className="divide-y divide-slate-100">
-              {["Call Motilal client", "Send CRM demo link", "Update lead status"].map((task) => (
-                <div key={task} className="px-5 py-4 flex items-center justify-between gap-4">
-                  <div>
-                    <h3 className="font-bold text-slate-900">{task}</h3>
-                    <p className="text-sm text-red-500 mt-1">Overdue from yesterday</p>
+              <div className="p-6 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="rounded-xl bg-slate-50 p-4">
+                    <p className="text-xs font-black uppercase text-slate-500">Lead</p>
+                    <p className="font-bold text-slate-900 mt-1">{selectedTask.lead}</p>
                   </div>
-                  <button className="h-9 px-3 rounded-xl bg-orange-500 text-white font-bold text-sm">
-                    Follow up
-                  </button>
+                  <div className="rounded-xl bg-slate-50 p-4">
+                    <p className="text-xs font-black uppercase text-slate-500">Type</p>
+                    <p className="font-bold text-slate-900 mt-1">{selectedTask.type}</p>
+                  </div>
+                  <div className="rounded-xl bg-slate-50 p-4">
+                    <p className="text-xs font-black uppercase text-slate-500">Due</p>
+                    <p className="font-bold text-slate-900 mt-1">{selectedTask.due}</p>
+                  </div>
+                  <div className="rounded-xl bg-slate-50 p-4">
+                    <p className="text-xs font-black uppercase text-slate-500">Status</p>
+                    <p className="font-bold text-slate-900 mt-1 capitalize">{selectedTask.status}</p>
+                  </div>
                 </div>
-              ))}
+
+                <div className="rounded-xl bg-orange-50 border border-orange-100 p-4">
+                  <p className="text-xs font-black uppercase text-orange-700">Why this task?</p>
+                  <p className="font-bold text-slate-900 mt-1">{selectedTask.reason}</p>
+                  <p className="text-sm text-slate-600 mt-2">{selectedTask.note}</p>
+                </div>
+              </div>
+
+              <div className="px-6 py-4 border-t border-slate-200 flex justify-end gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSelectedTask(null)}
+                  className="h-10 px-4 rounded-xl border border-slate-200 text-slate-700 font-bold"
+                >
+                  Close
+                </button>
+                <button
+                  type="button"
+                  onClick={() => markDone(selectedTask.id)}
+                  className="h-10 px-4 rounded-xl bg-green-600 text-white font-bold"
+                >
+                  Mark Done
+                </button>
+              </div>
             </div>
-          </section>
-        </div>
+          </div>
+        )}
       </div>
     </EmployeeShell>
   );
