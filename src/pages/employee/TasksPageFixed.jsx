@@ -47,10 +47,22 @@ function taskBadgeClass(status) {
   return "bg-blue-50 text-blue-700 border-blue-100";
 }
 
+function statusLabel(status) {
+  if (status === "overdue") return "OVERDUE";
+  if (status === "today") return "TODAY";
+  return "UPCOMING";
+}
+
+function statusBadgeClass(status) {
+  if (status === "overdue") return "bg-red-600 text-white border-red-600 shadow-sm shadow-red-600/20";
+  if (status === "today") return "bg-blue-600 text-white border-blue-600 shadow-sm shadow-blue-600/20";
+  return "bg-yellow-100 text-yellow-800 border-yellow-200";
+}
+
 function taskRowClass(status) {
   if (status === "incoming") return "bg-yellow-50/70 hover:bg-yellow-100/80";
-  if (status === "overdue") return "bg-red-50/40 hover:bg-red-50";
-  return "hover:bg-slate-50";
+  if (status === "overdue") return "bg-red-50/50 hover:bg-red-50 border-l-4 border-l-red-500";
+  return "hover:bg-slate-50 border-l-4 border-l-transparent";
 }
 
 function filterByType(tasks, value) {
@@ -198,6 +210,7 @@ export default function TasksPageFixed() {
                 <tr>
                   <th className="px-6 py-4 font-black">Task</th>
                   <th className="px-6 py-4 font-black">Type</th>
+                  <th className="px-6 py-4 font-black">Status</th>
                   <th className="px-6 py-4 font-black">Due</th>
                   <th className="px-6 py-4 font-black">Reason</th>
                   <th className="px-6 py-4 font-black">Action</th>
@@ -208,7 +221,8 @@ export default function TasksPageFixed() {
                   <tr key={task.id} onClick={() => setSelectedTask(task)} className={`${taskRowClass(task.status)} cursor-pointer transition-colors`}>
                     <td className="px-6 py-5"><h3 className="font-black text-slate-900">{task.title}</h3><p className="text-sm text-slate-500 mt-1">Lead: {task.lead}</p></td>
                     <td className="px-6 py-5"><span className={`px-3 py-1 rounded-full border text-xs font-black ${taskBadgeClass(task.status)}`}>{task.type}</span></td>
-                    <td className="px-6 py-5 text-sm font-bold text-slate-700 whitespace-nowrap"><div className="inline-flex items-center gap-2"><CalendarClock className="w-4 h-4 text-slate-400" />{task.due}</div></td>
+                    <td className="px-6 py-5"><span className={`inline-flex items-center px-3 py-1.5 rounded-full border text-xs font-black tracking-wide ${statusBadgeClass(task.status)}`}>{statusLabel(task.status)}</span></td>
+                    <td className={`px-6 py-5 text-sm font-bold whitespace-nowrap ${task.status === "overdue" ? "text-red-700" : "text-slate-700"}`}><div className="inline-flex items-center gap-2"><CalendarClock className={`w-4 h-4 ${task.status === "overdue" ? "text-red-500" : "text-slate-400"}`} />{task.due}{task.status === "overdue" && <span className="ml-2 rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-black text-red-700">Overdue</span>}</div></td>
                     <td className={`px-6 py-5 text-sm ${task.status === "overdue" ? "text-red-600 font-bold" : "text-slate-600"}`}>{task.reason}</td>
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-2" onClick={(event) => event.stopPropagation()}>
@@ -218,7 +232,7 @@ export default function TasksPageFixed() {
                     </td>
                   </tr>
                 ))}
-                {filteredTasks.length === 0 && <tr><td colSpan="5" className="px-6 py-12 text-center text-slate-500">No tasks found for selected filters.</td></tr>}
+                {filteredTasks.length === 0 && <tr><td colSpan="6" className="px-6 py-12 text-center text-slate-500">No tasks found for selected filters.</td></tr>}
               </tbody>
             </table>
           </div>
@@ -236,7 +250,7 @@ export default function TasksPageFixed() {
                   <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Lead</p><p className="font-bold text-slate-900 mt-1">{selectedTask.lead}</p></div>
                   <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Type</p><p className="font-bold text-slate-900 mt-1">{selectedTask.type}</p></div>
                   <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Due</p><p className="font-bold text-slate-900 mt-1">{selectedTask.due}</p></div>
-                  <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Status</p><p className="font-bold text-slate-900 mt-1 capitalize">{selectedTask.status}</p></div>
+                  <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Status</p><p className={`inline-flex mt-1 px-3 py-1 rounded-full border text-xs font-black ${statusBadgeClass(selectedTask.status)}`}>{statusLabel(selectedTask.status)}</p></div>
                 </div>
                 <div className="rounded-xl bg-orange-50 border border-orange-100 p-4"><p className="text-xs font-black uppercase text-orange-700">Why this task?</p><p className="font-bold text-slate-900 mt-1">{selectedTask.reason}</p><p className="text-sm text-slate-600 mt-2">{selectedTask.note}</p></div>
               </div>
