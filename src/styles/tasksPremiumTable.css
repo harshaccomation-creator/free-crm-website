@@ -1,13 +1,14 @@
-/* Premium Tasks table polish */
+/* Premium Tasks table polish - stable column layout */
 .sf-employee table:has(th:nth-child(6)) {
   table-layout: fixed !important;
   border-collapse: separate !important;
   border-spacing: 0 !important;
+  min-width: 1180px !important;
 }
 
 .sf-employee table:has(th:nth-child(6)) th,
 .sf-employee table:has(th:nth-child(6)) td {
-  padding: 14px 20px !important;
+  padding: 16px 18px !important;
   vertical-align: middle !important;
 }
 
@@ -16,16 +17,17 @@
   letter-spacing: .04em !important;
   color: #64748b !important;
   background: #f8fafc !important;
+  white-space: nowrap !important;
 }
 
 .sf-employee table:has(th:nth-child(6)) th:nth-child(1),
-.sf-employee table:has(th:nth-child(6)) td:nth-child(1) { width: 23% !important; }
+.sf-employee table:has(th:nth-child(6)) td:nth-child(1) { width: 22% !important; }
 .sf-employee table:has(th:nth-child(6)) th:nth-child(2),
 .sf-employee table:has(th:nth-child(6)) td:nth-child(2) { width: 12% !important; }
 .sf-employee table:has(th:nth-child(6)) th:nth-child(3),
 .sf-employee table:has(th:nth-child(6)) td:nth-child(3) { width: 12% !important; }
 .sf-employee table:has(th:nth-child(6)) th:nth-child(4),
-.sf-employee table:has(th:nth-child(6)) td:nth-child(4) { width: 17% !important; }
+.sf-employee table:has(th:nth-child(6)) td:nth-child(4) { width: 18% !important; }
 .sf-employee table:has(th:nth-child(6)) th:nth-child(5),
 .sf-employee table:has(th:nth-child(6)) td:nth-child(5) { width: 24% !important; }
 .sf-employee table:has(th:nth-child(6)) th:nth-child(6),
@@ -33,12 +35,13 @@
 
 .sf-employee table:has(th:nth-child(6)) td h3 {
   font-size: 15px !important;
-  line-height: 1.25 !important;
-  max-width: 220px !important;
+  line-height: 1.35 !important;
+  max-width: 230px !important;
 }
 
 .sf-employee table:has(th:nth-child(6)) td p {
   font-size: 13px !important;
+  line-height: 1.35 !important;
 }
 
 .sf-employee table:has(th:nth-child(6)) tr {
@@ -48,20 +51,27 @@
 
 .sf-employee table:has(th:nth-child(6)) tr.bg-red-50\/50,
 .sf-employee table:has(th:nth-child(6)) tr.bg-red-50\/40 {
-  background: linear-gradient(90deg, #fff5f5 0%, #ffffff 30%) !important;
+  background: linear-gradient(90deg, #fff7f7 0%, #ffffff 26%) !important;
 }
 
 .sf-employee table:has(th:nth-child(6)) tr.bg-yellow-50\/70 {
-  background: linear-gradient(90deg, #fffbea 0%, #ffffff 30%) !important;
+  background: linear-gradient(90deg, #fffdf0 0%, #ffffff 26%) !important;
 }
 
+.sf-employee table:has(th:nth-child(6)) td:nth-child(2) span,
 .sf-employee table:has(th:nth-child(6)) td:nth-child(3) span {
-  min-width: 82px !important;
+  display: inline-flex !important;
+  align-items: center !important;
   justify-content: center !important;
-  padding: 6px 10px !important;
-  font-size: 10px !important;
-  letter-spacing: .08em !important;
+  min-width: 88px !important;
+  max-width: 128px !important;
+  padding: 7px 10px !important;
+  font-size: 11px !important;
+  line-height: 1.1 !important;
+  letter-spacing: .04em !important;
   box-shadow: none !important;
+  white-space: normal !important;
+  text-align: center !important;
 }
 
 .sf-employee table:has(th:nth-child(6)) td:nth-child(3) span.bg-red-600 {
@@ -79,24 +89,34 @@
 .sf-employee table:has(th:nth-child(6)) td:nth-child(4) {
   font-size: 14px !important;
   line-height: 1.35 !important;
+  white-space: nowrap !important;
 }
 
+.sf-employee table:has(th:nth-child(6)) td:nth-child(4) > div {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: nowrap !important;
+}
+
+/* Hide duplicate overdue chip in Due column; Status column already shows it */
 .sf-employee table:has(th:nth-child(6)) td:nth-child(4) span.bg-red-100 {
-  background: #fff1f2 !important;
-  color: #be123c !important;
-  border: 1px solid #fecdd3 !important;
-  padding: 2px 8px !important;
+  display: none !important;
 }
 
 .sf-employee table:has(th:nth-child(6)) td:nth-child(5) {
   font-size: 14px !important;
   line-height: 1.35 !important;
-  max-width: 260px !important;
-}
-
-.sf-employee table:has(th:nth-child(6)) td:nth-child(5) {
+  color: #334155 !important;
+  font-weight: 600 !important;
+  max-width: 280px !important;
+  white-space: normal !important;
   overflow-wrap: normal !important;
   word-break: normal !important;
+}
+
+.sf-employee table:has(th:nth-child(6)) td:nth-child(5).text-red-600 {
+  color: #dc2626 !important;
 }
 
 .sf-employee table:has(th:nth-child(6)) td:nth-child(6) .w-10 {
@@ -107,10 +127,11 @@
 
 .sf-employee table:has(th:nth-child(6)) td:nth-child(6) > div {
   gap: 8px !important;
+  justify-content: flex-start !important;
 }
 
 @media (max-width: 1200px) {
   .sf-employee table:has(th:nth-child(6)) {
-    min-width: 1100px !important;
+    min-width: 1180px !important;
   }
 }
