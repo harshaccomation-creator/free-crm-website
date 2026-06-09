@@ -15,7 +15,7 @@ const navItems = [
   { label: "Activities", icon: Activity, href: "/employee/activities" },
   { label: "Lead Activity", icon: Zap, href: "/employee/lead-activity" },
   { label: "Reports", icon: BarChart2, href: "/employee/reports" },
-  { label: "Notifications", icon: Bell, href: "/notifications", badge: 4 },
+  { label: "Notifications", icon: Bell, href: "/notifications" },
   { label: "Profile", icon: User, href: "/employee/profile" },
   { label: "Settings", icon: Settings, href: "/settings" },
 ];
@@ -127,12 +127,6 @@ export default function EmployeeShell({ children }) {
                   }`}
                 />
                 <span className="flex-1">{item.label}</span>
-
-                {item.badge && (
-                  <span className="text-[10px] font-bold bg-orange-500 text-white rounded-full w-4 h-4 flex items-center justify-center">
-                    {item.badge}
-                  </span>
-                )}
               </button>
             );
           })}
@@ -190,9 +184,6 @@ export default function EmployeeShell({ children }) {
           <div className="flex items-center gap-3 ml-auto">
             <button className="relative p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
               <Bell className="w-5 h-5" />
-              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-orange-500 text-[9px] text-white rounded-full flex items-center justify-center font-bold">
-                0
-              </span>
             </button>
 
             <div className="flex items-center gap-2 cursor-pointer">
@@ -220,14 +211,7 @@ export default function EmployeeShell({ children }) {
           </div>
         </header>
 
-      <div
-  className="flex-1"
-  style={{
-    padding: "20px 28px 32px",
-    boxSizing: "border-box",
-    width: "100%"
-  }}
->
+        <div className="flex-1" style={{ padding: "18px 24px" }}>
           {children}
         </div>
       </main>
