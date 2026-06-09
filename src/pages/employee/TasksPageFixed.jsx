@@ -1,88 +1,29 @@
 import { useMemo, useState } from "react";
-import { CheckSquare, Clock, AlertTriangle, Phone, CheckCircle2, CalendarClock, Eye, X, Filter, CalendarDays } from "lucide-react";
+import {
+  CheckSquare,
+  Clock,
+  AlertTriangle,
+  Phone,
+  CheckCircle2,
+  CalendarClock,
+  Eye,
+  X,
+  Filter,
+  CalendarDays,
+} from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 
 const initialTasks = [
-  {
-    id: "task-1",
-    title: "Follow up with Rajesh Kumar",
-    lead: "Rajesh Kumar",
-    type: "Follow Up",
-    due: "Today, 3:00 PM",
-    dateKey: "today",
-    status: "today",
-    reason: "Follow-up reminder after lead discussion",
-    note: "Call and confirm next step for proposal.",
-  },
-  {
-    id: "task-2",
-    title: "Send proposal to Aditya Mehta",
-    lead: "Aditya Mehta",
-    type: "Proposal",
-    due: "Today, 5:00 PM",
-    dateKey: "today",
-    status: "today",
-    reason: "Proposal pending after qualification",
-    note: "Share updated CRM pricing proposal.",
-  },
-  {
-    id: "task-3",
-    title: "Demo call with Priya Sharma",
-    lead: "Priya Sharma",
-    type: "Demo Schedule",
-    due: "Tomorrow, 11:00 AM",
-    dateKey: "tomorrow",
-    status: "incoming",
-    reason: "Demo scheduled for tomorrow",
-    note: "Prepare product demo and checklist.",
-  },
-  {
-    id: "task-4",
-    title: "Update lead notes for Sunita Patel",
-    lead: "Sunita Patel",
-    type: "Note Update",
-    due: "Jun 9, 2:00 PM",
-    dateKey: "jun-9",
-    status: "incoming",
-    reason: "Incoming task assigned by manager",
-    note: "Add latest discussion summary.",
-  },
-  {
-    id: "task-5",
-    title: "Call Motilal client",
-    lead: "Motilal",
-    type: "Call",
-    due: "Yesterday, 4:00 PM",
-    dateKey: "yesterday",
-    status: "overdue",
-    reason: "Call follow-up overdue from yesterday",
-    note: "Client had e-way bill issue after login.",
-  },
-  {
-    id: "task-6",
-    title: "Send CRM demo link",
-    lead: "CRM Demo Lead",
-    type: "Demo Link",
-    due: "Yesterday, 6:00 PM",
-    dateKey: "yesterday",
-    status: "overdue",
-    reason: "Demo schedule link was not sent on time",
-    note: "Send meeting/demo link and confirm availability.",
-  },
-  {
-    id: "task-7",
-    title: "Update lead status",
-    lead: "Open Lead",
-    type: "Lead Status",
-    due: "Yesterday, 7:00 PM",
-    dateKey: "yesterday",
-    status: "overdue",
-    reason: "Lead status update overdue after activity",
-    note: "Update disposition and current stage.",
-  },
+  { id: "task-1", title: "Follow up with Rajesh Kumar", lead: "Rajesh Kumar", type: "Follow Up", due: "Today, 3:00 PM", dateKey: "today", dueDate: "2026-06-09", status: "today", reason: "Follow-up reminder after lead discussion", note: "Call and confirm next step for proposal." },
+  { id: "task-2", title: "Send proposal to Aditya Mehta", lead: "Aditya Mehta", type: "Proposal", due: "Today, 5:00 PM", dateKey: "today", dueDate: "2026-06-09", status: "today", reason: "Proposal pending after qualification", note: "Share updated CRM pricing proposal." },
+  { id: "task-3", title: "Demo call with Priya Sharma", lead: "Priya Sharma", type: "Demo Schedule", due: "Tomorrow, 11:00 AM", dateKey: "tomorrow", dueDate: "2026-06-10", status: "incoming", reason: "Demo scheduled for tomorrow", note: "Prepare product demo and checklist." },
+  { id: "task-4", title: "Update lead notes for Sunita Patel", lead: "Sunita Patel", type: "Note Update", due: "Jun 9, 2:00 PM", dateKey: "today", dueDate: "2026-06-09", status: "incoming", reason: "Incoming task assigned by manager", note: "Add latest discussion summary." },
+  { id: "task-5", title: "Call Motilal client", lead: "Motilal", type: "Call", due: "Yesterday, 4:00 PM", dateKey: "yesterday", dueDate: "2026-06-08", status: "overdue", reason: "Call follow-up overdue from yesterday", note: "Client had e-way bill issue after login." },
+  { id: "task-6", title: "Send CRM demo link", lead: "CRM Demo Lead", type: "Demo Link", due: "Yesterday, 6:00 PM", dateKey: "yesterday", dueDate: "2026-06-08", status: "overdue", reason: "Demo schedule link was not sent on time", note: "Send meeting/demo link and confirm availability." },
+  { id: "task-7", title: "Update lead status", lead: "Open Lead", type: "Lead Status", due: "Yesterday, 7:00 PM", dateKey: "yesterday", dueDate: "2026-06-08", status: "overdue", reason: "Lead status update overdue after activity", note: "Update disposition and current stage." },
 ];
 
-const filterOptions = [
+const typeFilters = [
   { label: "All", value: "all" },
   { label: "Overdue", value: "overdue" },
   { label: "Today", value: "today" },
@@ -92,12 +33,12 @@ const filterOptions = [
   { label: "Demo", value: "demo" },
 ];
 
-const dateFilterOptions = [
+const dateFilters = [
   { label: "All Dates", value: "all" },
   { label: "Yesterday", value: "yesterday" },
   { label: "Today", value: "today" },
   { label: "Tomorrow", value: "tomorrow" },
-  { label: "Jun 9", value: "jun-9" },
+  { label: "Custom Date", value: "custom" },
 ];
 
 function taskBadgeClass(status) {
@@ -112,74 +53,53 @@ function taskRowClass(status) {
   return "hover:bg-slate-50";
 }
 
-function getTypeFilteredTasks(tasks, activeFilter) {
-  if (activeFilter === "all") return tasks;
-  if (["overdue", "today", "incoming"].includes(activeFilter)) {
-    return tasks.filter((task) => task.status === activeFilter);
-  }
-  if (activeFilter === "call") {
-    return tasks.filter((task) => task.type.toLowerCase().includes("call"));
-  }
-  if (activeFilter === "follow-up") {
-    return tasks.filter((task) => task.type.toLowerCase().includes("follow"));
-  }
-  if (activeFilter === "demo") {
-    return tasks.filter((task) => task.type.toLowerCase().includes("demo"));
-  }
+function filterByType(tasks, value) {
+  if (value === "all") return tasks;
+  if (["overdue", "today", "incoming"].includes(value)) return tasks.filter((task) => task.status === value);
+  if (value === "call") return tasks.filter((task) => task.type.toLowerCase().includes("call"));
+  if (value === "follow-up") return tasks.filter((task) => task.type.toLowerCase().includes("follow"));
+  if (value === "demo") return tasks.filter((task) => task.type.toLowerCase().includes("demo"));
   return tasks;
 }
 
-function getFilteredTasks(tasks, activeFilter, activeDateFilter) {
-  const typeFiltered = getTypeFilteredTasks(tasks, activeFilter);
-
-  if (activeDateFilter === "all") return typeFiltered;
-
-  return typeFiltered.filter((task) => task.dateKey === activeDateFilter);
+function filterTasks(tasks, typeFilter, dateFilter, customDate) {
+  let rows = filterByType(tasks, typeFilter);
+  if (dateFilter === "all") return rows;
+  if (dateFilter === "custom") {
+    if (!customDate) return rows;
+    return rows.filter((task) => task.dueDate === customDate);
+  }
+  return rows.filter((task) => task.dateKey === dateFilter);
 }
 
 export default function TasksPageFixed() {
   const [tasks, setTasks] = useState(initialTasks);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [activeFilter, setActiveFilter] = useState("all");
-  const [activeDateFilter, setActiveDateFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState("all");
+  const [dateFilter, setDateFilter] = useState("all");
+  const [customDate, setCustomDate] = useState("");
 
-  const stats = useMemo(() => {
-    return [
-      {
-        label: "Today Tasks",
-        value: tasks.filter((task) => task.status === "today").length,
-        icon: CheckSquare,
-        color: "#2563eb",
-      },
-      {
-        label: "Overdue",
-        value: tasks.filter((task) => task.status === "overdue").length,
-        icon: AlertTriangle,
-        color: "#dc2626",
-      },
-      {
-        label: "Calls",
-        value: tasks.filter((task) => task.type.toLowerCase().includes("call")).length,
-        icon: Phone,
-        color: "#16a34a",
-      },
-      {
-        label: "Total Tasks",
-        value: tasks.length,
-        icon: Clock,
-        color: "#f97316",
-      },
-    ];
-  }, [tasks]);
+  const stats = useMemo(() => [
+    { label: "Today Tasks", value: tasks.filter((task) => task.status === "today").length, icon: CheckSquare, color: "#2563eb" },
+    { label: "Overdue", value: tasks.filter((task) => task.status === "overdue").length, icon: AlertTriangle, color: "#dc2626" },
+    { label: "Calls", value: tasks.filter((task) => task.type.toLowerCase().includes("call")).length, icon: Phone, color: "#16a34a" },
+    { label: "Total Tasks", value: tasks.length, icon: Clock, color: "#f97316" },
+  ], [tasks]);
 
   const filteredTasks = useMemo(() => {
     const order = { overdue: 1, today: 2, incoming: 3 };
-    return getFilteredTasks(tasks, activeFilter, activeDateFilter).sort((a, b) => order[a.status] - order[b.status]);
-  }, [tasks, activeFilter, activeDateFilter]);
+    return filterTasks(tasks, typeFilter, dateFilter, customDate).sort((a, b) => order[a.status] - order[b.status]);
+  }, [tasks, typeFilter, dateFilter, customDate]);
 
   const markDone = (taskId) => {
     setTasks((prev) => prev.filter((task) => task.id !== taskId));
     setSelectedTask((prev) => (prev?.id === taskId ? null : prev));
+  };
+
+  const resetFilters = () => {
+    setTypeFilter("all");
+    setDateFilter("all");
+    setCustomDate("");
   };
 
   return (
@@ -188,9 +108,7 @@ export default function TasksPageFixed() {
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div>
             <h1 className="text-4xl font-black text-slate-900 tracking-tight">Tasks</h1>
-            <p className="text-lg text-slate-500 mt-2">
-              Track follow-ups, calls, demo schedules and pending actions.
-            </p>
+            <p className="text-lg text-slate-500 mt-2">Track follow-ups, calls, demo schedules and pending actions.</p>
           </div>
         </div>
 
@@ -214,64 +132,70 @@ export default function TasksPageFixed() {
         </div>
 
         <section className="rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-          <div className="px-6 py-5 border-b border-slate-200 flex flex-col gap-4">
+          <div className="px-6 py-5 border-b border-slate-200 space-y-4">
             <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
               <div>
                 <h2 className="text-xl font-black text-slate-900">All Tasks</h2>
-                <p className="text-sm text-slate-500 mt-1">
-                  Showing {filteredTasks.length} of {tasks.length} pending tasks.
-                </p>
+                <p className="text-sm text-slate-500 mt-1">Showing {filteredTasks.length} of {tasks.length} pending tasks.</p>
               </div>
+
+              <button
+                type="button"
+                onClick={resetFilters}
+                className="h-10 px-4 rounded-xl border border-slate-200 text-slate-700 font-black text-sm hover:bg-slate-50"
+              >
+                Reset Filter
+              </button>
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 text-sm font-black text-slate-600">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <label className="space-y-2">
+                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600">
                   <Filter className="w-4 h-4 text-orange-600" />
-                  Type / Status Filter
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {filterOptions.map((filter) => (
-                    <button
-                      key={filter.value}
-                      type="button"
-                      onClick={() => setActiveFilter(filter.value)}
-                      className={`h-9 px-4 rounded-xl text-sm font-black border transition-all ${
-                        activeFilter === filter.value
-                          ? "bg-orange-600 text-white border-orange-600 shadow-md shadow-orange-500/20"
-                          : "bg-white text-slate-600 border-slate-200 hover:bg-orange-50 hover:text-orange-700"
-                      }`}
-                    >
-                      {filter.label}
-                    </button>
+                  Type / Status
+                </span>
+                <select
+                  value={typeFilter}
+                  onChange={(event) => setTypeFilter(event.target.value)}
+                  className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20"
+                >
+                  {typeFilters.map((filter) => (
+                    <option key={filter.value} value={filter.value}>{filter.label}</option>
                   ))}
-                </div>
-              </div>
+                </select>
+              </label>
 
-              <div className="space-y-2">
-                <div className="inline-flex items-center gap-2 text-sm font-black text-slate-600">
+              <label className="space-y-2">
+                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600">
                   <CalendarDays className="w-4 h-4 text-orange-600" />
-                  Date Filter
-                </div>
-
-                <div className="flex flex-wrap gap-2">
-                  {dateFilterOptions.map((filter) => (
-                    <button
-                      key={filter.value}
-                      type="button"
-                      onClick={() => setActiveDateFilter(filter.value)}
-                      className={`h-9 px-4 rounded-xl text-sm font-black border transition-all ${
-                        activeDateFilter === filter.value
-                          ? "bg-slate-900 text-white border-slate-900 shadow-md shadow-slate-500/20"
-                          : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50 hover:text-slate-900"
-                      }`}
-                    >
-                      {filter.label}
-                    </button>
+                  Date
+                </span>
+                <select
+                  value={dateFilter}
+                  onChange={(event) => setDateFilter(event.target.value)}
+                  className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20"
+                >
+                  {dateFilters.map((filter) => (
+                    <option key={filter.value} value={filter.value}>{filter.label}</option>
                   ))}
-                </div>
-              </div>
+                </select>
+              </label>
+
+              <label className="space-y-2">
+                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600">
+                  <CalendarClock className="w-4 h-4 text-orange-600" />
+                  Custom Date
+                </span>
+                <input
+                  type="date"
+                  value={customDate}
+                  onChange={(event) => {
+                    setCustomDate(event.target.value);
+                    setDateFilter("custom");
+                  }}
+                  className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 outline-none focus:ring-2 focus:ring-orange-500/20"
+                />
+              </label>
             </div>
           </div>
 
@@ -289,58 +213,29 @@ export default function TasksPageFixed() {
 
               <tbody className="divide-y divide-slate-200">
                 {filteredTasks.map((task) => (
-                  <tr
-                    key={task.id}
-                    onClick={() => setSelectedTask(task)}
-                    className={`${taskRowClass(task.status)} cursor-pointer transition-colors`}
-                  >
+                  <tr key={task.id} onClick={() => setSelectedTask(task)} className={`${taskRowClass(task.status)} cursor-pointer transition-colors`}>
                     <td className="px-6 py-5">
                       <h3 className="font-black text-slate-900">{task.title}</h3>
                       <p className="text-sm text-slate-500 mt-1">Lead: {task.lead}</p>
                     </td>
                     <td className="px-6 py-5">
-                      <span className={`px-3 py-1 rounded-full border text-xs font-black ${taskBadgeClass(task.status)}`}>
-                        {task.type}
-                      </span>
+                      <span className={`px-3 py-1 rounded-full border text-xs font-black ${taskBadgeClass(task.status)}`}>{task.type}</span>
                     </td>
                     <td className="px-6 py-5 text-sm font-bold text-slate-700 whitespace-nowrap">
-                      <div className="inline-flex items-center gap-2">
-                        <CalendarClock className="w-4 h-4 text-slate-400" />
-                        {task.due}
-                      </div>
+                      <div className="inline-flex items-center gap-2"><CalendarClock className="w-4 h-4 text-slate-400" />{task.due}</div>
                     </td>
-                    <td className={`px-6 py-5 text-sm ${task.status === "overdue" ? "text-red-600 font-bold" : "text-slate-600"}`}>
-                      {task.reason}
-                    </td>
+                    <td className={`px-6 py-5 text-sm ${task.status === "overdue" ? "text-red-600 font-bold" : "text-slate-600"}`}>{task.reason}</td>
                     <td className="px-6 py-5">
                       <div className="flex items-center gap-3" onClick={(event) => event.stopPropagation()}>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedTask(task)}
-                          className="h-9 px-3 rounded-xl border border-slate-200 text-slate-700 font-bold text-sm inline-flex items-center gap-2"
-                        >
-                          <Eye className="w-4 h-4" />
-                          Open
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => markDone(task.id)}
-                          className="h-9 px-3 rounded-xl bg-green-50 text-green-700 font-bold text-sm inline-flex items-center gap-2"
-                        >
-                          <CheckCircle2 className="w-4 h-4" />
-                          Mark Done
-                        </button>
+                        <button type="button" onClick={() => setSelectedTask(task)} className="h-9 px-3 rounded-xl border border-slate-200 text-slate-700 font-bold text-sm inline-flex items-center gap-2"><Eye className="w-4 h-4" />Open</button>
+                        <button type="button" onClick={() => markDone(task.id)} className="h-9 px-3 rounded-xl bg-green-50 text-green-700 font-bold text-sm inline-flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Mark Done</button>
                       </div>
                     </td>
                   </tr>
                 ))}
 
                 {filteredTasks.length === 0 && (
-                  <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center text-slate-500">
-                      No tasks found for selected filters.
-                    </td>
-                  </tr>
+                  <tr><td colSpan="5" className="px-6 py-12 text-center text-slate-500">No tasks found for selected filters.</td></tr>
                 )}
               </tbody>
             </table>
@@ -355,33 +250,15 @@ export default function TasksPageFixed() {
                   <p className="text-xs font-black uppercase tracking-widest text-orange-600">Task Details</p>
                   <h2 className="text-2xl font-black text-slate-900 mt-1">{selectedTask.title}</h2>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setSelectedTask(null)}
-                  className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 grid place-items-center"
-                >
-                  <X className="w-5 h-5" />
-                </button>
+                <button type="button" onClick={() => setSelectedTask(null)} className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 grid place-items-center"><X className="w-5 h-5" /></button>
               </div>
 
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="rounded-xl bg-slate-50 p-4">
-                    <p className="text-xs font-black uppercase text-slate-500">Lead</p>
-                    <p className="font-bold text-slate-900 mt-1">{selectedTask.lead}</p>
-                  </div>
-                  <div className="rounded-xl bg-slate-50 p-4">
-                    <p className="text-xs font-black uppercase text-slate-500">Type</p>
-                    <p className="font-bold text-slate-900 mt-1">{selectedTask.type}</p>
-                  </div>
-                  <div className="rounded-xl bg-slate-50 p-4">
-                    <p className="text-xs font-black uppercase text-slate-500">Due</p>
-                    <p className="font-bold text-slate-900 mt-1">{selectedTask.due}</p>
-                  </div>
-                  <div className="rounded-xl bg-slate-50 p-4">
-                    <p className="text-xs font-black uppercase text-slate-500">Status</p>
-                    <p className="font-bold text-slate-900 mt-1 capitalize">{selectedTask.status}</p>
-                  </div>
+                  <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Lead</p><p className="font-bold text-slate-900 mt-1">{selectedTask.lead}</p></div>
+                  <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Type</p><p className="font-bold text-slate-900 mt-1">{selectedTask.type}</p></div>
+                  <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Due</p><p className="font-bold text-slate-900 mt-1">{selectedTask.due}</p></div>
+                  <div className="rounded-xl bg-slate-50 p-4"><p className="text-xs font-black uppercase text-slate-500">Status</p><p className="font-bold text-slate-900 mt-1 capitalize">{selectedTask.status}</p></div>
                 </div>
 
                 <div className="rounded-xl bg-orange-50 border border-orange-100 p-4">
@@ -392,20 +269,8 @@ export default function TasksPageFixed() {
               </div>
 
               <div className="px-6 py-4 border-t border-slate-200 flex justify-end gap-3">
-                <button
-                  type="button"
-                  onClick={() => setSelectedTask(null)}
-                  className="h-10 px-4 rounded-xl border border-slate-200 text-slate-700 font-bold"
-                >
-                  Close
-                </button>
-                <button
-                  type="button"
-                  onClick={() => markDone(selectedTask.id)}
-                  className="h-10 px-4 rounded-xl bg-green-600 text-white font-bold"
-                >
-                  Mark Done
-                </button>
+                <button type="button" onClick={() => setSelectedTask(null)} className="h-10 px-4 rounded-xl border border-slate-200 text-slate-700 font-bold">Close</button>
+                <button type="button" onClick={() => markDone(selectedTask.id)} className="h-10 px-4 rounded-xl bg-green-600 text-white font-bold">Mark Done</button>
               </div>
             </div>
           </div>
