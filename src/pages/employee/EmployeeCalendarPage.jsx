@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { CalendarDays, Plus, Clock, X, Users, Phone, Video, CheckCircle2 } from "lucide-react";
+import { CalendarDays, Plus, Clock, X, Phone, Video, CheckCircle2 } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 
 const days = Array.from({ length: 30 }, (_, i) => i + 1);
@@ -180,55 +180,56 @@ export default function EmployeeCalendarPage() {
         </div>
 
         {isScheduleOpen && (
-          <div className="fixed inset-0 z-[9999] bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-6">
-            <div className="w-full max-w-xl rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
-              <div className="px-6 py-5 border-b border-slate-200 flex items-start justify-between gap-4">
+          <div className="fixed inset-0 z-[9999] bg-slate-950/45 backdrop-blur-[3px] flex items-center justify-center p-4">
+            <div className="w-full max-w-lg rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
+              <div className="px-5 py-4 border-b border-slate-200 flex items-start justify-between gap-4 bg-slate-50/80">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-widest text-orange-600">Calendar Schedule</p>
-                  <h2 className="text-2xl font-black text-slate-900 mt-1">Schedule Demo / Follow-up</h2>
+                  <p className="text-[11px] font-black uppercase tracking-[0.18em] text-orange-600">Calendar Schedule</p>
+                  <h2 className="text-xl font-black text-slate-900 mt-1">Schedule Activity</h2>
+                  <p className="text-sm text-slate-500 mt-1">Create demo, call or follow-up for a lead.</p>
                 </div>
-                <button type="button" onClick={() => setIsScheduleOpen(false)} className="w-10 h-10 rounded-xl bg-slate-100 text-slate-500 grid place-items-center">
-                  <X className="w-5 h-5" />
+                <button type="button" onClick={() => setIsScheduleOpen(false)} className="w-9 h-9 rounded-xl bg-white border border-slate-200 text-slate-500 grid place-items-center hover:bg-slate-100">
+                  <X className="w-4 h-4" />
                 </button>
               </div>
 
-              <form onSubmit={handleSchedule} className="p-6 space-y-4">
+              <form onSubmit={handleSchedule} className="p-5 space-y-4">
                 <label className="block">
                   <span className="text-sm font-black text-slate-700">Lead</span>
-                  <select value={form.leadId} onChange={(e) => setForm((prev) => ({ ...prev, leadId: e.target.value }))} className="mt-2 w-full h-12 rounded-xl border border-slate-200 px-4 font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
+                  <select value={form.leadId} onChange={(e) => setForm((prev) => ({ ...prev, leadId: e.target.value }))} className="mt-2 w-full h-11 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
                     {leadOptions.map((lead) => <option key={lead.id} value={lead.id}>{lead.name} · {lead.company}</option>)}
                   </select>
                 </label>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <label className="block">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <label className="block md:col-span-1">
                     <span className="text-sm font-black text-slate-700">Type</span>
-                    <select value={form.type} onChange={(e) => setForm((prev) => ({ ...prev, type: e.target.value }))} className="mt-2 w-full h-12 rounded-xl border border-slate-200 px-4 font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
+                    <select value={form.type} onChange={(e) => setForm((prev) => ({ ...prev, type: e.target.value }))} className="mt-2 w-full h-11 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
                       <option>Follow-up</option>
                       <option>Demo</option>
                       <option>Call</option>
                     </select>
                   </label>
 
-                  <label className="block">
+                  <label className="block md:col-span-1">
+                    <span className="text-sm font-black text-slate-700">Date</span>
+                    <input type="date" value={form.date} onChange={(e) => setForm((prev) => ({ ...prev, date: e.target.value }))} className="mt-2 w-full h-11 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                  </label>
+
+                  <label className="block md:col-span-1">
                     <span className="text-sm font-black text-slate-700">Time</span>
-                    <input type="time" value={form.time} onChange={(e) => setForm((prev) => ({ ...prev, time: e.target.value }))} className="mt-2 w-full h-12 rounded-xl border border-slate-200 px-4 font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                    <input type="time" value={form.time} onChange={(e) => setForm((prev) => ({ ...prev, time: e.target.value }))} className="mt-2 w-full h-11 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
                   </label>
                 </div>
 
                 <label className="block">
-                  <span className="text-sm font-black text-slate-700">Date</span>
-                  <input type="date" value={form.date} onChange={(e) => setForm((prev) => ({ ...prev, date: e.target.value }))} className="mt-2 w-full h-12 rounded-xl border border-slate-200 px-4 font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
-                </label>
-
-                <label className="block">
                   <span className="text-sm font-black text-slate-700">Note</span>
-                  <textarea value={form.note} onChange={(e) => setForm((prev) => ({ ...prev, note: e.target.value }))} rows={3} className="mt-2 w-full rounded-xl border border-slate-200 px-4 py-3 font-bold outline-none focus:ring-2 focus:ring-orange-500/20" placeholder="Add schedule note..." />
+                  <textarea value={form.note} onChange={(e) => setForm((prev) => ({ ...prev, note: e.target.value }))} rows={2} className="mt-2 w-full rounded-xl border border-slate-200 px-3 py-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500/20 resize-none" placeholder="Add short note..." />
                 </label>
 
-                <div className="flex justify-end gap-3 pt-2">
-                  <button type="button" onClick={() => setIsScheduleOpen(false)} className="h-11 px-5 rounded-xl border border-slate-200 text-slate-700 font-bold">Cancel</button>
-                  <button type="submit" className="h-11 px-5 rounded-xl bg-orange-600 text-white font-bold shadow-lg shadow-orange-500/20">Save Schedule</button>
+                <div className="flex justify-end gap-3 pt-1">
+                  <button type="button" onClick={() => setIsScheduleOpen(false)} className="h-10 px-4 rounded-xl border border-slate-200 text-slate-700 font-bold hover:bg-slate-50">Cancel</button>
+                  <button type="submit" className="h-10 px-5 rounded-xl bg-orange-600 text-white font-bold shadow-lg shadow-orange-500/20 hover:bg-orange-700">Save Schedule</button>
                 </div>
               </form>
             </div>
