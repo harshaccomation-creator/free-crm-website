@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   LayoutDashboard, Users, Phone, Trophy, CheckSquare, Calendar,
-  Activity, Zap, BarChart2, Bell, User, Settings, Menu, X,
+  Activity, BarChart2, Bell, User, Settings, Menu, X,
   LogOut, Search
 } from "lucide-react";
 
@@ -13,7 +13,6 @@ const navItems = [
   { label: "Tasks", icon: CheckSquare, href: "/employee/tasks" },
   { label: "Calendar", icon: Calendar, href: "/employee/calendar" },
   { label: "Activities", icon: Activity, href: "/employee/activities" },
-  { label: "Lead Activity", icon: Zap, href: "/employee/lead-activity" },
   { label: "Reports", icon: BarChart2, href: "/employee/reports" },
   { label: "Notifications", icon: Bell, href: "/notifications" },
   { label: "Profile", icon: User, href: "/employee/profile" },
