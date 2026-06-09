@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { CheckSquare, Clock, AlertTriangle, Phone, CheckCircle2, CalendarClock, Eye, X } from "lucide-react";
+import { CheckSquare, Clock, AlertTriangle, Phone, CheckCircle2, CalendarClock, Eye, X, Filter } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 
 const initialTasks = [
@@ -75,6 +75,16 @@ const initialTasks = [
   },
 ];
 
+const filterOptions = [
+  { label: "All", value: "all" },
+  { label: "Overdue", value: "overdue" },
+  { label: "Today", value: "today" },
+  { label: "Incoming", value: "incoming" },
+  { label: "Call", value: "call" },
+  { label: "Follow Up", value: "follow-up" },
+  { label: "Demo", value: "demo" },
+];
+
 function taskBadgeClass(status) {
   if (status === "overdue") return "bg-red-50 text-red-700 border-red-100";
   if (status === "incoming") return "bg-yellow-50 text-yellow-800 border-yellow-200";
@@ -87,9 +97,27 @@ function taskRowClass(status) {
   return "hover:bg-slate-50";
 }
 
+function getFilteredTasks(tasks, activeFilter) {
+  if (activeFilter === "all") return tasks;
+  if (["overdue", "today", "incoming"].includes(activeFilter)) {
+    return tasks.filter((task) => task.status === activeFilter);
+  }
+  if (activeFilter === "call") {
+    return tasks.filter((task) => task.type.toLowerCase().includes("call"));
+  }
+  if (activeFilter === "follow-up") {
+    return tasks.filter((task) => task.type.toLowerCase().includes("follow"));
+  }
+  if (activeFilter === "demo") {
+    return tasks.filter((task) => task.type.toLowerCase().includes("demo"));
+  }
+  return tasks;
+}
+
 export default function TasksPageFixed() {
   const [tasks, setTasks] = useState(initialTasks);
   const [selectedTask, setSelectedTask] = useState(null);
+  const [activeFilter, setActiveFilter] = useState("all");
 
   const stats = useMemo(() => {
     return [
@@ -120,10 +148,10 @@ export default function TasksPageFixed() {
     ];
   }, [tasks]);
 
-  const sortedTasks = useMemo(() => {
+  const filteredTasks = useMemo(() => {
     const order = { overdue: 1, today: 2, incoming: 3 };
-    return [...tasks].sort((a, b) => order[a.status] - order[b.status]);
-  }, [tasks]);
+    return getFilteredTasks(tasks, activeFilter).sort((a, b) => order[a.status] - order[b.status]);
+  }, [tasks, activeFilter]);
 
   const markDone = (taskId) => {
     setTasks((prev) => prev.filter((task) => task.id !== taskId));
@@ -162,18 +190,36 @@ export default function TasksPageFixed() {
         </div>
 
         <section className="rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-          <div className="px-6 py-5 border-b border-slate-200 flex items-center justify-between gap-4">
+          <div className="px-6 py-5 border-b border-slate-200 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
             <div>
               <h2 className="text-xl font-black text-slate-900">All Tasks</h2>
               <p className="text-sm text-slate-500 mt-1">
-                Today, overdue and incoming tasks in one list.
+                Showing {filteredTasks.length} of {tasks.length} pending tasks.
               </p>
             </div>
 
-            <div className="hidden md:flex items-center gap-2 text-xs font-bold text-slate-500">
-              <span className="px-3 py-1 rounded-full bg-red-50 text-red-700">Overdue</span>
-              <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-700">Today</span>
-              <span className="px-3 py-1 rounded-full bg-yellow-50 text-yellow-800">Incoming</span>
+            <div className="flex flex-col md:flex-row md:items-center gap-3">
+              <div className="inline-flex items-center gap-2 text-sm font-black text-slate-600">
+                <Filter className="w-4 h-4 text-orange-600" />
+                Filter
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {filterOptions.map((filter) => (
+                  <button
+                    key={filter.value}
+                    type="button"
+                    onClick={() => setActiveFilter(filter.value)}
+                    className={`h-9 px-4 rounded-xl text-sm font-black border transition-all ${
+                      activeFilter === filter.value
+                        ? "bg-orange-600 text-white border-orange-600 shadow-md shadow-orange-500/20"
+                        : "bg-white text-slate-600 border-slate-200 hover:bg-orange-50 hover:text-orange-700"
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -190,7 +236,7 @@ export default function TasksPageFixed() {
               </thead>
 
               <tbody className="divide-y divide-slate-200">
-                {sortedTasks.map((task) => (
+                {filteredTasks.map((task) => (
                   <tr
                     key={task.id}
                     onClick={() => setSelectedTask(task)}
@@ -237,10 +283,10 @@ export default function TasksPageFixed() {
                   </tr>
                 ))}
 
-                {sortedTasks.length === 0 && (
+                {filteredTasks.length === 0 && (
                   <tr>
                     <td colSpan="5" className="px-6 py-12 text-center text-slate-500">
-                      No pending tasks. Completed tasks are removed from this list.
+                      No tasks found for this filter.
                     </td>
                   </tr>
                 )}
