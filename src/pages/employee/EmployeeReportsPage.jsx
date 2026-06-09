@@ -1,5 +1,4 @@
-import { useMemo, useState } from "react";
-import { BarChart2, TrendingUp, Users, Trophy, Activity, RotateCcw } from "lucide-react";
+import { BarChart2, TrendingUp, Users, Trophy, Activity } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 
 const stats = [
@@ -9,68 +8,24 @@ const stats = [
   { label: "Activities", value: "240", icon: Activity, color: "#7c3aed" }
 ];
 
-const trendRows = [
-  { date: "2026-06-01", label: "Jun 1", connected: 5, calls: 8, demos: 1, won: 0 },
-  { date: "2026-06-02", label: "Jun 2", connected: 7, calls: 11, demos: 2, won: 1 },
-  { date: "2026-06-03", label: "Jun 3", connected: 6, calls: 9, demos: 1, won: 0 },
-  { date: "2026-06-04", label: "Jun 4", connected: 9, calls: 14, demos: 3, won: 1 },
-  { date: "2026-06-05", label: "Jun 5", connected: 6, calls: 10, demos: 2, won: 0 },
-  { date: "2026-06-06", label: "Jun 6", connected: 10, calls: 15, demos: 4, won: 2 },
-  { date: "2026-06-07", label: "Jun 7", connected: 8, calls: 12, demos: 2, won: 1 },
-  { date: "2026-06-08", label: "Jun 8", connected: 11, calls: 16, demos: 3, won: 1 },
-  { date: "2026-06-09", label: "Jun 9", connected: 12, calls: 18, demos: 4, won: 2 },
-  { date: "2026-06-10", label: "Jun 10", connected: 9, calls: 13, demos: 2, won: 1 }
+const chart = [
+  [0, 30, 6, 28, 12, 20, 18, 24, 30, 18],
+  [0, 18, 10, 16, 8, 22, 14, 26, 28, 16],
+  [0, 8, 2, 10, 4, 12, 6, 10, 12, 5],
+  [0, 4, 0, 5, 1, 7, 3, 5, 7, 3]
 ];
+const chartColors = ["#2563eb", "#16a34a", "#7c3aed", "#eab308"];
+const chartLabels = ["Calls", "Connected", "Demos", "Won"];
+const days = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-const lineMeta = {
-  connected: { label: "Connected", color: "#16a34a" },
-  calls: { label: "Calls", color: "#2563eb" },
-  demos: { label: "Demos", color: "#7c3aed" },
-  won: { label: "Won", color: "#eab308" }
-};
-
-function makePoints(rows, key, width, height, maxValue) {
-  if (!rows.length) return "";
-  const step = rows.length === 1 ? 0 : width / (rows.length - 1);
-  return rows.map((row, index) => {
-    const x = rows.length === 1 ? width / 2 : index * step;
-    const y = height - (Number(row[key] || 0) / maxValue) * height;
-    return `${x},${y}`;
-  }).join(" ");
-}
-
-function pointList(rows, key, width, height, maxValue) {
-  if (!rows.length) return [];
-  const step = rows.length === 1 ? 0 : width / (rows.length - 1);
-  return rows.map((row, index) => ({
-    row,
-    x: rows.length === 1 ? width / 2 : index * step,
-    y: height - (Number(row[key] || 0) / maxValue) * height,
-    value: Number(row[key] || 0)
-  }));
+function path(values) {
+  const width = 100;
+  const height = 34;
+  const step = width / (values.length - 1);
+  return values.map((v, i) => `${i * step},${height - v}`).join(" ");
 }
 
 export default function EmployeeReportsPage() {
-  const [fromDate, setFromDate] = useState("2026-06-01");
-  const [toDate, setToDate] = useState("2026-06-10");
-  const [hoverPoint, setHoverPoint] = useState(null);
-
-  const chartRows = useMemo(() => {
-    return trendRows
-      .filter((row) => (!fromDate || row.date >= fromDate) && (!toDate || row.date <= toDate))
-      .slice(-10);
-  }, [fromDate, toDate]);
-
-  const chartWidth = 720;
-  const chartHeight = 64;
-  const maxValue = Math.max(1, ...chartRows.flatMap((row) => [row.connected, row.calls, row.demos, row.won]));
-
-  const resetChart = () => {
-    setFromDate("2026-06-01");
-    setToDate("2026-06-10");
-    setHoverPoint(null);
-  };
-
   return (
     <EmployeeShell>
       <div className="space-y-5">
@@ -99,71 +54,6 @@ export default function EmployeeReportsPage() {
           })}
         </div>
 
-        <section className="rounded-2xl bg-white border border-slate-200 shadow-sm px-4 py-3">
-          <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-2">
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-              <div>
-                <h2 className="text-sm font-black text-slate-900">Performance Trend</h2>
-                <p className="text-[11px] text-slate-500 mt-0.5">Hover point for number.</p>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold text-slate-600">
-                {Object.entries(lineMeta).map(([key, meta]) => (
-                  <span key={key} className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full" style={{ background: meta.color }} />{meta.label}</span>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-end gap-1.5">
-              <label className="flex items-center gap-1">
-                <span className="text-[10px] font-black text-slate-500 uppercase">From</span>
-                <input type="date" value={fromDate} onChange={(event) => setFromDate(event.target.value)} className="h-8 rounded-lg border border-slate-200 px-2 text-[11px] font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
-              </label>
-              <label className="flex items-center gap-1">
-                <span className="text-[10px] font-black text-slate-500 uppercase">To</span>
-                <input type="date" value={toDate} onChange={(event) => setToDate(event.target.value)} className="h-8 rounded-lg border border-slate-200 px-2 text-[11px] font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
-              </label>
-              <button type="button" onClick={resetChart} className="h-8 px-2.5 rounded-lg border border-slate-200 text-[11px] font-bold text-slate-700 hover:bg-slate-50 inline-flex items-center gap-1">
-                <RotateCcw className="w-3 h-3" /> Reset
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-1 overflow-x-auto">
-            <div className="min-w-[720px] relative">
-              {hoverPoint && (
-                <div className="absolute z-20 -translate-x-1/2 -translate-y-full rounded-md bg-slate-900 text-white px-2 py-1 text-[10px] font-bold shadow-xl pointer-events-none" style={{ left: `${hoverPoint.x + 24}px`, top: `${hoverPoint.y + 5}px` }}>
-                  {hoverPoint.label}: {hoverPoint.value}
-                </div>
-              )}
-
-              <div className="grid grid-cols-[24px_1fr] gap-1">
-                <div className="h-[82px] relative text-[9px] font-bold text-slate-400">
-                  {[maxValue, Math.round(maxValue / 2), 0].map((tick, index) => (
-                    <span key={`${tick}-${index}`} className="absolute right-1" style={{ top: `${index * 30}px` }}>{tick}</span>
-                  ))}
-                </div>
-
-                <div>
-                  <svg viewBox={`0 0 ${chartWidth} ${chartHeight}`} className="w-full h-[82px] overflow-visible">
-                    {[0, 0.5, 1].map((line) => (
-                      <line key={line} x1="0" x2={chartWidth} y1={chartHeight * line} y2={chartHeight * line} stroke="#e2e8f0" strokeWidth="1" />
-                    ))}
-                    {Object.entries(lineMeta).map(([key, meta]) => (
-                      <polyline key={key} points={makePoints(chartRows, key, chartWidth, chartHeight, maxValue)} fill="none" stroke={meta.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    ))}
-                    {Object.entries(lineMeta).flatMap(([key, meta]) => pointList(chartRows, key, chartWidth, chartHeight, maxValue).map((point) => (
-                      <circle key={`${key}-${point.row.date}`} cx={point.x} cy={point.y} r="3" fill="white" stroke={meta.color} strokeWidth="2" onMouseEnter={() => setHoverPoint({ x: point.x, y: point.y, value: point.value, date: point.row.label, label: meta.label })} onMouseLeave={() => setHoverPoint(null)} />
-                    )))}
-                  </svg>
-                  <div className="grid text-[9px] font-bold text-slate-500 -mt-2" style={{ gridTemplateColumns: `repeat(${Math.max(chartRows.length, 1)}, minmax(0, 1fr))` }}>
-                    {chartRows.map((row) => <span key={row.date} className="text-center">{row.label}</span>)}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
           <section className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
             <div className="flex items-center justify-between">
@@ -174,7 +64,24 @@ export default function EmployeeReportsPage() {
               <BarChart2 className="w-5 h-5 text-orange-500" />
             </div>
 
-            <div className="mt-6 space-y-4">
+            <div className="mt-4 rounded-2xl border border-slate-100 bg-slate-50/70 px-4 py-3">
+              <div className="flex items-center justify-between gap-3 mb-2">
+                <p className="text-xs font-black text-slate-700">Mini Trend</p>
+                <div className="flex flex-wrap gap-2 text-[10px] font-bold text-slate-500">
+                  {chartLabels.map((label, i) => <span key={label} className="inline-flex items-center gap-1"><span className="w-2 h-2 rounded-full" style={{ background: chartColors[i] }} />{label}</span>)}
+                </div>
+              </div>
+              <svg viewBox="0 0 100 34" className="w-full h-[74px] overflow-visible">
+                {[10, 20, 30].map((y) => <line key={y} x1="0" x2="100" y1={y} y2={y} stroke="#e2e8f0" strokeWidth="0.35" />)}
+                {chart.map((values, i) => <polyline key={i} points={path(values)} fill="none" stroke={chartColors[i]} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />)}
+                {chart.map((values, i) => values.map((v, idx) => <circle key={`${i}-${idx}`} cx={(100 / (values.length - 1)) * idx} cy={34 - v} r="1.15" fill="white" stroke={chartColors[i]} strokeWidth="1" />))}
+              </svg>
+              <div className="grid grid-cols-10 text-[9px] font-bold text-slate-400 -mt-3">
+                {days.map((d) => <span key={d} className="text-center">{d}</span>)}
+              </div>
+            </div>
+
+            <div className="mt-4 space-y-4">
               {[["New", "72%"], ["Contacted", "58%"], ["Demo", "36%"], ["Won", "24%"]].map((item) => (
                 <div key={item[0]}>
                   <div className="flex items-center justify-between text-sm mb-2">
@@ -192,7 +99,6 @@ export default function EmployeeReportsPage() {
           <section className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
             <h2 className="text-lg font-bold text-slate-900">Activity Summary</h2>
             <p className="text-sm text-slate-500 mt-1">Calls, WhatsApp and follow-ups.</p>
-
             <div className="grid grid-cols-2 gap-4 mt-6">
               {[["Calls", "84"], ["WhatsApp", "96"], ["Emails", "28"], ["Notes", "32"]].map((item) => (
                 <div key={item[0]} className="rounded-2xl bg-slate-50 border border-slate-100 p-4">
