@@ -1,0 +1,57 @@
+/* My Leads top stat cards icon badges */
+.sf-employee .space-y-6 > .grid.grid-cols-1.md\:grid-cols-2.xl\:grid-cols-4 > section {
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 118px !important;
+  padding-right: 82px !important;
+}
+
+.sf-employee .space-y-6 > .grid.grid-cols-1.md\:grid-cols-2.xl\:grid-cols-4 > section::after {
+  content: "";
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  font-weight: 900;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.06);
+}
+
+.sf-employee .space-y-6 > .grid.grid-cols-1.md\:grid-cols-2.xl\:grid-cols-4 > section:nth-child(1)::after {
+  content: "👥";
+  background: #eef4ff;
+}
+
+.sf-employee .space-y-6 > .grid.grid-cols-1.md\:grid-cols-2.xl\:grid-cols-4 > section:nth-child(2)::after {
+  content: "✓";
+  color: #16a34a;
+  background: #ecfdf5;
+  font-size: 28px;
+}
+
+.sf-employee .space-y-6 > .grid.grid-cols-1.md\:grid-cols-2.xl\:grid-cols-4 > section:nth-child(3)::after {
+  content: "×";
+  color: #ef4444;
+  background: #fef2f2;
+  font-size: 32px;
+}
+
+.sf-employee .space-y-6 > .grid.grid-cols-1.md\:grid-cols-2.xl\:grid-cols-4 > section:nth-child(4)::after {
+  content: "🏆";
+  background: #f0fdf4;
+}
+
+.sf-employee .space-y-6 > .grid.grid-cols-1.md\:grid-cols-2.xl\:grid-cols-4 > section p {
+  position: relative;
+  z-index: 1;
+}
+
+.sf-employee .space-y-6 > .grid.grid-cols-1.md\:grid-cols-2.xl\:grid-cols-4 > section h2 {
+  position: relative;
+  z-index: 1;
+}
