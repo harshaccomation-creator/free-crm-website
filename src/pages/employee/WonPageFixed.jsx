@@ -1,49 +1,76 @@
-import { useState } from "react";
-import { Trophy, IndianRupee, Percent, Users, Download } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Trophy, IndianRupee, Download, Search, CalendarDays, Filter, Eye } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 import { wonLeads, empLeads } from "../../data/employeeData.js";
 
-const stats = [
-  { label: "Won Leads", value: wonLeads.length, icon: Trophy, color: "#16a34a" },
-  {
-    label: "Won Value",
-    value: `₹${wonLeads.reduce((sum, lead) => sum + Number(lead.value || 0), 0).toLocaleString("en-IN")}`,
-    icon: IndianRupee,
-    color: "#f97316"
-  },
-  {
-    label: "Conversion",
-    value: `${empLeads.length ? Math.round((wonLeads.length / empLeads.length) * 100) : 0}%`,
-    icon: Percent,
-    color: "#2563eb"
-  },
-  { label: "Total Leads", value: empLeads.length, icon: Users, color: "#7c3aed" }
-];
+const enrichedWonLeads = wonLeads.map((lead, index) => ({
+  ...lead,
+  closeDate: lead.closeDate || lead.created || "May 28, 2025",
+  owner: lead.owner || "Jayraj",
+  source: lead.source || (index % 2 === 0 ? "Website" : "LinkedIn")
+}));
+
+function toMonthKey(dateText = "") {
+  return String(dateText).toLowerCase().includes("may") ? "2025-05" : "all";
+}
+
+function openLead(leadId) {
+  window.history.pushState({}, "", `/leads/${leadId}`);
+  window.dispatchEvent(new Event("salesflow:navigate"));
+}
 
 export default function WonPageFixed() {
   const [page, setPage] = useState(1);
+  const [filters, setFilters] = useState({ date: "all", source: "all", query: "" });
   const size = 10;
 
-  const totalPages = Math.max(1, Math.ceil(wonLeads.length / size));
-  const start = (page - 1) * size;
-  const rows = wonLeads.slice(start, start + size);
+  const sources = useMemo(() => ["all", ...new Set(enrichedWonLeads.map((lead) => lead.source).filter(Boolean))], []);
+
+  const filteredWon = useMemo(() => {
+    const query = filters.query.trim().toLowerCase();
+
+    return enrichedWonLeads.filter((lead) => {
+      if (filters.source !== "all" && lead.source !== filters.source) return false;
+      if (filters.date !== "all" && toMonthKey(lead.closeDate) !== filters.date) return false;
+
+      if (!query) return true;
+
+      return [lead.name, lead.company, lead.phone, lead.owner, lead.source, lead.closeDate]
+        .join(" ")
+        .toLowerCase()
+        .includes(query);
+    });
+  }, [filters]);
+
+  const totalRevenue = enrichedWonLeads.reduce((sum, lead) => sum + Number(lead.value || 0), 0);
+  const wonThisMonth = enrichedWonLeads.filter((lead) => toMonthKey(lead.closeDate) === "2025-05").length;
+  const averageDeal = enrichedWonLeads.length ? Math.round(totalRevenue / enrichedWonLeads.length) : 0;
+
+  const stats = [
+    { label: "Total Won", value: enrichedWonLeads.length, icon: Trophy, color: "#16a34a" },
+    { label: "Won This Month", value: wonThisMonth, icon: CalendarDays, color: "#2563eb" },
+    { label: "Revenue", value: `₹${totalRevenue.toLocaleString("en-IN")}`, icon: IndianRupee, color: "#f97316" },
+    { label: "Average Deal Amount", value: `₹${averageDeal.toLocaleString("en-IN")}`, icon: IndianRupee, color: "#7c3aed" }
+  ];
+
+  const totalPages = Math.max(1, Math.ceil(filteredWon.length / size));
+  const safePage = Math.min(page, totalPages);
+  const start = (safePage - 1) * size;
+  const rows = filteredWon.slice(start, start + size);
+
+  const updateFilter = (key, value) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+    setPage(1);
+  };
 
   return (
     <EmployeeShell>
       <div className="space-y-5">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">
-              Employee Workspace
-            </p>
-
-            <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">
-              Won Leads
-            </h1>
-
-            <p className="text-sm text-slate-500 mt-1">
-              Showing 10 won leads per page.
-            </p>
+            <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">Employee Workspace</p>
+            <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">Won Leads</h1>
+            <p className="text-sm text-slate-500 mt-1">Track closed deals, revenue and won lead sources.</p>
           </div>
 
           <button className="inline-flex items-center gap-2 px-4 h-10 rounded-xl bg-orange-500 text-white text-sm font-bold shadow-lg shadow-orange-500/20">
@@ -55,27 +82,14 @@ export default function WonPageFixed() {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           {stats.map((item) => {
             const Icon = item.icon;
-
             return (
-              <div
-                key={item.label}
-                className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm"
-              >
+              <div key={item.label} className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">
-                      {item.label}
-                    </p>
-
-                    <h2 className="text-3xl font-bold text-slate-900 mt-2">
-                      {item.value}
-                    </h2>
+                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wide">{item.label}</p>
+                    <h2 className="text-3xl font-bold text-slate-900 mt-2">{item.value}</h2>
                   </div>
-
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center"
-                    style={{ background: `${item.color}18`, color: item.color }}
-                  >
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: `${item.color}18`, color: item.color }}>
                     <Icon className="w-5 h-5" />
                   </div>
                 </div>
@@ -85,67 +99,85 @@ export default function WonPageFixed() {
         </div>
 
         <section className="rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-100">
-            <h2 className="text-lg font-bold text-slate-900">Won Records</h2>
+          <div className="px-5 py-4 border-b border-slate-100 space-y-4">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h2 className="text-lg font-bold text-slate-900">Won List</h2>
+                <p className="text-sm text-slate-500 mt-1">Showing {filteredWon.length === 0 ? 0 : start + 1}-{Math.min(start + size, filteredWon.length)} of {filteredWon.length}</p>
+              </div>
+              <div className="inline-flex items-center gap-2 text-sm font-bold text-slate-600">
+                <Filter className="w-4 h-4 text-orange-600" />
+                Filters
+              </div>
+            </div>
 
-            <p className="text-sm text-slate-500 mt-1">
-              Showing {wonLeads.length === 0 ? 0 : start + 1}-
-              {Math.min(start + size, wonLeads.length)} of {wonLeads.length}
-            </p>
+            <div className="grid grid-cols-1 lg:grid-cols-[180px_180px_1fr] gap-3">
+              <label className="block">
+                <span className="text-xs font-black text-slate-500 uppercase">Date</span>
+                <select value={filters.date} onChange={(event) => updateFilter("date", event.target.value)} className="mt-1 w-full h-11 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
+                  <option value="all">All Dates</option>
+                  <option value="2025-05">This Month</option>
+                </select>
+              </label>
+
+              <label className="block">
+                <span className="text-xs font-black text-slate-500 uppercase">Lead Source</span>
+                <select value={filters.source} onChange={(event) => updateFilter("source", event.target.value)} className="mt-1 w-full h-11 rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
+                  {sources.map((source) => <option key={source} value={source}>{source === "all" ? "All Sources" : source}</option>)}
+                </select>
+              </label>
+
+              <label className="block">
+                <span className="text-xs font-black text-slate-500 uppercase">Search</span>
+                <div className="relative mt-1">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input value={filters.query} onChange={(event) => updateFilter("query", event.target.value)} placeholder="Search lead, company, owner, source..." className="w-full h-11 rounded-xl border border-slate-200 pl-9 pr-3 text-sm font-semibold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                </div>
+              </label>
+            </div>
           </div>
 
-          <div className="divide-y divide-slate-100">
-            {rows.map((lead) => (
-              <div
-                key={lead.id}
-                className="px-5 py-4 flex items-center justify-between gap-4 hover:bg-slate-50"
-              >
-                <div>
-                  <h3 className="font-bold text-slate-900">{lead.name}</h3>
-                  <p className="text-sm text-slate-500">
-                    {lead.company} · {lead.phone}
-                  </p>
-                </div>
-
-                <div className="hidden md:block text-sm text-slate-600">
-                  {lead.created}
-                </div>
-
-                <strong className="text-sm text-green-700">
-                  ₹{Number(lead.value || 0).toLocaleString("en-IN")}
-                </strong>
+          <div className="overflow-x-auto">
+            <div className="min-w-[980px]">
+              <div className="grid grid-cols-[1fr_1.3fr_1.4fr_1.1fr_1fr_1fr_64px] gap-4 px-5 py-3 bg-slate-50 border-b border-slate-200 text-[12px] font-bold uppercase tracking-wide text-slate-500">
+                <div>Close Date</div>
+                <div>Lead Name</div>
+                <div>Company</div>
+                <div>Deal Amount</div>
+                <div>Owner</div>
+                <div>Source</div>
+                <div className="text-center">Action</div>
               </div>
-            ))}
 
-            {rows.length === 0 && (
-              <div className="px-5 py-10 text-center text-slate-500">
-                No won leads found.
+              <div className="divide-y divide-slate-100">
+                {rows.map((lead) => (
+                  <div key={lead.id} className="grid grid-cols-[1fr_1.3fr_1.4fr_1.1fr_1fr_1fr_64px] gap-4 px-5 py-4 items-center hover:bg-slate-50">
+                    <div className="text-sm text-slate-600">{lead.closeDate}</div>
+                    <div>
+                      <h3 className="font-bold text-slate-900">{lead.name}</h3>
+                      <p className="text-xs text-slate-500">{lead.phone}</p>
+                    </div>
+                    <div className="text-sm font-semibold text-slate-700">{lead.company}</div>
+                    <div className="text-sm font-black text-green-700">₹{Number(lead.value || 0).toLocaleString("en-IN")}</div>
+                    <div className="text-sm text-slate-600">{lead.owner}</div>
+                    <div><span className="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">{lead.source}</span></div>
+                    <div className="flex justify-center">
+                      <button type="button" onClick={() => openLead(lead.id)} className="w-9 h-9 rounded-xl border border-slate-200 text-slate-600 hover:text-orange-600 hover:bg-orange-50 grid place-items-center" title="Open lead">
+                        <Eye className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+                {rows.length === 0 && <div className="px-5 py-10 text-center text-slate-500">No won leads found for selected filter.</div>}
               </div>
-            )}
+            </div>
           </div>
 
           <div className="px-5 py-4 border-t border-slate-100 flex items-center justify-between">
-            <button
-              type="button"
-              disabled={page === 1}
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              className="h-9 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 disabled:opacity-40"
-            >
-              Previous
-            </button>
-
-            <span className="text-sm font-bold text-slate-600">
-              Page {page} of {totalPages}
-            </span>
-
-            <button
-              type="button"
-              disabled={page === totalPages}
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              className="h-9 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 disabled:opacity-40"
-            >
-              Next
-            </button>
+            <button type="button" disabled={safePage === 1} onClick={() => setPage((p) => Math.max(1, p - 1))} className="h-9 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 disabled:opacity-40">Previous</button>
+            <span className="text-sm font-bold text-slate-600">Page {safePage} of {totalPages}</span>
+            <button type="button" disabled={safePage === totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))} className="h-9 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 disabled:opacity-40">Next</button>
           </div>
         </section>
       </div>
