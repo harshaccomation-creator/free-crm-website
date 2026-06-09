@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Plus, Search, Eye, X, Save, Filter, RotateCcw } from "lucide-react";
+import { Plus, Search, Eye, X, Save, Filter, RotateCcw, CalendarDays } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 import { empLeads } from "../../data/employeeData.js";
 
@@ -8,6 +8,11 @@ const tabs = ["All", "New", "Contacted", "Qualified", "Proposal Sent", "Won", "L
 const statusOptions = ["New", "Contacted", "Qualified", "Proposal Sent", "Won", "Lost"];
 const sourceOptions = ["Website", "Referral", "WhatsApp", "Facebook", "Instagram", "Google Ads", "Manual"];
 const scoreOptions = ["Hot", "Warm", "Cold"];
+const dateOptions = ["All Dates", "Today", "Yesterday", "This Month", "Custom Range"];
+const todayDate = "2026-06-09";
+const yesterdayDate = "2026-06-08";
+const monthStartDate = "2026-06-01";
+const monthEndDate = "2026-06-30";
 
 const emptyForm = {
   name: "",
@@ -46,6 +51,26 @@ function scoreNumber(score) {
   return Number(score || 0);
 }
 
+function getLeadDate(lead) {
+  if (lead.createdAt) return String(lead.createdAt).slice(0, 10);
+  if (lead.createdDate) return String(lead.createdDate).slice(0, 10);
+  if (lead.date) return String(lead.date).slice(0, 10);
+  return todayDate;
+}
+
+function dateMatches(leadDate, dateFilter, fromDate, toDate) {
+  if (dateFilter === "All Dates") return true;
+  if (dateFilter === "Today") return leadDate === todayDate;
+  if (dateFilter === "Yesterday") return leadDate === yesterdayDate;
+  if (dateFilter === "This Month") return leadDate >= monthStartDate && leadDate <= monthEndDate;
+  if (dateFilter === "Custom Range") {
+    if (fromDate && leadDate < fromDate) return false;
+    if (toDate && leadDate > toDate) return false;
+    return true;
+  }
+  return true;
+}
+
 function Field({ label, children, error, full = false }) {
   return (
     <label className={`${full ? "md:col-span-2" : ""} block`}>
@@ -63,6 +88,9 @@ export default function LeadListPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
   const [sourceFilter, setSourceFilter] = useState("All");
+  const [dateFilter, setDateFilter] = useState("All Dates");
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
   const [page, setPage] = useState(1);
   const [isAddLeadOpen, setIsAddLeadOpen] = useState(false);
   const [form, setForm] = useState(emptyForm);
@@ -77,6 +105,7 @@ export default function LeadListPage() {
       source: lead.source || "Manual",
       value: lead.value || 0,
       score: scoreNumber(lead.score),
+      createdDate: getLeadDate(lead),
     }));
   }, [localLeads]);
 
@@ -91,13 +120,14 @@ export default function LeadListPage() {
       const tabOk = activeTab === "All" || lead.status === activeTab;
       const statusOk = statusFilter === "All" || lead.status === statusFilter;
       const sourceOk = sourceFilter === "All" || lead.source === sourceFilter;
+      const dateOk = dateMatches(lead.createdDate, dateFilter, fromDate, toDate);
       const searchOk = !query || [lead.name, lead.company, lead.email, lead.phone, lead.source]
         .join(" ")
         .toLowerCase()
         .includes(query);
-      return tabOk && statusOk && sourceOk && searchOk;
+      return tabOk && statusOk && sourceOk && dateOk && searchOk;
     });
-  }, [activeTab, statusFilter, sourceFilter, search, leads]);
+  }, [activeTab, statusFilter, sourceFilter, dateFilter, fromDate, toDate, search, leads]);
 
   const totalPages = Math.max(1, Math.ceil(filteredLeads.length / PAGE_SIZE));
   const start = (page - 1) * PAGE_SIZE;
@@ -152,6 +182,9 @@ export default function LeadListPage() {
     setActiveTab("All");
     setStatusFilter("All");
     setSourceFilter("All");
+    setDateFilter("All Dates");
+    setFromDate("");
+    setToDate("");
     setSearch("");
     setPage(1);
     closeAddLead();
@@ -161,6 +194,9 @@ export default function LeadListPage() {
     setActiveTab("All");
     setStatusFilter("All");
     setSourceFilter("All");
+    setDateFilter("All Dates");
+    setFromDate("");
+    setToDate("");
     setSearch("");
     setPage(1);
   };
@@ -201,7 +237,7 @@ export default function LeadListPage() {
           </div>
 
           <div className="px-6 py-5 border-b border-slate-200">
-            <div className="grid grid-cols-1 xl:grid-cols-[1fr_220px_220px_auto] gap-4 items-end">
+            <div className={`grid grid-cols-1 ${dateFilter === "Custom Range" ? "xl:grid-cols-[1fr_170px_170px_170px_150px_150px_auto]" : "xl:grid-cols-[1fr_190px_190px_190px_auto]"} gap-4 items-end`}>
               <label>
                 <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><Search className="w-4 h-4 text-orange-600" />Search</span>
                 <input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search leads, company, source..." className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20 shadow-sm" />
@@ -222,6 +258,38 @@ export default function LeadListPage() {
                   {sourceOptions.map((item) => <option key={item}>{item}</option>)}
                 </select>
               </label>
+
+              <label>
+                <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />Date</span>
+                <select
+                  value={dateFilter}
+                  onChange={(event) => {
+                    const value = event.target.value;
+                    setDateFilter(value);
+                    if (value !== "Custom Range") {
+                      setFromDate("");
+                      setToDate("");
+                    }
+                    setPage(1);
+                  }}
+                  className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20"
+                >
+                  {dateOptions.map((item) => <option key={item}>{item}</option>)}
+                </select>
+              </label>
+
+              {dateFilter === "Custom Range" && (
+                <>
+                  <label>
+                    <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />From</span>
+                    <input type="date" value={fromDate} onChange={(event) => { setFromDate(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                  </label>
+                  <label>
+                    <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />To</span>
+                    <input type="date" value={toDate} onChange={(event) => { setToDate(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                  </label>
+                </>
+              )}
 
               <button type="button" onClick={resetFilters} className="h-12 px-5 rounded-xl border border-slate-200 bg-white text-slate-700 font-black inline-flex items-center gap-2 hover:bg-slate-50">
                 <RotateCcw className="w-4 h-4" /> Reset
