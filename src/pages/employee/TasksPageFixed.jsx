@@ -211,9 +211,9 @@ export default function TasksPageFixed() {
                     <td className="px-6 py-5 text-sm font-bold text-slate-700 whitespace-nowrap"><div className="inline-flex items-center gap-2"><CalendarClock className="w-4 h-4 text-slate-400" />{task.due}</div></td>
                     <td className={`px-6 py-5 text-sm ${task.status === "overdue" ? "text-red-600 font-bold" : "text-slate-600"}`}>{task.reason}</td>
                     <td className="px-6 py-5">
-                      <div className="flex items-center gap-3" onClick={(event) => event.stopPropagation()}>
-                        <button type="button" onClick={() => setSelectedTask(task)} className="h-9 px-3 rounded-xl border border-slate-200 text-slate-700 font-bold text-sm inline-flex items-center gap-2"><Eye className="w-4 h-4" />Open</button>
-                        <button type="button" onClick={() => markDone(task.id)} className="h-9 px-3 rounded-xl bg-green-50 text-green-700 font-bold text-sm inline-flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Mark Done</button>
+                      <div className="flex items-center gap-2" onClick={(event) => event.stopPropagation()}>
+                        <button type="button" title="Open Task" aria-label="Open Task" onClick={() => setSelectedTask(task)} className="w-10 h-10 rounded-xl border border-slate-200 text-slate-700 inline-flex items-center justify-center hover:bg-slate-50 hover:text-blue-600 transition-colors"><Eye className="w-4 h-4" /></button>
+                        <button type="button" title="Mark Done" aria-label="Mark Done" onClick={() => markDone(task.id)} className="w-10 h-10 rounded-xl bg-green-50 text-green-700 inline-flex items-center justify-center hover:bg-green-100 transition-colors"><CheckCircle2 className="w-4 h-4" /></button>
                       </div>
                     </td>
                   </tr>
