@@ -5,14 +5,22 @@ import { empLeads } from "../../data/employeeData.js";
 
 const PAGE_SIZE = 10;
 const tabs = ["All", "New", "Contacted", "Qualified", "Proposal Sent", "Won", "Lost"];
-const statusOptions = ["New", "Contacted", "Qualified", "Proposal Sent", "Won", "Lost"];
-const sourceOptions = ["Website", "Referral", "WhatsApp", "Facebook", "Instagram", "Google Ads", "Manual"];
+const statusOptions = ["New", "Contacted", "Qualified", "Proposal Sent", "Won", "Lost", "Overdue", "Junk"];
+const sourceOptions = ["Website", "LinkedIn", "Referral", "Cold Email", "Event", "Cold Call", "WhatsApp", "Facebook", "Instagram", "Google Ads", "Manual"];
 const scoreOptions = ["Hot", "Warm", "Cold"];
 const dateOptions = ["All Dates", "Today", "Yesterday", "This Month", "Custom Range"];
 const todayDate = "2026-06-09";
 const yesterdayDate = "2026-06-08";
 const monthStartDate = "2026-06-01";
 const monthEndDate = "2026-06-30";
+
+const emptyFilters = {
+  status: "All",
+  source: "All",
+  dateType: "All Dates",
+  from: "",
+  to: "",
+};
 
 const emptyForm = {
   name: "",
@@ -54,14 +62,14 @@ function getLeadDate(lead) {
   return todayDate;
 }
 
-function dateMatches(leadDate, dateFilter, fromDate, toDate) {
-  if (dateFilter === "All Dates") return true;
-  if (dateFilter === "Today") return leadDate === todayDate;
-  if (dateFilter === "Yesterday") return leadDate === yesterdayDate;
-  if (dateFilter === "This Month") return leadDate >= monthStartDate && leadDate <= monthEndDate;
-  if (dateFilter === "Custom Range") {
-    if (fromDate && leadDate < fromDate) return false;
-    if (toDate && leadDate > toDate) return false;
+function dateMatches(leadDate, filters) {
+  if (filters.dateType === "All Dates") return true;
+  if (filters.dateType === "Today") return leadDate === todayDate;
+  if (filters.dateType === "Yesterday") return leadDate === yesterdayDate;
+  if (filters.dateType === "This Month") return leadDate >= monthStartDate && leadDate <= monthEndDate;
+  if (filters.dateType === "Custom Range") {
+    if (filters.from && leadDate < filters.from) return false;
+    if (filters.to && leadDate > filters.to) return false;
     return true;
   }
   return true;
@@ -82,11 +90,8 @@ const inputClass = "w-full h-11 rounded-xl border border-slate-200 bg-white px-3
 export default function LeadListPage() {
   const [activeTab, setActiveTab] = useState("All");
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState("All");
-  const [sourceFilter, setSourceFilter] = useState("All");
-  const [dateFilter, setDateFilter] = useState("All Dates");
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
+  const [appliedFilters, setAppliedFilters] = useState(emptyFilters);
+  const [tempFilters, setTempFilters] = useState(emptyFilters);
   const [page, setPage] = useState(1);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isAddLeadOpen, setIsAddLeadOpen] = useState(false);
@@ -115,22 +120,22 @@ export default function LeadListPage() {
     const query = search.trim().toLowerCase();
     return leads.filter((lead) => {
       const tabOk = activeTab === "All" || lead.status === activeTab;
-      const statusOk = statusFilter === "All" || lead.status === statusFilter;
-      const sourceOk = sourceFilter === "All" || lead.source === sourceFilter;
-      const dateOk = dateMatches(lead.createdDate, dateFilter, fromDate, toDate);
+      const statusOk = appliedFilters.status === "All" || lead.status === appliedFilters.status;
+      const sourceOk = appliedFilters.source === "All" || lead.source === appliedFilters.source;
+      const dateOk = dateMatches(lead.createdDate, appliedFilters);
       const searchOk = !query || [lead.name, lead.company, lead.email, lead.phone, lead.source]
         .join(" ")
         .toLowerCase()
         .includes(query);
       return tabOk && statusOk && sourceOk && dateOk && searchOk;
     });
-  }, [activeTab, statusFilter, sourceFilter, dateFilter, fromDate, toDate, search, leads]);
+  }, [activeTab, appliedFilters, search, leads]);
 
   const totalPages = Math.max(1, Math.ceil(filteredLeads.length / PAGE_SIZE));
   const start = (page - 1) * PAGE_SIZE;
   const pageRows = filteredLeads.slice(start, start + PAGE_SIZE);
 
-  const hasActiveFilter = statusFilter !== "All" || sourceFilter !== "All" || dateFilter !== "All Dates" || search.trim();
+  const hasActiveFilter = appliedFilters.status !== "All" || appliedFilters.source !== "All" || appliedFilters.dateType !== "All Dates";
 
   const updateForm = (field, value) => {
     setForm((old) => ({ ...old, [field]: value }));
@@ -148,14 +153,22 @@ export default function LeadListPage() {
     setErrors({});
   };
 
+  const openFilterPopup = () => {
+    setTempFilters(appliedFilters);
+    setIsFilterOpen(true);
+  };
+
+  const closeFilterPopup = () => setIsFilterOpen(false);
+
+  const saveFilters = () => {
+    setAppliedFilters(tempFilters);
+    setPage(1);
+    setIsFilterOpen(false);
+  };
+
   const resetFilters = () => {
-    setActiveTab("All");
-    setStatusFilter("All");
-    setSourceFilter("All");
-    setDateFilter("All Dates");
-    setFromDate("");
-    setToDate("");
-    setSearch("");
+    setAppliedFilters(emptyFilters);
+    setTempFilters(emptyFilters);
     setPage(1);
   };
 
@@ -189,12 +202,31 @@ export default function LeadListPage() {
     };
 
     setLocalLeads((prev) => [newLead, ...prev]);
-    resetFilters();
+    setAppliedFilters(emptyFilters);
+    setTempFilters(emptyFilters);
+    setSearch("");
+    setActiveTab("All");
+    setPage(1);
     closeAddLead();
   };
 
   return (
     <EmployeeShell>
+      <style>{`
+        .sf-employee .sf-leads-card .sf-tabs-row { overflow-x: visible !important; scrollbar-width: none !important; }
+        .sf-employee .sf-leads-card .sf-tabs-row::-webkit-scrollbar { display: none !important; }
+        .sf-employee .sf-leads-table.sf-leads-table { width: 100% !important; min-width: 0 !important; table-layout: fixed !important; border-collapse: collapse !important; }
+        .sf-employee .sf-leads-table.sf-leads-table th,
+        .sf-employee .sf-leads-table.sf-leads-table td { padding: 13px 18px !important; vertical-align: middle !important; height: 66px !important; }
+        .sf-employee .sf-leads-table.sf-leads-table thead th { height: 44px !important; font-size: 12px !important; color: #64748b !important; background: #f8fafc !important; }
+        .sf-employee .sf-leads-table.sf-leads-table th:nth-child(1), .sf-employee .sf-leads-table.sf-leads-table td:nth-child(1) { width: 30% !important; }
+        .sf-employee .sf-leads-table.sf-leads-table th:nth-child(2), .sf-employee .sf-leads-table.sf-leads-table td:nth-child(2) { width: 22% !important; }
+        .sf-employee .sf-leads-table.sf-leads-table th:nth-child(3), .sf-employee .sf-leads-table.sf-leads-table td:nth-child(3) { width: 15% !important; }
+        .sf-employee .sf-leads-table.sf-leads-table th:nth-child(4), .sf-employee .sf-leads-table.sf-leads-table td:nth-child(4) { width: 15% !important; }
+        .sf-employee .sf-leads-table.sf-leads-table th:nth-child(5), .sf-employee .sf-leads-table.sf-leads-table td:nth-child(5) { width: 9% !important; text-align: center !important; }
+        .sf-employee .sf-leads-table.sf-leads-table th:nth-child(6), .sf-employee .sf-leads-table.sf-leads-table td:nth-child(6) { width: 9% !important; text-align: center !important; }
+      `}</style>
+
       <div className="space-y-6">
         <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
           <div>
@@ -216,110 +248,61 @@ export default function LeadListPage() {
           <section className="rounded-xl bg-white border border-slate-200 p-6 shadow-sm"><p className="text-lg text-slate-500 font-medium">Won Leads</p><h2 className="text-4xl font-black text-slate-900">{leads.filter((lead) => lead.status === "Won").length}</h2></section>
         </div>
 
-        <section className="rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-          <div className="px-6 pt-5 border-b border-slate-200">
-            <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
-              <div className="flex items-center gap-8 overflow-x-auto">
-                {tabs.map((tab) => (
-                  <button key={tab} type="button" onClick={() => { setActiveTab(tab); setPage(1); }} className={`pb-5 text-lg font-semibold flex items-center gap-2 border-b-2 whitespace-nowrap ${activeTab === tab ? "text-orange-600 border-orange-600" : "text-slate-500 border-transparent"}`}>
-                    {tab}
-                    <span className="px-2 py-0.5 rounded-full text-sm bg-slate-100 text-slate-500">{counts[tab]}</span>
-                  </button>
-                ))}
-              </div>
-
-              <div className="flex items-center gap-3 pb-4 xl:pb-5 w-full xl:w-auto">
-                <label className="relative flex-1 xl:w-[340px]">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-orange-600" />
-                  <input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search leads, company, source..." className="w-full h-11 rounded-xl border border-slate-200 bg-white pl-11 pr-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20 shadow-sm" />
-                </label>
-
-                <button type="button" onClick={() => setIsFilterOpen((prev) => !prev)} className={`h-11 px-5 rounded-xl border font-black inline-flex items-center gap-2 ${isFilterOpen || hasActiveFilter ? "bg-orange-600 text-white border-orange-600 shadow-lg shadow-orange-500/20" : "bg-white text-slate-700 border-slate-200"}`}>
-                  <Filter className="w-4 h-4" /> Filter
+        <section className="sf-leads-card rounded-2xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+          <div className="px-6 pt-6 border-b border-slate-200">
+            <div className="sf-tabs-row flex flex-wrap items-center gap-x-9 gap-y-3">
+              {tabs.map((tab) => (
+                <button key={tab} type="button" onClick={() => { setActiveTab(tab); setPage(1); }} className={`relative pb-5 text-lg font-semibold flex items-center gap-2 whitespace-nowrap ${activeTab === tab ? "text-orange-600" : "text-slate-500 hover:text-slate-800"}`}>
+                  {tab}
+                  <span className="px-2 py-0.5 rounded-full text-sm bg-slate-100 text-slate-500">{counts[tab]}</span>
+                  {activeTab === tab && <span className="absolute left-0 -bottom-[1px] h-[3px] w-full rounded-full bg-orange-600" />}
                 </button>
-              </div>
+              ))}
             </div>
           </div>
 
-          {isFilterOpen && (
-            <div className="px-6 py-5 border-b border-slate-200 bg-slate-50/60">
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-end">
-                <label>
-                  <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><Filter className="w-4 h-4 text-orange-600" />Status</span>
-                  <select value={statusFilter} onChange={(event) => { setStatusFilter(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
-                    <option>All</option>
-                    {statusOptions.map((item) => <option key={item}>{item}</option>)}
-                  </select>
-                </label>
+          <div className="px-6 py-5 border-b border-slate-200">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+              <label className="relative w-full lg:max-w-[540px]">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-600" />
+                <input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search leads, company, source..." className="w-full h-12 rounded-2xl border border-slate-200 bg-white pl-12 pr-4 text-sm font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-300 shadow-sm" />
+              </label>
 
-                <label>
-                  <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><Filter className="w-4 h-4 text-orange-600" />Source</span>
-                  <select value={sourceFilter} onChange={(event) => { setSourceFilter(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
-                    <option>All</option>
-                    {sourceOptions.map((item) => <option key={item}>{item}</option>)}
-                  </select>
-                </label>
-
-                <label>
-                  <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />Date</span>
-                  <select
-                    value={dateFilter}
-                    onChange={(event) => {
-                      const value = event.target.value;
-                      setDateFilter(value);
-                      if (value !== "Custom Range") {
-                        setFromDate("");
-                        setToDate("");
-                      }
-                      setPage(1);
-                    }}
-                    className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20"
-                  >
-                    {dateOptions.map((item) => <option key={item}>{item}</option>)}
-                  </select>
-                </label>
-
-                <button type="button" onClick={resetFilters} className="h-12 px-5 rounded-xl border border-slate-200 bg-white text-slate-700 font-black inline-flex items-center justify-center gap-2 hover:bg-slate-50">
-                  <RotateCcw className="w-4 h-4" /> Reset
-                </button>
-              </div>
-
-              {dateFilter === "Custom Range" && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                  <label>
-                    <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />From Date</span>
-                    <input type="date" value={fromDate} onChange={(event) => { setFromDate(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
-                  </label>
-                  <label>
-                    <span className="inline-flex items-center gap-2 text-sm font-black text-slate-600 mb-2"><CalendarDays className="w-4 h-4 text-orange-600" />To Date</span>
-                    <input type="date" value={toDate} onChange={(event) => { setToDate(event.target.value); setPage(1); }} className="w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
-                  </label>
-                </div>
-              )}
+              <button type="button" onClick={openFilterPopup} className={`h-12 px-6 rounded-2xl border font-black inline-flex items-center justify-center gap-2 ${hasActiveFilter ? "bg-orange-600 text-white border-orange-600 shadow-lg shadow-orange-500/20" : "bg-white text-slate-700 border-slate-200 hover:text-orange-600 hover:border-orange-200"}`}>
+                <Filter className="w-5 h-5" /> Filter
+              </button>
             </div>
-          )}
+          </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
+          <div className="w-full overflow-hidden">
+            <table className="sf-leads-table w-full text-left">
               <thead className="bg-slate-50 text-slate-500 uppercase text-sm">
                 <tr>
-                  <th className="px-6 py-4 font-black">Lead</th>
-                  <th className="px-6 py-4 font-black">Company</th>
-                  <th className="px-6 py-4 font-black">Source</th>
-                  <th className="px-6 py-4 font-black">Status</th>
-                  <th className="px-6 py-4 font-black">Score</th>
-                  <th className="px-6 py-4 font-black">Actions</th>
+                  <th className="font-black">Lead</th>
+                  <th className="font-black">Company</th>
+                  <th className="font-black">Source</th>
+                  <th className="font-black">Status</th>
+                  <th className="font-black text-center">Score</th>
+                  <th className="font-black text-center">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
                 {pageRows.map((lead) => (
-                  <tr key={lead.id} className="hover:bg-slate-50">
-                    <td className="px-6 py-5"><div className="flex items-center gap-4"><div className="w-12 h-12 rounded-full bg-purple-600 text-white grid place-items-center font-black">{initials(lead.name)}</div><div><button type="button" onClick={() => go(`/leads/${lead.id}`)} className="text-lg font-black text-slate-900 hover:text-orange-600">{lead.name}</button><p className="text-slate-500">{lead.email}</p></div></div></td>
-                    <td className="px-6 py-5 text-lg text-slate-900">{lead.company}</td>
-                    <td className="px-6 py-5 text-lg text-slate-500">{lead.source}</td>
-                    <td className="px-6 py-5"><span className="px-3 py-1 rounded-md border text-sm font-black bg-orange-50 text-orange-700 border-orange-100">{lead.status}</span></td>
-                    <td className="px-6 py-5"><span className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 grid place-items-center font-black">{lead.score}</span></td>
-                    <td className="px-6 py-5"><button type="button" onClick={() => go(`/leads/${lead.id}`)} className="w-10 h-10 rounded-xl border border-slate-200 text-slate-600 hover:text-blue-600 hover:bg-slate-50 inline-flex items-center justify-center"><Eye className="w-5 h-5" /></button></td>
+                  <tr key={lead.id} className="hover:bg-slate-50/80 transition-colors">
+                    <td>
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-10 h-10 rounded-full bg-purple-600 text-white grid place-items-center font-black shrink-0">{initials(lead.name)}</div>
+                        <div className="min-w-0">
+                          <button type="button" onClick={() => go(`/leads/${lead.id}`)} className="block text-[15px] leading-tight font-black text-slate-900 hover:text-orange-600 truncate max-w-[240px] text-left">{lead.name}</button>
+                          <p className="text-[13px] leading-tight text-slate-500 truncate max-w-[240px] mt-1">{lead.email}</p>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="text-[15px] font-semibold text-slate-800 break-words">{lead.company}</td>
+                    <td className="text-[15px] font-semibold text-slate-500">{lead.source}</td>
+                    <td><span className="px-3 py-1 rounded-lg border text-xs font-black bg-orange-50 text-orange-700 border-orange-100 whitespace-nowrap">{lead.status}</span></td>
+                    <td className="text-center"><span className="mx-auto w-10 h-10 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 grid place-items-center font-black">{lead.score}</span></td>
+                    <td className="text-center"><button type="button" onClick={() => go(`/leads/${lead.id}`)} className="mx-auto w-10 h-10 rounded-xl border border-slate-200 text-slate-600 hover:text-blue-600 hover:bg-slate-50 inline-flex items-center justify-center"><Eye className="w-5 h-5" /></button></td>
                   </tr>
                 ))}
                 {pageRows.length === 0 && <tr><td colSpan="6" className="px-6 py-12 text-center text-slate-500">No leads found.</td></tr>}
@@ -327,7 +310,7 @@ export default function LeadListPage() {
             </table>
           </div>
 
-          <div className="px-6 py-4 border-t border-slate-200 flex items-center justify-between">
+          <div className="px-6 py-4 border-t border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <p className="text-sm font-semibold text-slate-500">Showing {filteredLeads.length === 0 ? 0 : start + 1}-{Math.min(start + PAGE_SIZE, filteredLeads.length)} of {filteredLeads.length}</p>
             <div className="flex items-center gap-3">
               <button disabled={page === 1} onClick={() => setPage((prev) => Math.max(1, prev - 1))} className="h-10 px-4 rounded-lg border border-slate-200 font-bold text-slate-700 disabled:opacity-40">Previous</button>
@@ -336,6 +319,67 @@ export default function LeadListPage() {
             </div>
           </div>
         </section>
+
+        {isFilterOpen && (
+          <div className="fixed inset-0 z-[99999] bg-slate-950/50 backdrop-blur-sm flex items-center justify-center p-5">
+            <div className="w-full max-w-2xl rounded-3xl bg-white border border-slate-200 shadow-2xl overflow-hidden">
+              <div className="px-6 py-5 border-b border-slate-200 flex items-start justify-between gap-4 bg-gradient-to-b from-white to-slate-50">
+                <div>
+                  <p className="text-xs font-black text-orange-600 uppercase tracking-[0.18em]">Lead Filters</p>
+                  <h2 className="text-2xl font-black text-slate-900 mt-1">Filter Leads</h2>
+                  <p className="text-sm text-slate-500 mt-1">Status, source aur date range select karke save karo.</p>
+                </div>
+                <button type="button" onClick={closeFilterPopup} className="w-10 h-10 rounded-xl border border-slate-200 bg-white text-slate-500 grid place-items-center hover:text-red-600"><X className="w-5 h-5" /></button>
+              </div>
+
+              <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                <label>
+                  <span className="text-sm font-black text-slate-600">Status</span>
+                  <select value={tempFilters.status} onChange={(event) => setTempFilters((old) => ({ ...old, status: event.target.value }))} className="mt-2 w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
+                    <option>All</option>
+                    {statusOptions.map((item) => <option key={item}>{item}</option>)}
+                  </select>
+                </label>
+
+                <label>
+                  <span className="text-sm font-black text-slate-600">Source</span>
+                  <select value={tempFilters.source} onChange={(event) => setTempFilters((old) => ({ ...old, source: event.target.value }))} className="mt-2 w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
+                    <option>All</option>
+                    {sourceOptions.map((item) => <option key={item}>{item}</option>)}
+                  </select>
+                </label>
+
+                <label className="md:col-span-2">
+                  <span className="text-sm font-black text-slate-600">Date</span>
+                  <select value={tempFilters.dateType} onChange={(event) => {
+                    const value = event.target.value;
+                    setTempFilters((old) => ({ ...old, dateType: value, from: value === "Custom Range" ? old.from : "", to: value === "Custom Range" ? old.to : "" }));
+                  }} className="mt-2 w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
+                    {dateOptions.map((item) => <option key={item}>{item}</option>)}
+                  </select>
+                </label>
+
+                {tempFilters.dateType === "Custom Range" && (
+                  <>
+                    <label>
+                      <span className="text-sm font-black text-slate-600">From Date</span>
+                      <input type="date" value={tempFilters.from} onChange={(event) => setTempFilters((old) => ({ ...old, from: event.target.value }))} className="mt-2 w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                    </label>
+                    <label>
+                      <span className="text-sm font-black text-slate-600">To Date</span>
+                      <input type="date" value={tempFilters.to} onChange={(event) => setTempFilters((old) => ({ ...old, to: event.target.value }))} className="mt-2 w-full h-12 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                    </label>
+                  </>
+                )}
+              </div>
+
+              <div className="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
+                <button type="button" onClick={resetFilters} className="h-11 px-5 rounded-xl border border-slate-200 bg-white text-slate-700 font-black inline-flex items-center gap-2"><RotateCcw className="w-4 h-4" /> Reset</button>
+                <button type="button" onClick={saveFilters} className="h-11 px-6 rounded-xl bg-orange-600 text-white font-black shadow-lg shadow-orange-500/20">Save Filters</button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {isAddLeadOpen && (
           <div className="fixed inset-0 z-[99999] bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-6">
