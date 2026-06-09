@@ -21,7 +21,7 @@ const crmActivityFallback = [
     type: "not-connected",
     title: "Not Connected — Motilal client",
     description: "Call not picked. Auto follow-up task should be created for 2 hours later.",
-    status: "Not Connected",
+    status: "Pending",
     lead: "Motilal",
     time: "Jun 12, 04:10 PM"
   },
@@ -54,40 +54,79 @@ function iconFor(type) {
 
 function colorFor(type) {
   const key = normalizeType(type);
-  if (key === "call") return "#16a34a";
-  if (key === "whatsapp") return "#22c55e";
+  if (key === "call" || key === "whatsapp") return "#16a34a";
   if (key === "email") return "#2563eb";
-  if (key === "task") return "#f97316";
-  if (key === "won") return "#7c3aed";
-  if (key === "not-connected") return "#f59e0b";
+  if (key === "task") return "#7c3aed";
+  if (key === "won") return "#16a34a";
+  if (key === "not-connected") return "#dc2626";
   if (key === "lost") return "#dc2626";
   return "#64748b";
 }
 
-function statusClass(status = "") {
-  const key = status.toLowerCase();
-  if (key.includes("not connected")) return "bg-yellow-50 text-yellow-800";
-  if (key.includes("lost")) return "bg-red-50 text-red-700";
-  if (key.includes("won")) return "bg-purple-50 text-purple-700";
-  if (key.includes("completed")) return "bg-green-50 text-green-700";
-  if (key.includes("sent")) return "bg-blue-50 text-blue-700";
-  if (key.includes("missed")) return "bg-orange-50 text-orange-700";
-  if (key.includes("done")) return "bg-emerald-50 text-emerald-700";
-  return "bg-slate-100 text-slate-600";
+function activityTypeFor(item) {
+  const key = normalizeType(item.type);
+  const title = String(item.title || "").toLowerCase();
+  const status = String(item.status || "").toLowerCase();
+
+  if (key === "call") return "Call";
+  if (key === "whatsapp") return "Call";
+  if (key === "email") return "Note";
+  if (key === "task" && title.includes("demo")) return "Demo";
+  if (key === "task") return "Demo";
+  if (key === "won" || status.includes("won")) return "Demo Done";
+  if (key === "not-connected") return "Call";
+  if (key === "lost") return "Call";
+  return item.type || "Activity";
+}
+
+function activityTypeClass(value = "") {
+  const key = value.toLowerCase();
+  if (key.includes("call")) return "bg-green-50 text-green-700 border-green-100";
+  if (key.includes("demo done")) return "bg-emerald-50 text-emerald-700 border-emerald-100";
+  if (key.includes("demo")) return "bg-purple-50 text-purple-700 border-purple-100";
+  if (key.includes("note")) return "bg-blue-50 text-blue-700 border-blue-100";
+  return "bg-slate-100 text-slate-700 border-slate-200";
 }
 
 function dispositionFor(item) {
   const key = normalizeType(item.type);
   const status = String(item.status || "").toLowerCase();
+  const title = String(item.title || "").toLowerCase();
+  const description = String(item.description || "").toLowerCase();
 
-  if (key === "not-connected" || status.includes("not connected")) return "Not Connected";
-  if (key === "lost" || status.includes("lost")) return "Lost";
-  if (key === "call") return status.includes("missed") ? "Missed Call" : "Call Connected";
-  if (key === "whatsapp") return "WhatsApp Follow-up";
-  if (key === "email") return "Proposal / Email";
-  if (key === "task") return "Task Update";
-  if (key === "won") return "Won";
+  if (key === "not-connected" || status.includes("not connected") || title.includes("not connected")) return "Not Connected";
+  if (key === "lost" || status.includes("lost") || title.includes("lost")) return "Not Connected";
+  if (key === "call") return status.includes("missed") ? "Not Connected" : "Connected";
+  if (key === "whatsapp") return "Follow Up";
+  if (key === "email") return "Follow Up";
+  if (key === "task" && (title.includes("demo") || description.includes("demo"))) return "Demo Booked";
+  if (key === "task") return "Follow Up";
+  if (key === "won") return "Demo Booked";
   return item.status || "-";
+}
+
+function dispositionClass(value = "") {
+  const key = value.toLowerCase();
+  if (key.includes("connected") && !key.includes("not")) return "bg-green-50 text-green-700 border-green-100";
+  if (key.includes("follow")) return "bg-yellow-50 text-yellow-800 border-yellow-200";
+  if (key.includes("demo booked")) return "bg-purple-50 text-purple-700 border-purple-100";
+  if (key.includes("not connected")) return "bg-red-50 text-red-700 border-red-100";
+  return "bg-slate-100 text-slate-700 border-slate-200";
+}
+
+function statusClass(status = "") {
+  const key = status.toLowerCase();
+  if (key.includes("pending")) return "bg-yellow-50 text-yellow-800 border-yellow-200";
+  if (key.includes("booked")) return "bg-purple-50 text-purple-700 border-purple-100";
+  if (key.includes("not connected")) return "bg-red-50 text-red-700 border-red-100";
+  if (key.includes("lost")) return "bg-red-50 text-red-700 border-red-100";
+  if (key.includes("won")) return "bg-purple-50 text-purple-700 border-purple-100";
+  if (key.includes("completed")) return "bg-green-50 text-green-700 border-green-100";
+  if (key.includes("sent")) return "bg-blue-50 text-blue-700 border-blue-100";
+  if (key.includes("missed")) return "bg-red-50 text-red-700 border-red-100";
+  if (key.includes("done")) return "bg-emerald-50 text-emerald-700 border-emerald-100";
+  if (key.includes("note")) return "bg-blue-50 text-blue-700 border-blue-100";
+  return "bg-slate-100 text-slate-600 border-slate-200";
 }
 
 export default function EmployeeActivitiesPage() {
@@ -199,11 +238,12 @@ export default function EmployeeActivitiesPage() {
           </div>
 
           <div className="overflow-x-auto">
-            <div className="min-w-[980px]">
-              <div className="hidden lg:grid grid-cols-[2.3fr_1.1fr_1.1fr_1.25fr_0.9fr_56px] gap-4 px-5 py-3 bg-slate-50 border-b border-slate-200 text-[12px] font-bold uppercase tracking-wide text-slate-500">
-                <div>Activity</div>
-                <div>Lead Name</div>
+            <div className="min-w-[1080px]">
+              <div className="hidden lg:grid grid-cols-[1.05fr_1.15fr_2.1fr_1.05fr_1.2fr_0.95fr_56px] gap-4 px-5 py-3 bg-slate-50 border-b border-slate-200 text-[12px] font-bold uppercase tracking-wide text-slate-500">
                 <div>Activity Time</div>
+                <div>Lead Name</div>
+                <div>Activity</div>
+                <div>Activity Type</div>
                 <div>Disposition</div>
                 <div>Status</div>
                 <div className="text-center">Action</div>
@@ -213,13 +253,28 @@ export default function EmployeeActivitiesPage() {
                 {rows.map((item) => {
                   const Icon = iconFor(item.type);
                   const color = colorFor(item.type);
+                  const activityType = activityTypeFor(item);
                   const disposition = dispositionFor(item);
 
                   return (
                     <div
                       key={item.id}
-                      className="grid grid-cols-1 lg:grid-cols-[2.3fr_1.1fr_1.1fr_1.25fr_0.9fr_56px] gap-4 px-5 py-4 items-start hover:bg-slate-50 transition-colors"
+                      className="grid grid-cols-1 lg:grid-cols-[1.05fr_1.15fr_2.1fr_1.05fr_1.2fr_0.95fr_56px] gap-4 px-5 py-4 items-start hover:bg-slate-50 transition-colors"
                     >
+                      <div className="text-sm text-slate-600">
+                        <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
+                          Activity Time
+                        </span>
+                        {item.time}
+                      </div>
+
+                      <div className="text-sm font-semibold text-slate-700">
+                        <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
+                          Lead Name
+                        </span>
+                        {item.lead}
+                      </div>
+
                       <div className="flex items-start gap-4 min-w-0">
                         <div
                           className="w-11 h-11 rounded-2xl flex items-center justify-center shrink-0"
@@ -239,32 +294,29 @@ export default function EmployeeActivitiesPage() {
                         </div>
                       </div>
 
-                      <div className="text-sm font-semibold text-slate-700">
+                      <div>
                         <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
-                          Lead Name
+                          Activity Type
                         </span>
-                        {item.lead}
+                        <span className={`inline-flex px-2.5 py-1 rounded-full border text-[11px] font-bold ${activityTypeClass(activityType)}`}>
+                          {activityType}
+                        </span>
                       </div>
 
-                      <div className="text-sm text-slate-600">
-                        <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
-                          Activity Time
-                        </span>
-                        {item.time}
-                      </div>
-
-                      <div className="text-sm font-semibold text-slate-700">
+                      <div>
                         <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
                           Disposition
                         </span>
-                        {disposition}
+                        <span className={`inline-flex px-2.5 py-1 rounded-full border text-[11px] font-bold ${dispositionClass(disposition)}`}>
+                          {disposition}
+                        </span>
                       </div>
 
                       <div>
                         <span className="lg:hidden block text-[11px] uppercase text-slate-400 mb-1">
                           Status
                         </span>
-                        <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-bold ${statusClass(item.status)}`}>
+                        <span className={`inline-flex px-2.5 py-1 rounded-full border text-[11px] font-bold ${statusClass(item.status)}`}>
                           {item.status}
                         </span>
                       </div>
