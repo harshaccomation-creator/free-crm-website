@@ -155,3 +155,54 @@
   background: rgba(148, 163, 184, 0.42) !important;
   border-radius: 999px !important;
 }
+
+/* My Leads: move search beside status tabs and keep custom date row clean */
+.sf-employee section > div:nth-child(2) {
+  position: relative !important;
+}
+
+.sf-employee section > div:nth-child(2) > div > label:first-child:has(input[placeholder*="Search leads"]) {
+  position: absolute !important;
+  right: 24px !important;
+  top: -86px !important;
+  width: 340px !important;
+  z-index: 5 !important;
+}
+
+.sf-employee section > div:nth-child(2) > div > label:first-child:has(input[placeholder*="Search leads"]) > span {
+  display: none !important;
+}
+
+.sf-employee section > div:nth-child(2) > div > label:first-child:has(input[placeholder*="Search leads"]) input {
+  height: 42px !important;
+  padding-left: 42px !important;
+  border-radius: 14px !important;
+}
+
+.sf-employee section > div:nth-child(2) > div:has(label:first-child input[placeholder*="Search leads"]) {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 16px !important;
+  align-items: end !important;
+}
+
+.sf-employee section > div:nth-child(2) > div:has(label:first-child input[placeholder*="Search leads"]) > label:not(:first-child) {
+  flex: 1 1 190px !important;
+  max-width: 230px !important;
+}
+
+.sf-employee section > div:nth-child(2) > div:has(label:first-child input[placeholder*="Search leads"]) > button {
+  flex: 0 0 auto !important;
+  min-width: 128px !important;
+}
+
+@media (max-width: 1280px) {
+  .sf-employee section > div:nth-child(2) > div > label:first-child:has(input[placeholder*="Search leads"]) {
+    position: static !important;
+    width: 100% !important;
+  }
+
+  .sf-employee section > div:nth-child(2) > div > label:first-child:has(input[placeholder*="Search leads"]) > span {
+    display: inline-flex !important;
+  }
+}
