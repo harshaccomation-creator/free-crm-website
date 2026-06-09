@@ -1,0 +1,5 @@
+/* Hide employee sidebar notification number badge */
+.sf-employee aside nav a .rounded-full,
+.sf-employee aside nav button .rounded-full {
+  display: none !important;
+}
