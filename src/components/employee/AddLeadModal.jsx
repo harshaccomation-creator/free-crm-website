@@ -1,12 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { X, Save } from "lucide-react";
 import { validateLeadForm } from "../../utils/leadValidators.js";
-
-const loggedInEmployee = {
-  id: "employee-current",
-  name: "Jayraj",
-  email: "employee@example.com",
-};
+import { resolveCurrentUser } from "../../services/currentUserResolver.js";
 
 const emptyLeadForm = {
   name: "",
@@ -20,7 +15,7 @@ const emptyLeadForm = {
   industry: "",
   location: "",
   website: "",
-  owner: loggedInEmployee.name,
+  owner: "",
   note: "",
 };
 
@@ -40,16 +35,17 @@ function Field({ label, children, error, full = false }) {
 
 const inputClass = "w-full h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-900 outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-300";
 
-export default function AddLeadModal({ open, onClose, onSave }) {
+export default function AddLeadModal({ open, onClose, onSave, currentUser }) {
+  const activeUser = resolveCurrentUser(currentUser);
   const [form, setForm] = useState(emptyLeadForm);
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (open) {
-      setForm({ ...emptyLeadForm, owner: loggedInEmployee.name });
+      setForm({ ...emptyLeadForm, owner: activeUser.name });
       setErrors({});
     }
-  }, [open]);
+  }, [open, activeUser.name]);
 
   const isValid = useMemo(() => form.name.trim() && form.email.trim() && form.phone.trim() && form.source.trim(), [form.name, form.email, form.phone, form.source]);
 
@@ -62,7 +58,8 @@ export default function AddLeadModal({ open, onClose, onSave }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const nextErrors = validateLeadForm({ ...form, owner: loggedInEmployee.name });
+    const ownerName = activeUser.name;
+    const nextErrors = validateLeadForm({ ...form, owner: ownerName });
     if (Object.keys(nextErrors).length) {
       setErrors(nextErrors);
       return;
@@ -82,11 +79,14 @@ export default function AddLeadModal({ open, onClose, onSave }) {
       industry: form.industry.trim(),
       location: form.location.trim(),
       website: form.website.trim(),
-      owner: loggedInEmployee.name,
-      ownerName: loggedInEmployee.name,
-      ownerId: loggedInEmployee.id,
-      ownerEmail: loggedInEmployee.email,
-      createdBy: loggedInEmployee.name,
+      owner: ownerName,
+      ownerName,
+      ownerId: activeUser.id,
+      ownerEmail: activeUser.email,
+      companyId: activeUser.companyId,
+      role: activeUser.role,
+      createdBy: ownerName,
+      createdById: activeUser.id,
       note: form.note.trim(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -141,7 +141,7 @@ export default function AddLeadModal({ open, onClose, onSave }) {
               <input className={inputClass} value={form.website} onChange={(e) => updateField("website", e.target.value)} placeholder="https://company.com" />
             </Field>
             <Field label="Owner">
-              <input className={`${inputClass} bg-slate-50 text-slate-500 cursor-not-allowed`} value={loggedInEmployee.name} readOnly placeholder="Lead owner" />
+              <input className={`${inputClass} bg-slate-50 text-slate-500 cursor-not-allowed`} value={activeUser.name} readOnly placeholder="Lead owner" />
             </Field>
             <Field label="Note" full>
               <textarea className="w-full min-h-[96px] rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-bold text-slate-900 outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-300" value={form.note} onChange={(e) => updateField("note", e.target.value)} placeholder="Add lead note..." />
