@@ -107,6 +107,13 @@ export default function LeadDetailPage({ leadId }) {
     }
   };
 
+  const openLeadActivity = () => {
+    setActiveTab("Activity Timeline");
+    window.setTimeout(() => {
+      document.getElementById("lead-activity-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  };
+
   const tabs = ["Activity Timeline", "Notes", "Tasks"];
 
   if (loading) {
@@ -139,6 +146,7 @@ export default function LeadDetailPage({ leadId }) {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            <button type="button" onClick={openLeadActivity} className="h-10 px-5 rounded-lg border border-orange-200 bg-orange-50 text-orange-700 font-bold inline-flex items-center gap-2"><FileText className="w-4 h-4" />Lead Activity</button>
             <button type="button" disabled={saving} onClick={() => addActivity("email", `Email sent to ${currentLead.name}`)} className="h-10 px-5 rounded-lg border border-blue-200 bg-blue-50 text-blue-700 font-bold inline-flex items-center gap-2 disabled:opacity-50"><Mail className="w-4 h-4" />Email</button>
             <button type="button" disabled={saving} onClick={() => addActivity("call", `Call logged with ${currentLead.name}`)} className="h-10 px-5 rounded-lg border border-green-200 bg-green-50 text-green-700 font-bold inline-flex items-center gap-2 disabled:opacity-50"><Phone className="w-4 h-4" />Call</button>
             <button type="button" className="h-10 px-5 rounded-lg bg-orange-600 text-white font-bold inline-flex items-center gap-2 shadow-lg shadow-orange-500/20"><Edit3 className="w-4 h-4" />Edit Lead</button>
@@ -164,7 +172,7 @@ export default function LeadDetailPage({ leadId }) {
             </div>
           </section>
 
-          <section className="rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden">
+          <section id="lead-activity-section" className="rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden">
             <div className="px-6 pt-5 border-b border-slate-200"><div className="flex items-center gap-8">{tabs.map((tab) => <button key={tab} type="button" onClick={() => setActiveTab(tab)} className={`pb-4 text-lg font-semibold border-b-2 ${activeTab === tab ? "text-slate-900 border-orange-600" : "text-slate-500 border-transparent"}`}>{tab}</button>)}</div></div>
             <div className="p-6">
               {activeTab === "Activity Timeline" && <div className="space-y-3">{activities.map((item) => <div key={item.id} className="rounded-xl border border-slate-200 p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-slate-900">{item.title || activityLabel(item.type)}</p><p className="text-sm text-slate-600 mt-1">{item.note || "No note added"}</p></div><span className="px-2 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold">{activityLabel(item.type)}</span></div><p className="text-xs text-slate-400 mt-2">{formatTime(item.activity_at || item.created_at)}</p></div>)}{activities.length === 0 && <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-slate-500">No Supabase activities found.</div>}</div>}
