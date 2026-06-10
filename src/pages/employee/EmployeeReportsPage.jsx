@@ -1,15 +1,98 @@
-import { BarChart2, TrendingUp, Users, Trophy, Activity } from "lucide-react";
+import { useMemo } from "react";
+import { BarChart2, TrendingUp, Users, Trophy, Activity, Download } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 import ReportsDateFilter from "../../components/employee/ReportsDateFilter.jsx";
+import { getCalendarPageState } from "../../services/calendarPageAdapter.js";
+import { filterRecordsForUser, getAccessUser } from "../../services/crmAccessControl.js";
+import { downloadCsv, rowsToCsv } from "../../services/exportService.js";
 
-const stats = [
-  { label: "Lead Growth", value: "+18%", icon: TrendingUp, color: "#16a34a" },
-  { label: "Total Leads", value: "128", icon: Users, color: "#2563eb" },
-  { label: "Won Deals", value: "18", icon: Trophy, color: "#f97316" },
-  { label: "Activities", value: "240", icon: Activity, color: "#7c3aed" }
-];
+function norm(value = "") {
+  return String(value || "").trim().toLowerCase();
+}
+
+function toPercent(count, total) {
+  if (!total) return "0%";
+  return `${Math.round((count / total) * 100)}%`;
+}
+
+function isWon(lead = {}) {
+  return norm(lead.status) === "won";
+}
+
+function isDemo(lead = {}) {
+  return [lead.status, lead.stage, lead.type].some((value) => norm(value).includes("demo"));
+}
+
+function isContacted(lead = {}) {
+  return [lead.status, lead.stage].some((value) => ["contacted", "demo", "demo done", "won"].includes(norm(value)) || norm(value).includes("follow"));
+}
+
+function isNew(lead = {}) {
+  const status = norm(lead.status || "new");
+  return status === "new" || status === "assigned" || status === "open";
+}
+
+function activityType(activity = {}) {
+  const text = `${activity.type || ""} ${activity.title || ""} ${activity.description || ""}`.toLowerCase();
+  if (text.includes("whatsapp") || text.includes("whats app")) return "WhatsApp";
+  if (text.includes("email") || text.includes("mail")) return "Emails";
+  if (text.includes("note")) return "Notes";
+  if (text.includes("call") || text.includes("connected") || text.includes("not connected")) return "Calls";
+  return "Other";
+}
+
+function reportRows(leads = [], activities = [], tasks = []) {
+  return [
+    ...leads.map((lead) => ({ type: "Lead", name: lead.name, company: lead.company, status: lead.status, owner: lead.ownerName || lead.owner || lead.createdBy, date: lead.createdAt || lead.updatedAt })),
+    ...activities.map((activity) => ({ type: "Activity", name: activity.leadName || activity.lead, company: activity.company, status: activity.type || activity.title, owner: activity.ownerName || activity.createdBy, date: activity.createdAt })),
+    ...tasks.map((task) => ({ type: "Task", name: task.leadName || task.lead, company: task.company, status: task.status || task.type, owner: task.ownerName || task.createdBy, date: task.dueAt || task.createdAt })),
+  ];
+}
 
 export default function EmployeeReportsPage() {
+  const accessUser = useMemo(() => getAccessUser(), []);
+  const workflowState = useMemo(() => getCalendarPageState(), []);
+
+  const leads = useMemo(() => filterRecordsForUser(workflowState.leads || [], accessUser), [workflowState, accessUser]);
+  const activities = useMemo(() => filterRecordsForUser(workflowState.activities || [], accessUser), [workflowState, accessUser]);
+  const tasks = useMemo(() => filterRecordsForUser(workflowState.tasks || [], accessUser), [workflowState, accessUser]);
+
+  const wonDeals = leads.filter(isWon).length;
+  const totalLeads = leads.length;
+  const totalActivities = activities.length;
+  const leadGrowth = totalLeads ? `+${Math.min(100, Math.round((tasks.length / Math.max(totalLeads, 1)) * 100))}%` : "0%";
+
+  const stats = [
+    { label: "Lead Growth", value: leadGrowth, icon: TrendingUp, color: "#16a34a" },
+    { label: "Total Leads", value: totalLeads, icon: Users, color: "#2563eb" },
+    { label: "Won Deals", value: wonDeals, icon: Trophy, color: "#f97316" },
+    { label: "Activities", value: totalActivities, icon: Activity, color: "#7c3aed" }
+  ];
+
+  const performance = [
+    ["New", toPercent(leads.filter(isNew).length, totalLeads)],
+    ["Contacted", toPercent(leads.filter(isContacted).length, totalLeads)],
+    ["Demo", toPercent(leads.filter(isDemo).length, totalLeads)],
+    ["Won", toPercent(wonDeals, totalLeads)],
+  ];
+
+  const activitySummary = ["Calls", "WhatsApp", "Emails", "Notes"].map((label) => [
+    label,
+    activities.filter((activity) => activityType(activity) === label).length,
+  ]);
+
+  const handleExport = () => {
+    const csv = rowsToCsv(reportRows(leads, activities, tasks), [
+      { key: "type", label: "Type" },
+      { key: "name", label: "Lead/Item" },
+      { key: "company", label: "Company" },
+      { key: "status", label: "Status" },
+      { key: "owner", label: "Owner" },
+      { key: "date", label: "Date" },
+    ]);
+    downloadCsv("employee-reports.csv", csv);
+  };
+
   return (
     <EmployeeShell>
       <div className="space-y-5">
@@ -17,9 +100,14 @@ export default function EmployeeReportsPage() {
           <div>
             <p className="text-xs font-bold text-orange-600 uppercase tracking-wider">Employee Workspace</p>
             <h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">Reports</h1>
-            <p className="text-sm text-slate-500 mt-1">Your sales performance and activity reports.</p>
+            <p className="text-sm text-slate-500 mt-1">Your sales performance and activity reports from accessible data only.</p>
           </div>
-          <ReportsDateFilter />
+          <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
+            <ReportsDateFilter />
+            <button type="button" onClick={handleExport} disabled={!leads.length && !activities.length && !tasks.length} className="inline-flex items-center justify-center gap-2 h-10 px-4 rounded-xl bg-orange-500 text-white text-sm font-bold shadow-lg shadow-orange-500/20 disabled:opacity-50 disabled:cursor-not-allowed">
+              <Download className="w-4 h-4" /> Export
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -46,13 +134,13 @@ export default function EmployeeReportsPage() {
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-lg font-bold text-slate-900">Lead Performance</h2>
-                <p className="text-sm text-slate-500 mt-1">Weekly lead movement.</p>
+                <p className="text-sm text-slate-500 mt-1">Lead movement based on accessible records.</p>
               </div>
               <BarChart2 className="w-5 h-5 text-orange-500" />
             </div>
 
             <div className="mt-6 space-y-4">
-              {[["New", "72%"], ["Contacted", "58%"], ["Demo", "36%"], ["Won", "24%"]].map((item) => (
+              {performance.map((item) => (
                 <div key={item[0]}>
                   <div className="flex items-center justify-between text-sm mb-2">
                     <span className="font-bold text-slate-700">{item[0]}</span>
@@ -68,9 +156,9 @@ export default function EmployeeReportsPage() {
 
           <section className="rounded-2xl bg-white border border-slate-200 shadow-sm p-5">
             <h2 className="text-lg font-bold text-slate-900">Activity Summary</h2>
-            <p className="text-sm text-slate-500 mt-1">Calls, WhatsApp and follow-ups.</p>
+            <p className="text-sm text-slate-500 mt-1">Calls, WhatsApp, emails and notes from accessible activities.</p>
             <div className="grid grid-cols-2 gap-4 mt-6">
-              {[["Calls", "84"], ["WhatsApp", "96"], ["Emails", "28"], ["Notes", "32"]].map((item) => (
+              {activitySummary.map((item) => (
                 <div key={item[0]} className="rounded-2xl bg-slate-50 border border-slate-100 p-4">
                   <p className="text-xs font-bold text-slate-500 uppercase">{item[0]}</p>
                   <h3 className="text-2xl font-bold text-slate-900 mt-2">{item[1]}</h3>
