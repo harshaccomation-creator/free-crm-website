@@ -15,8 +15,8 @@ export function getCalendarPageState() {
   return createActivityPageState();
 }
 
-export function workflowTasksToCalendarEvents(state, fallback = []) {
-  const workflowEvents = (state.tasks || [])
+export function workflowTasksToCalendarEvents(state) {
+  return (state.tasks || [])
     .filter((task) => task.status !== "done")
     .filter(isCalendarTask)
     .map((task) => {
@@ -24,21 +24,20 @@ export function workflowTasksToCalendarEvents(state, fallback = []) {
       if (!due) return null;
       const typeText = `${task.type || ""} ${task.title || ""}`.toLowerCase().includes("demo") ? "Demo" : "Follow-up";
       return {
+        ...task,
         id: task.id,
         date: due.toISOString().slice(0, 10),
         day: due.getDate(),
-        title: task.title || `${typeText} with ${task.leadName || task.lead || "Not assign"}`,
-        leadId: task.leadId || task.leadName || task.lead || "Not assign",
-        leadName: task.leadName || task.lead || "Not assign",
+        title: task.title || `${typeText} with ${task.leadName || task.lead || "Not assigned"}`,
+        leadId: task.leadId || task.leadName || task.lead || "Not assigned",
+        leadName: task.leadName || task.lead || "Not assigned",
         type: typeText,
         time: due.toLocaleTimeString("en-IN", { hour: "2-digit", minute: "2-digit", hour12: true }),
         source: "Lead Activity",
-        note: task.note || task.description || "Created from lead activity.",
+        note: task.note || task.description || "Created from lead activity."
       };
     })
     .filter(Boolean);
-
-  return workflowEvents.length ? workflowEvents : fallback.filter((event) => ["Demo", "Follow-up"].includes(event.type));
 }
 
 export function addCalendarEventToWorkflow(state, event) {
@@ -56,7 +55,7 @@ export function addCalendarEventToWorkflow(state, event) {
     description: event.note || `${event.type} scheduled from calendar.`,
     reminderMinutesBefore: 15,
     showInCalendar: true,
-    createdAt: new Date().toISOString(),
+    createdAt: new Date().toISOString()
   };
   const next = { ...state, tasks: [nextTask, ...(state.tasks || [])] };
   saveActivityPageState(next);
