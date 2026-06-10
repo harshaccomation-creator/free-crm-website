@@ -55,7 +55,13 @@ export function addCalendarEventToWorkflow(state, event) {
     description: event.note || `${event.type} scheduled from calendar.`,
     reminderMinutesBefore: 15,
     showInCalendar: true,
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    ownerId: event.ownerId,
+    ownerName: event.ownerName,
+    ownerEmail: event.ownerEmail,
+    companyId: event.companyId,
+    createdById: event.createdById,
+    createdBy: event.createdBy
   };
   const next = { ...state, tasks: [nextTask, ...(state.tasks || [])] };
   saveActivityPageState(next);
