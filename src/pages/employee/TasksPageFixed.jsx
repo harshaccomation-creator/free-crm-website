@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { CheckSquare, Clock, AlertTriangle, Phone, CheckCircle2, CalendarClock, Eye, X, Filter, CalendarDays } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 import { getTasksPageState, markWorkflowTaskDone, workflowTasksToPageTasks } from "../../services/tasksPageAdapter.js";
+import { attachOwnerToRecord, filterRecordsForUser, getAccessUser } from "../../services/crmAccessControl.js";
 
 const initialTasks = [
   { id: "task-1", title: "Follow up with Rajesh Kumar", lead: "Rajesh Kumar", type: "Follow Up", due: "Today, 3:00 PM", dateKey: "today", dueDate: "2026-06-09", status: "today", reason: "Follow-up reminder after lead discussion", note: "Call and confirm next step for proposal." },
@@ -26,10 +27,19 @@ function statusBadgeClass(status) { if (status === "overdue") return "bg-red-50 
 function rowClass(status) { if (status === "overdue") return "border-l-red-500 bg-gradient-to-r from-red-50/80 to-white"; if (status === "incoming") return "border-l-yellow-400 bg-gradient-to-r from-yellow-50/70 to-white"; return "border-l-transparent bg-white"; }
 function filterByType(tasks, value) { if (value === "all") return tasks; if (["overdue", "today", "incoming"].includes(value)) return tasks.filter((task) => task.status === value); if (value === "call") return tasks.filter((task) => task.type.toLowerCase().includes("call")); if (value === "follow-up") return tasks.filter((task) => task.type.toLowerCase().includes("follow")); if (value === "demo") return tasks.filter((task) => task.type.toLowerCase().includes("demo")); return tasks; }
 function filterTasks(tasks, typeFilter, dateFilter, customFromDate, customToDate) { let rows = filterByType(tasks, typeFilter); if (dateFilter === "all") return rows; if (dateFilter === "custom") { if (!customFromDate && !customToDate) return rows; return rows.filter((task) => { if (customFromDate && task.dueDate < customFromDate) return false; if (customToDate && task.dueDate > customToDate) return false; return true; }); } return rows.filter((task) => task.dateKey === dateFilter); }
+function ensureTaskOwner(task, accessUser) {
+  if (task.ownerId || task.assignedToId || task.createdById || task.ownerEmail) return task;
+  return attachOwnerToRecord(task, accessUser);
+}
+function buildVisibleTasks(state, accessUser) {
+  const rows = workflowTasksToPageTasks(state, initialTasks).map((task) => ensureTaskOwner(task, accessUser));
+  return filterRecordsForUser(rows, accessUser);
+}
 
 export default function TasksPageFixed() {
+  const accessUser = useMemo(() => getAccessUser(), []);
   const [workflowState, setWorkflowState] = useState(() => getTasksPageState());
-  const [tasks, setTasks] = useState(() => workflowTasksToPageTasks(getTasksPageState(), initialTasks));
+  const [tasks, setTasks] = useState(() => buildVisibleTasks(getTasksPageState(), accessUser));
   const [selectedTask, setSelectedTask] = useState(null);
   const [typeFilter, setTypeFilter] = useState("all");
   const [dateFilter, setDateFilter] = useState("all");
@@ -48,7 +58,7 @@ export default function TasksPageFixed() {
     return filterTasks(tasks, typeFilter, dateFilter, customFromDate, customToDate).sort((a, b) => (order[a.status] || 4) - (order[b.status] || 4));
   }, [tasks, typeFilter, dateFilter, customFromDate, customToDate]);
 
-  const syncTasks = (nextState) => setTasks(workflowTasksToPageTasks(nextState, initialTasks));
+  const syncTasks = (nextState) => setTasks(buildVisibleTasks(nextState, accessUser));
   const markDone = (taskId) => {
     const nextState = markWorkflowTaskDone(workflowState, taskId);
     setWorkflowState(nextState);
