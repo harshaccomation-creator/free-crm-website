@@ -11,12 +11,11 @@ export function getWonPageState() {
   return createActivityPageState();
 }
 
-export function getWonLeads(state, fallback = []) {
-  const rows = (state.leads || []).filter((lead) => lead.status === "Won");
-  return rows.length ? rows : fallback;
+export function getWonLeads(state) {
+  return (state.leads || []).filter((lead) => lead.status === "Won" && cleanAmount(lead.value || lead.amount) > 0);
 }
 
-export function markWon(state, leadIdOrName, amount) {
+export function markWon(state, leadIdOrName, amount, employee) {
   const errors = validateWonAmount(amount);
   if (Object.keys(errors).length) return { state, errors };
 
@@ -33,6 +32,12 @@ export function markWon(state, leadIdOrName, amount) {
       closeDate: now.toLocaleString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true }),
       wonAt: now.toISOString(),
       updatedAt: now.toISOString(),
+      ownerId: lead.ownerId || employee?.id,
+      ownerName: lead.ownerName || employee?.name,
+      ownerEmail: lead.ownerEmail || employee?.email,
+      companyId: lead.companyId || employee?.companyId,
+      createdById: lead.createdById || employee?.id,
+      createdBy: lead.createdBy || employee?.name,
     };
   });
 
@@ -41,6 +46,6 @@ export function markWon(state, leadIdOrName, amount) {
   return { state: next, errors: {} };
 }
 
-export function exportWonCsv(state, fallback = []) {
-  return exportLeadsCsv(getWonLeads(state, fallback));
+export function exportWonCsv(rows = []) {
+  return exportLeadsCsv(rows);
 }
