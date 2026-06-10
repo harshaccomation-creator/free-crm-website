@@ -1,5 +1,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { X, Save } from "lucide-react";
+import { validateLeadForm } from "../../utils/leadValidators.js";
+
+const loggedInEmployee = {
+  id: "employee-current",
+  name: "Jayraj",
+  email: "employee@example.com",
+};
 
 const emptyLeadForm = {
   name: "",
@@ -13,7 +20,7 @@ const emptyLeadForm = {
   industry: "",
   location: "",
   website: "",
-  owner: "",
+  owner: loggedInEmployee.name,
   note: "",
 };
 
@@ -39,12 +46,12 @@ export default function AddLeadModal({ open, onClose, onSave }) {
 
   useEffect(() => {
     if (open) {
-      setForm(emptyLeadForm);
+      setForm({ ...emptyLeadForm, owner: loggedInEmployee.name });
       setErrors({});
     }
   }, [open]);
 
-  const isValid = useMemo(() => form.name.trim() && form.company.trim(), [form.name, form.company]);
+  const isValid = useMemo(() => form.name.trim() && form.email.trim() && form.phone.trim() && form.source.trim(), [form.name, form.email, form.phone, form.source]);
 
   if (!open) return null;
 
@@ -55,9 +62,7 @@ export default function AddLeadModal({ open, onClose, onSave }) {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const nextErrors = {};
-    if (!form.name.trim()) nextErrors.name = "Lead name required";
-    if (!form.company.trim()) nextErrors.company = "Company required";
+    const nextErrors = validateLeadForm({ ...form, owner: loggedInEmployee.name });
     if (Object.keys(nextErrors).length) {
       setErrors(nextErrors);
       return;
@@ -71,12 +76,17 @@ export default function AddLeadModal({ open, onClose, onSave }) {
       phone: form.phone.trim(),
       status: form.status,
       score: form.score,
-      value: form.value ? Number(form.value) : 0,
+      value: 0,
+      amount: 0,
       source: form.source,
       industry: form.industry.trim(),
       location: form.location.trim(),
       website: form.website.trim(),
-      owner: form.owner.trim(),
+      owner: loggedInEmployee.name,
+      ownerName: loggedInEmployee.name,
+      ownerId: loggedInEmployee.id,
+      ownerEmail: loggedInEmployee.email,
+      createdBy: loggedInEmployee.name,
       note: form.note.trim(),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -103,13 +113,13 @@ export default function AddLeadModal({ open, onClose, onSave }) {
             <Field label="Lead Name *" error={errors.name}>
               <input className={inputClass} value={form.name} onChange={(e) => updateField("name", e.target.value)} placeholder="Enter lead name" />
             </Field>
-            <Field label="Company *" error={errors.company}>
+            <Field label="Company">
               <input className={inputClass} value={form.company} onChange={(e) => updateField("company", e.target.value)} placeholder="Enter company name" />
             </Field>
-            <Field label="Email">
+            <Field label="Email *" error={errors.email}>
               <input className={inputClass} type="email" value={form.email} onChange={(e) => updateField("email", e.target.value)} placeholder="client@email.com" />
             </Field>
-            <Field label="Phone">
+            <Field label="Phone *" error={errors.phone}>
               <input className={inputClass} value={form.phone} onChange={(e) => updateField("phone", e.target.value)} placeholder="+91 98765 43210" />
             </Field>
             <Field label="Status">
@@ -118,10 +128,7 @@ export default function AddLeadModal({ open, onClose, onSave }) {
             <Field label="Lead Score">
               <select className={inputClass} value={form.score} onChange={(e) => updateField("score", e.target.value)}>{scoreOptions.map((item) => <option key={item}>{item}</option>)}</select>
             </Field>
-            <Field label="Deal Value">
-              <input className={inputClass} type="number" min="0" value={form.value} onChange={(e) => updateField("value", e.target.value)} placeholder="50000" />
-            </Field>
-            <Field label="Source">
+            <Field label="Source *" error={errors.source}>
               <select className={inputClass} value={form.source} onChange={(e) => updateField("source", e.target.value)}>{sourceOptions.map((item) => <option key={item}>{item}</option>)}</select>
             </Field>
             <Field label="Industry">
@@ -134,7 +141,7 @@ export default function AddLeadModal({ open, onClose, onSave }) {
               <input className={inputClass} value={form.website} onChange={(e) => updateField("website", e.target.value)} placeholder="https://company.com" />
             </Field>
             <Field label="Owner">
-              <input className={inputClass} value={form.owner} onChange={(e) => updateField("owner", e.target.value)} placeholder="Lead owner" />
+              <input className={`${inputClass} bg-slate-50 text-slate-500 cursor-not-allowed`} value={loggedInEmployee.name} readOnly placeholder="Lead owner" />
             </Field>
             <Field label="Note" full>
               <textarea className="w-full min-h-[96px] rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm font-bold text-slate-900 outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-300" value={form.note} onChange={(e) => updateField("note", e.target.value)} placeholder="Add lead note..." />
