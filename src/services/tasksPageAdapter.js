@@ -33,7 +33,7 @@ const dateKeyFromDue = (value) => {
 
 const formatDue = (value) => {
   const date = asDate(value);
-  if (!date) return value || "Not assign";
+  if (!date) return value || "Not assigned";
   return date.toLocaleString("en-IN", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit", hour12: true });
 };
 
@@ -41,23 +41,22 @@ export function getTasksPageState() {
   return createActivityPageState();
 }
 
-export function workflowTasksToPageTasks(state, fallback = []) {
-  const pending = (state.tasks || []).filter((task) => task.status !== "done");
-  const rows = pending.length ? pending : fallback;
+export function workflowTasksToPageTasks(state) {
+  const rows = (state.tasks || []).filter((task) => task.status !== "done");
   return rows.map((task) => {
     const dueAt = task.dueAt || task.due;
     return {
       ...task,
       id: task.id,
-      title: task.title || "Not assign",
-      lead: task.leadName || task.lead || "Not assign",
+      title: task.title || "Not assigned",
+      lead: task.leadName || task.lead || "Not assigned",
       type: task.type || "Task",
       due: formatDue(dueAt),
       dateKey: dateKeyFromDue(dueAt),
       dueDate: asDate(dueAt) ? asDate(dueAt).toISOString().slice(0, 10) : "",
       status: statusFromDue(task),
       reason: task.reason || task.description || task.note || "Created from lead activity",
-      note: task.note || task.description || "Not assign",
+      note: task.note || task.description || "Not assigned",
     };
   });
 }
