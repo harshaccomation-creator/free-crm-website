@@ -1,61 +1,48 @@
 import { useMemo, useState } from "react";
-import {
-  addActivityToWorkflow,
-  addLeadToWorkflow,
-  completeWorkflowTask,
-  createEmployeeWorkflowState,
-  exportWorkflowLeads,
-  exportWorkflowWonLeads,
-  getWorkflowCalendarItems,
-  getWorkflowContacts,
-  getWorkflowDashboardData,
-  getWorkflowReminderEmails,
-  markWorkflowReminderSent,
-} from "../services/employeeWorkflowStore.js";
 
-export function useEmployeeWorkflow(employee = {}) {
-  const [workflowState, setWorkflowState] = useState(() => createEmployeeWorkflowState());
+const emptyWorkflowState = {
+  leads: [],
+  tasks: [],
+  activities: [],
+  contacts: [],
+  wonLeads: [],
+};
 
-  const dashboardData = useMemo(() => getWorkflowDashboardData(workflowState), [workflowState]);
-  const calendarItems = useMemo(() => getWorkflowCalendarItems(workflowState), [workflowState]);
-  const contacts = useMemo(() => getWorkflowContacts(workflowState), [workflowState]);
-  const leadCsv = useMemo(() => exportWorkflowLeads(workflowState), [workflowState]);
-  const wonCsv = useMemo(() => exportWorkflowWonLeads(workflowState), [workflowState]);
-
-  const addLead = (lead) => {
-    const result = addLeadToWorkflow(workflowState, lead, employee);
-    if (!Object.keys(result.errors || {}).length) setWorkflowState(result.state);
-    return result;
+function disabledResult(message) {
+  return {
+    state: emptyWorkflowState,
+    errors: { supabase: message },
   };
+}
 
-  const addActivity = (leadIdOrName, activity) => {
-    const result = addActivityToWorkflow(workflowState, leadIdOrName, activity, employee);
-    if (!Object.keys(result.errors || {}).length) setWorkflowState(result.state);
-    return result;
-  };
+export function useEmployeeWorkflow() {
+  const [workflowState, setWorkflowState] = useState(emptyWorkflowState);
 
-  const completeTask = (taskId) => {
-    setWorkflowState((current) => completeWorkflowTask(current, taskId));
-  };
+  const dashboardData = useMemo(() => ({
+    totalLeads: 0,
+    todayFollowUps: 0,
+    wonLeads: 0,
+    overdue: 0,
+  }), []);
 
-  const getReminderEmails = (now = new Date()) => getWorkflowReminderEmails(workflowState, employee, now);
-
-  const markReminderSent = (taskId) => {
-    setWorkflowState((current) => markWorkflowReminderSent(current, taskId));
-  };
+  const addLead = () => disabledResult("Legacy local workflow disabled. Use Supabase lead APIs.");
+  const addActivity = () => disabledResult("Legacy local workflow disabled. Use Supabase activity APIs.");
+  const completeTask = () => disabledResult("Legacy local workflow disabled. Use Supabase task APIs.");
+  const getReminderEmails = () => [];
+  const markReminderSent = () => disabledResult("Legacy local workflow disabled. Use Supabase reminder APIs.");
 
   return {
     workflowState,
     setWorkflowState,
-    leads: workflowState.leads,
-    tasks: workflowState.tasks,
-    activities: workflowState.activities,
-    contacts,
-    wonLeads: workflowState.wonLeads,
+    leads: [],
+    tasks: [],
+    activities: [],
+    contacts: [],
+    wonLeads: [],
     dashboardData,
-    calendarItems,
-    leadCsv,
-    wonCsv,
+    calendarItems: [],
+    leadCsv: "",
+    wonCsv: "",
     addLead,
     addActivity,
     completeTask,
