@@ -1,18 +1,7 @@
-import LeadActivityManager from "../../components/employee/LeadActivityManager.jsx";
-import { useMemo, useState } from "react";
-import {
-  Mail,
-  Phone,
-  Edit3,
-  Building2,
-  MapPin,
-  Globe,
-  Clock,
-  MessageCircle,
-  FileText
-} from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Mail, Phone, Edit3, Building2, MapPin, Globe, FileText, Loader2 } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
-import { empLeads } from "../../data/employeeData.js";
+import { createActivity, getLead, listActivities } from "../../services/crmApi.js";
 
 function getLeadIdFromUrl() {
   const parts = window.location.pathname.split("/");
@@ -20,7 +9,7 @@ function getLeadIdFromUrl() {
 }
 
 function initials(name = "") {
-  return name
+  return String(name || "")
     .split(" ")
     .map((x) => x[0])
     .join("")
@@ -41,262 +30,148 @@ function statusClass(status) {
   return "bg-slate-100 text-slate-600 border-slate-200";
 }
 
+function formatTime(value) {
+  if (!value) return "Not assigned";
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return String(value);
+  return date.toLocaleString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true });
+}
+
+function activityLabel(type = "") {
+  const key = String(type).replaceAll("_", " ");
+  return key ? key.charAt(0).toUpperCase() + key.slice(1) : "Activity";
+}
+
 export default function LeadDetailPage({ leadId }) {
+  const id = useMemo(() => leadId || getLeadIdFromUrl(), [leadId]);
   const [activeTab, setActiveTab] = useState("Activity Timeline");
   const [noteText, setNoteText] = useState("");
+  const [currentLead, setCurrentLead] = useState(null);
+  const [activities, setActivities] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState("");
 
-  const currentLead = useMemo(() => {
-    const id = leadId || getLeadIdFromUrl();
-    return empLeads.find((lead) => lead.id === id) || empLeads[0];
-  }, [leadId]);
-
-  const [activities, setActivities] = useState([
-    {
-      id: 1,
-      type: "Note",
-      text: "Needs security clearance before final sign off",
-      time: "10/25/2023, 2:50:00 PM"
+  async function loadLeadDetail() {
+    setLoading(true);
+    setError("");
+    try {
+      const [leadRow, activityRows] = await Promise.all([
+        getLead(id),
+        listActivities({ leadId: id, limit: 100 }),
+      ]);
+      setCurrentLead(leadRow);
+      setActivities(activityRows || []);
+    } catch (err) {
+      setError(err.message || "Lead detail load failed.");
+      setCurrentLead(null);
+      setActivities([]);
+    } finally {
+      setLoading(false);
     }
-  ]);
+  }
 
-  const status =
-    currentLead.status === "Demo Done" ? "Qualified" : currentLead.status;
+  useEffect(() => { loadLeadDetail(); }, [id]);
 
-  const addActivity = (type, text) => {
-    const next = {
-      id: Date.now(),
-      type,
-      text,
-      time: new Date().toLocaleString("en-IN")
-    };
+  const status = currentLead?.status === "Demo Done" ? "Qualified" : currentLead?.status || "New";
 
-    setActivities((items) => [next, ...items]);
-    setActiveTab("Activity Timeline");
+  const addActivity = async (type, text) => {
+    if (!currentLead?.id || saving) return;
+    setSaving(true);
+    setError("");
+    try {
+      await createActivity({ lead_id: currentLead.id, type, title: text, note: text });
+      setActiveTab("Activity Timeline");
+      await loadLeadDetail();
+    } catch (err) {
+      setError(err.message || "Activity save failed.");
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const addNote = () => {
+  const addNote = async () => {
     const clean = noteText.trim();
-
-    if (!clean) return;
-
-    addActivity("Note", clean);
-    setNoteText("");
+    if (!clean || !currentLead?.id || saving) return;
+    setSaving(true);
+    setError("");
+    try {
+      await createActivity({ lead_id: currentLead.id, type: "note", title: "Note added", note: clean });
+      setNoteText("");
+      setActiveTab("Activity Timeline");
+      await loadLeadDetail();
+    } catch (err) {
+      setError(err.message || "Note save failed.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   const tabs = ["Activity Timeline", "Notes", "Tasks"];
 
+  if (loading) {
+    return (
+      <EmployeeShell>
+        <div className="min-h-[360px] grid place-items-center text-slate-500 font-bold"><Loader2 className="w-5 h-5 animate-spin mr-2 inline" /> Loading lead from Supabase...</div>
+      </EmployeeShell>
+    );
+  }
+
+  if (!currentLead) {
+    return (
+      <EmployeeShell>
+        <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-red-700 font-bold">{error || "Lead not found or permission denied."}</div>
+      </EmployeeShell>
+    );
+  }
+
   return (
     <EmployeeShell>
       <div className="space-y-5">
+        {error ? <div className="rounded-xl border border-red-200 bg-red-50 px-5 py-3 text-sm font-bold text-red-700">{error}</div> : null}
         <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
           <div className="flex items-center gap-5">
-            <div className="w-16 h-16 rounded-full bg-orange-600 text-white grid place-items-center text-2xl font-black">
-              {initials(currentLead.name)}
-            </div>
-
+            <div className="w-16 h-16 rounded-full bg-orange-600 text-white grid place-items-center text-2xl font-black">{initials(currentLead.name)}</div>
             <div>
-              <h1 className="text-3xl font-black text-slate-900">
-                {currentLead.name}
-              </h1>
-              <p className="text-lg text-slate-500 mt-1">
-                {currentLead.company}
-              </p>
+              <h1 className="text-3xl font-black text-slate-900">{currentLead.name}</h1>
+              <p className="text-lg text-slate-500 mt-1">{currentLead.company || "No company"}</p>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={() => addActivity("Email", `Email sent to ${currentLead.name}`)}
-              className="h-10 px-5 rounded-lg border border-blue-200 bg-blue-50 text-blue-700 font-bold inline-flex items-center gap-2"
-            >
-              <Mail className="w-4 h-4" />
-              Email
-            </button>
-
-            <button
-              type="button"
-              onClick={() => addActivity("Call", `Call logged with ${currentLead.name}`)}
-              className="h-10 px-5 rounded-lg border border-green-200 bg-green-50 text-green-700 font-bold inline-flex items-center gap-2"
-            >
-              <Phone className="w-4 h-4" />
-              Call
-            </button>
-
-            <button
-              type="button"
-              className="h-10 px-5 rounded-lg bg-orange-600 text-white font-bold inline-flex items-center gap-2 shadow-lg shadow-orange-500/20"
-            >
-              <Edit3 className="w-4 h-4" />
-              Edit Lead
-            </button>
+            <button type="button" disabled={saving} onClick={() => addActivity("email", `Email sent to ${currentLead.name}`)} className="h-10 px-5 rounded-lg border border-blue-200 bg-blue-50 text-blue-700 font-bold inline-flex items-center gap-2 disabled:opacity-50"><Mail className="w-4 h-4" />Email</button>
+            <button type="button" disabled={saving} onClick={() => addActivity("call", `Call logged with ${currentLead.name}`)} className="h-10 px-5 rounded-lg border border-green-200 bg-green-50 text-green-700 font-bold inline-flex items-center gap-2 disabled:opacity-50"><Phone className="w-4 h-4" />Call</button>
+            <button type="button" className="h-10 px-5 rounded-lg bg-orange-600 text-white font-bold inline-flex items-center gap-2 shadow-lg shadow-orange-500/20"><Edit3 className="w-4 h-4" />Edit Lead</button>
           </div>
         </div>
 
         <div className="grid grid-cols-1 xl:grid-cols-[420px_1fr] gap-5">
           <section className="rounded-xl bg-white border border-slate-200 shadow-sm p-6">
             <h2 className="text-xl font-black text-slate-900">About</h2>
-
             <div className="grid grid-cols-2 gap-5 mt-6">
-              <div>
-                <p className="text-sm text-slate-500 font-semibold">Status</p>
-                <span
-                  className={`inline-flex mt-2 px-3 py-1 rounded-md border text-sm font-black ${statusClass(status)}`}
-                >
-                  {status}
-                </span>
-              </div>
-
-              <div>
-                <p className="text-sm text-slate-500 font-semibold">
-                  Lead Score
-                </p>
-                <span className="inline-grid mt-2 w-11 h-11 rounded-full bg-blue-50 text-slate-900 place-items-center font-black">
-                  {currentLead.score || 85}
-                </span>
-              </div>
-
-              <div>
-                <p className="text-sm text-slate-500 font-semibold">
-                  Deal Value
-                </p>
-                <h3 className="text-lg font-black text-slate-900 mt-2">
-                  {formatValue(currentLead.value)}
-                </h3>
-              </div>
-
-              <div>
-                <p className="text-sm text-slate-500 font-semibold">Source</p>
-                <h3 className="text-lg font-black text-slate-900 mt-2">
-                  {currentLead.source || "Website"}
-                </h3>
-              </div>
+              <div><p className="text-sm text-slate-500 font-semibold">Status</p><span className={`inline-flex mt-2 px-3 py-1 rounded-md border text-sm font-black ${statusClass(status)}`}>{status}</span></div>
+              <div><p className="text-sm text-slate-500 font-semibold">Lead Score</p><span className="inline-grid mt-2 w-11 h-11 rounded-full bg-blue-50 text-slate-900 place-items-center font-black">{currentLead.score || 60}</span></div>
+              <div><p className="text-sm text-slate-500 font-semibold">Deal Value</p><h3 className="text-lg font-black text-slate-900 mt-2">{formatValue(currentLead.value)}</h3></div>
+              <div><p className="text-sm text-slate-500 font-semibold">Source</p><h3 className="text-lg font-black text-slate-900 mt-2">{currentLead.source || "Website"}</h3></div>
             </div>
-
             <div className="h-px bg-slate-200 my-6" />
-
             <div className="space-y-4">
-              <div className="flex items-start gap-3">
-                <Mail className="w-5 h-5 text-slate-500 mt-0.5" />
-                <div>
-                  <h3 className="font-bold text-slate-900">
-                    {currentLead.email}
-                  </h3>
-                  <p className="text-sm text-slate-500">Work</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <Phone className="w-5 h-5 text-slate-500 mt-0.5" />
-                <div>
-                  <h3 className="font-bold text-slate-900">
-                    {currentLead.phone}
-                  </h3>
-                  <p className="text-sm text-slate-500">Mobile</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <Building2 className="w-5 h-5 text-slate-500 mt-0.5" />
-                <div>
-                  <h3 className="font-bold text-slate-900">
-                    {currentLead.company}
-                  </h3>
-                  <p className="text-sm text-slate-500">
-                    Industry: Technology
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-slate-500 mt-0.5" />
-                <h3 className="font-bold text-slate-900">Mumbai, India</h3>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <Globe className="w-5 h-5 text-slate-500 mt-0.5" />
-                <h3 className="font-bold text-blue-600">
-                  www.{String(currentLead.company || "company")
-                    .toLowerCase()
-                    .replaceAll(" ", "")}
-                  .com
-                </h3>
-              </div>
+              <div className="flex items-start gap-3"><Mail className="w-5 h-5 text-slate-500 mt-0.5" /><div><h3 className="font-bold text-slate-900">{currentLead.email || "No email"}</h3><p className="text-sm text-slate-500">Work</p></div></div>
+              <div className="flex items-start gap-3"><Phone className="w-5 h-5 text-slate-500 mt-0.5" /><div><h3 className="font-bold text-slate-900">{currentLead.phone || "No phone"}</h3><p className="text-sm text-slate-500">Mobile</p></div></div>
+              <div className="flex items-start gap-3"><Building2 className="w-5 h-5 text-slate-500 mt-0.5" /><div><h3 className="font-bold text-slate-900">{currentLead.company || "No company"}</h3><p className="text-sm text-slate-500">Industry: {currentLead.job_title || "Not assigned"}</p></div></div>
+              <div className="flex items-start gap-3"><MapPin className="w-5 h-5 text-slate-500 mt-0.5" /><h3 className="font-bold text-slate-900">{currentLead.location || "Not assigned"}</h3></div>
+              <div className="flex items-start gap-3"><Globe className="w-5 h-5 text-slate-500 mt-0.5" /><h3 className="font-bold text-blue-600">{currentLead.website || "Not assigned"}</h3></div>
             </div>
           </section>
 
           <section className="rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-            <div className="px-6 pt-5 border-b border-slate-200">
-              <div className="flex items-center gap-8">
-                {tabs.map((tab) => (
-                  <button
-                    key={tab}
-                    type="button"
-                    onClick={() => setActiveTab(tab)}
-                    className={`pb-4 text-lg font-semibold border-b-2 ${
-                      activeTab === tab
-                        ? "text-slate-900 border-orange-600"
-                        : "text-slate-500 border-transparent"
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
-            </div>
-
+            <div className="px-6 pt-5 border-b border-slate-200"><div className="flex items-center gap-8">{tabs.map((tab) => <button key={tab} type="button" onClick={() => setActiveTab(tab)} className={`pb-4 text-lg font-semibold border-b-2 ${activeTab === tab ? "text-slate-900 border-orange-600" : "text-slate-500 border-transparent"}`}>{tab}</button>)}</div></div>
             <div className="p-6">
-{activeTab === "Activity Timeline" && (
-  <LeadActivityManager leadName={currentLead.name} />
-)}
+              {activeTab === "Activity Timeline" && <div className="space-y-3">{activities.map((item) => <div key={item.id} className="rounded-xl border border-slate-200 p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-slate-900">{item.title || activityLabel(item.type)}</p><p className="text-sm text-slate-600 mt-1">{item.note || "No note added"}</p></div><span className="px-2 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold">{activityLabel(item.type)}</span></div><p className="text-xs text-slate-400 mt-2">{formatTime(item.activity_at || item.created_at)}</p></div>)}{activities.length === 0 && <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-slate-500">No Supabase activities found.</div>}</div>}
 
-              {activeTab === "Notes" && (
-                <div className="space-y-4">
-                  <div className="rounded-lg border border-slate-200 p-4">
-                    <textarea
-                      value={noteText}
-                      onChange={(event) => setNoteText(event.target.value)}
-                      placeholder="Write a note..."
-                      className="w-full min-h-28 outline-none resize-none text-sm"
-                    />
-                    <div className="flex justify-end mt-3">
-                      <button
-                        type="button"
-                        onClick={addNote}
-                        className="h-9 px-4 rounded-lg bg-orange-600 text-white text-sm font-bold"
-                      >
-                        Add Note
-                      </button>
-                    </div>
-                  </div>
+              {activeTab === "Notes" && <div className="space-y-4"><div className="rounded-lg border border-slate-200 p-4"><textarea value={noteText} onChange={(event) => setNoteText(event.target.value)} placeholder="Write a note..." className="w-full min-h-28 outline-none resize-none text-sm" /><div className="flex justify-end mt-3"><button type="button" disabled={saving || !noteText.trim()} onClick={addNote} className="h-9 px-4 rounded-lg bg-orange-600 text-white text-sm font-bold disabled:opacity-50">{saving ? "Saving..." : "Add Note"}</button></div></div><div className="space-y-3">{activities.filter((a) => String(a.type).includes("note")).map((item) => <div key={item.id} className="rounded-lg border border-slate-200 p-5"><div className="flex items-center gap-3"><FileText className="w-5 h-5 text-orange-600" /><h3 className="font-black text-slate-900">{item.title || "Note"}</h3></div><p className="text-slate-600 mt-3">{item.note}</p></div>)}</div></div>}
 
-                  <div className="rounded-lg border border-slate-200 p-5">
-                    <div className="flex items-center gap-3">
-                      <FileText className="w-5 h-5 text-orange-600" />
-                      <h3 className="font-black text-slate-900">Lead Notes</h3>
-                    </div>
-                    <p className="text-slate-600 mt-3">
-                      Customer is interested in premium CRM plan. Follow-up required.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {activeTab === "Tasks" && (
-                <div className="space-y-3">
-                  {["Send proposal", "Schedule demo", "Final follow-up"].map((task) => (
-                    <div
-                      key={task}
-                      className="rounded-lg border border-slate-200 p-4 flex items-center justify-between"
-                    >
-                      <h3 className="font-bold text-slate-900">{task}</h3>
-                      <span className="px-3 py-1 rounded-full bg-orange-50 text-orange-700 text-xs font-black">
-                        Pending
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {activeTab === "Tasks" && <div className="space-y-3"><div className="rounded-lg border border-slate-200 p-4 text-slate-500">Tasks are managed from Tasks page.</div></div>}
             </div>
           </section>
         </div>
