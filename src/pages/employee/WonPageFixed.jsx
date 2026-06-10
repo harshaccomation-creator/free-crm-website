@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { Trophy, IndianRupee, Download, Search, CalendarDays, Filter, Eye } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
-import { wonLeads } from "../../data/employeeData.js";
 import { downloadCsv } from "../../services/exportService.js";
 import { exportWonCsv, getWonLeads, getWonPageState } from "../../services/wonFlowService.js";
+import { filterRecordsForUser, getAccessUser } from "../../services/crmAccessControl.js";
 
 const leadSourceOptions = ["Website", "LinkedIn", "Referral", "Facebook", "Instagram", "Google Ads", "Event", "Cold Call", "WhatsApp", "Other"];
 
@@ -22,37 +22,47 @@ function isThisMonth(dateISO = "") {
 }
 
 function openLead(leadId) {
+  if (!leadId) return;
   window.history.pushState({}, "", `/leads/${leadId}`);
   window.dispatchEvent(new Event("salesflow:navigate"));
 }
 
 function formatDate(value) {
-  if (!value) return "Not assign";
+  if (!value) return "Not assigned";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return value;
   return date.toLocaleString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true });
 }
 
+function cleanAmount(value) {
+  return Number(String(value || "").replace(/,/g, ""));
+}
+
 function enrichWonRows(rows = []) {
-  return rows.map((lead, index) => ({
-    ...lead,
-    closeDateISO: lead.closeDateISO || String(lead.wonAt || lead.updatedAt || lead.createdAt || "").slice(0, 10),
-    closeDate: lead.closeDate || formatDate(lead.wonAt || lead.updatedAt || lead.createdAt || lead.created),
-    owner: lead.owner || lead.ownerName || "Jayraj",
-    source: lead.source || leadSourceOptions[index % leadSourceOptions.length],
-    value: Number(lead.value || lead.amount || 0),
-    company: lead.company || "Not assign",
-    phone: lead.phone || "Not assign",
-  }));
+  return rows
+    .map((lead) => ({
+      ...lead,
+      closeDateISO: lead.closeDateISO || String(lead.wonAt || lead.updatedAt || lead.createdAt || "").slice(0, 10),
+      closeDate: lead.closeDate || formatDate(lead.wonAt || lead.updatedAt || lead.createdAt || lead.created),
+      owner: lead.owner || lead.ownerName || lead.createdBy || "Not assigned",
+      source: lead.source || "Not assigned",
+      value: cleanAmount(lead.value || lead.amount),
+      company: lead.company || "Not assigned",
+      phone: lead.phone || "Not assigned",
+    }))
+    .filter((lead) => lead.value > 0);
 }
 
 export default function WonPageFixed() {
+  const accessUser = useMemo(() => getAccessUser(), []);
   const [page, setPage] = useState(1);
   const [workflowState] = useState(() => getWonPageState());
   const [filters, setFilters] = useState({ date: "all", fromDate: "", toDate: "", source: "all", query: "" });
   const size = 10;
 
-  const enrichedWonLeads = useMemo(() => enrichWonRows(getWonLeads(workflowState, wonLeads)), [workflowState]);
+  const enrichedWonLeads = useMemo(() => {
+    return enrichWonRows(filterRecordsForUser(getWonLeads(workflowState), accessUser));
+  }, [workflowState, accessUser]);
 
   const filteredWon = useMemo(() => {
     const query = filters.query.trim().toLowerCase();
@@ -70,11 +80,11 @@ export default function WonPageFixed() {
     });
   }, [filters, enrichedWonLeads]);
 
-  const totalRevenue = enrichedWonLeads.reduce((sum, lead) => sum + Number(lead.value || 0), 0);
-  const wonThisMonth = enrichedWonLeads.filter((lead) => isThisMonth(lead.closeDateISO)).length;
-  const averageDeal = enrichedWonLeads.length ? Math.round(totalRevenue / enrichedWonLeads.length) : 0;
+  const totalRevenue = filteredWon.reduce((sum, lead) => sum + Number(lead.value || 0), 0);
+  const wonThisMonth = filteredWon.filter((lead) => isThisMonth(lead.closeDateISO)).length;
+  const averageDeal = filteredWon.length ? Math.round(totalRevenue / filteredWon.length) : 0;
   const stats = [
-    { label: "Total Won", value: enrichedWonLeads.length, icon: Trophy, color: "#16a34a" },
+    { label: "Total Won", value: filteredWon.length, icon: Trophy, color: "#16a34a" },
     { label: "Won This Month", value: wonThisMonth, icon: CalendarDays, color: "#2563eb" },
     { label: "Revenue", value: `₹${totalRevenue.toLocaleString("en-IN")}`, icon: IndianRupee, color: "#f97316" },
     { label: "Average Deal Amount", value: `₹${averageDeal.toLocaleString("en-IN")}`, icon: IndianRupee, color: "#7c3aed" }
@@ -87,14 +97,14 @@ export default function WonPageFixed() {
 
   const updateFilter = (key, value) => { setFilters((prev) => ({ ...prev, [key]: value })); setPage(1); };
   const resetFilters = () => { setFilters({ date: "all", fromDate: "", toDate: "", source: "all", query: "" }); setPage(1); };
-  const handleExport = () => downloadCsv("won-leads.csv", exportWonCsv(workflowState, enrichedWonLeads));
+  const handleExport = () => downloadCsv("won-leads.csv", exportWonCsv(filteredWon));
 
   return (
     <EmployeeShell>
       <div className="space-y-5">
         <div className="flex items-center justify-between gap-4">
-          <div><p className="text-xs font-bold text-orange-600 uppercase tracking-wider">Employee Workspace</p><h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">Won Leads</h1><p className="text-sm text-slate-500 mt-1">Track closed deals, revenue and won lead sources.</p></div>
-          <button type="button" onClick={handleExport} className="inline-flex items-center gap-2 px-4 h-10 rounded-xl bg-orange-500 text-white text-sm font-bold shadow-lg shadow-orange-500/20"><Download className="w-4 h-4" />Export Won</button>
+          <div><p className="text-xs font-bold text-orange-600 uppercase tracking-wider">Employee Workspace</p><h1 className="text-3xl font-bold text-slate-900 tracking-tight mt-1">Won Leads</h1><p className="text-sm text-slate-500 mt-1">Track closed deals, revenue and won lead sources from accessible data only.</p></div>
+          <button type="button" onClick={handleExport} disabled={!filteredWon.length} className="inline-flex items-center gap-2 px-4 h-10 rounded-xl bg-orange-500 text-white text-sm font-bold shadow-lg shadow-orange-500/20 disabled:opacity-50 disabled:cursor-not-allowed"><Download className="w-4 h-4" />Export Won</button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
@@ -115,7 +125,7 @@ export default function WonPageFixed() {
           <div className="overflow-x-auto"><div className="min-w-[980px]"><div className="grid grid-cols-[1fr_1.3fr_1.4fr_1.1fr_1fr_1fr_64px] gap-4 px-5 py-3 bg-slate-50 border-b border-slate-200 text-[12px] font-bold uppercase tracking-wide text-slate-500"><div>Close Date</div><div>Lead Name</div><div>Company</div><div>Deal Amount</div><div>Owner</div><div>Source</div><div className="text-center">Action</div></div>
             <div className="divide-y divide-slate-100">
               {rows.map((lead) => <div key={lead.id} className="grid grid-cols-[1fr_1.3fr_1.4fr_1.1fr_1fr_1fr_64px] gap-4 px-5 py-4 items-center hover:bg-slate-50"><div className="text-sm text-slate-600">{lead.closeDate}</div><div><h3 className="font-bold text-slate-900">{lead.name}</h3><p className="text-xs text-slate-500">{lead.phone}</p></div><div className="text-sm font-semibold text-slate-700">{lead.company}</div><div className="text-sm font-black text-green-700">₹{Number(lead.value || 0).toLocaleString("en-IN")}</div><div className="text-sm text-slate-600">{lead.owner}</div><div><span className="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold">{lead.source}</span></div><div className="flex justify-center"><button type="button" onClick={() => openLead(lead.id)} className="w-9 h-9 rounded-xl border border-slate-200 text-slate-600 hover:text-orange-600 hover:bg-orange-50 grid place-items-center" title="Open lead"><Eye className="w-4 h-4" /></button></div></div>)}
-              {rows.length === 0 && <div className="px-5 py-10 text-center text-slate-500">No won leads found for selected filter.</div>}
+              {rows.length === 0 && <div className="px-5 py-10 text-center text-slate-500">No accessible won leads found for selected filter.</div>}
             </div></div></div>
 
           <div className="px-5 py-4 border-t border-slate-100 flex items-center justify-between"><button type="button" disabled={safePage === 1} onClick={() => setPage((p) => Math.max(1, p - 1))} className="h-9 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 disabled:opacity-40">Previous</button><span className="text-sm font-bold text-slate-600">Page {safePage} of {totalPages}</span><button type="button" disabled={safePage === totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))} className="h-9 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 disabled:opacity-40">Next</button></div>
