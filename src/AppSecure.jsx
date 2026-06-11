@@ -29,6 +29,7 @@ import './styles/crmDesignSystem.css';
 import './styles/crmFixedPageShell.css';
 import './styles/crmProductionPolish.css';
 import './styles/leadCleanTableSpacing.css';
+import './styles/myLeadsActionColumnFinal.css';
 
 function go(path, setPath) {
   window.history.pushState({}, '', path);
