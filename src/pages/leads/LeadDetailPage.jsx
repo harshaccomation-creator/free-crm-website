@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Mail, Phone, Edit3, Building2, MapPin, Globe, FileText, Loader2, Plus } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
-import { createActivity, getLead, listActivities, updateLead } from "../../services/crmApi.js";
+import { createActivity, getCurrentProfile, getLead, listActivities, updateLead } from "../../services/crmApi.js";
 
 const DISPOSITION_OPTIONS = ["Call Connected", "Not Connected", "Follow Up", "Demo Book", "Post Demo Follow Up", "Won", "Lost", "Junk"];
 
@@ -68,6 +68,7 @@ export default function LeadDetailPage({ leadId }) {
   const [activeTab, setActiveTab] = useState("Activity Timeline");
   const [noteText, setNoteText] = useState("");
   const [currentLead, setCurrentLead] = useState(null);
+  const [currentProfile, setCurrentProfile] = useState(null);
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -79,15 +80,18 @@ export default function LeadDetailPage({ leadId }) {
     setLoading(true);
     setError("");
     try {
-      const [leadRow, activityRows] = await Promise.all([
+      const [leadRow, activityRows, profileRow] = await Promise.all([
         getLead(id),
         listActivities({ leadId: id, limit: 100 }),
+        getCurrentProfile(),
       ]);
       setCurrentLead(leadRow);
+      setCurrentProfile(profileRow);
       setActivities(activityRows || []);
     } catch (err) {
       setError(err.message || "Lead detail load failed.");
       setCurrentLead(null);
+      setCurrentProfile(null);
       setActivities([]);
     } finally {
       setLoading(false);
@@ -98,6 +102,8 @@ export default function LeadDetailPage({ leadId }) {
 
   const status = currentLead?.status === "Demo Done" ? "Qualified" : currentLead?.status || "New";
   const subDispositionOptions = SUB_DISPOSITIONS[activityForm.disposition] || [];
+  const activityOwnerName = currentProfile?.full_name || currentProfile?.email || currentLead?.owner?.full_name || currentLead?.owner?.email || "Login employee";
+  const activityPreviewTime = formatTime(new Date().toISOString());
 
   const addActivity = async (type, text) => {
     if (!currentLead?.id || saving) return;
@@ -283,6 +289,16 @@ export default function LeadDetailPage({ leadId }) {
               <button type="button" onClick={() => setActivityPopupOpen(false)} className="h-9 w-9 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50">×</button>
             </div>
             <div className="p-5 space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="rounded-2xl border border-orange-100 bg-orange-50/70 px-4 py-3">
+                  <p className="text-[11px] font-black uppercase tracking-wide text-orange-700">Activity Date & Time</p>
+                  <h3 className="mt-1 text-sm font-black text-slate-900">{activityPreviewTime}</h3>
+                </div>
+                <div className="rounded-2xl border border-blue-100 bg-blue-50/70 px-4 py-3">
+                  <p className="text-[11px] font-black uppercase tracking-wide text-blue-700">Activity Owner</p>
+                  <h3 className="mt-1 text-sm font-black text-slate-900 truncate">{activityOwnerName}</h3>
+                </div>
+              </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <label className="block">
                   <span className="text-xs font-black uppercase tracking-wide text-slate-500">Disposition</span>
