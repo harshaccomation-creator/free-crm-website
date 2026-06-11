@@ -28,6 +28,7 @@ import './styles/sidebarUnified.css';
 import './styles/crmDesignSystem.css';
 import './styles/crmFixedPageShell.css';
 import './styles/crmProductionPolish.css';
+import './styles/leadCleanTableSpacing.css';
 
 function go(path, setPath) {
   window.history.pushState({}, '', path);
