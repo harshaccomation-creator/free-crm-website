@@ -6,7 +6,7 @@ import LoginPage from './pages/LoginPage.jsx';
 import EmployeeDashboard from './pages/dashboards/EmployeeDashboardV2.jsx';
 import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
 import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
-import LeadListPage from './pages/leads/LeadListPageClean.jsx';
+import LeadListPage from './pages/leads/LeadListPageFixed.jsx';
 import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
 import EmployeeCalendarPage from './pages/employee/EmployeeCalendarPage.jsx';
 import EmployeeActivitiesPage from './pages/employee/EmployeeActivitiesPage.jsx';
