@@ -1,0 +1,57 @@
+/* Clean product spacing for My Leads table. No DOM/runtime mutation. */
+.crm-clean-leads-table {
+  width: 100% !important;
+  min-width: 900px !important;
+  max-width: 100% !important;
+  table-layout: fixed !important;
+}
+
+.crm-clean-leads-table th,
+.crm-clean-leads-table td {
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+  vertical-align: middle !important;
+}
+
+.crm-clean-leads-table th:nth-child(1),
+.crm-clean-leads-table td:nth-child(1) {
+  width: 250px !important;
+}
+
+.crm-clean-leads-table th:nth-child(2),
+.crm-clean-leads-table td:nth-child(2) {
+  width: 150px !important;
+}
+
+.crm-clean-leads-table th:nth-child(3),
+.crm-clean-leads-table td:nth-child(3) {
+  width: 130px !important;
+}
+
+.crm-clean-leads-table th:nth-child(4),
+.crm-clean-leads-table td:nth-child(4) {
+  width: 140px !important;
+}
+
+.crm-clean-leads-table th:nth-child(5),
+.crm-clean-leads-table td:nth-child(5) {
+  width: 90px !important;
+  text-align: center !important;
+}
+
+.crm-clean-leads-table th:nth-child(6),
+.crm-clean-leads-table td:nth-child(6) {
+  width: 80px !important;
+  text-align: center !important;
+}
+
+.crm-clean-leads-table td:nth-child(6) button {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+@media (min-width: 1200px) {
+  .crm-clean-leads-table {
+    min-width: 860px !important;
+  }
+}
