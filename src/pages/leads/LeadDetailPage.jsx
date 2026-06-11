@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Mail, Phone, Edit3, Building2, MapPin, Globe, FileText, Loader2 } from "lucide-react";
+import { Mail, Phone, Edit3, Building2, MapPin, Globe, FileText, Loader2, Plus } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 import { createActivity, getLead, listActivities } from "../../services/crmApi.js";
 
@@ -114,6 +114,13 @@ export default function LeadDetailPage({ leadId }) {
     }, 50);
   };
 
+  const openAddActivity = () => {
+    setActiveTab("Notes");
+    window.setTimeout(() => {
+      document.getElementById("lead-activity-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  };
+
   const tabs = ["Activity Timeline", "Notes", "Tasks"];
 
   if (loading) {
@@ -173,7 +180,16 @@ export default function LeadDetailPage({ leadId }) {
           </section>
 
           <section id="lead-activity-section" className="rounded-xl bg-white border border-slate-200 shadow-sm overflow-hidden">
-            <div className="px-6 pt-5 border-b border-slate-200"><div className="flex items-center gap-8">{tabs.map((tab) => <button key={tab} type="button" onClick={() => setActiveTab(tab)} className={`pb-4 text-lg font-semibold border-b-2 ${activeTab === tab ? "text-slate-900 border-orange-600" : "text-slate-500 border-transparent"}`}>{tab}</button>)}</div></div>
+            <div className="px-6 pt-5 border-b border-slate-200">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-8">
+                  {tabs.map((tab) => <button key={tab} type="button" onClick={() => setActiveTab(tab)} className={`pb-4 text-lg font-semibold border-b-2 ${activeTab === tab ? "text-slate-900 border-orange-600" : "text-slate-500 border-transparent"}`}>{tab}</button>)}
+                </div>
+                <button type="button" onClick={openAddActivity} className="mb-4 inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-orange-600 px-4 text-sm font-bold text-white shadow-lg shadow-orange-500/20">
+                  <Plus className="w-4 h-4" /> Add Activity
+                </button>
+              </div>
+            </div>
             <div className="p-6">
               {activeTab === "Activity Timeline" && <div className="space-y-3">{activities.map((item) => <div key={item.id} className="rounded-xl border border-slate-200 p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-slate-900">{item.title || activityLabel(item.type)}</p><p className="text-sm text-slate-600 mt-1">{item.note || "No note added"}</p></div><span className="px-2 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold">{activityLabel(item.type)}</span></div><p className="text-xs text-slate-400 mt-2">{formatTime(item.activity_at || item.created_at)}</p></div>)}{activities.length === 0 && <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-slate-500">No Supabase activities found.</div>}</div>}
 
