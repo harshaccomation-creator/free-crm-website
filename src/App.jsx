@@ -10,6 +10,7 @@ import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
 import EmployeeReportsPage from './pages/employee/EmployeeReportsPage.jsx';
 import PremiumProfilePage from './pages/employee/ProfilePagePremium.jsx';
 import EmployeeActivitiesPage from './pages/employee/EmployeeActivitiesPage.jsx';
+import EmployeeContactsPage from './pages/employee/EmployeeContactsPage.jsx';
 import EmployeeCalendarPage from './pages/employee/EmployeeCalendarPage.jsx';
 import SettingsPage from './pages/shared/SettingsPage.jsx';
 import NotificationsPage from './pages/shared/NotificationsPage.jsx';
@@ -90,6 +91,7 @@ function isProtectedRoute(pathname) {
     pathname.startsWith('/super-admin') ||
     pathname === '/leads' ||
     pathname.startsWith('/leads/') ||
+    pathname === '/contacts' ||
     pathname === '/settings' ||
     pathname === '/notifications';
 }
@@ -149,11 +151,13 @@ export default function App() {
   if (isLoggedIn && !isSuperAdminRole(savedRole) && path.startsWith('/super-admin')) return isAdminRole(savedRole) ? <AdminDashboard /> : <EmployeeDashboard />;
   if (path === '/settings') return <SettingsPage />;
   if (path === '/notifications') return <NotificationsPage />;
+  if (path === '/contacts') return <EmployeeContactsPage />;
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
   if (path === '/employee/won') return <WonPageFixed />;
   if (path === '/employee/tasks') return <TasksPageFixed />;
   if (path === '/employee/calendar') return <EmployeeCalendarPage />;
   if (path === '/employee/activities') return <EmployeeActivitiesPage />;
+  if (path === '/employee/contacts') return <EmployeeContactsPage />;
   if (path === '/employee/reports') return <EmployeeReportsPage />;
   if (path === '/employee/profile') return <PremiumProfilePage />;
   if (path === '/admin/dashboard') return <AdminDashboard />;
