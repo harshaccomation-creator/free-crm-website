@@ -5,7 +5,7 @@ import EmployeeDashboard from './pages/dashboards/EmployeeDashboard.jsx';
 import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
 import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
 import SuperAdminSectionPage from './pages/dashboards/SuperAdminSectionPage.jsx';
-import LeadListPage from './pages/leads/LeadListPage.jsx';
+import LeadListPage from './pages/leads/LeadListPageClean.jsx';
 import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
 import EmployeeReportsPage from './pages/employee/EmployeeReportsPage.jsx';
 import PremiumProfilePage from './pages/employee/ProfilePagePremium.jsx';
@@ -16,7 +16,6 @@ import SettingsPage from './pages/shared/SettingsPage.jsx';
 import NotificationsPage from './pages/shared/NotificationsPage.jsx';
 import WonPageFixed from './pages/employee/WonPageFixed.jsx';
 import TasksPageFixed from './pages/employee/TasksPageFixed.jsx';
-import { installLeadActionColumnFix } from './utils/leadActionColumnFix.js';
 import './styles/dashboardBase.css';
 import './styles/loginPage.css';
 import './styles/loginDarkHero.css';
@@ -60,7 +59,6 @@ import './styles/crmReadabilityFix.css';
 import './styles/zzzzFinalPageOffsetLock.css';
 import './styles/superAdminFinalDarkLock.css';
 import './styles/superAdminDesignSystem.css';
-
 
 function getSavedRole() {
   const raw = window.localStorage.getItem('salesflow_user_role') || window.localStorage.getItem('salesflowRole') || '';
@@ -122,7 +120,7 @@ function installEmployeeLeftAlignFix() {
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
-  useEffect(() => { installEmployeeLeftAlignFix(); installLeadActionColumnFix(); }, []);
+  useEffect(() => { installEmployeeLeftAlignFix(); }, []);
   useEffect(() => {
     const role = getSavedRole();
     if (!hasActiveCrmSession()) return;
