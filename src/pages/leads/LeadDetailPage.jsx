@@ -1,7 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { Mail, Phone, Edit3, Building2, MapPin, Globe, FileText, Loader2, Plus } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
-import { createActivity, getLead, listActivities } from "../../services/crmApi.js";
+import { createActivity, getLead, listActivities, updateLead } from "../../services/crmApi.js";
+
+const DISPOSITION_OPTIONS = ["Call Connected", "Not Connected", "Follow Up", "Demo Book", "Post Demo Follow Up", "Won", "Lost", "Junk"];
+
+const SUB_DISPOSITIONS = {
+  "Call Connected": ["Interested", "Need Follow Up", "Demo Book", "Pricing Shared", "Decision Pending"],
+  "Not Connected": ["Not Picked", "Busy", "Switch Off", "Wrong Number", "Ringing"],
+  "Follow Up": ["Today Follow Up", "Tomorrow Follow Up", "Warm Follow Up", "Cold Follow Up", "Payment Follow Up"],
+  "Demo Book": ["Demo Scheduled", "Demo Confirmed", "Demo Rescheduled", "Demo Cancelled"],
+  "Post Demo Follow Up": ["Requirement Pending", "Payment Discussion", "Decision Pending", "Second Demo Required"],
+  Won: ["Deal Closed", "Payment Received", "Advance Received", "Subscription Started"],
+  Lost: ["Not Interested", "Budget Issue", "Competitor", "No Requirement", "Decision Dropped"],
+  Junk: ["Invalid Number", "Duplicate Lead", "Spam", "Test Lead", "Wrong Data"],
+};
 
 function getLeadIdFromUrl() {
   const parts = window.location.pathname.split("/");
@@ -42,6 +55,14 @@ function activityLabel(type = "") {
   return key ? key.charAt(0).toUpperCase() + key.slice(1) : "Activity";
 }
 
+function activityActor(item = {}) {
+  return item.user?.full_name || item.user?.email || item.employeeName || item.ownerName || item.createdBy || "Not assigned";
+}
+
+function activityTypeKey(value = "") {
+  return String(value || "activity").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "activity";
+}
+
 export default function LeadDetailPage({ leadId }) {
   const id = useMemo(() => leadId || getLeadIdFromUrl(), [leadId]);
   const [activeTab, setActiveTab] = useState("Activity Timeline");
@@ -51,6 +72,8 @@ export default function LeadDetailPage({ leadId }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [activityPopupOpen, setActivityPopupOpen] = useState(false);
+  const [activityForm, setActivityForm] = useState({ disposition: "Call Connected", subDisposition: "Interested", note: "", amount: "" });
 
   async function loadLeadDetail() {
     setLoading(true);
@@ -74,6 +97,7 @@ export default function LeadDetailPage({ leadId }) {
   useEffect(() => { loadLeadDetail(); }, [id]);
 
   const status = currentLead?.status === "Demo Done" ? "Qualified" : currentLead?.status || "New";
+  const subDispositionOptions = SUB_DISPOSITIONS[activityForm.disposition] || [];
 
   const addActivity = async (type, text) => {
     if (!currentLead?.id || saving) return;
@@ -107,6 +131,54 @@ export default function LeadDetailPage({ leadId }) {
     }
   };
 
+  const saveLeadActivity = async () => {
+    if (!currentLead?.id || saving) return;
+    const disposition = activityForm.disposition;
+    const subDisposition = activityForm.subDisposition;
+    const note = activityForm.note.trim();
+    const amount = Number(activityForm.amount || 0);
+    if (!disposition || !subDisposition) {
+      setError("Disposition and sub disposition required.");
+      return;
+    }
+    if (disposition === "Lost" && !note) {
+      setError("Lost activity ke liye note mandatory hai.");
+      return;
+    }
+    if (disposition === "Won" && (!amount || amount <= 0)) {
+      setError("Won activity ke liye amount mandatory hai.");
+      return;
+    }
+    setSaving(true);
+    setError("");
+    try {
+      const title = `${disposition} - ${subDisposition}`;
+      const finalNote = [
+        `Disposition: ${disposition}`,
+        `Sub Disposition: ${subDisposition}`,
+        note ? `Note: ${note}` : "",
+        disposition === "Won" ? `Amount: ₹${amount.toLocaleString("en-IN")}` : "",
+      ].filter(Boolean).join("\n");
+      await createActivity({
+        lead_id: currentLead.id,
+        type: activityTypeKey(disposition),
+        title,
+        note: finalNote,
+        activity_at: new Date().toISOString(),
+      });
+      if (disposition === "Won") await updateLead(currentLead.id, { value: amount, status: "Won" });
+      if (disposition === "Junk") await updateLead(currentLead.id, { status: "Junk" });
+      setActivityPopupOpen(false);
+      setActivityForm({ disposition: "Call Connected", subDisposition: "Interested", note: "", amount: "" });
+      setActiveTab("Activity Timeline");
+      await loadLeadDetail();
+    } catch (err) {
+      setError(err.message || "Activity save failed.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const openLeadActivity = () => {
     setActiveTab("Activity Timeline");
     window.setTimeout(() => {
@@ -115,7 +187,7 @@ export default function LeadDetailPage({ leadId }) {
   };
 
   const openAddActivity = () => {
-    setActiveTab("Notes");
+    setActivityPopupOpen(true);
     window.setTimeout(() => {
       document.getElementById("lead-activity-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 50);
@@ -191,7 +263,7 @@ export default function LeadDetailPage({ leadId }) {
               </div>
             </div>
             <div className="p-6">
-              {activeTab === "Activity Timeline" && <div className="space-y-3">{activities.map((item) => <div key={item.id} className="rounded-xl border border-slate-200 p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-slate-900">{item.title || activityLabel(item.type)}</p><p className="text-sm text-slate-600 mt-1">{item.note || "No note added"}</p></div><span className="px-2 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold">{activityLabel(item.type)}</span></div><p className="text-xs text-slate-400 mt-2">{formatTime(item.activity_at || item.created_at)}</p></div>)}{activities.length === 0 && <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-slate-500">No Supabase activities found.</div>}</div>}
+              {activeTab === "Activity Timeline" && <div className="space-y-3">{activities.map((item) => <div key={item.id} className="rounded-xl border border-slate-200 p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-slate-900">{item.title || activityLabel(item.type)}</p><p className="text-sm text-slate-600 mt-1 whitespace-pre-line">{item.note || "No note added"}</p><p className="text-xs text-slate-400 mt-2">By {activityActor(item)} · {formatTime(item.activity_at || item.created_at)}</p></div><span className="px-2 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold">{activityLabel(item.type)}</span></div></div>)}{activities.length === 0 && <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-slate-500">No Supabase activities found.</div>}</div>}
 
               {activeTab === "Notes" && <div className="space-y-4"><div className="rounded-lg border border-slate-200 p-4"><textarea value={noteText} onChange={(event) => setNoteText(event.target.value)} placeholder="Write a note..." className="w-full min-h-28 outline-none resize-none text-sm" /><div className="flex justify-end mt-3"><button type="button" disabled={saving || !noteText.trim()} onClick={addNote} className="h-9 px-4 rounded-lg bg-orange-600 text-white text-sm font-bold disabled:opacity-50">{saving ? "Saving..." : "Add Note"}</button></div></div><div className="space-y-3">{activities.filter((a) => String(a.type).includes("note")).map((item) => <div key={item.id} className="rounded-lg border border-slate-200 p-5"><div className="flex items-center gap-3"><FileText className="w-5 h-5 text-orange-600" /><h3 className="font-black text-slate-900">{item.title || "Note"}</h3></div><p className="text-slate-600 mt-3">{item.note}</p></div>)}</div></div>}
 
@@ -200,6 +272,50 @@ export default function LeadDetailPage({ leadId }) {
           </section>
         </div>
       </div>
+
+      {activityPopupOpen && (
+        <div className="fixed inset-0 z-[9999] grid place-items-center bg-slate-950/60 px-4">
+          <div className="w-full max-w-xl rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-3">
+              <div>
+                <h2 className="text-xl font-black text-slate-900">Add Lead Activity</h2>
+                <p className="text-sm text-slate-500 mt-1">Date, time and login employee name auto save hoga.</p>
+              </div>
+              <button type="button" onClick={() => setActivityPopupOpen(false)} className="h-9 w-9 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50">×</button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <label className="block">
+                  <span className="text-xs font-black uppercase tracking-wide text-slate-500">Disposition</span>
+                  <select value={activityForm.disposition} onChange={(event) => { const next = event.target.value; setActivityForm((prev) => ({ ...prev, disposition: next, subDisposition: SUB_DISPOSITIONS[next]?.[0] || "", amount: next === "Won" ? prev.amount : "" })); }} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
+                    {DISPOSITION_OPTIONS.map((item) => <option key={item} value={item}>{item}</option>)}
+                  </select>
+                </label>
+                <label className="block">
+                  <span className="text-xs font-black uppercase tracking-wide text-slate-500">Sub Disposition</span>
+                  <select value={activityForm.subDisposition} onChange={(event) => setActivityForm((prev) => ({ ...prev, subDisposition: event.target.value }))} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
+                    {subDispositionOptions.map((item) => <option key={item} value={item}>{item}</option>)}
+                  </select>
+                </label>
+              </div>
+              {activityForm.disposition === "Won" && (
+                <label className="block">
+                  <span className="text-xs font-black uppercase tracking-wide text-slate-500">Won Amount</span>
+                  <input type="number" min="0" value={activityForm.amount} onChange={(event) => setActivityForm((prev) => ({ ...prev, amount: event.target.value }))} placeholder="Enter deal amount" className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
+                </label>
+              )}
+              <label className="block">
+                <span className="text-xs font-black uppercase tracking-wide text-slate-500">Note {activityForm.disposition === "Lost" ? "*" : ""}</span>
+                <textarea value={activityForm.note} onChange={(event) => setActivityForm((prev) => ({ ...prev, note: event.target.value }))} placeholder={activityForm.disposition === "Lost" ? "Lost reason mandatory..." : "Activity note / description..."} className="mt-1 min-h-28 w-full rounded-xl border border-slate-200 px-3 py-3 text-sm font-semibold outline-none resize-none focus:ring-2 focus:ring-orange-500/20" />
+              </label>
+            </div>
+            <div className="px-5 py-4 border-t border-slate-100 flex items-center justify-end gap-3">
+              <button type="button" onClick={() => setActivityPopupOpen(false)} className="h-10 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50">Cancel</button>
+              <button type="button" disabled={saving} onClick={saveLeadActivity} className="h-10 px-5 rounded-xl bg-orange-600 text-white text-sm font-black shadow-lg shadow-orange-500/20 disabled:opacity-50">{saving ? "Saving..." : "Save Activity"}</button>
+            </div>
+          </div>
+        </div>
+      )}
     </EmployeeShell>
   );
 }
