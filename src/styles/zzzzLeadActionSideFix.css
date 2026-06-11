@@ -1,0 +1,70 @@
+/* Move existing lead 3-dot action menu from lead text area to score-side action position */
+.sf-leads-card table.sf-leads-table {
+  width: 980px !important;
+  min-width: 980px !important;
+  max-width: 980px !important;
+  table-layout: fixed !important;
+}
+
+.sf-leads-card table.sf-leads-table th,
+.sf-leads-card table.sf-leads-table td {
+  vertical-align: middle !important;
+}
+
+.sf-leads-card table.sf-leads-table th:nth-child(1),
+.sf-leads-card table.sf-leads-table td:nth-child(1) {
+  width: 330px !important;
+  overflow: visible !important;
+}
+
+.sf-leads-card table.sf-leads-table th:nth-child(2),
+.sf-leads-card table.sf-leads-table td:nth-child(2) {
+  width: 190px !important;
+}
+
+.sf-leads-card table.sf-leads-table th:nth-child(3),
+.sf-leads-card table.sf-leads-table td:nth-child(3) {
+  width: 145px !important;
+}
+
+.sf-leads-card table.sf-leads-table th:nth-child(4),
+.sf-leads-card table.sf-leads-table td:nth-child(4) {
+  width: 155px !important;
+}
+
+.sf-leads-card table.sf-leads-table th:nth-child(5),
+.sf-leads-card table.sf-leads-table td:nth-child(5) {
+  width: 160px !important;
+  text-align: left !important;
+}
+
+.sf-leads-card table.sf-leads-table th:nth-child(5)::after {
+  content: "  ACTION";
+  display: inline-block;
+  margin-left: 34px;
+  color: #64748b;
+}
+
+.sf-leads-card table.sf-leads-table td:first-child > div {
+  position: relative !important;
+}
+
+.sf-leads-card table.sf-leads-table td:first-child .relative.shrink-0 {
+  position: absolute !important;
+  left: 850px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 60 !important;
+  margin-left: 0 !important;
+}
+
+.sf-leads-card table.sf-leads-table td:first-child .relative.shrink-0 > button {
+  width: 38px !important;
+  height: 38px !important;
+}
+
+.sf-leads-card table.sf-leads-table td:first-child .relative.shrink-0 > div {
+  left: auto !important;
+  right: 0 !important;
+  top: 42px !important;
+}
