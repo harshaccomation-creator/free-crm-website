@@ -1,74 +1,8 @@
-/* Clean product spacing for My Leads table. No DOM/runtime mutation. */
+/* Legacy My Leads spacing file.
+   Keep only mobile shell safety rules here.
+   Desktop My Leads table layout is owned by LeadListPageFixed.jsx + myLeadsActionColumnFinal.css.
+   No DOM/runtime mutation. No feature removal. */
 
-/* Prevent the My Leads table from shifting horizontally or hiding the Lead column. */
-.space-y-6 section .overflow-x-auto,
-.space-y-6 section .overflow-y-visible {
-  overflow-x: visible !important;
-}
-
-.space-y-6 section table,
-.crm-clean-leads-table,
-section table[class*="w-[980px]"],
-section table[class*="min-w-[980px]"] {
-  width: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
-  table-layout: fixed !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  transform: none !important;
-}
-
-.space-y-6 section table th,
-.space-y-6 section table td,
-.crm-clean-leads-table th,
-.crm-clean-leads-table td,
-section table[class*="w-[980px]"] th,
-section table[class*="w-[980px]"] td,
-section table[class*="min-w-[980px]"] th,
-section table[class*="min-w-[980px]"] td {
-  padding-left: 10px !important;
-  padding-right: 10px !important;
-  vertical-align: middle !important;
-}
-
-.space-y-6 section table th:nth-child(1),
-.space-y-6 section table td:nth-child(1),
-.crm-clean-leads-table th:nth-child(1),
-.crm-clean-leads-table td:nth-child(1) { width: 28% !important; }
-.space-y-6 section table th:nth-child(2),
-.space-y-6 section table td:nth-child(2),
-.crm-clean-leads-table th:nth-child(2),
-.crm-clean-leads-table td:nth-child(2) { width: 17% !important; }
-.space-y-6 section table th:nth-child(3),
-.space-y-6 section table td:nth-child(3),
-.crm-clean-leads-table th:nth-child(3),
-.crm-clean-leads-table td:nth-child(3) { width: 14% !important; }
-.space-y-6 section table th:nth-child(4),
-.space-y-6 section table td:nth-child(4),
-.crm-clean-leads-table th:nth-child(4),
-.crm-clean-leads-table td:nth-child(4) { width: 16% !important; }
-.space-y-6 section table th:nth-child(5),
-.space-y-6 section table td:nth-child(5),
-.crm-clean-leads-table th:nth-child(5),
-.crm-clean-leads-table td:nth-child(5) { width: 12% !important; text-align: center !important; }
-.space-y-6 section table th:nth-child(6),
-.space-y-6 section table td:nth-child(6),
-.crm-clean-leads-table th:nth-child(6),
-.crm-clean-leads-table td:nth-child(6) { width: 13% !important; text-align: center !important; }
-
-.space-y-6 section table td:nth-child(6) button,
-.crm-clean-leads-table td:nth-child(6) button {
-  margin-left: auto !important;
-  margin-right: auto !important;
-}
-
-.space-y-6 section table td:first-child,
-.crm-clean-leads-table td:first-child {
-  overflow: visible !important;
-}
-
-/* Employee shell mobile fix: inline styles set margin-left:200px and overflow-x:hidden. Override for responsive/devtools widths. */
 @media (max-width: 900px) {
   .sf-employee {
     display: block !important;
