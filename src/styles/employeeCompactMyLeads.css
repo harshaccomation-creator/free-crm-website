@@ -1,4 +1,6 @@
-/* Compact Employee My Leads page */
+/* Compact Employee CRM page polish.
+   Important: do not control My Leads table columns here.
+   My Leads table layout is owned by LeadListPageFixed.jsx + myLeadsActionColumnFinal.css. */
 .sf-employee main {
   font-size: 14px;
 }
@@ -19,7 +21,7 @@
 }
 
 .sf-employee .space-y-6 > * + * {
-  margin-top: 16px !important;
+  margin-top: 12px !important;
 }
 
 .sf-employee .grid.gap-5 {
@@ -72,14 +74,42 @@
   height: 40px !important;
 }
 
-.sf-employee table th {
+.sf-employee .h-12.px-6,
+.sf-employee .h-10.px-4 {
+  height: 36px !important;
+  padding-left: 14px !important;
+  padding-right: 14px !important;
+}
+
+/* Keep generic table compacting away from the My Leads table. */
+.sf-employee table:not(.sf-leads-table) th {
   padding: 10px 18px !important;
   font-size: 12px !important;
 }
 
-.sf-employee table td {
+.sf-employee table:not(.sf-leads-table) td {
   padding: 12px 18px !important;
   font-size: 14px !important;
+  vertical-align: middle !important;
+}
+
+.sf-employee table:not(.sf-leads-table) .text-lg {
+  font-size: 14px !important;
+}
+
+.sf-employee table:not(.sf-leads-table) .text-slate-500 {
+  font-size: 13px !important;
+}
+
+.sf-employee table:not(.sf-leads-table) .w-12.h-12,
+.sf-employee table:not(.sf-leads-table) .w-14.h-14 {
+  width: 36px !important;
+  height: 36px !important;
+}
+
+.sf-employee table:not(.sf-leads-table) .w-12.h-12.rounded-full {
+  width: 40px !important;
+  height: 40px !important;
 }
 
 .sf-employee .w-14.h-14 {
@@ -92,72 +122,11 @@
   height: 38px !important;
 }
 
-.sf-employee table .text-lg {
-  font-size: 14px !important;
-}
-
-.sf-employee table .text-slate-500 {
-  font-size: 13px !important;
-}
-
-.sf-employee table td:nth-child(2) {
-  min-width: 190px;
-  white-space: normal;
-}
-
-.sf-employee table td:last-child,
-.sf-employee table th:last-child {
-  padding-right: 90px !important;
-}
-/* Final compact polish */
-.sf-employee main > div:last-child {
-  padding-top: 14px !important;
-}
-
-.sf-employee .space-y-6 > * + * {
-  margin-top: 12px !important;
-}
-
-.sf-employee .grid.grid-cols-1.md\:grid-cols-2.xl\:grid-cols-4 {
-  gap: 12px !important;
-}
-
-.sf-employee .rounded-xl.bg-white.border.p-6,
-.sf-employee .rounded-xl.bg-white.border.p-4 {
-  min-height: 92px !important;
-}
-
-.sf-employee .h-12.px-6,
-.sf-employee .h-10.px-4 {
-  height: 36px !important;
-  padding-left: 14px !important;
-  padding-right: 14px !important;
-}
-
-.sf-employee table td:last-child,
-.sf-employee table th:last-child {
-  padding-right: 120px !important;
-  min-width: 170px !important;
-}
-
-.sf-employee table td {
-  vertical-align: middle !important;
-}
-
-.sf-employee table .w-12.h-12,
-.sf-employee table .w-14.h-14 {
-  width: 36px !important;
-  height: 36px !important;
-}
-
-.sf-employee table .w-12.h-12.rounded-full {
-  width: 40px !important;
-  height: 40px !important;
-}
 /* Lead Details compact polish */
 .sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] {
   grid-template-columns: 360px minmax(0, 1fr) !important;
   gap: 14px !important;
+  align-items: flex-start !important;
 }
 
 .sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] .p-6 {
@@ -193,11 +162,7 @@
   font-size: 18px !important;
 }
 
-.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] .w-11.h-11 {
-  width: 38px !important;
-  height: 38px !important;
-}
-
+.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] .w-11.h-11,
 .sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] .w-12.h-12 {
   width: 38px !important;
   height: 38px !important;
@@ -210,6 +175,7 @@
 .sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] section:last-child {
   padding-right: 72px !important;
 }
+
 /* Employee sidebar proper alignment */
 .sf-employee aside {
   overflow: hidden !important;
@@ -257,7 +223,6 @@
   justify-content: flex-start !important;
 }
 
-/* menu item spacing */
 .sf-employee aside nav a,
 .sf-employee aside nav button {
   width: 100% !important;
@@ -279,15 +244,10 @@
   object-fit: contain !important;
 }
 
-/* notification badge right side */
 .sf-employee aside nav a .rounded-full,
 .sf-employee aside nav button .rounded-full {
   margin-left: auto !important;
   flex: 0 0 auto !important;
-}
-/* Lead detail: keep About card only as tall as its content */
-.sf-employee .grid.grid-cols-1.xl\:grid-cols-\[420px_1fr\] {
-  align-items: flex-start !important;
 }
 
 @media (max-height: 760px) {
