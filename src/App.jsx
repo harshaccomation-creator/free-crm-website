@@ -16,6 +16,7 @@ import SettingsPage from './pages/shared/SettingsPage.jsx';
 import NotificationsPage from './pages/shared/NotificationsPage.jsx';
 import WonPageFixed from './pages/employee/WonPageFixed.jsx';
 import TasksPageFixed from './pages/employee/TasksPageFixed.jsx';
+import { installLeadActionColumnFix } from './utils/leadActionColumnFix.js';
 import './styles/dashboardBase.css';
 import './styles/loginPage.css';
 import './styles/loginDarkHero.css';
@@ -121,7 +122,7 @@ function installEmployeeLeftAlignFix() {
 
 export default function App() {
   const [path, setPath] = useState(window.location.pathname);
-  useEffect(() => { installEmployeeLeftAlignFix(); }, []);
+  useEffect(() => { installEmployeeLeftAlignFix(); installLeadActionColumnFix(); }, []);
   useEffect(() => {
     const role = getSavedRole();
     if (!hasActiveCrmSession()) return;
