@@ -58,7 +58,6 @@ function dateMatches(leadDate, filters) {
   if (filters.dateType === "Custom Range") {
     if (filters.from && leadDate < filters.from) return false;
     if (filters.to && leadDate > filters.to) return false;
-    return true;
   }
   return true;
 }
@@ -256,7 +255,7 @@ export default function LeadListPageFixed() {
           <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"><p className="text-lg font-medium text-slate-500">Won Leads</p><h2 className="text-4xl font-black text-slate-900">{loading ? "..." : leads.filter((lead) => lead.status === "Won").length}</h2></section>
         </div>
 
-        <section className="sf-leads-card overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <section className="sf-leads-card rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div className="border-b border-slate-200 px-6 pt-6">
             <div className="sf-tabs-row flex flex-wrap items-center gap-x-9 gap-y-3">
               {tabs.map((tab) => (
@@ -280,43 +279,43 @@ export default function LeadListPageFixed() {
             </div>
           </div>
 
-          <div className="w-full overflow-x-auto overflow-y-visible">
-            <table className="sf-leads-table w-full min-w-[900px] table-fixed text-left">
+          <div className="w-full overflow-visible">
+            <table className="sf-leads-table w-full table-fixed text-left">
               <colgroup>
-                <col style={{ width: "28%" }} />
-                <col style={{ width: "17%" }} />
+                <col style={{ width: "24%" }} />
+                <col style={{ width: "18%" }} />
                 <col style={{ width: "14%" }} />
                 <col style={{ width: "15%" }} />
-                <col style={{ width: "11%" }} />
-                <col style={{ width: "15%" }} />
+                <col style={{ width: "12%" }} />
+                <col style={{ width: "8%" }} />
               </colgroup>
               <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
                 <tr>
-                  <th className="px-3 py-4 font-black">Lead</th>
-                  <th className="px-3 py-4 font-black">Company</th>
-                  <th className="px-3 py-4 font-black">Source</th>
-                  <th className="px-3 py-4 font-black">Status</th>
-                  <th className="px-3 py-4 text-center font-black">Score</th>
-                  <th className="px-3 py-4 text-center font-black">Action</th>
+                  <th className="px-2 py-4 font-black">Lead</th>
+                  <th className="px-2 py-4 font-black">Company</th>
+                  <th className="px-2 py-4 font-black">Source</th>
+                  <th className="px-2 py-4 font-black">Status</th>
+                  <th className="px-2 py-4 text-center font-black">Score</th>
+                  <th className="px-2 py-4 text-center font-black">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
                 {pageRows.map((lead) => (
                   <tr key={lead.id} className="transition-colors hover:bg-slate-50/80">
-                    <td className="px-3 py-4">
+                    <td className="px-2 py-4">
                       <div className="flex min-w-0 items-center gap-3">
                         <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-600 font-black text-white">{initials(lead.name)}</div>
                         <div className="min-w-0 flex-1">
-                          <button type="button" onClick={() => go(`/leads/${lead.id}`)} className="block max-w-[210px] truncate text-left text-[15px] font-black leading-tight text-slate-900 hover:text-orange-600">{lead.name}</button>
-                          <p className="mt-1 max-w-[210px] truncate text-[13px] leading-tight text-slate-500">{lead.email}</p>
+                          <button type="button" onClick={() => go(`/leads/${lead.id}`)} className="block max-w-[170px] truncate text-left text-[15px] font-black leading-tight text-slate-900 hover:text-orange-600">{lead.name}</button>
+                          <p className="mt-1 max-w-[170px] truncate text-[13px] leading-tight text-slate-500">{lead.email}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="truncate px-3 py-4 text-[15px] font-semibold text-slate-800">{lead.company}</td>
-                    <td className="truncate px-3 py-4 text-[15px] font-semibold text-slate-500">{lead.source}</td>
-                    <td className="px-3 py-4"><span className="whitespace-nowrap rounded-lg border border-orange-100 bg-orange-50 px-3 py-1 text-xs font-black text-orange-700">{lead.status}</span></td>
-                    <td className="px-3 py-4 text-center"><span className="mx-auto grid h-10 w-10 place-items-center rounded-full border border-emerald-200 bg-emerald-50 font-black text-emerald-700">{lead.score}</span></td>
-                    <td className="relative px-3 py-4 text-center">
+                    <td className="truncate px-2 py-4 text-[15px] font-semibold text-slate-800">{lead.company}</td>
+                    <td className="truncate px-2 py-4 text-[15px] font-semibold text-slate-500">{lead.source}</td>
+                    <td className="px-2 py-4"><span className="whitespace-nowrap rounded-lg border border-orange-100 bg-orange-50 px-3 py-1 text-xs font-black text-orange-700">{lead.status}</span></td>
+                    <td className="px-2 py-4 text-center"><span className="mx-auto grid h-10 w-10 place-items-center rounded-full border border-emerald-200 bg-emerald-50 font-black text-emerald-700">{lead.score}</span></td>
+                    <td className="relative px-2 py-4 text-center">
                       <button
                         type="button"
                         onClick={(event) => {
@@ -331,27 +330,8 @@ export default function LeadListPageFixed() {
 
                       {actionMenuLeadId === lead.id && (
                         <div className="absolute right-0 top-12 z-[80] w-36 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setActionMenuLeadId(null);
-                              go(`/leads/${lead.id}`);
-                            }}
-                            className="w-full px-4 py-3 text-left text-sm font-bold text-slate-700 hover:bg-slate-50"
-                          >
-                            View Lead
-                          </button>
-
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setActionMenuLeadId(null);
-                              go(`/leads/${lead.id}`);
-                            }}
-                            className="w-full px-4 py-3 text-left text-sm font-bold text-orange-600 hover:bg-orange-50"
-                          >
-                            Edit Lead
-                          </button>
+                          <button type="button" onClick={() => { setActionMenuLeadId(null); go(`/leads/${lead.id}`); }} className="w-full px-4 py-3 text-left text-sm font-bold text-slate-700 hover:bg-slate-50">View Lead</button>
+                          <button type="button" onClick={() => { setActionMenuLeadId(null); go(`/leads/${lead.id}`); }} className="w-full px-4 py-3 text-left text-sm font-bold text-orange-600 hover:bg-orange-50">Edit Lead</button>
                         </div>
                       )}
                     </td>
