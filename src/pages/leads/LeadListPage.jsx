@@ -160,7 +160,7 @@ export default function LeadListPage() {
           <div className="px-6 pt-6 border-b border-slate-200"><div className="sf-tabs-row flex flex-wrap items-center gap-x-9 gap-y-3">{tabs.map((tab) => <button key={tab} type="button" onClick={() => { setActiveTab(tab); setPage(1); }} className={`relative pb-5 text-lg font-semibold flex items-center gap-2 whitespace-nowrap ${activeTab === tab ? "text-orange-600" : "text-slate-500 hover:text-slate-800"}`}>{tab}<span className="px-2 py-0.5 rounded-full text-sm bg-slate-100 text-slate-500">{counts[tab] || 0}</span>{activeTab === tab && <span className="absolute left-0 -bottom-[1px] h-[3px] w-full rounded-full bg-orange-600" />}</button>)}</div></div>
           <div className="px-6 py-5 border-b border-slate-200"><div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"><label className="relative w-full lg:max-w-[540px]"><Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-orange-600" /><input value={search} onChange={(event) => { setSearch(event.target.value); setPage(1); }} placeholder="Search leads, company, source..." className="w-full h-12 rounded-2xl border border-slate-200 bg-white pl-12 pr-4 text-sm font-bold text-slate-800 outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-300 shadow-sm" /></label><button type="button" onClick={openFilterPopup} className={`h-12 px-6 rounded-2xl border font-black inline-flex items-center justify-center gap-2 ${hasActiveFilter ? "bg-orange-600 text-white border-orange-600 shadow-lg shadow-orange-500/20" : "bg-white text-slate-700 border-slate-200 hover:text-orange-600 hover:border-orange-200"}`}><Filter className="w-5 h-5" /> Filter</button></div></div>
           <div className="w-full overflow-x-auto overflow-y-visible">
-            <table className="sf-leads-table min-w-[900px] max-w-[900px] w-[900px] table-fixed text-left">
+            <table className="sf-leads-table min-w-[980px] max-w-[980px] w-[980px] table-fixed text-left">
               <thead className="bg-slate-50 text-slate-500 uppercase text-sm">
                 <tr>
                   <th className="w-[330px] font-black">Lead</th>
@@ -168,6 +168,7 @@ export default function LeadListPage() {
                   <th className="w-[140px] font-black">Source</th>
                   <th className="w-[150px] font-black">Status</th>
                   <th className="w-[100px] font-black text-center">Score</th>
+                  <th className="w-[80px] font-black text-center">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-200">
@@ -180,25 +181,56 @@ export default function LeadListPage() {
                           <button type="button" onClick={() => go(`/leads/${lead.id}`)} className="block text-[15px] leading-tight font-black text-slate-900 hover:text-orange-600 truncate max-w-[190px] text-left">{lead.name}</button>
                           <p className="text-[13px] leading-tight text-slate-500 truncate max-w-[190px] mt-1">{lead.email}</p>
                         </div>
-                        <div className="relative shrink-0">
-                          <button type="button" onClick={(event) => { event.stopPropagation(); setActionMenuLeadId((old) => old === lead.id ? null : lead.id); }} className="w-9 h-9 rounded-xl border border-slate-200 bg-white text-slate-600 hover:text-orange-600 hover:bg-orange-50 grid place-items-center text-xl font-black" title="Lead actions">⋯</button>
-                          {actionMenuLeadId === lead.id && (
-                            <div className="absolute left-0 top-10 z-[60] w-36 rounded-xl border border-slate-200 bg-white shadow-xl overflow-hidden">
-                              <button type="button" onClick={() => { setActionMenuLeadId(null); go(`/leads/${lead.id}`); }} className="w-full px-4 py-3 text-left text-sm font-bold text-slate-700 hover:bg-slate-50">View Lead</button>
-                              <button type="button" onClick={() => { setActionMenuLeadId(null); go(`/leads/${lead.id}`); }} className="w-full px-4 py-3 text-left text-sm font-bold text-orange-600 hover:bg-orange-50">Edit Lead</button>
-                            </div>
-                          )}
-                        </div>
                       </div>
                     </td>
+                    <td className="px-6 py-4 text-center"><span className="mx-auto w-10 h-10 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 grid place-items-center font-black">{lead.score}</span></td>
+                    <td className="relative px-4 py-4 text-center">
+  <button
+    type="button"
+    onClick={(event) => {
+      event.stopPropagation();
+      setActionMenuLeadId((old) => (old === lead.id ? null : lead.id));
+    }}
+    className="mx-auto w-9 h-9 rounded-xl border border-slate-200 bg-white text-slate-600 hover:text-orange-600 hover:bg-orange-50 grid place-items-center text-xl font-black"
+    title="Lead actions"
+  >
+    ⋯
+  </button>
+
+  {actionMenuLeadId === lead.id && (
+    <div className="absolute right-4 top-12 z-[60] w-36 rounded-xl border border-slate-200 bg-white shadow-xl overflow-hidden">
+      <button
+        type="button"
+        onClick={() => {
+          setActionMenuLeadId(null);
+          go(`/leads/${lead.id}`);
+        }}
+        className="w-full px-4 py-3 text-left text-sm font-bold text-slate-700 hover:bg-slate-50"
+      >
+        View Lead
+      </button>
+
+      <button
+        type="button"
+        onClick={() => {
+          setActionMenuLeadId(null);
+          go(`/leads/${lead.id}`);
+        }}
+        className="w-full px-4 py-3 text-left text-sm font-bold text-orange-600 hover:bg-orange-50"
+      >
+        Edit Lead
+      </button>
+    </div>
+  )}
+</td>
                     <td className="px-6 py-4 text-[15px] font-semibold text-slate-800 break-words">{lead.company}</td>
                     <td className="px-6 py-4 text-[15px] font-semibold text-slate-500">{lead.source}</td>
                     <td className="px-6 py-4"><span className="px-3 py-1 rounded-lg border text-xs font-black bg-orange-50 text-orange-700 border-orange-100 whitespace-nowrap">{lead.status}</span></td>
                     <td className="px-6 py-4 text-center"><span className="mx-auto w-10 h-10 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 grid place-items-center font-black">{lead.score}</span></td>
                   </tr>
                 ))}
-                {loading && <tr><td colSpan="5" className="px-6 py-12 text-center text-slate-500"><Loader2 className="w-5 h-5 animate-spin inline mr-2" />Loading Supabase leads...</td></tr>}
-                {!loading && pageRows.length === 0 && <tr><td colSpan="5" className="px-6 py-12 text-center text-slate-500">No leads found.</td></tr>}
+                {loading && <tr><td colSpan="6" className="px-6 py-12 text-center text-slate-500"><Loader2 className="w-5 h-5 animate-spin inline mr-2" />Loading Supabase leads...</td></tr>}
+                {!loading && pageRows.length === 0 && <tr><td colSpan="6" className="px-6 py-12 text-center text-slate-500">No leads found.</td></tr>}
               </tbody>
             </table>
           </div>
