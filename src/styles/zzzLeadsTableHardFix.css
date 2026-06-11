@@ -1,0 +1,52 @@
+/* Last-load hard fix for My Leads table spacing */
+html body #root .sf-leads-card {
+  max-width: 1040px !important;
+}
+
+html body #root .sf-leads-card > div.w-full.overflow-hidden,
+html body #root .sf-leads-card .w-full.overflow-hidden {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+}
+
+html body #root table.sf-leads-table,
+html body #root table.sf-leads-table.w-full {
+  width: 980px !important;
+  min-width: 980px !important;
+  max-width: 980px !important;
+  table-layout: fixed !important;
+}
+
+html body #root table.sf-leads-table th,
+html body #root table.sf-leads-table td {
+  padding: 14px 14px !important;
+  vertical-align: middle !important;
+}
+
+html body #root table.sf-leads-table th:nth-child(1),
+html body #root table.sf-leads-table td:nth-child(1) { width: 280px !important; }
+html body #root table.sf-leads-table th:nth-child(2),
+html body #root table.sf-leads-table td:nth-child(2) { width: 170px !important; }
+html body #root table.sf-leads-table th:nth-child(3),
+html body #root table.sf-leads-table td:nth-child(3) { width: 135px !important; }
+html body #root table.sf-leads-table th:nth-child(4),
+html body #root table.sf-leads-table td:nth-child(4) { width: 130px !important; }
+html body #root table.sf-leads-table th:nth-child(5),
+html body #root table.sf-leads-table td:nth-child(5) { width: 105px !important; }
+html body #root table.sf-leads-table th:nth-child(6),
+html body #root table.sf-leads-table td:nth-child(6) { width: 90px !important; }
+
+html body #root table.sf-leads-table td:nth-child(2),
+html body #root table.sf-leads-table td:nth-child(3) {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+html body #root table.sf-leads-table th:nth-child(5),
+html body #root table.sf-leads-table td:nth-child(5),
+html body #root table.sf-leads-table th:nth-child(6),
+html body #root table.sf-leads-table td:nth-child(6) {
+  text-align: center !important;
+}
