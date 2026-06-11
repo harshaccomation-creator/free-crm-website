@@ -6,7 +6,7 @@ import LoginPage from './pages/LoginPage.jsx';
 import EmployeeDashboard from './pages/dashboards/EmployeeDashboardV2.jsx';
 import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
 import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
-import LeadListPage from './pages/leads/LeadListPage.jsx';
+import LeadListPage from './pages/leads/LeadListPageClean.jsx';
 import LeadDetailPage from './pages/leads/LeadDetailPage.jsx';
 import EmployeeCalendarPage from './pages/employee/EmployeeCalendarPage.jsx';
 import EmployeeActivitiesPage from './pages/employee/EmployeeActivitiesPage.jsx';
@@ -94,7 +94,7 @@ export default function AppSecure() {
   if (path === '/employee/calendar') return <EmployeeCalendarPage />;
   if (path === '/employee/activities') return <EmployeeActivitiesPage />;
   if (path === '/contacts') return <EmployeeContactsPage />;
-if (path === '/employee/lead-activity') return <EmployeeLeadActivityPage />;
+  if (path === '/employee/lead-activity') return <EmployeeLeadActivityPage />;
   if (path === '/employee/reports') return <EmployeeReportsPage />;
   if (path === '/employee/profile') return <PremiumProfilePage />;
 
