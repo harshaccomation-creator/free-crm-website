@@ -1,14 +1,11 @@
-/* Final scoped My Leads table layout fix.
-   Desktop/laptop must show Lead | Company | Source | Status | Score | Action.
-   No runtime DOM mutation, no action-button moving, and no CRM feature removal. */
-
 .sf-leads-card {
   max-width: 100% !important;
   overflow: visible !important;
 }
 
 .sf-leads-card .overflow-x-auto,
-.sf-leads-card .overflow-y-visible {
+.sf-leads-card .overflow-y-visible,
+.sf-leads-card .overflow-visible {
   overflow-x: visible !important;
   overflow-y: visible !important;
 }
@@ -21,72 +18,49 @@
   margin-left: 0 !important;
   margin-right: 0 !important;
   transform: none !important;
-  border-collapse: separate !important;
+  border-collapse: collapse !important;
   border-spacing: 0 !important;
 }
 
-/* Override old inline colgroup widths from previous attempts. */
 .sf-leads-card .sf-leads-table col:nth-child(1) { width: 24% !important; }
 .sf-leads-card .sf-leads-table col:nth-child(2) { width: 18% !important; }
 .sf-leads-card .sf-leads-table col:nth-child(3) { width: 14% !important; }
 .sf-leads-card .sf-leads-table col:nth-child(4) { width: 15% !important; }
 .sf-leads-card .sf-leads-table col:nth-child(5) { width: 12% !important; }
-.sf-leads-card .sf-leads-table col:nth-child(6) { width: 17% !important; }
+.sf-leads-card .sf-leads-table col:nth-child(6) { width: 8% !important; }
 
 .sf-leads-card .sf-leads-table th,
 .sf-leads-card .sf-leads-table td {
-  padding: 14px 10px !important;
+  padding: 14px 8px !important;
   vertical-align: middle !important;
 }
 
 .sf-leads-card .sf-leads-table th:nth-child(1),
-.sf-leads-card .sf-leads-table td:nth-child(1) {
-  width: 24% !important;
-}
-
+.sf-leads-card .sf-leads-table td:nth-child(1) { width: 24% !important; }
 .sf-leads-card .sf-leads-table th:nth-child(2),
-.sf-leads-card .sf-leads-table td:nth-child(2) {
-  width: 18% !important;
-  min-width: 0 !important;
-}
-
+.sf-leads-card .sf-leads-table td:nth-child(2) { width: 18% !important; min-width: 0 !important; }
 .sf-leads-card .sf-leads-table th:nth-child(3),
-.sf-leads-card .sf-leads-table td:nth-child(3) {
-  width: 14% !important;
-}
-
+.sf-leads-card .sf-leads-table td:nth-child(3) { width: 14% !important; }
 .sf-leads-card .sf-leads-table th:nth-child(4),
-.sf-leads-card .sf-leads-table td:nth-child(4) {
-  width: 15% !important;
-}
-
+.sf-leads-card .sf-leads-table td:nth-child(4) { width: 15% !important; }
 .sf-leads-card .sf-leads-table th:nth-child(5),
-.sf-leads-card .sf-leads-table td:nth-child(5) {
-  width: 12% !important;
-  text-align: center !important;
-}
-
+.sf-leads-card .sf-leads-table td:nth-child(5) { width: 12% !important; text-align: center !important; }
 .sf-leads-card .sf-leads-table th:nth-child(6),
 .sf-leads-card .sf-leads-table td:nth-child(6) {
-  width: 17% !important;
-  min-width: 86px !important;
-  padding-left: 6px !important;
-  padding-right: 10px !important;
+  width: 8% !important;
+  min-width: 70px !important;
+  padding-left: 4px !important;
+  padding-right: 8px !important;
   text-align: center !important;
-  position: sticky !important;
-  right: 0 !important;
-  z-index: 30 !important;
-  background: #ffffff !important;
-}
-
-.sf-leads-card .sf-leads-table thead th:nth-child(6) {
-  background: #f8fafc !important;
-  z-index: 40 !important;
+  position: relative !important;
+  right: auto !important;
+  z-index: auto !important;
+  background: transparent !important;
 }
 
 .sf-leads-card .sf-leads-table td:nth-child(6) button {
-  width: 38px !important;
-  height: 38px !important;
+  width: 36px !important;
+  height: 36px !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
@@ -97,5 +71,5 @@
 
 .sf-leads-card .sf-leads-table td:first-child button,
 .sf-leads-card .sf-leads-table td:first-child p {
-  max-width: 180px !important;
+  max-width: 170px !important;
 }
