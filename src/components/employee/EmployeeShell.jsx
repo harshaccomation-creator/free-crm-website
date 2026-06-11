@@ -22,6 +22,7 @@ const navItems = [
 export default function EmployeeShell({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location, setLocation] = useState(window.location.pathname);
+  const [isNarrow, setIsNarrow] = useState(() => window.innerWidth < 1024);
 
   useEffect(() => {
     const sync = () => setLocation(window.location.pathname);
@@ -31,6 +32,13 @@ export default function EmployeeShell({ children }) {
       window.removeEventListener("popstate", sync);
       window.removeEventListener("salesflow:navigate", sync);
     };
+  }, []);
+
+  useEffect(() => {
+    const syncWidth = () => setIsNarrow(window.innerWidth < 1024);
+    syncWidth();
+    window.addEventListener("resize", syncWidth);
+    return () => window.removeEventListener("resize", syncWidth);
   }, []);
 
   const navigate = (href) => {
@@ -120,28 +128,28 @@ export default function EmployeeShell({ children }) {
         </nav>
       </aside>
 
-     <main
-  className="sf-emp-main min-h-screen flex flex-col"
+      <main
+        className="sf-emp-main min-h-screen flex flex-col"
         style={{
-          marginLeft: "200px",
-          width: "calc(100vw - 200px)",
-          maxWidth: "calc(100vw - 200px)",
+          marginLeft: isNarrow ? "0px" : "200px",
+          width: isNarrow ? "100vw" : "calc(100vw - 200px)",
+          maxWidth: isNarrow ? "100vw" : "calc(100vw - 200px)",
           background: "#f5f7fb",
-          overflowX: "hidden",
+          overflowX: "auto",
           boxSizing: "border-box"
         }}
       >
-       <header
-  className="flex items-center gap-3 sticky top-0 z-20"
-  style={{
-    background: "#0d1626",
-    borderBottom: "1px solid rgba(255,255,255,0.07)",
-    width: "100%",
-    height: "64px",
-    padding: "0 24px",
-    boxSizing: "border-box"
-  }}
->
+        <header
+          className="flex items-center gap-3 sticky top-0 z-20"
+          style={{
+            background: "#0d1626",
+            borderBottom: "1px solid rgba(255,255,255,0.07)",
+            width: "100%",
+            height: "64px",
+            padding: isNarrow ? "0 12px" : "0 24px",
+            boxSizing: "border-box"
+          }}
+        >
           <button
             onClick={() => setMobileOpen(true)}
             className="lg:hidden text-gray-400 hover:text-white mr-1"
@@ -198,7 +206,7 @@ export default function EmployeeShell({ children }) {
           </div>
         </header>
 
-        <div className="flex-1" style={{ padding: "18px 24px" }}>
+        <div className="flex-1" style={{ padding: isNarrow ? "14px 12px" : "18px 24px" }}>
           {children}
         </div>
       </main>
