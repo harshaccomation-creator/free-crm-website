@@ -35,46 +35,27 @@ section table[class*="min-w-[980px]"] td {
 .space-y-6 section table th:nth-child(1),
 .space-y-6 section table td:nth-child(1),
 .crm-clean-leads-table th:nth-child(1),
-.crm-clean-leads-table td:nth-child(1) {
-  width: 28% !important;
-}
-
+.crm-clean-leads-table td:nth-child(1) { width: 28% !important; }
 .space-y-6 section table th:nth-child(2),
 .space-y-6 section table td:nth-child(2),
 .crm-clean-leads-table th:nth-child(2),
-.crm-clean-leads-table td:nth-child(2) {
-  width: 17% !important;
-}
-
+.crm-clean-leads-table td:nth-child(2) { width: 17% !important; }
 .space-y-6 section table th:nth-child(3),
 .space-y-6 section table td:nth-child(3),
 .crm-clean-leads-table th:nth-child(3),
-.crm-clean-leads-table td:nth-child(3) {
-  width: 14% !important;
-}
-
+.crm-clean-leads-table td:nth-child(3) { width: 14% !important; }
 .space-y-6 section table th:nth-child(4),
 .space-y-6 section table td:nth-child(4),
 .crm-clean-leads-table th:nth-child(4),
-.crm-clean-leads-table td:nth-child(4) {
-  width: 16% !important;
-}
-
+.crm-clean-leads-table td:nth-child(4) { width: 16% !important; }
 .space-y-6 section table th:nth-child(5),
 .space-y-6 section table td:nth-child(5),
 .crm-clean-leads-table th:nth-child(5),
-.crm-clean-leads-table td:nth-child(5) {
-  width: 12% !important;
-  text-align: center !important;
-}
-
+.crm-clean-leads-table td:nth-child(5) { width: 12% !important; text-align: center !important; }
 .space-y-6 section table th:nth-child(6),
 .space-y-6 section table td:nth-child(6),
 .crm-clean-leads-table th:nth-child(6),
-.crm-clean-leads-table td:nth-child(6) {
-  width: 13% !important;
-  text-align: center !important;
-}
+.crm-clean-leads-table td:nth-child(6) { width: 13% !important; text-align: center !important; }
 
 .space-y-6 section table td:nth-child(6) button,
 .crm-clean-leads-table td:nth-child(6) button {
@@ -85,4 +66,49 @@ section table[class*="min-w-[980px]"] td {
 .space-y-6 section table td:first-child,
 .crm-clean-leads-table td:first-child {
   overflow: visible !important;
+}
+
+/* Employee shell mobile fix: inline styles set margin-left:200px and overflow-x:hidden. Override for responsive/devtools widths. */
+@media (max-width: 900px) {
+  .sf-employee {
+    display: block !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
+  }
+
+  .sf-employee > aside {
+    transform: translateX(-100%) !important;
+  }
+
+  .sf-employee > aside.translate-x-0 {
+    transform: translateX(0) !important;
+  }
+
+  .sf-emp-main {
+    margin-left: 0 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    overflow-x: auto !important;
+  }
+
+  .sf-emp-main > div.flex-1 {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .sf-emp-main .space-y-6 section {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .sf-emp-main .space-y-6 section .overflow-visible,
+  .sf-emp-main .space-y-6 section .overflow-x-auto,
+  .sf-emp-main .space-y-6 section .overflow-y-visible {
+    overflow-x: auto !important;
+  }
+
+  .sf-emp-main .space-y-6 section table {
+    min-width: 720px !important;
+  }
 }
