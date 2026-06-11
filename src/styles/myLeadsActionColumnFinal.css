@@ -1,37 +1,42 @@
 /* Final scoped My Leads table layout fix.
-   This file only neutralizes old global compact-table CSS on the My Leads table.
+   Desktop/laptop must show Lead | Company | Source | Status | Score | Action without horizontal scrolling.
    No runtime DOM mutation, no action-button moving, and no CRM feature removal. */
+
+.sf-leads-card {
+  max-width: 100% !important;
+}
 
 .sf-leads-card .overflow-x-auto,
 .sf-leads-card .overflow-y-visible {
-  overflow-x: auto !important;
+  overflow-x: visible !important;
   overflow-y: visible !important;
 }
 
 .sf-leads-card .sf-leads-table {
   width: 100% !important;
-  min-width: 900px !important;
-  max-width: none !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
   table-layout: fixed !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
   transform: none !important;
+  border-collapse: collapse !important;
 }
 
 .sf-leads-card .sf-leads-table th,
 .sf-leads-card .sf-leads-table td {
-  padding: 14px 12px !important;
+  padding: 14px 10px !important;
   vertical-align: middle !important;
 }
 
 .sf-leads-card .sf-leads-table th:nth-child(1),
 .sf-leads-card .sf-leads-table td:nth-child(1) {
-  width: 28% !important;
+  width: 25% !important;
 }
 
 .sf-leads-card .sf-leads-table th:nth-child(2),
 .sf-leads-card .sf-leads-table td:nth-child(2) {
-  width: 17% !important;
+  width: 18% !important;
   min-width: 0 !important;
 }
 
@@ -47,23 +52,31 @@
 
 .sf-leads-card .sf-leads-table th:nth-child(5),
 .sf-leads-card .sf-leads-table td:nth-child(5) {
-  width: 11% !important;
+  width: 12% !important;
   text-align: center !important;
 }
 
 .sf-leads-card .sf-leads-table th:nth-child(6),
 .sf-leads-card .sf-leads-table td:nth-child(6) {
-  width: 15% !important;
-  min-width: 0 !important;
-  padding-right: 12px !important;
+  width: 8% !important;
+  min-width: 72px !important;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
   text-align: center !important;
 }
 
 .sf-leads-card .sf-leads-table td:nth-child(6) button {
+  width: 38px !important;
+  height: 38px !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 
 .sf-leads-card .sf-leads-table td:first-child {
   overflow: visible !important;
+}
+
+.sf-leads-card .sf-leads-table td:first-child button,
+.sf-leads-card .sf-leads-table td:first-child p {
+  max-width: 180px !important;
 }
