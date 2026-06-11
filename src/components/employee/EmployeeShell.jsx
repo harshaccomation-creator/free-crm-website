@@ -5,6 +5,8 @@ import {
   LogOut, Search
 } from "lucide-react";
 
+const SIDEBAR_WIDTH = 260;
+
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/employee/dashboard" },
   { label: "My Leads", icon: Users, href: "/leads" },
@@ -53,7 +55,7 @@ export default function EmployeeShell({ children }) {
   };
 
   return (
-    <div className="sf-employee flex min-h-screen">
+    <div className="sf-employee flex min-h-screen" style={{ overflowX: "hidden" }}>
       {mobileOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 lg:hidden"
@@ -62,12 +64,14 @@ export default function EmployeeShell({ children }) {
       )}
 
       <aside
-        className={`fixed top-0 left-0 h-full w-[200px] z-40 flex flex-col transition-transform duration-300 ${
+        className={`fixed top-0 left-0 h-full z-40 flex flex-col transition-transform duration-300 ${
           mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
         style={{
+          width: isNarrow ? "260px" : `${SIDEBAR_WIDTH}px`,
           background: "#0d1626",
           borderRight: "1px solid rgba(255,255,255,0.07)",
+          boxSizing: "border-box",
         }}
       >
         <div
@@ -131,12 +135,13 @@ export default function EmployeeShell({ children }) {
       <main
         className="sf-emp-main min-h-screen flex flex-col"
         style={{
-          marginLeft: isNarrow ? "0px" : "200px",
-          width: isNarrow ? "100vw" : "calc(100vw - 200px)",
-          maxWidth: isNarrow ? "100vw" : "calc(100vw - 200px)",
+          marginLeft: isNarrow ? "0px" : `${SIDEBAR_WIDTH}px`,
+          width: isNarrow ? "100vw" : `calc(100vw - ${SIDEBAR_WIDTH}px)`,
+          maxWidth: isNarrow ? "100vw" : `calc(100vw - ${SIDEBAR_WIDTH}px)`,
           background: "#f5f7fb",
-          overflowX: "auto",
-          boxSizing: "border-box"
+          overflowX: "hidden",
+          boxSizing: "border-box",
+          flexShrink: 0,
         }}
       >
         <header
@@ -206,7 +211,7 @@ export default function EmployeeShell({ children }) {
           </div>
         </header>
 
-        <div className="flex-1" style={{ padding: isNarrow ? "14px 12px" : "18px 24px" }}>
+        <div className="flex-1" style={{ padding: isNarrow ? "14px 12px" : "18px 24px", minWidth: 0 }}>
           {children}
         </div>
       </main>
