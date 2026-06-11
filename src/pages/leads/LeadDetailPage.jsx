@@ -167,7 +167,6 @@ export default function LeadDetailPage({ leadId }) {
         activity_at: new Date().toISOString(),
       });
       if (disposition === "Won") await updateLead(currentLead.id, { value: amount, status: "Won" });
-      if (disposition === "Junk") await updateLead(currentLead.id, { status: "Junk" });
       setActivityPopupOpen(false);
       setActivityForm({ disposition: "Call Connected", subDisposition: "Interested", note: "", amount: "" });
       setActiveTab("Activity Timeline");
