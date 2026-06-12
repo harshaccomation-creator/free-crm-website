@@ -16,7 +16,7 @@ import WonPageFixed from './pages/employee/WonPageFixed.jsx';
 import TasksPageFixed from './pages/employee/TasksPageFixed.jsx';
 import SettingsPage from './pages/shared/SettingsPage.jsx';
 import NotificationsPage from './pages/shared/NotificationsPage.jsx';
-import { useAuthProfile } from './hooks/useAuthProfile.js';
+import { useAuthProfile, roleHome } from './hooks/useAuthProfile.js';
 
 import './styles/dashboardBase.css';
 import './styles/loginPage.css';
@@ -45,7 +45,28 @@ function isProtected(path) {
     path === '/leads' ||
     path.startsWith('/leads/') ||
     path === '/settings' ||
-    path === '/notifications'
+    path === '/notifications' ||
+    path === '/contacts'
+  );
+}
+
+function canOpenRoute(path, role) {
+  if (path.startsWith('/super-admin')) return role === 'super_admin';
+  if (path.startsWith('/admin')) return role === 'company_admin';
+  return true;
+}
+
+function RedirectToRoleHome({ role, setPath }) {
+  useEffect(() => {
+    go(roleHome(role), setPath);
+  }, [role, setPath]);
+
+  return (
+    <div className="crm-session-loader">
+      <div className="crm-session-loader__card">
+        Redirecting to your workspace...
+      </div>
+    </div>
   );
 }
 
@@ -78,6 +99,10 @@ export default function AppSecure() {
 
   if (isProtected(path) && !loggedIn) {
     return <LoginPage />;
+  }
+
+  if (loggedIn && isProtected(path) && !canOpenRoute(path, role)) {
+    return <RedirectToRoleHome role={role} setPath={setPath} />;
   }
 
   if (path === '/login') {
