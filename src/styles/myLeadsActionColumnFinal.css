@@ -27,9 +27,31 @@
 }
 
 .sf-leads-card [role="table"] [role="cell"]:nth-child(5) span,
-.sf-leads-card [role="table"] [role="cell"]:nth-child(6) button {
+.sf-leads-card [role="table"] [role="cell"]:nth-child(6) > button {
   width: 38px !important;
   height: 38px !important;
+}
+
+/* Action dropdown: keep View Lead / Edit Lead on single lines. */
+.sf-leads-card [role="table"] [role="cell"]:nth-child(6) > div.absolute,
+.sf-leads-card .sf-leads-table td:nth-child(6) > div.absolute {
+  width: 168px !important;
+  min-width: 168px !important;
+  right: 0 !important;
+  overflow: hidden !important;
+}
+
+.sf-leads-card [role="table"] [role="cell"]:nth-child(6) > div.absolute button,
+.sf-leads-card .sf-leads-table td:nth-child(6) > div.absolute button {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 42px !important;
+  padding: 10px 16px !important;
+  text-align: left !important;
+  white-space: nowrap !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
 }
 
 @media (max-width: 1180px) {
@@ -112,7 +134,7 @@
 
 .sf-leads-card .sf-leads-table td:nth-child(5) .h-10,
 .sf-leads-card .sf-leads-table td:nth-child(5) .w-10,
-.sf-leads-card .sf-leads-table td:nth-child(6) button {
+.sf-leads-card .sf-leads-table td:nth-child(6) > button {
   width: 32px !important;
   height: 32px !important;
   margin-left: auto !important;
