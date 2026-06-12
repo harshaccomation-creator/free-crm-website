@@ -14,6 +14,7 @@ const dateOptions = ["All Dates", "Today", "Yesterday", "This Month", "Custom Ra
 const emptyFilters = { status: "All", source: "All", dateType: "All Dates", from: "", to: "" };
 const emptyForm = { name: "", company: "", email: "", phone: "", status: "New", score: "Warm", source: "Website", industry: "", location: "", website: "", owner: "", note: "" };
 const inputClass = "w-full h-11 rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-900 outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-300";
+const leadGridColumns = "minmax(0, 1.35fr) minmax(0, 0.95fr) minmax(0, 0.78fr) minmax(0, 0.82fr) 58px 58px";
 
 function go(path) {
   window.history.pushState({}, "", path);
@@ -279,57 +280,49 @@ export default function LeadListPageFixed() {
             </div>
           </div>
 
-          <div className="w-full overflow-hidden">
-            <table className="sf-leads-table w-full table-fixed text-left">
-              <colgroup>
-                <col style={{ width: "24%" }} />
-                <col style={{ width: "19%" }} />
-                <col style={{ width: "15%" }} />
-                <col style={{ width: "16%" }} />
-                <col style={{ width: "13%" }} />
-                <col style={{ width: "13%" }} />
-              </colgroup>
-              <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
-                <tr>
-                  <th className="px-2 py-4 font-black">Lead</th>
-                  <th className="px-2 py-4 font-black">Company</th>
-                  <th className="px-2 py-4 font-black">Source</th>
-                  <th className="px-2 py-4 font-black">Status</th>
-                  <th className="px-2 py-4 text-center font-black">Score</th>
-                  <th className="px-2 py-4 text-center font-black">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-200">
+          <div className="w-full overflow-visible">
+            <div role="table" className="w-full text-left">
+              <div role="row" className="grid items-center bg-slate-50 px-4 text-xs font-black uppercase tracking-wide text-slate-500" style={{ gridTemplateColumns: leadGridColumns }}>
+                <div role="columnheader" className="min-w-0 py-4 pr-2">Lead</div>
+                <div role="columnheader" className="min-w-0 py-4 px-2">Company</div>
+                <div role="columnheader" className="min-w-0 py-4 px-2">Source</div>
+                <div role="columnheader" className="min-w-0 py-4 px-2">Status</div>
+                <div role="columnheader" className="min-w-0 py-4 px-1 text-center">Score</div>
+                <div role="columnheader" className="min-w-0 py-4 pl-1 text-center">Action</div>
+              </div>
+
+              <div role="rowgroup" className="divide-y divide-slate-200">
                 {pageRows.map((lead) => (
-                  <tr key={lead.id} className="transition-colors hover:bg-slate-50/80">
-                    <td className="px-2 py-4">
+                  <div key={lead.id} role="row" className="grid items-center px-4 transition-colors hover:bg-slate-50/80" style={{ gridTemplateColumns: leadGridColumns }}>
+                    <div role="cell" className="min-w-0 py-4 pr-2">
                       <div className="flex min-w-0 items-center gap-3">
                         <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-purple-600 font-black text-white">{initials(lead.name)}</div>
                         <div className="min-w-0 flex-1">
-                          <button type="button" onClick={() => go(`/leads/${lead.id}`)} className="block max-w-[170px] truncate text-left text-[15px] font-black leading-tight text-slate-900 hover:text-orange-600">{lead.name}</button>
-                          <p className="mt-1 max-w-[170px] truncate text-[13px] leading-tight text-slate-500">{lead.email}</p>
+                          <button type="button" onClick={() => go(`/leads/${lead.id}`)} className="block max-w-full truncate text-left text-[15px] font-black leading-tight text-slate-900 hover:text-orange-600">{lead.name}</button>
+                          <p className="mt-1 max-w-full truncate text-[13px] leading-tight text-slate-500">{lead.email}</p>
                         </div>
                       </div>
-                    </td>
-                    <td className="truncate px-2 py-4 text-[15px] font-semibold text-slate-800">{lead.company}</td>
-                    <td className="truncate px-2 py-4 text-[15px] font-semibold text-slate-500">{lead.source}</td>
-                    <td className="px-2 py-4"><span className="whitespace-nowrap rounded-lg border border-orange-100 bg-orange-50 px-3 py-1 text-xs font-black text-orange-700">{lead.status}</span></td>
-                    <td className="px-2 py-4 text-center"><span className="mx-auto grid h-10 w-10 place-items-center rounded-full border border-emerald-200 bg-emerald-50 font-black text-emerald-700">{lead.score}</span></td>
-                    <td className="relative px-2 py-4 text-center">
-                      <button type="button" onClick={(event) => { event.stopPropagation(); setActionMenuLeadId((old) => (old === lead.id ? null : lead.id)); }} className="mx-auto grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-xl font-black text-slate-600 hover:bg-orange-50 hover:text-orange-600" title="Lead actions">⋯</button>
+                    </div>
+                    <div role="cell" className="min-w-0 truncate px-2 py-4 text-[15px] font-semibold text-slate-800">{lead.company}</div>
+                    <div role="cell" className="min-w-0 truncate px-2 py-4 text-[15px] font-semibold text-slate-500">{lead.source}</div>
+                    <div role="cell" className="min-w-0 px-2 py-4"><span className="inline-flex max-w-full truncate whitespace-nowrap rounded-lg border border-orange-100 bg-orange-50 px-2 py-1 text-[11px] font-black text-orange-700">{lead.status}</span></div>
+                    <div role="cell" className="min-w-0 px-1 py-4 text-center"><span className="mx-auto grid h-9 w-9 place-items-center rounded-full border border-emerald-200 bg-emerald-50 text-sm font-black text-emerald-700">{lead.score}</span></div>
+                    <div role="cell" className="relative min-w-0 px-1 py-4 text-center">
+                      <button type="button" onClick={(event) => { event.stopPropagation(); setActionMenuLeadId((old) => (old === lead.id ? null : lead.id)); }} className="mx-auto grid h-9 w-9 place-items-center rounded-xl border border-slate-200 bg-white text-xl font-black text-slate-600 hover:bg-orange-50 hover:text-orange-600" title="Lead actions">⋯</button>
                       {actionMenuLeadId === lead.id && (
                         <div className="absolute right-0 top-12 z-[80] w-36 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
                           <button type="button" onClick={() => { setActionMenuLeadId(null); go(`/leads/${lead.id}`); }} className="w-full px-4 py-3 text-left text-sm font-bold text-slate-700 hover:bg-slate-50">View Lead</button>
                           <button type="button" onClick={() => { setActionMenuLeadId(null); go(`/leads/${lead.id}`); }} className="w-full px-4 py-3 text-left text-sm font-bold text-orange-600 hover:bg-orange-50">Edit Lead</button>
                         </div>
                       )}
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                 ))}
-                {loading && <tr><td colSpan="6" className="px-6 py-12 text-center text-slate-500"><Loader2 className="mr-2 inline h-5 w-5 animate-spin" />Loading Supabase leads...</td></tr>}
-                {!loading && pageRows.length === 0 && <tr><td colSpan="6" className="px-6 py-12 text-center text-slate-500">No leads found.</td></tr>}
-              </tbody>
-            </table>
+
+                {loading && <div className="px-6 py-12 text-center text-slate-500"><Loader2 className="mr-2 inline h-5 w-5 animate-spin" />Loading Supabase leads...</div>}
+                {!loading && pageRows.length === 0 && <div className="px-6 py-12 text-center text-slate-500">No leads found.</div>}
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col gap-3 border-t border-slate-200 px-6 py-4 md:flex-row md:items-center md:justify-between">
