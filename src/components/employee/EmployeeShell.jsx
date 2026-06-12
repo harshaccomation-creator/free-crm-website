@@ -67,13 +67,16 @@ export default function EmployeeShell({ children }) {
     }
   };
 
-  const handleTopbarSearch = (event) => {
-    if (event.key !== "Enter") return;
-    const query = topbarSearch.trim();
-    if (!query) return;
+  const handleTopbarSearchChange = (event) => {
+    const query = event.target.value;
+    setTopbarSearch(query);
     window.sessionStorage.setItem("salesflow_leads_search", query);
-    navigate("/leads");
-    window.setTimeout(() => applyLeadSearchToPage(query), 80);
+
+    if (window.location.pathname !== "/leads") {
+      navigate("/leads");
+    }
+
+    window.setTimeout(() => applyLeadSearchToPage(query), 60);
   };
 
   const handleLogout = async () => {
@@ -210,21 +213,15 @@ export default function EmployeeShell({ children }) {
             <input
               type="search"
               value={topbarSearch}
-              onChange={(event) => setTopbarSearch(event.target.value)}
-              onKeyDown={handleTopbarSearch}
+              onChange={handleTopbarSearchChange}
               placeholder="Search leads, clients, follow-ups..."
-              className="w-full pl-9 pr-20 py-2 rounded-xl text-sm font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30"
+              className="w-full pl-9 pr-4 py-2 rounded-xl text-sm font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30"
               style={{
                 background: "#ffffff",
                 border: "1px solid rgba(249,115,22,0.45)",
                 boxShadow: "0 0 0 1px rgba(249,115,22,0.12)",
               }}
             />
-
-            <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[11px] text-slate-500 font-semibold">
-              <span>↵</span>
-              <span>Search</span>
-            </div>
           </div>
 
           <div className="flex items-center gap-3 ml-auto">
