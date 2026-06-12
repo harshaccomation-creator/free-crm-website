@@ -51,12 +51,29 @@ export default function EmployeeShell({ children }) {
     window.dispatchEvent(new Event("salesflow:navigate"));
   };
 
+  const applyLeadSearchToPage = (query, attempt = 0) => {
+    const input = document.querySelector('input[placeholder="Search leads, company, source..."]');
+    if (input) {
+      const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value")?.set;
+      if (setter) setter.call(input, query);
+      else input.value = query;
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+      return;
+    }
+
+    if (attempt < 12) {
+      window.setTimeout(() => applyLeadSearchToPage(query, attempt + 1), 120);
+    }
+  };
+
   const handleTopbarSearch = (event) => {
     if (event.key !== "Enter") return;
     const query = topbarSearch.trim();
     if (!query) return;
     window.sessionStorage.setItem("salesflow_leads_search", query);
     navigate("/leads");
+    window.setTimeout(() => applyLeadSearchToPage(query), 80);
   };
 
   const handleLogout = async () => {
@@ -188,7 +205,7 @@ export default function EmployeeShell({ children }) {
           </button>
 
           <div className="flex-1 relative" style={{ maxWidth: "560px" }}>
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
 
             <input
               type="search"
@@ -196,14 +213,15 @@ export default function EmployeeShell({ children }) {
               onChange={(event) => setTopbarSearch(event.target.value)}
               onKeyDown={handleTopbarSearch}
               placeholder="Search leads, clients, follow-ups..."
-              className="w-full pl-9 pr-16 py-2 rounded-xl text-sm text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500/50"
+              className="w-full pl-9 pr-20 py-2 rounded-xl text-sm font-bold text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/30"
               style={{
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.09)",
+                background: "#ffffff",
+                border: "1px solid rgba(249,115,22,0.45)",
+                boxShadow: "0 0 0 1px rgba(249,115,22,0.12)",
               }}
             />
 
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[10px] text-gray-600 font-mono">
+            <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 text-[11px] text-slate-500 font-semibold">
               <span>↵</span>
               <span>Search</span>
             </div>
