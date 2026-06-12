@@ -88,7 +88,7 @@ function normalizeLead(row = {}) {
     source: row.source || "Manual",
     status: row.status || "New",
     value: Number(row.value || row.amount || 0),
-    score: scoreNumber(row.score || row.priority || "Warm"),
+    score: scoreNumber(row.score ?? 0),
     ownerName: row.owner?.full_name || row.ownerName || row.owner || "Not assigned",
     createdDate: getLeadDate(row),
   };
@@ -208,7 +208,7 @@ export default function LeadListPageFixed() {
         phone: form.phone.trim(),
         status: form.status,
         priority: form.score,
-        score: scoreNumber(form.score),
+        score: 0,
         value: 0,
         source: form.source,
         location: form.location.trim() || null,
