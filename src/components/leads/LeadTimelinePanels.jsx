@@ -136,6 +136,7 @@ function TaskCard({ task }) {
   const owner = task.owner?.full_name || task.owner?.email || 'Not assigned';
   const isAutoTask = /auto task created from lead activity/i.test(safeText(task.note));
   const addedBy = isAutoTask ? 'System' : (task.created_by_profile?.full_name || task.created_by_profile?.email || owner);
+  const durationMinutes = Number(task.duration_minutes || task.duration || 30);
   const visibleNote = cleanTaskNote(task.note);
   return (
     <div className="relative flex gap-4">
@@ -147,7 +148,7 @@ function TaskCard({ task }) {
         <div className="flex items-start justify-between gap-3">
           <div>
             <p className="text-base font-black text-slate-900">{task.title || 'Task'}</p>
-            <p className="mt-2 text-sm font-semibold text-slate-600">🗓 {formatDate(task.due_at)} &nbsp; | &nbsp; 🕒 {formatTime(task.due_at)} &nbsp; | &nbsp; ⏳ 30m</p>
+            <p className="mt-2 text-sm font-semibold text-slate-600">🗓 {formatDate(task.due_at)} &nbsp; | &nbsp; 🕒 {formatTime(task.due_at)} &nbsp; | &nbsp; ⏳ {durationMinutes}m</p>
           </div>
           {statusBadge(task.status || 'Pending')}
         </div>
