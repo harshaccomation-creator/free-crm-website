@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Mail, Phone, Edit3, Building2, MapPin, Globe, FileText, Loader2, Plus } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
+import LeadTimelinePanels from "../../components/leads/LeadTimelinePanels.jsx";
 import { createActivity, getCurrentProfile, getLead, listActivities, updateLead } from "../../services/crmApi.js";
 
 const DISPOSITION_OPTIONS = ["Call Connected", "Not Connected", "Follow Up", "Demo Book", "Post Demo Follow Up", "Won", "Lost", "Junk"];
@@ -45,17 +46,21 @@ function formatTime(value) {
   return date.toLocaleString("en-IN", { day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true });
 }
 
-function activityLabel(type = "") {
-  const key = String(type).replaceAll("_", " ");
-  return key ? key.charAt(0).toUpperCase() + key.slice(1) : "Activity";
-}
-
-function activityActor(item = {}) {
-  return item.user?.full_name || item.user?.email || item.employeeName || item.ownerName || item.createdBy || "Not assigned";
-}
-
 function activityTypeKey(value = "") {
   return String(value || "activity").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "") || "activity";
+}
+
+function localDateTimeValue(date = new Date(Date.now() + 2 * 60 * 60 * 1000)) {
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+function needsTaskDate(disposition) {
+  return ["Call Connected", "Follow Up", "Demo Book", "Post Demo Follow Up"].includes(disposition);
+}
+
+function createInitialActivityForm(disposition = "Call Connected") {
+  return { disposition, subDisposition: SUB_DISPOSITIONS[disposition]?.[0] || "", taskDueAt: needsTaskDate(disposition) ? localDateTimeValue() : "", note: "", amount: "" };
 }
 
 export default function LeadDetailPage({ leadId }) {
@@ -69,7 +74,7 @@ export default function LeadDetailPage({ leadId }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [activityPopupOpen, setActivityPopupOpen] = useState(false);
-  const [activityForm, setActivityForm] = useState({ disposition: "Call Connected", subDisposition: "Interested", note: "", amount: "" });
+  const [activityForm, setActivityForm] = useState(createInitialActivityForm());
 
   async function loadLeadDetail() {
     setLoading(true);
@@ -138,9 +143,14 @@ export default function LeadDetailPage({ leadId }) {
     const disposition = activityForm.disposition;
     const subDisposition = activityForm.subDisposition;
     const note = activityForm.note.trim();
+    const taskDueAt = activityForm.taskDueAt;
     const amount = Number(activityForm.amount || 0);
     if (!disposition || !subDisposition) {
       setError("Disposition and sub disposition required.");
+      return;
+    }
+    if (needsTaskDate(disposition) && !taskDueAt) {
+      setError("Task / reminder date-time required hai.");
       return;
     }
     if (disposition === "Lost" && !note) {
@@ -158,19 +168,23 @@ export default function LeadDetailPage({ leadId }) {
       const finalNote = [
         `Disposition: ${disposition}`,
         `Sub Disposition: ${subDisposition}`,
+        taskDueAt ? `Task Date Time: ${new Date(taskDueAt).toISOString()}` : "",
+        taskDueAt ? `Reminder: 15 minutes before task time` : "",
         note ? `Note: ${note}` : "",
         disposition === "Won" ? `Amount: ₹${amount.toLocaleString("en-IN")}` : "",
       ].filter(Boolean).join("\n");
+      const type = disposition === "Call Connected" && subDisposition === "Demo Book" ? "demo_scheduled" : activityTypeKey(disposition);
       await createActivity({
         lead_id: currentLead.id,
-        type: activityTypeKey(disposition),
+        type,
         title,
         note: finalNote,
         activity_at: new Date().toISOString(),
+        task_due_at: taskDueAt ? new Date(taskDueAt).toISOString() : null,
       });
       if (disposition === "Won") await updateLead(currentLead.id, { value: amount, status: "Won" });
       setActivityPopupOpen(false);
-      setActivityForm({ disposition: "Call Connected", subDisposition: "Interested", note: "", amount: "" });
+      setActivityForm(createInitialActivityForm());
       setActiveTab("Activity Timeline");
       await loadLeadDetail();
     } catch (err) {
@@ -188,6 +202,7 @@ export default function LeadDetailPage({ leadId }) {
   };
 
   const openAddActivity = () => {
+    setActivityForm(createInitialActivityForm());
     setActivityPopupOpen(true);
     window.setTimeout(() => {
       document.getElementById("lead-activity-section")?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -256,7 +271,7 @@ export default function LeadDetailPage({ leadId }) {
             <div className="px-6 pt-5 border-b border-slate-200">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-8">
-                  {tabs.map((tab) => <button key={tab} type="button" onClick={() => setActiveTab(tab)} className={`pb-4 text-lg font-semibold border-b-2 ${activeTab === tab ? "text-slate-900 border-orange-600" : "text-slate-500 border-transparent"}`}>{tab}</button>)}
+                  {tabs.map((tab) => <button key={tab} type="button" onClick={() => setActiveTab(tab)} className={`pb-4 text-lg font-semibold border-b-2 ${activeTab === tab ? "text-slate-900 border-orange-600" : "text-slate-500 border-transparent"}`}>{tab}{tab === "Activity Timeline" ? <span className="ml-2 inline-grid min-w-5 h-5 place-items-center rounded-full bg-red-600 px-1 text-[11px] font-black text-white">{activities.length}</span> : null}</button>)}
                 </div>
                 <button type="button" onClick={openAddActivity} className="mb-4 inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-orange-600 px-4 text-sm font-bold text-white shadow-lg shadow-orange-500/20">
                   <Plus className="w-4 h-4" /> Add Activity
@@ -264,11 +279,11 @@ export default function LeadDetailPage({ leadId }) {
               </div>
             </div>
             <div className="p-6">
-              {activeTab === "Activity Timeline" && <div className="space-y-3">{activities.map((item) => <div key={item.id} className="rounded-xl border border-slate-200 p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-slate-900">{item.title || activityLabel(item.type)}</p><p className="text-sm text-slate-600 mt-1 whitespace-pre-line">{item.note || "No note added"}</p><p className="text-xs text-slate-400 mt-2">By {activityActor(item)} · {formatTime(item.activity_at || item.created_at)}</p></div><span className="px-2 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-bold">{activityLabel(item.type)}</span></div></div>)}{activities.length === 0 && <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-slate-500">No Supabase activities found.</div>}</div>}
-
-              {activeTab === "Notes" && <div className="space-y-4"><div className="rounded-lg border border-slate-200 p-4"><textarea value={noteText} onChange={(event) => setNoteText(event.target.value)} placeholder="Write a note..." className="w-full min-h-28 outline-none resize-none text-sm" /><div className="flex justify-end mt-3"><button type="button" disabled={saving || !noteText.trim()} onClick={addNote} className="h-9 px-4 rounded-lg bg-orange-600 text-white text-sm font-bold disabled:opacity-50">{saving ? "Saving..." : "Add Note"}</button></div></div><div className="space-y-3">{activities.filter((a) => String(a.type).includes("note")).map((item) => <div key={item.id} className="rounded-lg border border-slate-200 p-5"><div className="flex items-center gap-3"><FileText className="w-5 h-5 text-orange-600" /><h3 className="font-black text-slate-900">{item.title || "Note"}</h3></div><p className="text-slate-600 mt-3">{item.note}</p></div>)}</div></div>}
-
-              {activeTab === "Tasks" && <div className="space-y-3"><div className="rounded-lg border border-slate-200 p-4 text-slate-500">Tasks are managed from Tasks page.</div></div>}
+              {activeTab === "Notes" ? (
+                <div className="space-y-4"><div className="rounded-lg border border-slate-200 p-4"><textarea value={noteText} onChange={(event) => setNoteText(event.target.value)} placeholder="Write a note..." className="w-full min-h-28 outline-none resize-none text-sm" /><div className="flex justify-end mt-3"><button type="button" disabled={saving || !noteText.trim()} onClick={addNote} className="h-9 px-4 rounded-lg bg-orange-600 text-white text-sm font-bold disabled:opacity-50">{saving ? "Saving..." : "Add Note"}</button></div></div></div>
+              ) : (
+                <LeadTimelinePanels activeTab={activeTab} leadId={currentLead.id} activities={activities} />
+              )}
             </div>
           </section>
         </div>
@@ -283,7 +298,8 @@ export default function LeadDetailPage({ leadId }) {
             </div>
             <div className="p-5 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3"><div className="rounded-2xl border border-orange-100 bg-orange-50/70 px-4 py-3"><p className="text-[11px] font-black uppercase tracking-wide text-orange-700">Activity Date & Time</p><h3 className="mt-1 text-sm font-black text-slate-900">{activityPreviewTime}</h3></div><div className="rounded-2xl border border-blue-100 bg-blue-50/70 px-4 py-3"><p className="text-[11px] font-black uppercase tracking-wide text-blue-700">Activity Owner</p><h3 className="mt-1 text-sm font-black text-slate-900 truncate">{activityOwnerName}</h3></div></div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"><label className="block"><span className="text-xs font-black uppercase tracking-wide text-slate-500">Disposition</span><select value={activityForm.disposition} onChange={(event) => { const next = event.target.value; setActivityForm((prev) => ({ ...prev, disposition: next, subDisposition: SUB_DISPOSITIONS[next]?.[0] || "", amount: next === "Won" ? prev.amount : "" })); }} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">{DISPOSITION_OPTIONS.map((item) => <option key={item} value={item}>{item}</option>)}</select></label><label className="block"><span className="text-xs font-black uppercase tracking-wide text-slate-500">Sub Disposition</span><select value={activityForm.subDisposition} onChange={(event) => setActivityForm((prev) => ({ ...prev, subDisposition: event.target.value }))} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">{subDispositionOptions.map((item) => <option key={item} value={item}>{item}</option>)}</select></label></div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"><label className="block"><span className="text-xs font-black uppercase tracking-wide text-slate-500">Disposition</span><select value={activityForm.disposition} onChange={(event) => { const next = event.target.value; setActivityForm({ disposition: next, subDisposition: SUB_DISPOSITIONS[next]?.[0] || "", taskDueAt: needsTaskDate(next) ? localDateTimeValue() : "", note: "", amount: "" }); }} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">{DISPOSITION_OPTIONS.map((item) => <option key={item} value={item}>{item}</option>)}</select></label><label className="block"><span className="text-xs font-black uppercase tracking-wide text-slate-500">Sub Disposition</span><select value={activityForm.subDisposition} onChange={(event) => setActivityForm((prev) => ({ ...prev, subDisposition: event.target.value }))} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">{subDispositionOptions.map((item) => <option key={item} value={item}>{item}</option>)}</select></label></div>
+              {needsTaskDate(activityForm.disposition) ? <label className="block"><span className="text-xs font-black uppercase tracking-wide text-slate-500">Task / Reminder Date Time *</span><input type="datetime-local" value={activityForm.taskDueAt} onChange={(event) => setActivityForm((prev) => ({ ...prev, taskDueAt: event.target.value }))} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" /><p className="mt-1 text-xs font-semibold text-slate-500">Task time se 15 minutes pehle email reminder trigger hoga.</p></label> : null}
               {activityForm.disposition === "Won" && <label className="block"><span className="text-xs font-black uppercase tracking-wide text-slate-500">Won Amount</span><input type="number" min="0" value={activityForm.amount} onChange={(event) => setActivityForm((prev) => ({ ...prev, amount: event.target.value }))} placeholder="Enter deal amount" className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" /></label>}
               <label className="block"><span className="text-xs font-black uppercase tracking-wide text-slate-500">Note {activityForm.disposition === "Lost" ? "*" : ""}</span><textarea value={activityForm.note} onChange={(event) => setActivityForm((prev) => ({ ...prev, note: event.target.value }))} placeholder={activityForm.disposition === "Lost" ? "Lost reason mandatory..." : "Activity note / description..."} className="mt-1 min-h-28 w-full rounded-xl border border-slate-200 px-3 py-3 text-sm font-semibold outline-none resize-none focus:ring-2 focus:ring-orange-500/20" /></label>
             </div>
