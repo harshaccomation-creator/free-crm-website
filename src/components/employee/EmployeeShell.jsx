@@ -5,7 +5,7 @@ import {
   LogOut, Search
 } from "lucide-react";
 
-const SIDEBAR_WIDTH = 260;
+const SIDEBAR_WIDTH = 200;
 
 const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/employee/dashboard" },
