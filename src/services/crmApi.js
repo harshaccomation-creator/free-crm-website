@@ -2,13 +2,6 @@ import { requireBackend, supabase, isBackendConfigured } from '../lib/supabaseCl
 
 export { supabase, isBackendConfigured };
 
-const LEAD_SCORE_POINTS = {
-  call_connected: 15,
-  demo_booked: 20,
-  demo_done: 30,
-  won: 35,
-};
-
 export function normalizeRole(role) {
   const value = String(role || 'employee').toLowerCase().replace(/[\s-]+/g, '_');
   if (value === 'company_admin' || value === 'admin') return 'company_admin';
@@ -20,12 +13,8 @@ export function normalizeRole(role) {
 export function normalizeSupabaseError(error, fallbackMessage = 'Something went wrong') {
   if (!error) return new Error(fallbackMessage);
   const message = String(error.message || error.details || fallbackMessage);
-  if (message.includes('uniq_leads_company_phone') || message.toLowerCase().includes('duplicate key')) {
-    return new Error('This phone number already exists for another lead in this company. Use a different number or open the existing lead.');
-  }
-  if (message.toLowerCase().includes('row-level security') || error.code === '42501') {
-    return new Error('You do not have permission to perform this action.');
-  }
+  if (message.includes('uniq_leads_company_phone') || message.toLowerCase().includes('duplicate key')) return new Error('This phone number already exists for another lead in this company. Use a different number or open the existing lead.');
+  if (message.toLowerCase().includes('row-level security') || error.code === '42501') return new Error('You do not have permission to perform this action.');
   return new Error(message || fallbackMessage);
 }
 
@@ -36,9 +25,13 @@ function handleError(error, fallbackMessage = 'Something went wrong') {
   }
 }
 
-function isEmployee(profile) {
-  return normalizeRole(profile?.role) === 'employee';
-}
+function isEmployee(profile) { return normalizeRole(profile?.role) === 'employee'; }
+function profileName(profile) { return profile?.full_name || profile?.email || 'User'; }
+function plusHours(hours) { return new Date(Date.now() + hours * 60 * 60 * 1000).toISOString(); }
+function plusDays(days) { return new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString(); }
+function isCompletedTask(task) { return String(task.status || '').toLowerCase() === 'completed' || Boolean(task.completed_at); }
+function isOverdueTask(task) { return !isCompletedTask(task) && task.due_at && new Date(task.due_at).getTime() < Date.now(); }
+function isWon(status) { return ['won', 'converted', 'demo done'].includes(String(status || '').toLowerCase()); }
 
 function statusKey(status = '') {
   const key = String(status || '').toLowerCase();
@@ -49,18 +42,6 @@ function statusKey(status = '') {
   return 'New';
 }
 
-function isWon(status) {
-  return ['won', 'converted', 'demo done'].includes(String(status || '').toLowerCase());
-}
-
-function isCompletedTask(task) {
-  return String(task.status || '').toLowerCase() === 'completed' || Boolean(task.completed_at);
-}
-
-function isOverdueTask(task) {
-  return !isCompletedTask(task) && task.due_at && new Date(task.due_at).getTime() < Date.now();
-}
-
 function activityText(activity = {}) {
   const type = String(activity.type || '').toLowerCase();
   return `${type} ${activity.title || ''} ${activity.note || activity.description || ''}`.toLowerCase();
@@ -69,12 +50,13 @@ function activityText(activity = {}) {
 function getActivityLeadStatus(activity = {}) {
   const type = String(activity.type || '').toLowerCase();
   const combined = activityText(activity);
-  if (type === 'lead_created' || combined.includes('lead created')) return null;
+  if (type === 'lead_created' || type === 'lead_updated' || type === 'task_created' || combined.includes('lead created')) return null;
+  if (combined.includes('junk')) return 'Junk';
   if (combined.includes('lost')) return 'Lost';
   if (combined.includes('won') || combined.includes('payment done')) return 'Won';
   if (type === 'demo_done' || combined.includes('demo done')) return 'Demo Done';
   if (type === 'not_connected' || combined.includes('not connected') || combined.includes('not pick') || combined.includes('dnp')) return 'Not Connected';
-  if (type === 'demo_scheduled' || combined.includes('demo scheduled') || combined.includes('book demo') || combined.includes('demo booked') || combined.includes('scheduled')) return 'Demo Scheduled';
+  if (type === 'demo_scheduled' || combined.includes('demo scheduled') || combined.includes('book demo') || combined.includes('demo booked') || combined.includes('demo book')) return 'Demo Scheduled';
   if (type === 'follow_up' || combined.includes('follow')) return 'Follow-up';
   if (type === 'call_connected' || combined.includes('call connected') || combined.includes('connected') || type === 'call' || combined.includes('called') || combined.includes('contacted')) return 'Contacted';
   return null;
@@ -83,11 +65,11 @@ function getActivityLeadStatus(activity = {}) {
 function getActivityScoreEvent(activity = {}) {
   const type = String(activity.type || '').toLowerCase();
   const combined = activityText(activity);
-  if (type === 'lead_created' || combined.includes('lead created')) return null;
-  if (combined.includes('not connected') || combined.includes('not pick') || combined.includes('dnp') || combined.includes('lost')) return null;
+  if (type === 'lead_created' || type === 'lead_updated' || type === 'task_created' || combined.includes('lead created')) return null;
+  if (combined.includes('not connected') || combined.includes('not pick') || combined.includes('dnp') || combined.includes('lost') || combined.includes('junk')) return null;
   if (combined.includes('won') || combined.includes('payment done')) return 'won';
   if (type === 'demo_done' || combined.includes('demo done')) return 'demo_done';
-  if (type === 'demo_scheduled' || combined.includes('book demo') || combined.includes('demo booked') || combined.includes('demo scheduled') || combined.includes('scheduled')) return 'demo_booked';
+  if (type === 'demo_scheduled' || combined.includes('book demo') || combined.includes('demo booked') || combined.includes('demo scheduled') || combined.includes('demo book')) return 'demo_booked';
   if (type === 'call_connected' || combined.includes('call connected') || combined.includes('connected') || type === 'call' || combined.includes('called') || combined.includes('contacted')) return 'call_connected';
   return null;
 }
@@ -98,44 +80,73 @@ function calculateLeadScoreFromActivities(activities = []) {
     const event = getActivityScoreEvent(activity);
     if (event) earned.add(event);
   });
-  return Math.min(100, [...earned].reduce((sum, event) => sum + (LEAD_SCORE_POINTS[event] || 0), 0));
+  if (earned.has('won')) return 100;
+  if (earned.has('demo_done')) return 65;
+  if (earned.has('demo_booked')) return 35;
+  if (earned.has('call_connected')) return 15;
+  return 0;
 }
 
 function toDbLeadStatus(nextStatus) {
   if (nextStatus === 'Won') return 'Won';
   if (nextStatus === 'Lost') return 'Lost';
+  if (nextStatus === 'Junk') return 'Junk';
   if (nextStatus === 'Contacted' || nextStatus === 'Not Connected') return 'Contacted';
   if (nextStatus === 'Demo Scheduled' || nextStatus === 'Demo Done' || nextStatus === 'Follow-up') return 'In Progress';
   return null;
 }
 
-async function refreshLeadScoreAndStatus(client, leadId, companyId, nextStatus = null) {
-  const { data: activities, error } = await client
-    .from('lead_activities')
-    .select('type, title, note, activity_at, created_at')
-    .eq('lead_id', leadId)
-    .eq('company_id', companyId)
-    .limit(1000);
+function autoTaskForActivity(activity, taskDueAt) {
+  const type = String(activity.type || '').toLowerCase();
+  const combined = activityText(activity);
+  if (type === 'not_connected' || combined.includes('not connected') || combined.includes('not pick') || combined.includes('busy') || combined.includes('ringing')) return { title: 'Call again', type: 'Call', due_at: taskDueAt || plusHours(2) };
+  if (type === 'call_connected' || combined.includes('call connected') || combined.includes('connected')) return taskDueAt ? { title: 'Follow-up call', type: 'Follow Up', due_at: taskDueAt } : null;
+  if (type === 'demo_scheduled' || combined.includes('demo book') || combined.includes('demo scheduled') || combined.includes('demo booked')) return { title: 'Demo scheduled', type: 'Demo', due_at: taskDueAt || plusHours(2) };
+  if (type === 'demo_done' || combined.includes('demo done')) return { title: 'Post demo follow up', type: 'Post Demo Follow Up', due_at: taskDueAt || plusDays(1) };
+  if (type === 'follow_up' || combined.includes('follow up')) return taskDueAt ? { title: 'Follow-up', type: 'Follow Up', due_at: taskDueAt } : null;
+  return null;
+}
 
-  if (error) {
-    console.warn('[SalesFlow CRM API] score refresh skipped', error);
-    return;
-  }
+async function insertActivityRow(client, record) {
+  const { data, error } = await client.from('lead_activities').insert(record).select('*').single();
+  handleError(error, 'Unable to create activity');
+  return data || null;
+}
 
-  const patch = {
-    score: calculateLeadScoreFromActivities(activities || []),
-    last_activity_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
+async function createAutoTask(client, profile, leadId, task, leadOwnerId) {
+  if (!task?.title || !task?.due_at) return null;
+  const record = {
+    company_id: profile.company_id,
+    created_by: profile.id,
+    owner_id: leadOwnerId || profile.id,
+    lead_id: leadId,
+    title: task.title,
+    note: `Auto task created from lead activity. Reminder should be sent 15 minutes before due time.`,
+    type: task.type,
+    status: 'Pending',
+    due_at: task.due_at,
   };
+  const { data, error } = await client.from('tasks').insert(record).select('*').single();
+  if (error) { console.warn('[SalesFlow CRM API] auto task skipped', error); return null; }
+  await insertActivityRow(client, {
+    company_id: profile.company_id,
+    lead_id: leadId,
+    user_id: profile.id,
+    type: 'task_created',
+    title: `Task created - ${task.title}`,
+    note: `Due: ${new Date(task.due_at).toLocaleString('en-IN')}\nReminder: 15 minutes before due time`,
+    activity_at: new Date().toISOString(),
+  }).catch(() => null);
+  return data;
+}
+
+async function refreshLeadScoreAndStatus(client, leadId, companyId, nextStatus = null) {
+  const { data: activities, error } = await client.from('lead_activities').select('type, title, note, activity_at, created_at').eq('lead_id', leadId).eq('company_id', companyId).limit(1000);
+  if (error) { console.warn('[SalesFlow CRM API] score refresh skipped', error); return; }
+  const patch = { score: calculateLeadScoreFromActivities(activities || []), last_activity_at: new Date().toISOString(), updated_at: new Date().toISOString() };
   const dbStatus = toDbLeadStatus(nextStatus);
   if (dbStatus) patch.status = dbStatus;
-
-  const { error: updateError } = await client
-    .from('leads')
-    .update(patch)
-    .eq('id', leadId)
-    .eq('company_id', companyId);
-
+  const { error: updateError } = await client.from('leads').update(patch).eq('id', leadId).eq('company_id', companyId);
   if (updateError) console.warn('[SalesFlow CRM API] score update skipped', updateError);
 }
 
@@ -155,12 +166,7 @@ async function enrichLeadsWithActivityStatus(client, leads = []) {
   });
   return leads.map((lead) => {
     const activities = activitiesByLead.get(lead.id) || [];
-    const calculatedScore = calculateLeadScoreFromActivities(activities);
-    return {
-      ...lead,
-      score: calculatedScore,
-      status: statusByLead.has(lead.id) ? statusByLead.get(lead.id) : lead.status,
-    };
+    return { ...lead, score: calculateLeadScoreFromActivities(activities), status: statusByLead.has(lead.id) ? statusByLead.get(lead.id) : lead.status };
   });
 }
 
@@ -217,9 +223,7 @@ export async function listLeads({ status, assignedToMe = false, search = '', lim
   return enrichLeadsWithActivityStatus(client, data || []);
 }
 
-export async function listMyLeads(options = {}) {
-  return listLeads({ ...options, assignedToMe: true });
-}
+export async function listMyLeads(options = {}) { return listLeads({ ...options, assignedToMe: true }); }
 
 export async function getLead(leadId) {
   const client = requireBackend();
@@ -229,45 +233,38 @@ export async function getLead(leadId) {
   if (isEmployee(profile)) query = query.eq('owner_id', profile.id);
   const { data, error } = await query;
   handleError(error, 'Unable to load lead');
-  return data || null;
+  if (!data) return null;
+  const enriched = await enrichLeadsWithActivityStatus(client, [data]);
+  return enriched[0] || data;
 }
 
 export async function createLead(payload) {
   const client = requireBackend();
   const profile = await getCurrentProfile();
   if (!profile?.company_id) throw new Error('Profile company is missing. Logout karke dobara login karo ya profile company mapping check karo.');
-  const record = {
-    company_id: profile.company_id,
-    created_by: profile.id,
-    owner_id: payload.owner_id || payload.assigned_to || profile.id,
-    name: String(payload.name || '').trim(),
-    email: payload.email ? String(payload.email).trim().toLowerCase() : null,
-    phone: payload.phone ? String(payload.phone).trim() : null,
-    company: payload.company || payload.company_name || null,
-    source: payload.source || 'Website',
-    status: payload.status || 'New',
-    priority: payload.priority || 'Warm',
-    score: 0,
-    value: Number(payload.value || 0),
-    notes: payload.notes || null,
-    next_follow_up: payload.next_follow_up || payload.follow_up_at || null,
-  };
+  const record = { company_id: profile.company_id, created_by: profile.id, owner_id: payload.owner_id || payload.assigned_to || profile.id, name: String(payload.name || '').trim(), email: payload.email ? String(payload.email).trim().toLowerCase() : null, phone: payload.phone ? String(payload.phone).trim() : null, company: payload.company || payload.company_name || null, source: payload.source || 'Website', status: payload.status || 'New', priority: payload.priority || 'Warm', score: 0, value: Number(payload.value || 0), notes: payload.notes || null, next_follow_up: payload.next_follow_up || payload.follow_up_at || null };
   if (!record.name) throw new Error('Lead name is required.');
   if (!record.phone) throw new Error('Phone number is required.');
   const { data, error } = await client.from('leads').insert(record).select('*').single();
   handleError(error, 'Unable to create lead');
-  try { await createActivity({ lead_id: data.id, type: 'lead_created', title: 'Lead created', note: data.name }); } catch {}
+  try { await createActivity({ lead_id: data.id, type: 'lead_created', title: `Lead created by ${profileName(profile)}`, note: data.name }); } catch {}
   return { ...data, score: 0 };
 }
 
 export async function updateLead(leadId, payload) {
   const client = requireBackend();
   const profile = await getCurrentProfile();
+  const oldLead = payload.owner_id || payload.assigned_to ? await getLead(leadId).catch(() => null) : null;
   let query = client.from('leads').update({ ...payload, updated_at: new Date().toISOString() }).eq('id', leadId).eq('company_id', profile.company_id);
   if (isEmployee(profile)) query = query.eq('owner_id', profile.id);
   const { data, error } = await query.select('*').single();
   handleError(error, 'Unable to update lead');
-  try { await createActivity({ lead_id: leadId, type: 'lead_updated', title: 'Lead updated', note: payload.status ? `Status: ${payload.status}` : null }); } catch {}
+  const nextOwner = payload.owner_id || payload.assigned_to;
+  if (nextOwner && oldLead?.owner_id !== nextOwner) {
+    try { await createActivity({ lead_id: leadId, type: 'lead_assigned', title: `Lead assigned by ${profileName(profile)}`, note: `Assigned by ${profileName(profile)}` }); } catch {}
+  } else {
+    try { await createActivity({ lead_id: leadId, type: 'lead_updated', title: 'Lead updated', note: payload.status ? `Status: ${payload.status}` : null }); } catch {}
+  }
   return data;
 }
 
@@ -301,10 +298,7 @@ export async function createTask(payload) {
   return data;
 }
 
-export async function createMyTask(payload) {
-  const profile = await getCurrentProfile();
-  return createTask({ ...payload, owner_id: profile?.id });
-}
+export async function createMyTask(payload) { const profile = await getCurrentProfile(); return createTask({ ...payload, owner_id: profile?.id }); }
 
 export async function updateTask(taskId, payload) {
   const client = requireBackend();
@@ -332,14 +326,16 @@ export async function listActivities({ leadId, limit = 100, assignedToMe = false
 
 export async function listMyActivities(options = {}) { return listActivities({ ...options, assignedToMe: true }); }
 
-export async function createActivity({ lead_id, type = 'note', title, note = null, activity_at = null }) {
+export async function createActivity({ lead_id, type = 'note', title, note = null, activity_at = null, task_due_at = null }) {
   const client = requireBackend();
   const profile = await getCurrentProfile();
   if (!profile?.company_id || !lead_id) return null;
+  const leadRow = await client.from('leads').select('id, owner_id').eq('id', lead_id).eq('company_id', profile.company_id).maybeSingle();
   const record = { company_id: profile.company_id, lead_id, user_id: profile.id, type, title, note, activity_at: activity_at || new Date().toISOString() };
-  const { data, error } = await client.from('lead_activities').insert(record).select('*').single();
-  handleError(error, 'Unable to create activity');
+  const data = await insertActivityRow(client, record);
   const nextStatus = getActivityLeadStatus(record);
+  const task = autoTaskForActivity(record, task_due_at);
+  if (task) await createAutoTask(client, profile, lead_id, task, leadRow.data?.owner_id || profile.id);
   await refreshLeadScoreAndStatus(client, lead_id, profile.company_id, nextStatus);
   return data || null;
 }
