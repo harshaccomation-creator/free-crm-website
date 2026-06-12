@@ -11,6 +11,35 @@
   overflow-y: visible !important;
 }
 
+/* Current LeadListPageFixed renders the lead rows as role-based CSS grid.
+   Keep it scoped here so Score and Action do not touch each other. */
+.sf-leads-card [role="table"] [role="row"] {
+  grid-template-columns: minmax(0, 1.28fr) minmax(0, 0.88fr) minmax(0, 0.72fr) minmax(0, 0.78fr) 74px 74px !important;
+  column-gap: 16px !important;
+  box-sizing: border-box !important;
+}
+
+.sf-leads-card [role="table"] [role="columnheader"]:nth-child(5),
+.sf-leads-card [role="table"] [role="columnheader"]:nth-child(6),
+.sf-leads-card [role="table"] [role="cell"]:nth-child(5),
+.sf-leads-card [role="table"] [role="cell"]:nth-child(6) {
+  text-align: center !important;
+}
+
+.sf-leads-card [role="table"] [role="cell"]:nth-child(5) span,
+.sf-leads-card [role="table"] [role="cell"]:nth-child(6) button {
+  width: 38px !important;
+  height: 38px !important;
+}
+
+@media (max-width: 1180px) {
+  .sf-leads-card [role="table"] [role="row"] {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.82fr) minmax(0, 0.68fr) minmax(0, 0.72fr) 70px 70px !important;
+    column-gap: 14px !important;
+  }
+}
+
+/* Legacy table fallback kept harmless for older cached chunks. */
 .sf-leads-card .sf-leads-table {
   display: table !important;
   width: 100% !important;
@@ -99,18 +128,4 @@
   padding-left: 7px !important;
   padding-right: 7px !important;
   font-size: 10.5px !important;
-}
-
-@media (max-width: 1180px) {
-  .sf-leads-card .sf-leads-table th,
-  .sf-leads-card .sf-leads-table td {
-    padding-left: 2px !important;
-    padding-right: 2px !important;
-    font-size: 11.5px !important;
-  }
-
-  .sf-leads-card .sf-leads-table td:first-child button,
-  .sf-leads-card .sf-leads-table td:first-child p {
-    max-width: 96px !important;
-  }
 }
