@@ -2,6 +2,13 @@ import { requireBackend, supabase, isBackendConfigured } from '../lib/supabaseCl
 
 export { supabase, isBackendConfigured };
 
+const LEAD_SCORE_POINTS = {
+  call_connected: 15,
+  demo_booked: 20,
+  demo_done: 30,
+  won: 35,
+};
+
 export function normalizeRole(role) {
   const value = String(role || 'employee').toLowerCase().replace(/[\s-]+/g, '_');
   if (value === 'company_admin' || value === 'admin') return 'company_admin';
@@ -54,18 +61,82 @@ function isOverdueTask(task) {
   return !isCompletedTask(task) && task.due_at && new Date(task.due_at).getTime() < Date.now();
 }
 
+function activityText(activity = {}) {
+  const type = String(activity.type || '').toLowerCase();
+  return `${type} ${activity.title || ''} ${activity.note || activity.description || ''}`.toLowerCase();
+}
+
 function getActivityLeadStatus(activity = {}) {
   const type = String(activity.type || '').toLowerCase();
-  const combined = `${type} ${activity.title || ''} ${activity.note || activity.description || ''}`.toLowerCase();
-  if (type === 'lead_created' || type === 'lead_updated' || combined.includes('lead created')) return null;
+  const combined = activityText(activity);
+  if (type === 'lead_created' || combined.includes('lead created')) return null;
   if (combined.includes('lost')) return 'Lost';
   if (combined.includes('won') || combined.includes('payment done')) return 'Won';
-  if (type === 'demo_done' || combined.includes('demo done') || combined.includes('completed')) return 'Demo Done';
+  if (type === 'demo_done' || combined.includes('demo done')) return 'Demo Done';
   if (type === 'not_connected' || combined.includes('not connected') || combined.includes('not pick') || combined.includes('dnp')) return 'Not Connected';
-  if (type === 'demo_scheduled' || combined.includes('demo scheduled') || combined.includes('scheduled')) return 'Demo Scheduled';
+  if (type === 'demo_scheduled' || combined.includes('demo scheduled') || combined.includes('book demo') || combined.includes('demo booked') || combined.includes('scheduled')) return 'Demo Scheduled';
   if (type === 'follow_up' || combined.includes('follow')) return 'Follow-up';
-  if (type === 'call' || combined.includes('called') || combined.includes('contacted')) return 'Contacted';
+  if (type === 'call_connected' || combined.includes('call connected') || combined.includes('connected') || type === 'call' || combined.includes('called') || combined.includes('contacted')) return 'Contacted';
   return null;
+}
+
+function getActivityScoreEvent(activity = {}) {
+  const type = String(activity.type || '').toLowerCase();
+  const combined = activityText(activity);
+  if (type === 'lead_created' || combined.includes('lead created')) return null;
+  if (combined.includes('not connected') || combined.includes('not pick') || combined.includes('dnp') || combined.includes('lost')) return null;
+  if (combined.includes('won') || combined.includes('payment done')) return 'won';
+  if (type === 'demo_done' || combined.includes('demo done')) return 'demo_done';
+  if (type === 'demo_scheduled' || combined.includes('book demo') || combined.includes('demo booked') || combined.includes('demo scheduled') || combined.includes('scheduled')) return 'demo_booked';
+  if (type === 'call_connected' || combined.includes('call connected') || combined.includes('connected') || type === 'call' || combined.includes('called') || combined.includes('contacted')) return 'call_connected';
+  return null;
+}
+
+function calculateLeadScoreFromActivities(activities = []) {
+  const earned = new Set();
+  activities.forEach((activity) => {
+    const event = getActivityScoreEvent(activity);
+    if (event) earned.add(event);
+  });
+  return Math.min(100, [...earned].reduce((sum, event) => sum + (LEAD_SCORE_POINTS[event] || 0), 0));
+}
+
+function toDbLeadStatus(nextStatus) {
+  if (nextStatus === 'Won') return 'Won';
+  if (nextStatus === 'Lost') return 'Lost';
+  if (nextStatus === 'Contacted' || nextStatus === 'Not Connected') return 'Contacted';
+  if (nextStatus === 'Demo Scheduled' || nextStatus === 'Demo Done' || nextStatus === 'Follow-up') return 'In Progress';
+  return null;
+}
+
+async function refreshLeadScoreAndStatus(client, leadId, companyId, nextStatus = null) {
+  const { data: activities, error } = await client
+    .from('lead_activities')
+    .select('type, title, note, activity_at, created_at')
+    .eq('lead_id', leadId)
+    .eq('company_id', companyId)
+    .limit(1000);
+
+  if (error) {
+    console.warn('[SalesFlow CRM API] score refresh skipped', error);
+    return;
+  }
+
+  const patch = {
+    score: calculateLeadScoreFromActivities(activities || []),
+    last_activity_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+  const dbStatus = toDbLeadStatus(nextStatus);
+  if (dbStatus) patch.status = dbStatus;
+
+  const { error: updateError } = await client
+    .from('leads')
+    .update(patch)
+    .eq('id', leadId)
+    .eq('company_id', companyId);
+
+  if (updateError) console.warn('[SalesFlow CRM API] score update skipped', updateError);
 }
 
 async function enrichLeadsWithActivityStatus(client, leads = []) {
@@ -74,12 +145,23 @@ async function enrichLeadsWithActivityStatus(client, leads = []) {
   const { data, error } = await client.from('lead_activities').select('lead_id, type, title, note, activity_at, created_at').in('lead_id', ids).order('activity_at', { ascending: false }).limit(1000);
   if (error) return leads;
   const statusByLead = new Map();
+  const activitiesByLead = new Map();
   (data || []).forEach((activity) => {
+    if (!activitiesByLead.has(activity.lead_id)) activitiesByLead.set(activity.lead_id, []);
+    activitiesByLead.get(activity.lead_id).push(activity);
     if (statusByLead.has(activity.lead_id)) return;
     const next = getActivityLeadStatus(activity);
     if (next) statusByLead.set(activity.lead_id, next);
   });
-  return leads.map((lead) => statusByLead.has(lead.id) ? { ...lead, status: statusByLead.get(lead.id) } : lead);
+  return leads.map((lead) => {
+    const activities = activitiesByLead.get(lead.id) || [];
+    const calculatedScore = calculateLeadScoreFromActivities(activities);
+    return {
+      ...lead,
+      score: calculatedScore,
+      status: statusByLead.has(lead.id) ? statusByLead.get(lead.id) : lead.status,
+    };
+  });
 }
 
 export async function getCurrentUser() {
@@ -165,6 +247,7 @@ export async function createLead(payload) {
     source: payload.source || 'Website',
     status: payload.status || 'New',
     priority: payload.priority || 'Warm',
+    score: 0,
     value: Number(payload.value || 0),
     notes: payload.notes || null,
     next_follow_up: payload.next_follow_up || payload.follow_up_at || null,
@@ -174,7 +257,7 @@ export async function createLead(payload) {
   const { data, error } = await client.from('leads').insert(record).select('*').single();
   handleError(error, 'Unable to create lead');
   try { await createActivity({ lead_id: data.id, type: 'lead_created', title: 'Lead created', note: data.name }); } catch {}
-  return data;
+  return { ...data, score: 0 };
 }
 
 export async function updateLead(leadId, payload) {
@@ -257,7 +340,7 @@ export async function createActivity({ lead_id, type = 'note', title, note = nul
   const { data, error } = await client.from('lead_activities').insert(record).select('*').single();
   handleError(error, 'Unable to create activity');
   const nextStatus = getActivityLeadStatus(record);
-  if (nextStatus) await client.from('leads').update({ status: nextStatus, updated_at: new Date().toISOString() }).eq('id', lead_id).eq('company_id', profile.company_id);
+  await refreshLeadScoreAndStatus(client, lead_id, profile.company_id, nextStatus);
   return data || null;
 }
 
