@@ -1,0 +1,3 @@
+.sf-leads-card [role="table"] [role="row"] [role="cell"]:nth-child(5) span {
+  min-width: 36px !important;
+}
