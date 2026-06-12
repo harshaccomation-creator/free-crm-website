@@ -55,7 +55,7 @@ export default function EmployeeShell({ children }) {
   };
 
   return (
-    <div className="sf-employee flex min-h-screen" style={{ overflowX: "hidden" }}>
+    <div className="sf-employee min-h-screen" style={{ overflowX: "hidden", width: "100vw", maxWidth: "100vw" }}>
       {mobileOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 lg:hidden"
@@ -69,6 +69,7 @@ export default function EmployeeShell({ children }) {
         }`}
         style={{
           width: isNarrow ? "260px" : `${SIDEBAR_WIDTH}px`,
+          maxWidth: isNarrow ? "260px" : `${SIDEBAR_WIDTH}px`,
           background: "#0d1626",
           borderRight: "1px solid rgba(255,255,255,0.07)",
           boxSizing: "border-box",
@@ -136,12 +137,13 @@ export default function EmployeeShell({ children }) {
         className="sf-emp-main min-h-screen flex flex-col"
         style={{
           marginLeft: isNarrow ? "0px" : `${SIDEBAR_WIDTH}px`,
-          width: isNarrow ? "100vw" : `calc(100vw - ${SIDEBAR_WIDTH}px)`,
-          maxWidth: isNarrow ? "100vw" : `calc(100vw - ${SIDEBAR_WIDTH}px)`,
+          width: isNarrow ? "100vw" : "auto",
+          maxWidth: "none",
+          minWidth: 0,
+          position: "relative",
           background: "#f5f7fb",
           overflowX: "hidden",
           boxSizing: "border-box",
-          flexShrink: 0,
         }}
       >
         <header
@@ -211,7 +213,7 @@ export default function EmployeeShell({ children }) {
           </div>
         </header>
 
-        <div className="flex-1" style={{ padding: isNarrow ? "14px 12px" : "18px 24px", minWidth: 0 }}>
+        <div className="flex-1" style={{ padding: isNarrow ? "14px 12px" : "18px 24px", minWidth: 0, maxWidth: "100%", overflowX: "hidden", boxSizing: "border-box" }}>
           {children}
         </div>
       </main>
