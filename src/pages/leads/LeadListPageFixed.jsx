@@ -279,15 +279,15 @@ export default function LeadListPageFixed() {
             </div>
           </div>
 
-          <div className="w-full overflow-visible">
+          <div className="w-full overflow-hidden">
             <table className="sf-leads-table w-full table-fixed text-left">
               <colgroup>
                 <col style={{ width: "24%" }} />
-                <col style={{ width: "18%" }} />
-                <col style={{ width: "14%" }} />
+                <col style={{ width: "19%" }} />
                 <col style={{ width: "15%" }} />
-                <col style={{ width: "12%" }} />
-                <col style={{ width: "8%" }} />
+                <col style={{ width: "16%" }} />
+                <col style={{ width: "13%" }} />
+                <col style={{ width: "13%" }} />
               </colgroup>
               <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
                 <tr>
@@ -316,18 +316,7 @@ export default function LeadListPageFixed() {
                     <td className="px-2 py-4"><span className="whitespace-nowrap rounded-lg border border-orange-100 bg-orange-50 px-3 py-1 text-xs font-black text-orange-700">{lead.status}</span></td>
                     <td className="px-2 py-4 text-center"><span className="mx-auto grid h-10 w-10 place-items-center rounded-full border border-emerald-200 bg-emerald-50 font-black text-emerald-700">{lead.score}</span></td>
                     <td className="relative px-2 py-4 text-center">
-                      <button
-                        type="button"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          setActionMenuLeadId((old) => (old === lead.id ? null : lead.id));
-                        }}
-                        className="mx-auto grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-xl font-black text-slate-600 hover:bg-orange-50 hover:text-orange-600"
-                        title="Lead actions"
-                      >
-                        ⋯
-                      </button>
-
+                      <button type="button" onClick={(event) => { event.stopPropagation(); setActionMenuLeadId((old) => (old === lead.id ? null : lead.id)); }} className="mx-auto grid h-10 w-10 place-items-center rounded-xl border border-slate-200 bg-white text-xl font-black text-slate-600 hover:bg-orange-50 hover:text-orange-600" title="Lead actions">⋯</button>
                       {actionMenuLeadId === lead.id && (
                         <div className="absolute right-0 top-12 z-[80] w-36 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
                           <button type="button" onClick={() => { setActionMenuLeadId(null); go(`/leads/${lead.id}`); }} className="w-full px-4 py-3 text-left text-sm font-bold text-slate-700 hover:bg-slate-50">View Lead</button>
