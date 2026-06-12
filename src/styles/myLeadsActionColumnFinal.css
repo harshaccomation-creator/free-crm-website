@@ -3,21 +3,19 @@
   overflow: visible !important;
 }
 
-/* LeadListPageFixed.jsx currently uses overflow-hidden on the table wrapper.
-   Override it only inside My Leads card so the Action column is not clipped. */
 .sf-leads-card .overflow-hidden,
 .sf-leads-card .overflow-x-auto,
 .sf-leads-card .overflow-y-visible,
 .sf-leads-card .overflow-visible {
-  overflow-x: auto !important;
+  overflow-x: hidden !important;
   overflow-y: visible !important;
 }
 
 .sf-leads-card .sf-leads-table {
   display: table !important;
   width: 100% !important;
-  min-width: 980px !important;
-  max-width: none !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
   table-layout: fixed !important;
   margin: 0 !important;
   transform: none !important;
@@ -44,56 +42,68 @@
 .sf-leads-card .sf-leads-table th,
 .sf-leads-card .sf-leads-table td {
   display: table-cell !important;
-  padding: 14px 8px !important;
+  padding: 10px 4px !important;
   vertical-align: middle !important;
   overflow: visible !important;
   box-sizing: border-box !important;
   white-space: normal !important;
+  font-size: 13px !important;
 }
 
 .sf-leads-card .sf-leads-table th:nth-child(1),
-.sf-leads-card .sf-leads-table td:nth-child(1) { width: 24% !important; }
+.sf-leads-card .sf-leads-table td:nth-child(1) { width: 22% !important; }
 .sf-leads-card .sf-leads-table th:nth-child(2),
-.sf-leads-card .sf-leads-table td:nth-child(2) { width: 19% !important; }
+.sf-leads-card .sf-leads-table td:nth-child(2) { width: 17% !important; }
 .sf-leads-card .sf-leads-table th:nth-child(3),
-.sf-leads-card .sf-leads-table td:nth-child(3) { width: 15% !important; }
+.sf-leads-card .sf-leads-table td:nth-child(3) { width: 13% !important; }
 .sf-leads-card .sf-leads-table th:nth-child(4),
-.sf-leads-card .sf-leads-table td:nth-child(4) { width: 16% !important; }
+.sf-leads-card .sf-leads-table td:nth-child(4) { width: 14% !important; }
 .sf-leads-card .sf-leads-table th:nth-child(5),
-.sf-leads-card .sf-leads-table td:nth-child(5) { width: 13% !important; text-align: center !important; }
+.sf-leads-card .sf-leads-table td:nth-child(5) { width: 14% !important; text-align: center !important; }
 .sf-leads-card .sf-leads-table th:nth-child(6),
 .sf-leads-card .sf-leads-table td:nth-child(6) {
-  width: 13% !important;
+  width: 20% !important;
   text-align: center !important;
   position: relative !important;
   z-index: 20 !important;
 }
 
+.sf-leads-card .sf-leads-table td:first-child .h-10,
+.sf-leads-card .sf-leads-table td:first-child .w-10 {
+  height: 34px !important;
+  width: 34px !important;
+}
+
+.sf-leads-card .sf-leads-table td:nth-child(5) .h-10,
+.sf-leads-card .sf-leads-table td:nth-child(5) .w-10,
 .sf-leads-card .sf-leads-table td:nth-child(6) button {
-  width: 36px !important;
-  height: 36px !important;
+  width: 34px !important;
+  height: 34px !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 
 .sf-leads-card .sf-leads-table td:first-child button,
 .sf-leads-card .sf-leads-table td:first-child p {
-  max-width: 170px !important;
+  max-width: 135px !important;
+}
+
+.sf-leads-card .sf-leads-table td:nth-child(4) span {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+  font-size: 11px !important;
 }
 
 @media (max-width: 1180px) {
-  .sf-leads-card .sf-leads-table {
-    min-width: 980px !important;
-  }
-
   .sf-leads-card .sf-leads-table th,
   .sf-leads-card .sf-leads-table td {
-    padding-left: 6px !important;
-    padding-right: 6px !important;
+    padding-left: 3px !important;
+    padding-right: 3px !important;
+    font-size: 12px !important;
   }
 
   .sf-leads-card .sf-leads-table td:first-child button,
   .sf-leads-card .sf-leads-table td:first-child p {
-    max-width: 145px !important;
+    max-width: 115px !important;
   }
 }
