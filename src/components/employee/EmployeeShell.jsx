@@ -4,6 +4,8 @@ import {
   Activity, BarChart2, Bell, User, Settings, Menu, X,
   LogOut, Search
 } from "lucide-react";
+import { clearStoredSession } from "../../hooks/useAuthProfile.js";
+import { supabase } from "../../lib/supabaseClient.js";
 
 const SIDEBAR_WIDTH = 200;
 
@@ -25,6 +27,7 @@ export default function EmployeeShell({ children }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location, setLocation] = useState(window.location.pathname);
   const [isNarrow, setIsNarrow] = useState(() => window.innerWidth < 1024);
+  const [topbarSearch, setTopbarSearch] = useState("");
 
   useEffect(() => {
     const sync = () => setLocation(window.location.pathname);
@@ -46,6 +49,26 @@ export default function EmployeeShell({ children }) {
   const navigate = (href) => {
     window.history.pushState({}, "", href);
     window.dispatchEvent(new Event("salesflow:navigate"));
+  };
+
+  const handleTopbarSearch = (event) => {
+    if (event.key !== "Enter") return;
+    const query = topbarSearch.trim();
+    if (!query) return;
+    window.sessionStorage.setItem("salesflow_leads_search", query);
+    navigate("/leads");
+  };
+
+  const handleLogout = async () => {
+    try {
+      await supabase?.auth?.signOut?.();
+    } catch (error) {
+      console.error("[SalesFlow logout]", error);
+    } finally {
+      clearStoredSession();
+      window.history.replaceState({}, "", "/login");
+      window.dispatchEvent(new Event("salesflow:navigate"));
+    }
   };
 
   const isActive = (href) => {
@@ -169,6 +192,9 @@ export default function EmployeeShell({ children }) {
 
             <input
               type="search"
+              value={topbarSearch}
+              onChange={(event) => setTopbarSearch(event.target.value)}
+              onKeyDown={handleTopbarSearch}
               placeholder="Search leads, clients, follow-ups..."
               className="w-full pl-9 pr-16 py-2 rounded-xl text-sm text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-orange-500/50"
               style={{
@@ -178,17 +204,17 @@ export default function EmployeeShell({ children }) {
             />
 
             <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-0.5 text-[10px] text-gray-600 font-mono">
-              <span>⌘</span>
-              <span>K</span>
+              <span>↵</span>
+              <span>Search</span>
             </div>
           </div>
 
           <div className="flex items-center gap-3 ml-auto">
-            <button className="relative p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors">
+            <button type="button" onClick={() => navigate("/notifications")} className="relative p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors" title="Notifications">
               <Bell className="w-5 h-5" />
             </button>
 
-            <div className="flex items-center gap-2 cursor-pointer">
+            <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/employee/profile")}>
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white text-sm font-bold shrink-0">
                 J
               </div>
@@ -203,7 +229,7 @@ export default function EmployeeShell({ children }) {
 
             <button
               type="button"
-              onClick={() => navigate("/")}
+              onClick={handleLogout}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white transition-colors"
               style={{ background: "#f97316" }}
             >
