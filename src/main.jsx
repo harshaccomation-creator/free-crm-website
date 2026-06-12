@@ -2,7 +2,10 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import AppSecure from './AppSecure.jsx';
 import CompanyAdminPreview from './company-admin-new/CompanyAdminPreview.jsx';
+import { startClientTextSanitizer } from './utils/clientTextSanitizer.js';
 import './styles.css';
+
+startClientTextSanitizer();
 
 const root = createRoot(document.querySelector('#root'));
 const path = window.location.pathname;
