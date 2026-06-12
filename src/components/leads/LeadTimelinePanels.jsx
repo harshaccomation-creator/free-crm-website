@@ -69,6 +69,11 @@ function statusBadge(status = '') {
   return <span className={`rounded-lg px-3 py-1 text-xs font-black ${color}`}>{safeText(status || 'Pending')}</span>;
 }
 
+function isOpenTask(task = {}) {
+  const status = safeText(task.status).toLowerCase();
+  return status !== 'completed' && !task.completed_at;
+}
+
 function ActivityIcon({ type }) {
   const key = safeText(type).toLowerCase();
   const icon = key.includes('call') ? '☎️' : key.includes('demo') ? '📅' : key.includes('won') ? '🏆' : key.includes('task') ? '✅' : key.includes('note') ? '📝' : key.includes('not') ? '⚠️' : '⚡';
@@ -114,7 +119,8 @@ function ActivityCard({ item }) {
 
 function TaskCard({ task }) {
   const owner = task.owner?.full_name || task.owner?.email || 'Not assigned';
-  const addedBy = task.created_by_profile?.full_name || task.created_by_profile?.email || owner;
+  const isAutoTask = /auto task created from lead activity/i.test(safeText(task.note));
+  const addedBy = isAutoTask ? 'System' : (task.created_by_profile?.full_name || task.created_by_profile?.email || owner);
   return (
     <div className="relative flex gap-4">
       <div className="flex w-10 flex-col items-center">
@@ -143,14 +149,33 @@ function EmptyState({ text }) {
   return <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-slate-500">{text}</div>;
 }
 
+function updateTabBadges(openTaskCount) {
+  const section = document.getElementById('lead-activity-section');
+  if (!section) return;
+  const buttons = [...section.querySelectorAll('button')];
+  const activityButton = buttons.find((button) => (button.textContent || '').trim().startsWith('Activity Timeline'));
+  const tasksButton = buttons.find((button) => (button.textContent || '').trim().startsWith('Tasks'));
+
+  activityButton?.querySelectorAll('[data-sf-badge], span').forEach((badge) => badge.remove());
+  tasksButton?.querySelectorAll('[data-sf-badge]').forEach((badge) => badge.remove());
+
+  if (tasksButton && openTaskCount > 0) {
+    const badge = document.createElement('span');
+    badge.dataset.sfBadge = 'task-open-count';
+    badge.className = 'ml-2 inline-grid min-w-5 h-5 place-items-center rounded-full bg-red-600 px-1 text-[11px] font-black text-white';
+    badge.textContent = String(openTaskCount);
+    tasksButton.appendChild(badge);
+  }
+}
+
 export default function LeadTimelinePanels({ activeTab, leadId, activities = [] }) {
   const [tasks, setTasks] = useState([]);
   const [tasksLoading, setTasksLoading] = useState(false);
 
   useEffect(() => {
-    if (activeTab !== 'Tasks' || !leadId) return;
+    if (!leadId) return;
     let mounted = true;
-    setTasksLoading(true);
+    setTasksLoading(activeTab === 'Tasks');
     listTasks({ limit: 500 })
       .then((rows) => {
         if (!mounted) return;
@@ -160,6 +185,12 @@ export default function LeadTimelinePanels({ activeTab, leadId, activities = [] 
       .finally(() => mounted && setTasksLoading(false));
     return () => { mounted = false; };
   }, [activeTab, leadId]);
+
+  const openTaskCount = useMemo(() => tasks.filter(isOpenTask).length, [tasks]);
+
+  useEffect(() => {
+    updateTabBadges(openTaskCount);
+  }, [openTaskCount, activeTab, activities.length]);
 
   const groupedActivities = useMemo(() => groupByDay(activities, 'activity_at'), [activities]);
   const groupedTasks = useMemo(() => groupByDay(tasks, 'due_at'), [tasks]);
