@@ -3,6 +3,9 @@
   overflow: visible !important;
 }
 
+/* LeadListPageFixed.jsx currently uses overflow-hidden on the table wrapper.
+   Override it only inside My Leads card so the Action column is not clipped. */
+.sf-leads-card .overflow-hidden,
 .sf-leads-card .overflow-x-auto,
 .sf-leads-card .overflow-y-visible,
 .sf-leads-card .overflow-visible {
@@ -13,8 +16,8 @@
 .sf-leads-card .sf-leads-table {
   display: table !important;
   width: 100% !important;
-  min-width: 0 !important;
-  max-width: 100% !important;
+  min-width: 980px !important;
+  max-width: none !important;
   table-layout: fixed !important;
   margin: 0 !important;
   transform: none !important;
@@ -45,6 +48,7 @@
   vertical-align: middle !important;
   overflow: visible !important;
   box-sizing: border-box !important;
+  white-space: normal !important;
 }
 
 .sf-leads-card .sf-leads-table th:nth-child(1),
@@ -78,6 +82,10 @@
 }
 
 @media (max-width: 1180px) {
+  .sf-leads-card .sf-leads-table {
+    min-width: 980px !important;
+  }
+
   .sf-leads-card .sf-leads-table th,
   .sf-leads-card .sf-leads-table td {
     padding-left: 6px !important;
