@@ -30,6 +30,7 @@ import './styles/crmFixedPageShell.css';
 import './styles/crmProductionPolish.css';
 import './styles/leadCleanTableSpacing.css';
 import './styles/myLeadsActionColumnFinal.css';
+import './styles/myLeadsStatsPolish.css';
 
 function go(path, setPath) {
   window.history.pushState({}, '', path);
