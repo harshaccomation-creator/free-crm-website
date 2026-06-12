@@ -74,6 +74,21 @@ function isOpenTask(task = {}) {
   return status !== 'completed' && !task.completed_at;
 }
 
+function cleanTaskNote(note = '') {
+  return safeText(note)
+    .split('\n')
+    .filter((line) => {
+      const text = line.toLowerCase();
+      if (text.includes('auto task created from lead activity')) return false;
+      if (text.includes('reminder should be sent')) return false;
+      if (text.includes('reminder: 15 minutes')) return false;
+      if (text.includes('15 minutes before due time')) return false;
+      return line.trim();
+    })
+    .join('\n')
+    .trim();
+}
+
 function ActivityIcon({ type }) {
   const key = safeText(type).toLowerCase();
   const icon = key.includes('call') ? '☎️' : key.includes('demo') ? '📅' : key.includes('won') ? '🏆' : key.includes('task') ? '✅' : key.includes('note') ? '📝' : key.includes('not') ? '⚠️' : '⚡';
@@ -121,6 +136,7 @@ function TaskCard({ task }) {
   const owner = task.owner?.full_name || task.owner?.email || 'Not assigned';
   const isAutoTask = /auto task created from lead activity/i.test(safeText(task.note));
   const addedBy = isAutoTask ? 'System' : (task.created_by_profile?.full_name || task.created_by_profile?.email || owner);
+  const visibleNote = cleanTaskNote(task.note);
   return (
     <div className="relative flex gap-4">
       <div className="flex w-10 flex-col items-center">
@@ -139,7 +155,7 @@ function TaskCard({ task }) {
           <span className="rounded-md bg-slate-100 px-2 py-1 font-bold text-slate-700">{owner}</span>
           <span>Added By {addedBy} &nbsp; | &nbsp; {formatDateTime(task.created_at)} &nbsp; • &nbsp; {relativeTime(task.created_at)}</span>
         </div>
-        {task.note ? <p className="mt-3 whitespace-pre-line text-sm text-slate-500">{task.note}</p> : null}
+        {visibleNote ? <p className="mt-3 whitespace-pre-line text-sm text-slate-500">{visibleNote}</p> : null}
       </div>
     </div>
   );
