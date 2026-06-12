@@ -22,12 +22,7 @@ function getLeadIdFromUrl() {
 }
 
 function initials(name = "") {
-  return String(name || "")
-    .split(" ")
-    .map((x) => x[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
+  return String(name || "").split(" ").map((x) => x[0]).join("").slice(0, 2).toUpperCase();
 }
 
 function formatValue(value) {
@@ -101,6 +96,7 @@ export default function LeadDetailPage({ leadId }) {
   useEffect(() => { loadLeadDetail(); }, [id]);
 
   const status = currentLead?.status === "Demo Done" ? "Qualified" : currentLead?.status || "New";
+  const leadScore = Number(currentLead?.score ?? 0);
   const subDispositionOptions = SUB_DISPOSITIONS[activityForm.disposition] || [];
   const activityOwnerName = currentProfile?.full_name || currentProfile?.email || currentLead?.owner?.full_name || currentLead?.owner?.email || "Login employee";
   const activityPreviewTime = formatTime(new Date().toISOString());
@@ -242,7 +238,7 @@ export default function LeadDetailPage({ leadId }) {
             <h2 className="text-xl font-black text-slate-900">About</h2>
             <div className="grid grid-cols-2 gap-5 mt-6">
               <div><p className="text-sm text-slate-500 font-semibold">Status</p><span className={`inline-flex mt-2 px-3 py-1 rounded-md border text-sm font-black ${statusClass(status)}`}>{status}</span></div>
-              <div><p className="text-sm text-slate-500 font-semibold">Lead Score</p><span className="inline-grid mt-2 w-11 h-11 rounded-full bg-blue-50 text-slate-900 place-items-center font-black">{currentLead.score || 60}</span></div>
+              <div><p className="text-sm text-slate-500 font-semibold">Lead Score</p><span className="inline-grid mt-2 w-11 h-11 rounded-full bg-blue-50 text-slate-900 place-items-center font-black">{leadScore}</span></div>
               <div><p className="text-sm text-slate-500 font-semibold">Deal Value</p><h3 className="text-lg font-black text-slate-900 mt-2">{formatValue(currentLead.value)}</h3></div>
               <div><p className="text-sm text-slate-500 font-semibold">Source</p><h3 className="text-lg font-black text-slate-900 mt-2">{currentLead.source || "Website"}</h3></div>
             </div>
@@ -252,7 +248,7 @@ export default function LeadDetailPage({ leadId }) {
               <div className="flex items-start gap-3"><Phone className="w-5 h-5 text-slate-500 mt-0.5" /><div><h3 className="font-bold text-slate-900">{currentLead.phone || "No phone"}</h3><p className="text-sm text-slate-500">Mobile</p></div></div>
               <div className="flex items-start gap-3"><Building2 className="w-5 h-5 text-slate-500 mt-0.5" /><div><h3 className="font-bold text-slate-900">{currentLead.company || "No company"}</h3><p className="text-sm text-slate-500">Industry: {currentLead.job_title || "Not assigned"}</p></div></div>
               <div className="flex items-start gap-3"><MapPin className="w-5 h-5 text-slate-500 mt-0.5" /><h3 className="font-bold text-slate-900">{currentLead.location || "Not assigned"}</h3></div>
-              <div className="flex items-start gap-3"><Globe className="w-5 h-5 text-slate-500 mt-0.5" /><h3 className="font-bold text-blue-600">{currentLead.website || "Not assigned"}</h3></div>
+              <div className="flex items-start gap-3"><Globe className="w-5 h-5 text-slate-500 mt-0.5" /><h3 className="font-bold text-slate-900">{currentLead.website || "Not assigned"}</h3></div>
             </div>
           </section>
 
@@ -282,52 +278,16 @@ export default function LeadDetailPage({ leadId }) {
         <div className="fixed inset-0 z-[9999] grid place-items-center bg-slate-950/60 px-4">
           <div className="w-full max-w-xl rounded-2xl bg-white shadow-2xl border border-slate-200 overflow-hidden">
             <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-3">
-              <div>
-                <h2 className="text-xl font-black text-slate-900">Add Lead Activity</h2>
-                <p className="text-sm text-slate-500 mt-1">Date, time and login employee name auto save hoga.</p>
-              </div>
+              <div><h2 className="text-xl font-black text-slate-900">Add Lead Activity</h2><p className="text-sm text-slate-500 mt-1">Date, time and login employee name auto save hoga.</p></div>
               <button type="button" onClick={() => setActivityPopupOpen(false)} className="h-9 w-9 rounded-xl border border-slate-200 text-slate-500 hover:bg-slate-50">×</button>
             </div>
             <div className="p-5 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-orange-100 bg-orange-50/70 px-4 py-3">
-                  <p className="text-[11px] font-black uppercase tracking-wide text-orange-700">Activity Date & Time</p>
-                  <h3 className="mt-1 text-sm font-black text-slate-900">{activityPreviewTime}</h3>
-                </div>
-                <div className="rounded-2xl border border-blue-100 bg-blue-50/70 px-4 py-3">
-                  <p className="text-[11px] font-black uppercase tracking-wide text-blue-700">Activity Owner</p>
-                  <h3 className="mt-1 text-sm font-black text-slate-900 truncate">{activityOwnerName}</h3>
-                </div>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <label className="block">
-                  <span className="text-xs font-black uppercase tracking-wide text-slate-500">Disposition</span>
-                  <select value={activityForm.disposition} onChange={(event) => { const next = event.target.value; setActivityForm((prev) => ({ ...prev, disposition: next, subDisposition: SUB_DISPOSITIONS[next]?.[0] || "", amount: next === "Won" ? prev.amount : "" })); }} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
-                    {DISPOSITION_OPTIONS.map((item) => <option key={item} value={item}>{item}</option>)}
-                  </select>
-                </label>
-                <label className="block">
-                  <span className="text-xs font-black uppercase tracking-wide text-slate-500">Sub Disposition</span>
-                  <select value={activityForm.subDisposition} onChange={(event) => setActivityForm((prev) => ({ ...prev, subDisposition: event.target.value }))} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">
-                    {subDispositionOptions.map((item) => <option key={item} value={item}>{item}</option>)}
-                  </select>
-                </label>
-              </div>
-              {activityForm.disposition === "Won" && (
-                <label className="block">
-                  <span className="text-xs font-black uppercase tracking-wide text-slate-500">Won Amount</span>
-                  <input type="number" min="0" value={activityForm.amount} onChange={(event) => setActivityForm((prev) => ({ ...prev, amount: event.target.value }))} placeholder="Enter deal amount" className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" />
-                </label>
-              )}
-              <label className="block">
-                <span className="text-xs font-black uppercase tracking-wide text-slate-500">Note {activityForm.disposition === "Lost" ? "*" : ""}</span>
-                <textarea value={activityForm.note} onChange={(event) => setActivityForm((prev) => ({ ...prev, note: event.target.value }))} placeholder={activityForm.disposition === "Lost" ? "Lost reason mandatory..." : "Activity note / description..."} className="mt-1 min-h-28 w-full rounded-xl border border-slate-200 px-3 py-3 text-sm font-semibold outline-none resize-none focus:ring-2 focus:ring-orange-500/20" />
-              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3"><div className="rounded-2xl border border-orange-100 bg-orange-50/70 px-4 py-3"><p className="text-[11px] font-black uppercase tracking-wide text-orange-700">Activity Date & Time</p><h3 className="mt-1 text-sm font-black text-slate-900">{activityPreviewTime}</h3></div><div className="rounded-2xl border border-blue-100 bg-blue-50/70 px-4 py-3"><p className="text-[11px] font-black uppercase tracking-wide text-blue-700">Activity Owner</p><h3 className="mt-1 text-sm font-black text-slate-900 truncate">{activityOwnerName}</h3></div></div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4"><label className="block"><span className="text-xs font-black uppercase tracking-wide text-slate-500">Disposition</span><select value={activityForm.disposition} onChange={(event) => { const next = event.target.value; setActivityForm((prev) => ({ ...prev, disposition: next, subDisposition: SUB_DISPOSITIONS[next]?.[0] || "", amount: next === "Won" ? prev.amount : "" })); }} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">{DISPOSITION_OPTIONS.map((item) => <option key={item} value={item}>{item}</option>)}</select></label><label className="block"><span className="text-xs font-black uppercase tracking-wide text-slate-500">Sub Disposition</span><select value={activityForm.subDisposition} onChange={(event) => setActivityForm((prev) => ({ ...prev, subDisposition: event.target.value }))} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20">{subDispositionOptions.map((item) => <option key={item} value={item}>{item}</option>)}</select></label></div>
+              {activityForm.disposition === "Won" && <label className="block"><span className="text-xs font-black uppercase tracking-wide text-slate-500">Won Amount</span><input type="number" min="0" value={activityForm.amount} onChange={(event) => setActivityForm((prev) => ({ ...prev, amount: event.target.value }))} placeholder="Enter deal amount" className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold outline-none focus:ring-2 focus:ring-orange-500/20" /></label>}
+              <label className="block"><span className="text-xs font-black uppercase tracking-wide text-slate-500">Note {activityForm.disposition === "Lost" ? "*" : ""}</span><textarea value={activityForm.note} onChange={(event) => setActivityForm((prev) => ({ ...prev, note: event.target.value }))} placeholder={activityForm.disposition === "Lost" ? "Lost reason mandatory..." : "Activity note / description..."} className="mt-1 min-h-28 w-full rounded-xl border border-slate-200 px-3 py-3 text-sm font-semibold outline-none resize-none focus:ring-2 focus:ring-orange-500/20" /></label>
             </div>
-            <div className="px-5 py-4 border-t border-slate-100 flex items-center justify-end gap-3">
-              <button type="button" onClick={() => setActivityPopupOpen(false)} className="h-10 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50">Cancel</button>
-              <button type="button" disabled={saving} onClick={saveLeadActivity} className="h-10 px-5 rounded-xl bg-orange-600 text-white text-sm font-black shadow-lg shadow-orange-500/20 disabled:opacity-50">{saving ? "Saving..." : "Save Activity"}</button>
-            </div>
+            <div className="px-5 py-4 border-t border-slate-100 flex items-center justify-end gap-3"><button type="button" onClick={() => setActivityPopupOpen(false)} className="h-10 px-4 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50">Cancel</button><button type="button" disabled={saving} onClick={saveLeadActivity} className="h-10 px-5 rounded-xl bg-orange-600 text-white text-sm font-black shadow-lg shadow-orange-500/20 disabled:opacity-50">{saving ? "Saving..." : "Save Activity"}</button></div>
           </div>
         </div>
       )}
