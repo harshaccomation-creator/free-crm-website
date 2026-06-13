@@ -20,22 +20,34 @@ function addTimelineIconStyles() {
   if (document.getElementById('sf-meta-svg-style')) return;
   const style = document.createElement('style');
   style.id = 'sf-meta-svg-style';
-  style.textContent = '.sf-meta-svg{width:16px;height:16px;display:block;flex:0 0 16px;color:#64748b}.sf-meta-token{display:inline-flex;align-items:center;gap:6px;margin-right:18px;color:#475569;font-weight:700;line-height:1;vertical-align:middle}.sf-meta-line{display:inline-flex;align-items:center;flex-wrap:wrap;gap:0}';
+  style.textContent = '.sf-meta-line{display:inline-flex;align-items:center;flex-wrap:wrap;gap:18px}.sf-meta-token{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;color:#475569;font-weight:700;line-height:1.1}.sf-meta-svg{width:16px;height:16px;display:block;flex:0 0 16px;color:#64748b}.sf-meta-label{display:inline-block;line-height:1.1}';
   document.head.appendChild(style);
+}
+
+function makeToken(type, value) {
+  const clean = String(value || '').replace(/\s+/g, ' ').trim();
+  if (!clean) return '';
+  return `<span class="sf-meta-token">${SVG[type]}<span class="sf-meta-label">${clean}</span></span>`;
 }
 
 function replaceTimelineMeta(node) {
   if (!node || node.nodeType !== Node.TEXT_NODE) return false;
   const rawText = node.nodeValue || '';
   if (!rawText.includes('🗓') && !rawText.includes('🕒') && !rawText.includes('⏳')) return false;
-  const text = rawText.split('|').join(' ').replace(/\s+/g, ' ').trim();
-  const html = text
-    .replace(/🗓\s*/g, `<span class="sf-meta-token">${SVG.calendar}<span>`)
-    .replace(/🕒\s*/g, `</span></span><span class="sf-meta-token">${SVG.clock}<span>`)
-    .replace(/⏳\s*/g, `</span></span><span class="sf-meta-token">${SVG.duration}<span>`) + '</span></span>';
+
+  const compact = rawText.replace(/&nbsp;/g, ' ').split('|').join(' ').replace(/\s+/g, ' ').trim();
+  const dateMatch = compact.match(/🗓\s*(.*?)(?=\s*🕒|\s*⏳|$)/);
+  const timeMatch = compact.match(/🕒\s*(.*?)(?=\s*⏳|$)/);
+  const durationMatch = compact.match(/⏳\s*(.*?)$/);
+  const html = [
+    makeToken('calendar', dateMatch?.[1]),
+    makeToken('clock', timeMatch?.[1]),
+    makeToken('duration', durationMatch?.[1]),
+  ].filter(Boolean).join('');
+
   const span = document.createElement('span');
   span.className = 'sf-meta-line';
-  span.innerHTML = html.replace(/&nbsp;/g, ' ');
+  span.innerHTML = html;
   node.parentNode?.replaceChild(span, node);
   return true;
 }
