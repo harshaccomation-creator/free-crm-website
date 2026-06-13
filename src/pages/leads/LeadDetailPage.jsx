@@ -3,6 +3,7 @@ import { Mail, Phone, Edit3, Building2, MapPin, Globe, FileText, Loader2, Plus }
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 import LeadTimelinePanels from "../../components/leads/LeadTimelinePanels.jsx";
 import { createActivity, getCurrentProfile, getLead, listActivities, updateLead } from "../../services/crmApi.js";
+import { completeWonLeadTasks } from "../../services/editApi.js";
 
 const DISPOSITION_OPTIONS = ["Call Connected", "Not Connected", "Follow Up", "Demo Book", "Post Demo Follow Up", "Won", "Lost", "Junk"];
 
@@ -182,7 +183,10 @@ export default function LeadDetailPage({ leadId }) {
         activity_at: new Date().toISOString(),
         task_due_at: taskDueAt ? new Date(taskDueAt).toISOString() : null,
       });
-      if (disposition === "Won") await updateLead(currentLead.id, { value: amount, status: "Won" });
+      if (disposition === "Won") {
+        await updateLead(currentLead.id, { value: amount, status: "Won" });
+        await completeWonLeadTasks(currentLead.id);
+      }
       setActivityPopupOpen(false);
       setActivityForm(createInitialActivityForm());
       setActiveTab("Activity Timeline");
@@ -214,7 +218,7 @@ export default function LeadDetailPage({ leadId }) {
   if (loading) {
     return (
       <EmployeeShell>
-        <div className="min-h-[360px] grid place-items-center text-slate-500 font-bold"><Loader2 className="w-5 h-5 animate-spin mr-2 inline" /> Loading lead from Supabase...</div>
+        <div className="min-h-[360px] grid place-items-center text-slate-500 font-bold"><Loader2 className="w-5 h-5 animate-spin mr-2 inline" /> Loading lead from SalesFlow...</div>
       </EmployeeShell>
     );
   }
