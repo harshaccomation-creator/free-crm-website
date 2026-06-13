@@ -27,3 +27,26 @@ export async function editLeadTask({ taskId, title, note, dueAt, durationMinutes
   throwIfError(error, 'Task edit failed');
   return data;
 }
+
+export async function completeWonLeadTasks(leadId) {
+  if (!leadId) return null;
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+  throwIfError(authError, 'Unable to read login user');
+  const userId = authData?.user?.id;
+  if (!userId) return null;
+
+  const { data: profile, error: profileError } = await supabase
+    .from('profiles')
+    .select('company_id')
+    .eq('id', userId)
+    .maybeSingle();
+  throwIfError(profileError, 'Unable to read profile');
+  if (!profile?.company_id) return null;
+
+  const { data, error } = await supabase.rpc('salesflow_complete_open_tasks_for_lead', {
+    p_lead_id: leadId,
+    p_company_id: profile.company_id,
+  });
+  throwIfError(error, 'Unable to complete lead tasks');
+  return data;
+}
