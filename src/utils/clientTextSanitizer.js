@@ -6,56 +6,12 @@ const REPLACEMENTS = [
   [/supadata/gi, "SalesFlow"],
 ];
 
-const SVG = {
-  calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" class="sf-meta-svg"><rect x="3" y="4" width="18" height="18" rx="2"></rect><path d="M16 2v4"></path><path d="M8 2v4"></path><path d="M3 10h18"></path></svg>',
-  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" class="sf-meta-svg"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>',
-  duration: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" class="sf-meta-svg"><path d="M6 2h12"></path><path d="M6 22h12"></path><path d="M8 2c0 5 8 5 8 10s-8 5-8 10"></path><path d="M16 2c0 5-8 5-8 10s8 5 8 10"></path></svg>',
-};
-
 function cleanText(value) {
   return REPLACEMENTS.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), value);
 }
 
-function addTimelineIconStyles() {
-  if (document.getElementById('sf-meta-svg-style')) return;
-  const style = document.createElement('style');
-  style.id = 'sf-meta-svg-style';
-  style.textContent = '.sf-meta-line{display:inline-flex;align-items:center;flex-wrap:wrap;gap:18px}.sf-meta-token{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;color:#475569;font-weight:700;line-height:1.1}.sf-meta-svg{width:16px;height:16px;display:block;flex:0 0 16px;color:#64748b}.sf-meta-label{display:inline-block;line-height:1.1}';
-  document.head.appendChild(style);
-}
-
-function makeToken(type, value) {
-  const clean = String(value || '').replace(/\s+/g, ' ').trim();
-  if (!clean) return '';
-  return `<span class="sf-meta-token">${SVG[type]}<span class="sf-meta-label">${clean}</span></span>`;
-}
-
-function replaceTimelineMeta(node) {
-  if (!node || node.nodeType !== Node.TEXT_NODE) return false;
-  const rawText = node.nodeValue || '';
-  if (!rawText.includes('🗓') && !rawText.includes('🕒') && !rawText.includes('⏳')) return false;
-
-  const compact = rawText.replace(/&nbsp;/g, ' ').split('|').join(' ').replace(/\s+/g, ' ').trim();
-  const dateMatch = compact.match(/🗓\s*(.*?)(?=\s*🕒|\s*⏳|$)/);
-  const timeMatch = compact.match(/🕒\s*(.*?)(?=\s*⏳|$)/);
-  const durationMatch = compact.match(/⏳\s*(.*?)$/);
-  const html = [
-    makeToken('calendar', dateMatch?.[1]),
-    makeToken('clock', timeMatch?.[1]),
-    makeToken('duration', durationMatch?.[1]),
-  ].filter(Boolean).join('');
-
-  const span = document.createElement('span');
-  span.className = 'sf-meta-line';
-  span.innerHTML = html;
-  node.parentNode?.replaceChild(span, node);
-  return true;
-}
-
 function sanitizeNode(node) {
   if (!node) return;
-
-  if (replaceTimelineMeta(node)) return;
 
   if (node.nodeType === Node.TEXT_NODE) {
     const next = cleanText(node.nodeValue || "");
@@ -78,7 +34,6 @@ export function startClientTextSanitizer() {
   if (observerStarted) return;
   observerStarted = true;
 
-  addTimelineIconStyles();
   const run = () => sanitizeNode(document.body);
   if (document.body) run();
   else document.addEventListener("DOMContentLoaded", run, { once: true });
