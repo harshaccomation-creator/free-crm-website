@@ -20,19 +20,21 @@ function addTimelineIconStyles() {
   if (document.getElementById('sf-meta-svg-style')) return;
   const style = document.createElement('style');
   style.id = 'sf-meta-svg-style';
-  style.textContent = '.sf-meta-svg{width:16px;height:16px;display:inline-block;vertical-align:-3px;margin-right:6px;color:#64748b}.sf-meta-token{display:inline-flex;align-items:center;color:#475569;font-weight:700}';
+  style.textContent = '.sf-meta-svg{width:16px;height:16px;display:block;flex:0 0 16px;color:#64748b}.sf-meta-token{display:inline-flex;align-items:center;gap:6px;margin-right:18px;color:#475569;font-weight:700;line-height:1;vertical-align:middle}.sf-meta-line{display:inline-flex;align-items:center;flex-wrap:wrap;gap:0}';
   document.head.appendChild(style);
 }
 
 function replaceTimelineMeta(node) {
   if (!node || node.nodeType !== Node.TEXT_NODE) return false;
-  const text = node.nodeValue || '';
-  if (!text.includes('🗓') && !text.includes('🕒') && !text.includes('⏳')) return false;
+  const rawText = node.nodeValue || '';
+  if (!rawText.includes('🗓') && !rawText.includes('🕒') && !rawText.includes('⏳')) return false;
+  const text = rawText.split('|').join(' ').replace(/\s+/g, ' ').trim();
   const html = text
-    .replace(/🗓\s*/g, `<span class="sf-meta-token">${SVG.calendar}`)
-    .replace(/🕒\s*/g, `<span class="sf-meta-token">${SVG.clock}`)
-    .replace(/⏳\s*/g, `<span class="sf-meta-token">${SVG.duration}`);
+    .replace(/🗓\s*/g, `<span class="sf-meta-token">${SVG.calendar}<span>`)
+    .replace(/🕒\s*/g, `</span></span><span class="sf-meta-token">${SVG.clock}<span>`)
+    .replace(/⏳\s*/g, `</span></span><span class="sf-meta-token">${SVG.duration}<span>`) + '</span></span>';
   const span = document.createElement('span');
+  span.className = 'sf-meta-line';
   span.innerHTML = html.replace(/&nbsp;/g, ' ');
   node.parentNode?.replaceChild(span, node);
   return true;
