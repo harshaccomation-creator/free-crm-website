@@ -1,250 +1,100 @@
 import { useEffect, useMemo, useState } from 'react';
 import { listTasks } from '../../services/crmApi.js';
+import { editLeadActivity, editLeadTask } from '../../services/editApi.js';
 
-function safeText(value = '') {
-  return String(value || '');
-}
+function safeText(value = '') { return String(value || ''); }
+function dateObj(value) { const date = value ? new Date(value) : new Date(); return Number.isNaN(date.getTime()) ? new Date() : date; }
+function formatDate(value) { return dateObj(value).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }); }
+function formatTime(value) { return dateObj(value).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true }); }
+function formatDateTime(value) { return dateObj(value).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true }); }
+function relativeTime(value) { const mins = Math.max(0, Math.round((Date.now() - dateObj(value).getTime()) / 60000)); if (mins < 1) return 'just now'; if (mins < 60) return `${mins} mins ago`; const hours = Math.round(mins / 60); return hours < 24 ? `${hours} hours ago` : `${Math.round(hours / 24)} days ago`; }
+function dayHeading(value) { const date = dateObj(value); return date.toDateString() === new Date().toDateString() ? `Today, ${formatDate(value)}` : formatDate(value); }
 
-function dateObj(value) {
-  const date = value ? new Date(value) : new Date();
-  return Number.isNaN(date.getTime()) ? new Date() : date;
-}
+const LABEL_OVERRIDES = { email: 'Email', 'lead created': 'Lead Created', 'follow up': 'Follow Up', 'follow-up': 'Follow-Up', 'post demo follow up': 'Post Demo Follow Up', 'post demo follow-up': 'Post Demo Follow-Up', 'demo book': 'Demo Book', 'demo booked': 'Demo Booked', 'demo scheduled': 'Demo Scheduled', 'demo done': 'Demo Done', 'call connected': 'Call Connected', 'not connected': 'Not Connected', 'switch off': 'Switch Off', 'warm follow up': 'Warm Follow Up', 'payment discussion': 'Payment Discussion', qualified: 'Qualified', pending: 'Pending', completed: 'Completed', overdue: 'Overdue', won: 'Won', lost: 'Lost', junk: 'Junk', activity: 'Activity' };
+function formatLabel(value = '') { const raw = safeText(value).replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim(); if (!raw) return 'Activity'; const key = raw.toLowerCase(); if (LABEL_OVERRIDES[key]) return LABEL_OVERRIDES[key]; return key.split(' ').map((word) => word ? word.charAt(0).toUpperCase() + word.slice(1) : '').join(' '); }
+function typeLabel(type = '') { return formatLabel(type || 'Activity'); }
 
-function formatDate(value) {
-  return dateObj(value).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-}
+const DISPOSITION_OPTIONS = ['Call Connected', 'Not Connected', 'Follow Up', 'Demo Book', 'Post Demo Follow Up', 'Won', 'Lost', 'Junk'];
+const SUB_DISPOSITION_OPTIONS = {
+  'Call Connected': ['Requirement Pending', 'Price Discussion', 'Need Follow Up', 'Demo Book', 'Payment Discussion'],
+  'Not Connected': ['Switch Off', 'Not Reachable', 'No Answer', 'Wrong Number', 'Call Later'],
+  'Follow Up': ['Warm Follow Up', 'Cold Follow Up', 'Payment Follow Up', 'Document Follow Up'],
+  'Demo Book': ['Demo Scheduled', 'Demo Rescheduled', 'Online Demo', 'Offline Demo'],
+  'Post Demo Follow Up': ['Requirement Pending', 'Payment Discussion', 'Decision Pending', 'Plan Discussion'],
+  Won: ['Payment Done', 'Deal Closed'],
+  Lost: ['Price Issue', 'No Requirement', 'Competitor', 'Not Interested'],
+  Junk: ['Invalid Lead', 'Duplicate', 'Spam'],
+};
+function parseActivityTitle(title = '') { const clean = safeText(title).replace(/\s+/g, ' ').trim(); const [first, ...rest] = clean.split(/\s+-\s+/); const disposition = DISPOSITION_OPTIONS.find((option) => option.toLowerCase() === formatLabel(first).toLowerCase()) || formatLabel(first || 'Follow Up'); const subDisposition = rest.length ? formatLabel(rest.join(' - ')) : ''; return { disposition, subDisposition }; }
+function buildActivityTitle(disposition, subDisposition) { const main = formatLabel(disposition || 'Follow Up'); const subRaw = safeText(subDisposition).trim(); const sub = subRaw ? formatLabel(subRaw) : ''; return sub ? `${main} - ${sub}` : main; }
 
-function formatTime(value) {
-  return dateObj(value).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
-}
+function toLocalInput(value) { if (!value) return ''; const date = dateObj(value); const pad = (n) => String(n).padStart(2, '0'); return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`; }
+function isoFromLocal(value) { if (!value) return null; const date = new Date(value); return Number.isNaN(date.getTime()) ? null : date.toISOString(); }
+function cleanNote(note = '') { return safeText(note).split('\n').filter((line) => { const value = line.trim().toLowerCase(); if (!value) return false; if (value.startsWith('disposition:')) return false; if (value.startsWith('sub disposition:')) return false; if (value.startsWith('task date time:')) return false; if (value.startsWith('reminder:')) return false; if (value.startsWith('due:')) return false; if (value.includes('auto task')) return false; return true; }).join('\n').replace(/^note:\s*/i, '').trim(); }
+function groupByDay(items, field) { return items.reduce((groups, item) => { const key = formatDate(item[field]); groups[key] = groups[key] || []; groups[key].push(item); return groups; }, {}); }
+function isCompleted(task = {}) { return safeText(task.status).toLowerCase() === 'completed' || Boolean(task.completed_at); }
+function isOverdue(task = {}) { const due = task.due_at ? new Date(task.due_at).getTime() : 0; const duration = Number(task.duration_minutes || 30) * 60000; return !isCompleted(task) && due > 0 && due + duration < Date.now(); }
+function taskDisplayStatus(task = {}) { return isOverdue(task) ? 'Overdue' : task.status || 'Pending'; }
+function isOpenTask(task = {}) { return !isCompleted(task); }
+function statusBadge(value = '') { const key = safeText(value).toLowerCase(); const color = key.includes('completed') || key.includes('won') ? 'bg-green-50 text-green-700' : key.includes('lost') || key.includes('overdue') ? 'bg-red-50 text-red-700' : 'bg-orange-50 text-orange-700'; return <span className={`whitespace-nowrap rounded-lg px-3 py-1 text-xs font-black ${color}`}>{formatLabel(value || 'Pending')}</span>; }
 
-function formatDateTime(value) {
-  return dateObj(value).toLocaleString('en-IN', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
-  });
-}
+const iconCommon = { viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 2.2, strokeLinecap: 'round', strokeLinejoin: 'round', className: 'h-4 w-4' };
+function IconSvg({ type }) { const key = safeText(type).toLowerCase(); if (key.includes('call')) return <svg {...iconCommon}><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 3.1 5.18 2 2 0 0 1 5.11 3h3a2 2 0 0 1 2 1.72c.12.9.32 1.77.59 2.6a2 2 0 0 1-.45 2.11L9 10.7a16 16 0 0 0 4.3 4.3l1.27-1.25a2 2 0 0 1 2.11-.45c.83.27 1.7.47 2.6.59A2 2 0 0 1 22 16.92z" /></svg>; if (key.includes('demo') || key.includes('task')) return <svg {...iconCommon}><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4" /><path d="M8 2v4" /><path d="M3 10h18" /></svg>; if (key.includes('won')) return <svg {...iconCommon}><path d="M8 21h8" /><path d="M12 17v4" /><path d="M7 4h10v4a5 5 0 0 1-10 0V4z" /><path d="M5 5H3v2a4 4 0 0 0 4 4" /><path d="M19 5h2v2a4 4 0 0 1-4 4" /></svg>; if (key.includes('note')) return <svg {...iconCommon}><path d="M4 4h16v16H4z" /><path d="M8 8h8" /><path d="M8 12h8" /><path d="M8 16h5" /></svg>; if (key.includes('not') || key.includes('warning')) return <svg {...iconCommon}><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" /><path d="M12 9v4" /><path d="M12 17h.01" /></svg>; return <svg {...iconCommon}><path d="M13 2 3 14h8l-1 8 11-14h-8l0-6z" /></svg>; }
+function CalendarIcon() { return <svg {...iconCommon}><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4" /><path d="M8 2v4" /><path d="M3 10h18" /></svg>; }
+function ClockIcon() { return <svg {...iconCommon}><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>; }
+function DurationIcon() { return <svg {...iconCommon}><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2.5 1.5" /><path d="M9 2h6" /><path d="M12 2v3" /></svg>; }
+function MetaItem({ icon, text }) { return <span className="inline-flex items-center gap-1.5 whitespace-nowrap leading-none text-slate-600">{icon}<span>{text}</span></span>; }
+function MetaLine({ date, time, duration }) { return <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold text-slate-600"><MetaItem icon={<CalendarIcon />} text={date} /><MetaItem icon={<ClockIcon />} text={time} />{duration ? <MetaItem icon={<DurationIcon />} text={duration} /> : null}</div>; }
+function RowIcon({ type, done }) { return <div className="relative z-10 grid h-9 w-9 place-items-center rounded-xl bg-orange-50 text-orange-600 shadow-sm"><IconSvg type={type} />{done ? <span className="absolute -right-1 -bottom-1 grid h-4 w-4 place-items-center rounded-full bg-green-500 text-[10px] text-white">✓</span> : null}</div>; }
+function EditIconButton({ onClick }) { return <button type="button" title="Edit" aria-label="Edit" onClick={onClick} className="absolute right-4 top-14 grid h-9 w-9 place-items-center rounded-xl border border-slate-200 bg-white text-slate-600 shadow-sm hover:bg-orange-50 hover:text-orange-700"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4"><path d="M12 20h9" /><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg></button>; }
+function EmptyState({ text }) { return <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-slate-500">{text}</div>; }
+function updateTabBadges(openTaskCount) { const section = document.getElementById('lead-activity-section'); if (!section) return; const buttons = [...section.querySelectorAll('button')]; const activityButton = buttons.find((button) => (button.textContent || '').trim().startsWith('Activity Timeline')); const tasksButton = buttons.find((button) => (button.textContent || '').trim().startsWith('Tasks')); activityButton?.querySelectorAll('[data-sf-badge], span').forEach((badge) => badge.remove()); tasksButton?.querySelectorAll('[data-sf-badge]').forEach((badge) => badge.remove()); if (tasksButton && openTaskCount > 0) { const badge = document.createElement('span'); badge.dataset.sfBadge = 'task-open-count'; badge.className = 'ml-2 inline-grid min-w-5 h-5 place-items-center rounded-full bg-red-600 px-1 text-[11px] font-black text-white'; badge.textContent = String(openTaskCount); tasksButton.appendChild(badge); } }
 
-function dayHeading(value) {
-  const date = dateObj(value);
-  const today = new Date();
-  if (date.toDateString() === today.toDateString()) return `Today, ${formatDate(value)}`;
-  return formatDate(value);
-}
+function TimelineRow({ icon, children }) { return <div className="relative flex gap-4"><div className="flex w-10 flex-col items-center">{icon}<div className="h-full w-px bg-slate-200" /></div>{children}</div>; }
 
-function relativeTime(value) {
-  const diff = Date.now() - dateObj(value).getTime();
-  const mins = Math.max(0, Math.round(diff / 60000));
-  if (mins < 1) return 'just now';
-  if (mins < 60) return `${mins} mins ago`;
-  const hours = Math.round(mins / 60);
-  if (hours < 24) return `${hours} hours ago`;
-  return `${Math.round(hours / 24)} days ago`;
-}
-
-function groupByDay(items, field) {
-  return items.reduce((groups, item) => {
-    const key = formatDate(item[field]);
-    if (!groups[key]) groups[key] = [];
-    groups[key].push(item);
-    return groups;
-  }, {});
-}
-
-function typeLabel(type = '') {
-  return safeText(type).replaceAll('_', ' ') || 'Activity';
-}
-
-function statusBadge(status = '') {
-  const key = safeText(status).toLowerCase();
-  const color = key === 'completed' || key === 'won'
-    ? 'bg-green-50 text-green-700'
-    : key.includes('lost') || key.includes('over')
-      ? 'bg-red-50 text-red-700'
-      : 'bg-orange-50 text-orange-700';
-  return <span className={`rounded-lg px-3 py-1 text-xs font-black ${color}`}>{safeText(status || 'Pending')}</span>;
-}
-
-function isOpenTask(task = {}) {
-  const status = safeText(task.status).toLowerCase();
-  return status !== 'completed' && !task.completed_at;
-}
-
-function cleanTaskNote(note = '') {
-  return safeText(note)
-    .split('\n')
-    .filter((line) => {
-      const text = line.toLowerCase();
-      if (text.includes('auto task created from lead activity')) return false;
-      if (text.includes('reminder should be sent')) return false;
-      if (text.includes('reminder: 15 minutes')) return false;
-      if (text.includes('15 minutes before due time')) return false;
-      return line.trim();
-    })
-    .join('\n')
-    .trim();
-}
-
-function ActivityIcon({ type }) {
-  const key = safeText(type).toLowerCase();
-  const icon = key.includes('call') ? '☎️' : key.includes('demo') ? '📅' : key.includes('won') ? '🏆' : key.includes('task') ? '✅' : key.includes('note') ? '📝' : key.includes('not') ? '⚠️' : '⚡';
-  return <div className="relative z-10 grid h-9 w-9 place-items-center rounded-xl bg-orange-50 text-orange-600 shadow-sm">{icon}</div>;
-}
-
-function TaskIcon({ status }) {
-  const done = safeText(status).toLowerCase() === 'completed';
-  return (
-    <div className="relative z-10 grid h-9 w-9 place-items-center rounded-xl bg-blue-50 text-blue-600 shadow-sm">
-      📅
-      {done ? <span className="absolute -right-1 -bottom-1 grid h-4 w-4 place-items-center rounded-full bg-green-500 text-[10px] text-white">✓</span> : null}
-    </div>
-  );
-}
-
-function ActivityCard({ item }) {
+function ActivityCard({ item, onEdit }) {
   const actor = item.user?.full_name || item.user?.email || 'Not assigned';
   const activityAt = item.activity_at || item.created_at;
-  return (
-    <div className="relative flex gap-4">
-      <div className="flex w-10 flex-col items-center">
-        <ActivityIcon type={item.type} />
-        <div className="h-full w-px bg-slate-200" />
-      </div>
-      <div className="mb-4 flex-1 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-base font-black text-slate-900">{item.title || typeLabel(item.type)}</p>
-            <p className="mt-2 text-sm font-semibold text-slate-600">🗓 {formatDate(activityAt)} &nbsp; | &nbsp; 🕒 {formatTime(activityAt)}</p>
-          </div>
-          {statusBadge(typeLabel(item.type))}
-        </div>
-        {item.note ? <p className="mt-3 whitespace-pre-line text-sm text-slate-600">{item.note}</p> : null}
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-500">
-          <span className="rounded-md bg-slate-100 px-2 py-1 font-bold text-slate-700">{actor}</span>
-          <span>Added By {actor} &nbsp; | &nbsp; {formatDateTime(item.created_at || activityAt)} &nbsp; • &nbsp; {relativeTime(item.created_at || activityAt)}</span>
-        </div>
-      </div>
-    </div>
-  );
+  const visibleNote = cleanNote(item.note);
+  return <TimelineRow icon={<RowIcon type={item.type} />}><div className="relative mb-4 flex-1 rounded-2xl border border-slate-200 bg-white p-4 pr-16 shadow-sm"><div className="flex items-start justify-between gap-3"><div><p className="text-base font-black text-slate-900">{item.title || typeLabel(item.type)}</p><MetaLine date={formatDate(activityAt)} time={formatTime(activityAt)} /></div>{statusBadge(typeLabel(item.type))}</div>{visibleNote ? <p className="mt-3 whitespace-pre-line text-sm text-slate-600">{visibleNote}</p> : null}<div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-500"><span className="rounded-md bg-slate-100 px-2 py-1 font-bold text-slate-700">{actor}</span><span>Added By {actor} &nbsp; | &nbsp; {formatDateTime(item.created_at || activityAt)} &nbsp; • &nbsp; {relativeTime(item.created_at || activityAt)}</span></div><EditIconButton onClick={() => onEdit(item)} /></div></TimelineRow>;
 }
 
-function TaskCard({ task }) {
+function TaskCard({ task, onEdit }) {
   const owner = task.owner?.full_name || task.owner?.email || 'Not assigned';
-  const isAutoTask = /auto task created from lead activity/i.test(safeText(task.note));
+  const isAutoTask = /auto task/i.test(safeText(task.note)) || /call again|demo scheduled|follow-up/i.test(safeText(task.title));
   const addedBy = isAutoTask ? 'System' : (task.created_by_profile?.full_name || task.created_by_profile?.email || owner);
   const durationMinutes = Number(task.duration_minutes || task.duration || 30);
-  const visibleNote = cleanTaskNote(task.note);
-  return (
-    <div className="relative flex gap-4">
-      <div className="flex w-10 flex-col items-center">
-        <TaskIcon status={task.status} />
-        <div className="h-full w-px bg-slate-200" />
-      </div>
-      <div className="mb-4 flex-1 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-base font-black text-slate-900">{task.title || 'Task'}</p>
-            <p className="mt-2 text-sm font-semibold text-slate-600">🗓 {formatDate(task.due_at)} &nbsp; | &nbsp; 🕒 {formatTime(task.due_at)} &nbsp; | &nbsp; ⏳ {durationMinutes}m</p>
-          </div>
-          {statusBadge(task.status || 'Pending')}
-        </div>
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-500">
-          <span className="rounded-md bg-slate-100 px-2 py-1 font-bold text-slate-700">{owner}</span>
-          <span>Added By {addedBy} &nbsp; | &nbsp; {formatDateTime(task.created_at)} &nbsp; • &nbsp; {relativeTime(task.created_at)}</span>
-        </div>
-        {visibleNote ? <p className="mt-3 whitespace-pre-line text-sm text-slate-500">{visibleNote}</p> : null}
-      </div>
-    </div>
-  );
+  const visibleNote = cleanNote(task.note);
+  return <TimelineRow icon={<RowIcon type="task" done={isCompleted(task)} />}><div className="relative mb-4 flex-1 rounded-2xl border border-slate-200 bg-white p-4 pr-16 shadow-sm"><div className="flex items-start justify-between gap-3"><div><p className="text-base font-black text-slate-900">{task.title || 'Task'}</p><MetaLine date={formatDate(task.due_at)} time={formatTime(task.due_at)} duration={`${durationMinutes}m`} /></div>{statusBadge(taskDisplayStatus(task))}</div><div className="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-500"><span className="rounded-md bg-slate-100 px-2 py-1 font-bold text-slate-700">{owner}</span><span>Added By {addedBy} &nbsp; | &nbsp; {formatDateTime(task.created_at)} &nbsp; • &nbsp; {relativeTime(task.created_at)}</span></div>{visibleNote ? <p className="mt-3 whitespace-pre-line text-sm text-slate-500">{visibleNote}</p> : null}<EditIconButton onClick={() => onEdit(task)} /></div></TimelineRow>;
 }
 
-function EmptyState({ text }) {
-  return <div className="rounded-xl border border-dashed border-slate-200 p-8 text-center text-slate-500">{text}</div>;
-}
-
-function updateTabBadges(openTaskCount) {
-  const section = document.getElementById('lead-activity-section');
-  if (!section) return;
-  const buttons = [...section.querySelectorAll('button')];
-  const activityButton = buttons.find((button) => (button.textContent || '').trim().startsWith('Activity Timeline'));
-  const tasksButton = buttons.find((button) => (button.textContent || '').trim().startsWith('Tasks'));
-
-  activityButton?.querySelectorAll('[data-sf-badge], span').forEach((badge) => badge.remove());
-  tasksButton?.querySelectorAll('[data-sf-badge]').forEach((badge) => badge.remove());
-
-  if (tasksButton && openTaskCount > 0) {
-    const badge = document.createElement('span');
-    badge.dataset.sfBadge = 'task-open-count';
-    badge.className = 'ml-2 inline-grid min-w-5 h-5 place-items-center rounded-full bg-red-600 px-1 text-[11px] font-black text-white';
-    badge.textContent = String(openTaskCount);
-    tasksButton.appendChild(badge);
-  }
+function EditModal({ kind, value, saving, onChange, onCancel, onSave }) {
+  if (!value) return null;
+  const subOptions = SUB_DISPOSITION_OPTIONS[value.disposition] || [];
+  return <div className="fixed inset-0 z-[9999] grid place-items-center bg-slate-950/60 px-4"><div className="w-full max-w-lg rounded-2xl border border-slate-200 bg-white shadow-2xl"><div className="border-b border-slate-100 px-5 py-4"><h2 className="text-xl font-black text-slate-900">Edit {kind === 'task' ? 'Task' : 'Activity'}</h2></div><div className="space-y-4 p-5">{kind === 'activity' ? <><div className="grid grid-cols-2 gap-3"><label className="block"><span className="text-xs font-black uppercase text-slate-500">Disposition</span><select value={value.disposition} onChange={(e) => onChange({ ...value, disposition: e.target.value, subDisposition: '' })} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold">{DISPOSITION_OPTIONS.map((option) => <option key={option}>{option}</option>)}</select></label><label className="block"><span className="text-xs font-black uppercase text-slate-500">Sub Disposition</span><select value={value.subDisposition} onChange={(e) => onChange({ ...value, subDisposition: e.target.value })} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold"><option value="">Select</option>{subOptions.map((option) => <option key={option}>{option}</option>)}</select></label></div><label className="block"><span className="text-xs font-black uppercase text-slate-500">Activity Time</span><input type="datetime-local" value={value.activityAt} onChange={(e) => onChange({ ...value, activityAt: e.target.value })} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold" /></label></> : <><label className="block"><span className="text-xs font-black uppercase text-slate-500">Title</span><input value={value.title} onChange={(e) => onChange({ ...value, title: e.target.value })} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold" /></label><label className="block"><span className="text-xs font-black uppercase text-slate-500">Due Time</span><input type="datetime-local" value={value.dueAt} onChange={(e) => onChange({ ...value, dueAt: e.target.value })} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold" /></label><div className="grid grid-cols-2 gap-3"><label className="block"><span className="text-xs font-black uppercase text-slate-500">Duration</span><select value={value.durationMinutes} onChange={(e) => onChange({ ...value, durationMinutes: Number(e.target.value) })} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold"><option value={15}>15m</option><option value={30}>30m</option><option value={45}>45m</option><option value={60}>60m</option><option value={90}>90m</option><option value={120}>120m</option></select></label><label className="block"><span className="text-xs font-black uppercase text-slate-500">Status</span><select value={value.status} onChange={(e) => onChange({ ...value, status: e.target.value })} className="mt-1 h-11 w-full rounded-xl border border-slate-200 px-3 text-sm font-bold"><option>Pending</option><option>Completed</option></select></label></div></>}<label className="block"><span className="text-xs font-black uppercase text-slate-500">Note</span><textarea value={value.note} onChange={(e) => onChange({ ...value, note: e.target.value })} className="mt-1 min-h-24 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm font-semibold" /></label></div><div className="flex justify-end gap-3 border-t border-slate-100 px-5 py-4"><button type="button" onClick={onCancel} className="h-10 rounded-xl border border-slate-200 px-4 text-sm font-bold">Cancel</button><button type="button" disabled={saving} onClick={onSave} className="h-10 rounded-xl bg-orange-600 px-5 text-sm font-black text-white disabled:opacity-50">{saving ? 'Saving...' : 'Save'}</button></div></div></div>;
 }
 
 export default function LeadTimelinePanels({ activeTab, leadId, activities = [] }) {
   const [tasks, setTasks] = useState([]);
   const [tasksLoading, setTasksLoading] = useState(false);
+  const [editingActivity, setEditingActivity] = useState(null);
+  const [editingTask, setEditingTask] = useState(null);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (!leadId) return;
-    let mounted = true;
-    setTasksLoading(activeTab === 'Tasks');
-    listTasks({ limit: 500 })
-      .then((rows) => {
-        if (!mounted) return;
-        setTasks((rows || []).filter((task) => task.lead_id === leadId || task.lead?.id === leadId));
-      })
-      .catch(() => mounted && setTasks([]))
-      .finally(() => mounted && setTasksLoading(false));
-    return () => { mounted = false; };
-  }, [activeTab, leadId]);
-
+  async function loadTasks() { if (!leadId) return; const rows = await listTasks({ limit: 500 }); setTasks((rows || []).filter((task) => task.lead_id === leadId || task.lead?.id === leadId)); }
+  useEffect(() => { setTasksLoading(activeTab === 'Tasks'); loadTasks().catch(() => setTasks([])).finally(() => setTasksLoading(false)); }, [activeTab, leadId]);
+  const visibleActivities = useMemo(() => (activities || []).filter((item) => safeText(item.type).toLowerCase() !== 'task_created'), [activities]);
   const openTaskCount = useMemo(() => tasks.filter(isOpenTask).length, [tasks]);
-
-  useEffect(() => {
-    updateTabBadges(openTaskCount);
-  }, [openTaskCount, activeTab, activities.length]);
-
-  const groupedActivities = useMemo(() => groupByDay(activities, 'activity_at'), [activities]);
+  useEffect(() => { updateTabBadges(openTaskCount); }, [openTaskCount, activeTab, visibleActivities.length]);
+  const groupedActivities = useMemo(() => groupByDay(visibleActivities, 'activity_at'), [visibleActivities]);
   const groupedTasks = useMemo(() => groupByDay(tasks, 'due_at'), [tasks]);
 
-  if (activeTab === 'Activity Timeline') {
-    if (!activities.length) return <EmptyState text="No Supabase activities found." />;
-    return (
-      <div className="space-y-2">
-        {Object.entries(groupedActivities).map(([date, list]) => (
-          <div key={date}>
-            <div className="mb-3 text-sm font-black text-slate-800">{dayHeading(list[0]?.activity_at || list[0]?.created_at)}</div>
-            <div>{list.map((item) => <ActivityCard key={item.id} item={item} />)}</div>
-          </div>
-        ))}
-      </div>
-    );
-  }
+  async function saveActivity() { if (!editingActivity) return; setSaving(true); setError(''); try { const title = buildActivityTitle(editingActivity.disposition, editingActivity.subDisposition); await editLeadActivity({ activityId: editingActivity.id, title, note: editingActivity.note, activityAt: isoFromLocal(editingActivity.activityAt) }); window.location.reload(); } catch (err) { setError(err.message || 'Activity edit failed'); } finally { setSaving(false); } }
+  async function saveTask() { if (!editingTask) return; setSaving(true); setError(''); try { await editLeadTask({ taskId: editingTask.id, title: editingTask.title, note: editingTask.note, dueAt: isoFromLocal(editingTask.dueAt), durationMinutes: editingTask.durationMinutes, status: editingTask.status }); setEditingTask(null); await loadTasks(); } catch (err) { setError(err.message || 'Task edit failed'); } finally { setSaving(false); } }
 
-  if (activeTab === 'Tasks') {
-    if (tasksLoading) return <div className="text-slate-500 font-bold">Loading lead tasks...</div>;
-    if (!tasks.length) return <EmptyState text="No task found for this lead." />;
-    return (
-      <div>
-        <div className="mb-5 flex flex-wrap items-center gap-3">
-          <button type="button" className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm font-bold text-slate-700">↕</button>
-          <button type="button" className="h-9 rounded-lg border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700">Status⌄</button>
-          <button type="button" className="h-9 rounded-lg border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700">Due Date⌄</button>
-        </div>
-        {Object.entries(groupedTasks).map(([date, list]) => (
-          <div key={date}>
-            <div className="mb-3 text-sm font-black text-slate-800">{dayHeading(list[0]?.due_at)}</div>
-            <div>{list.map((task) => <TaskCard key={task.id} task={task} />)}</div>
-          </div>
-        ))}
-      </div>
-    );
-  }
+  const openActivityEdit = (item) => { const parts = parseActivityTitle(item.title || item.type); setEditingActivity({ id: item.id, disposition: parts.disposition, subDisposition: parts.subDisposition, note: cleanNote(item.note), activityAt: toLocalInput(item.activity_at || item.created_at) }); };
+  const openTaskEdit = (task) => setEditingTask({ id: task.id, title: task.title || '', note: cleanNote(task.note), dueAt: toLocalInput(task.due_at), durationMinutes: Number(task.duration_minutes || 30), status: task.status || 'Pending' });
 
-  return null;
+  return <><>{error ? <div className="mb-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-bold text-red-700">{error}</div> : null}</>{activeTab === 'Activity Timeline' ? (!visibleActivities.length ? <EmptyState text="No Supabase activities found." /> : <div className="space-y-2">{Object.entries(groupedActivities).map(([date, list]) => <div key={date}><div className="mb-3 text-sm font-black text-slate-800">{dayHeading(list[0]?.activity_at || list[0]?.created_at)}</div><div>{list.map((item) => <ActivityCard key={item.id} item={item} onEdit={openActivityEdit} />)}</div></div>)}</div>) : null}{activeTab === 'Tasks' ? (tasksLoading ? <div className="text-slate-500 font-bold">Loading lead tasks...</div> : !tasks.length ? <EmptyState text="No task found for this lead." /> : <div><div className="mb-5 flex flex-wrap items-center gap-3"><button type="button" className="h-9 rounded-lg border border-slate-200 bg-white px-3 text-sm font-bold text-slate-700">Sort</button><button type="button" className="h-9 rounded-lg border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700">Status</button><button type="button" className="h-9 rounded-lg border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700">Due Date</button></div>{Object.entries(groupedTasks).map(([date, list]) => <div key={date}><div className="mb-3 text-sm font-black text-slate-800">{dayHeading(list[0]?.due_at)}</div><div>{list.map((task) => <TaskCard key={task.id} task={task} onEdit={openTaskEdit} />)}</div></div>)}</div>) : null}<EditModal kind="activity" value={editingActivity} saving={saving} onChange={setEditingActivity} onCancel={() => setEditingActivity(null)} onSave={saveActivity} /><EditModal kind="task" value={editingTask} saving={saving} onChange={setEditingTask} onCancel={() => setEditingTask(null)} onSave={saveTask} /></>;
 }
