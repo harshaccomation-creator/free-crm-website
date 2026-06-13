@@ -4,6 +4,29 @@ const REPLACEMENTS = [
   [/Supabase/gi, "SalesFlow"],
   [/Supadata/gi, "SalesFlow"],
   [/supadata/gi, "SalesFlow"],
+
+  // CRM label and badge capitalization fixes
+  [/\bemail\b/g, "Email"],
+  [/\bfollow up\b/g, "Follow Up"],
+  [/\bfollow-up\b/g, "Follow-Up"],
+  [/\bpost demo follow up\b/g, "Post Demo Follow Up"],
+  [/\bpost demo follow-up\b/g, "Post Demo Follow-Up"],
+  [/\bdemo book\b/g, "Demo Book"],
+  [/\bdemo booked\b/g, "Demo Booked"],
+  [/\bdemo scheduled\b/g, "Demo Scheduled"],
+  [/\bdemo done\b/g, "Demo Done"],
+  [/\bcall connected\b/g, "Call Connected"],
+  [/\bnot connected\b/g, "Not Connected"],
+  [/\bswitch off\b/g, "Switch Off"],
+  [/\bwarm follow up\b/g, "Warm Follow Up"],
+  [/\bpayment discussion\b/g, "Payment Discussion"],
+  [/\bqualified\b/g, "Qualified"],
+  [/\bpending\b/g, "Pending"],
+  [/\bcompleted\b/g, "Completed"],
+  [/\boverdue\b/g, "Overdue"],
+  [/\bwon\b/g, "Won"],
+  [/\blost\b/g, "Lost"],
+  [/\bjunk\b/g, "Junk"],
 ];
 
 function cleanText(value) {
