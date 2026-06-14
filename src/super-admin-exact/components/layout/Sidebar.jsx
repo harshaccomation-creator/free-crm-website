@@ -1,7 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import {
   LayoutDashboard, Building2, Users, CreditCard, Package,
-  CalendarCheck, Activity, Mail, Ticket, HeartPulse, LogOut, Shield
+  CalendarCheck, Activity, Mail, Ticket, HeartPulse, LogOut, Shield,
+  TrendingUp, Target, Bell, ShieldCheck, Settings, BarChart2
 } from 'lucide-react';
 
 const NAV = [
@@ -13,13 +14,19 @@ const NAV = [
   { label: 'BILLING', items: [
     { to: '/subscriptions', icon: CreditCard, label: 'Subscriptions' },
     { to: '/plans', icon: Package, label: 'Plans' },
+    { to: '/revenue', icon: TrendingUp, label: 'Revenue & Plans' },
   ]},
   { label: 'OPERATIONS', items: [
+    { to: '/leads-monitor', icon: Target, label: 'Leads Monitor' },
     { to: '/demo-requests', icon: CalendarCheck, label: 'Demo Requests' },
     { to: '/support-tickets', icon: Ticket, label: 'Support Tickets' },
+    { to: '/notifications', icon: Bell, label: 'Notifications' },
   ]},
   { label: 'SYSTEM', items: [
     { to: '/website-health', icon: HeartPulse, label: 'Website Health' },
+    { to: '/security', icon: ShieldCheck, label: 'Security' },
+    { to: '/platform-settings', icon: Settings, label: 'Platform Settings' },
+    { to: '/reports', icon: BarChart2, label: 'Reports' },
     { to: '/activity-logs', icon: Activity, label: 'Activity Logs' },
     { to: '/email-logs', icon: Mail, label: 'Email Logs' },
   ]},
@@ -58,7 +65,7 @@ export default function Sidebar() {
                   }
                 >
                   <Icon className="w-4 h-4 flex-shrink-0" />
-                  {label}
+                  <span className="truncate">{label}</span>
                 </NavLink>
               ))}
             </div>
