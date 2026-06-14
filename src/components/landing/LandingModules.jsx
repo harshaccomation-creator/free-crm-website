@@ -13,7 +13,12 @@ const bottomModules = [
   { icon: '★', title: 'About SalesFlow', text: 'A fast CRM made for lead follow-up and sales operations.' },
 ];
 
-export default function LandingModules({ action, openLoginPage }) {
+function openTrialLogin() {
+  window.history.pushState({}, '', '/login');
+  window.dispatchEvent(new Event('popstate'));
+}
+
+export default function LandingModules({ action }) {
   const showNote = (title) => action?.(`${title} section selected`);
 
   return (
@@ -45,7 +50,7 @@ export default function LandingModules({ action, openLoginPage }) {
           <span>MODULAR CRM ARCHITECTURE</span>
           <h3>Professional CRM that stays stable as features grow.</h3>
           <p>Landing page, dashboard, admin, super admin, leads and lead activity will stay in separate files so future fixes are fast and safe.</p>
-          <button className="btn btn-primary" onClick={openLoginPage}>🚀 Start with SalesFlow</button>
+          <button className="btn btn-primary" onClick={openTrialLogin}>🚀 Start with SalesFlow</button>
         </div>
         <div className="modules-mini-ui" aria-label="CRM module preview">
           <div className="mini-ui-sidebar"><span /><span /><span /></div>
