@@ -7,12 +7,33 @@ const topModules = [
 ];
 
 const bottomModules = [
-  { icon: '▣', title: 'Resources', text: 'Guides, templates and sales playbooks for faster team setup.' },
-  { icon: '₹', title: 'Simple Pricing', text: 'Start free and upgrade only when your team needs more power.' },
-  { icon: '★', title: 'About SalesFlow', text: 'A fast CRM made for lead follow-up and sales operations.' },
+  { icon: '▣', title: 'Resources', text: 'Guides, templates and sales playbooks for faster team setup.', action: 'resources' },
+  { icon: '₹', title: 'Simple Pricing', text: 'Start free and upgrade only when your team needs more power.', action: 'pricing' },
+  { icon: '★', title: 'About SalesFlow', text: 'A fast CRM made for lead follow-up and sales operations.', action: 'about' },
 ];
 
-export default function LandingModules({ openModal }) {
+export default function LandingModules({ openModal, openLoginPage, openInfoPage }) {
+  const openModule = () => {
+    if (openLoginPage) openLoginPage();
+    else openModal?.('Start Free Trial');
+  };
+
+  const exploreModule = (item) => {
+    if (item.action === 'pricing') {
+      document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+    if (item.action === 'resources') {
+      openInfoPage?.('Resources');
+      return;
+    }
+    if (item.action === 'about') {
+      openInfoPage?.('About SalesFlow');
+      return;
+    }
+    openModal?.(item.title);
+  };
+
   return (
     <section id="products" className="landing-shell modules-section">
       <div className="modules-heading">
@@ -31,7 +52,7 @@ export default function LandingModules({ openModal }) {
             </div>
             <div className="module-footer-row">
               <span>{item.stat}</span>
-              <button onClick={() => openModal(`${item.title} Module`)}>Open →</button>
+              <button onClick={openModule}>Open Workspace →</button>
             </div>
           </article>
         ))}
@@ -41,7 +62,7 @@ export default function LandingModules({ openModal }) {
         <div className="modules-showcase-copy">
           <span>MODULAR CRM ARCHITECTURE</span>
           <h3>Professional CRM that stays stable as features grow.</h3>
-          <p>Landing page, dashboard, admin, super admin, leads and lead activity will stay in separate files so future fixes are fast and safe.</p>
+          <p>Landing page, dashboard, admin, super admin, leads and lead activity stay in separate files so future fixes are fast and safe.</p>
           <button className="btn btn-primary" onClick={() => openModal('Start Free Trial')}>🚀 Start with SalesFlow</button>
         </div>
         <div className="modules-mini-ui" aria-label="CRM module preview">
@@ -60,7 +81,7 @@ export default function LandingModules({ openModal }) {
             <div className="module-icon small">{item.icon}</div>
             <h3>{item.title}</h3>
             <p>{item.text}</p>
-            <button onClick={() => openModal(item.title)}>Explore</button>
+            <button onClick={() => exploreModule(item)}>Explore</button>
           </article>
         ))}
       </div>
