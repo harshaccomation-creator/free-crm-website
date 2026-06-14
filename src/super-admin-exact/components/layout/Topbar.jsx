@@ -1,34 +1,45 @@
-import { Bell, Search, RefreshCw } from 'lucide-react';
+import { Bell, CalendarDays, ChevronDown, HelpCircle, Menu, Search } from 'lucide-react';
 
-export default function Topbar({ title, subtitle }) {
+export default function Topbar() {
   return (
-    <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between sticky top-0 z-20">
-      <div>
-        <h1 className="text-xl font-bold text-gray-900">{title}</h1>
-        {subtitle && <p className="text-sm text-gray-500 mt-0.5">{subtitle}</p>}
+    <header className="h-[96px] bg-[#101827] border-b border-[#1d2d4a] flex items-center px-8 gap-7 sticky top-0 z-20">
+      <button className="w-10 h-10 flex items-center justify-center rounded-xl text-[#89a1c4] hover:bg-[#15233a] transition-colors">
+        <Menu className="w-7 h-7" />
+      </button>
+
+      <div className="relative flex-1 max-w-[680px]">
+        <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-[#7188ad]" />
+        <input
+          type="search"
+          placeholder="Search companies, users, invoices, tickets..."
+          className="sf-input w-full h-[54px] pl-14 pr-16 text-lg"
+        />
+        <span className="absolute right-4 top-1/2 -translate-y-1/2 px-2.5 py-1 rounded-lg bg-[#111f35] border border-[#253657] text-[#8ba3c8] text-sm">⌘K</span>
       </div>
-      <div className="flex items-center gap-3">
-        <div className="relative">
-          <Search className="absolute left-3 top-2.5 w-4 h-4 text-gray-400" />
-          <input
-            type="search"
-            placeholder="Search..."
-            className="pl-9 pr-4 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent w-56"
-          />
+
+      <div className="hidden xl:flex items-center gap-3 h-[44px] px-5 rounded-xl bg-[#101b31] border border-[#1d2d4a] text-[#8ba3c8] text-base whitespace-nowrap">
+        <CalendarDays className="w-5 h-5" />
+        May 12 – Jun 12, 2025
+      </div>
+
+      <button className="relative w-11 h-11 flex items-center justify-center rounded-xl text-[#8ba3c8] hover:bg-[#15233a] transition-colors">
+        <Bell className="w-6 h-6" />
+        <span className="absolute -top-1 -right-1 w-7 h-7 rounded-full bg-red-500 text-white text-xs font-bold flex items-center justify-center border-2 border-[#101827]">8</span>
+      </button>
+
+      <button className="w-11 h-11 flex items-center justify-center rounded-xl text-[#8ba3c8] hover:bg-[#15233a] transition-colors">
+        <HelpCircle className="w-6 h-6" />
+      </button>
+
+      <div className="h-10 w-px bg-[#243554]" />
+
+      <div className="flex items-center gap-4 min-w-[300px] justify-end">
+        <div className="w-11 h-11 rounded-full bg-[#133875] text-[#66a1ff] flex items-center justify-center font-bold">SA</div>
+        <div>
+          <p className="text-white font-bold leading-tight">Super Admin</p>
+          <p className="text-[#8ba3c8] text-sm">superadmin@salesflow.com</p>
         </div>
-        <button className="relative p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
-        </button>
-        <button className="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
-          <RefreshCw className="w-5 h-5" />
-        </button>
-        <div className="flex items-center gap-2 pl-3 border-l border-gray-200">
-          <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-xs">SA</div>
-          <div className="hidden md:block">
-            <p className="text-sm font-semibold text-gray-900 leading-tight">Super Admin</p>
-          </div>
-        </div>
+        <ChevronDown className="w-5 h-5 text-[#8ba3c8]" />
       </div>
     </header>
   );
