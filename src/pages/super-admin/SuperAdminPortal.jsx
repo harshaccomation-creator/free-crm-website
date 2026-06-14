@@ -1,3 +1,3 @@
-import SuperAdminPortalUploaded from './SuperAdminPortalUploaded.jsx';
+import SuperAdminZipApp from '../../super-admin-zip/SuperAdminZipApp.jsx';
 
-export default SuperAdminPortalUploaded;
+export default SuperAdminZipApp;
