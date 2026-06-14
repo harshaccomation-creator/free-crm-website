@@ -4,11 +4,13 @@ import LandingFooter from '../components/landing/LandingFooter.jsx';
 import LandingInfoPage from '../components/landing/LandingInfoPage.jsx';
 import LandingModules from '../components/landing/LandingModules.jsx';
 import LandingPricingFAQ from '../components/landing/LandingPricingFAQ.jsx';
+import BookDemoModal from '../components/landing/BookDemoModal.jsx';
 import PageLoader from '../components/landing/PageLoader.jsx';
 import CompanyAdminPreview from '../company-admin-new/CompanyAdminPreview.jsx';
 import { pageFromPathname, slugifyInfoPage } from '../components/landing/infoRoutes.js';
 import '../styles/landingPage.css';
 import '../styles/landingFit.css';
+import '../styles/bookDemoModal.css';
 
 const menuItems = ['Products', 'Solutions', 'Resources', 'Pricing', 'About'];
 const stats = [
@@ -19,7 +21,7 @@ const stats = [
 const sideItems = [
   ['Dashboard', '⌂'], ['Leads', '◉'], ['Deals', '◆'], ['Contacts', '☷'], ['Tasks', '✓'], ['Reports', '▣'], ['Settings', '⚙']
 ];
-const formModals = new Set(['Book a Demo', 'Start Free Trial', 'Contact Sales', 'Customer Support', 'Support', 'Chat']);
+const formModals = new Set(['Start Free Trial', 'Contact Sales', 'Customer Support', 'Support', 'Chat']);
 
 export default function LandingPage() {
   if (window.location.pathname.startsWith('/company-admin-preview')) return <CompanyAdminPreview />;
@@ -30,7 +32,7 @@ export default function LandingPage() {
   const [loadingLabel, setLoadingLabel] = useState('Loading SalesFlow page...');
   const goTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   const action = (text) => setNotice(text);
-  const shouldShowForm = formModals.has(modal) || modal.includes('Module') || modal.includes('Plan') || modal.includes('Trial');
+  const shouldShowForm = formModals.has(modal) || modal.includes('Plan') || modal.includes('Trial');
 
   useEffect(() => {
     const syncRoute = () => {
@@ -170,7 +172,7 @@ export default function LandingPage() {
       <LandingFooter openModal={setModal} openInfoPage={openInfoPage} />
       <button className="chat-bubble" onClick={() => setModal('Chat')} aria-label="Open chat">💬</button>
       {notice && <div className="toast-message">{notice}</div>}
-      {modal && <div className="modal-backdrop"><div className={`action-modal ${!shouldShowForm ? 'info-modal' : ''}`}><button className="modal-close" onClick={() => setModal('')}>×</button><h2>{modal}</h2><p>This button is working. Full backend connection will be added with the CRM module.</p>{shouldShowForm ? <><input placeholder="Name" /><input placeholder="Email" /><button className="btn btn-primary" onClick={() => { action('Request saved'); setModal(''); }}><span className="btn-icon">✓</span>Submit</button></> : <button className="btn btn-primary info-close-btn" onClick={() => setModal('')}>Okay, Got it</button>}</div></div>}
+      {modal === 'Book a Demo' ? <BookDemoModal onClose={() => setModal('')} /> : modal && <div className="modal-backdrop"><div className={`action-modal ${!shouldShowForm ? 'info-modal' : ''}`}><button className="modal-close" onClick={() => setModal('')}>×</button><h2>{modal}</h2><p>Share your details and our team will contact you shortly.</p>{shouldShowForm ? <><input placeholder="Name" /><input placeholder="Email" /><button className="btn btn-primary" onClick={() => { action('Request saved'); setModal(''); }}><span className="btn-icon">✓</span>Submit</button></> : <button className="btn btn-primary info-close-btn" onClick={() => setModal('')}>Okay, Got it</button>}</div></div>}
     </div>
   );
 }
