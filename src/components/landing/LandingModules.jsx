@@ -1,4 +1,5 @@
 import '../../styles/landingModules.css';
+import '../../styles/landingModulesLock.css';
 
 const topModules = [
   { icon: '◎', title: 'Lead Management', text: 'Capture, qualify and move leads with a clean visual pipeline.', stat: '1,250 leads' },
