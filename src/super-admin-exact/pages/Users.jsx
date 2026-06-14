@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Users, UserCheck, ShieldAlert, Clock } from 'lucide-react';
+import { Search, Users as UsersIcon, UserCheck, ShieldAlert, Clock } from 'lucide-react';
 import Badge from '../components/shared/Badge';
 import StatCard from '../components/shared/StatCard';
 import PageHeader from '../components/shared/PageHeader';
@@ -24,7 +24,7 @@ export default function Users() {
     <div className="p-6 space-y-6">
       <PageHeader title="Users" subtitle="All registered users across all companies" />
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard title="Total Users" value={USERS.length} icon={Users} iconBg="bg-blue-100" iconColor="text-blue-600" subtitle="all companies" />
+        <StatCard title="Total Users" value={USERS.length} icon={UsersIcon} iconBg="bg-blue-100" iconColor="text-blue-600" subtitle="all companies" />
         <StatCard title="Active" value={USERS.filter(u=>u.status==='Active').length} icon={UserCheck} iconBg="bg-emerald-100" iconColor="text-emerald-600" subtitle="paying users" />
         <StatCard title="On Trial" value={USERS.filter(u=>u.status==='Trial').length} icon={Clock} iconBg="bg-yellow-100" iconColor="text-yellow-600" subtitle="14-day trial" />
         <StatCard title="Suspended" value={USERS.filter(u=>u.status==='Suspended').length} icon={ShieldAlert} iconBg="bg-red-100" iconColor="text-red-600" subtitle="blocked access" />
