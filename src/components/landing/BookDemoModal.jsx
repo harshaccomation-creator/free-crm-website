@@ -11,6 +11,8 @@ const blankDemoForm = {
   preferredTime: '',
 };
 
+const customerSuccessMessage = 'Demo request received. Our team will contact you shortly.';
+
 export default function BookDemoModal({ onClose }) {
   const [form, setForm] = useState(blankDemoForm);
   const [message, setMessage] = useState('');
@@ -65,14 +67,11 @@ export default function BookDemoModal({ onClose }) {
         body: JSON.stringify(payload),
       });
 
-      const alertResult = await alertResponse.json().catch(() => ({}));
       if (!alertResponse.ok) {
-        setMessage(`Demo saved, but email alert failed: ${alertResult.error || 'check email settings'}`);
-        setForm(blankDemoForm);
-        return;
+        console.warn('Demo email alert failed. Lead saved in Supabase.');
       }
 
-      setMessage('Demo request received. Email alert sent to our team.');
+      setMessage(customerSuccessMessage);
       setForm(blankDemoForm);
     } catch (error) {
       setMessage(error.message || 'Unable to save demo request.');
