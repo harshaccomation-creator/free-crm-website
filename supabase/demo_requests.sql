@@ -11,6 +11,10 @@ create table if not exists public.demo_requests (
   created_at timestamptz not null default now()
 );
 
+grant usage on schema public to anon, authenticated;
+grant insert on public.demo_requests to anon, authenticated;
+grant select on public.demo_requests to authenticated;
+
 alter table public.demo_requests enable row level security;
 
 drop policy if exists "Anyone can create demo requests" on public.demo_requests;
