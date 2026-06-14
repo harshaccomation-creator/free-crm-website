@@ -1,5 +1,5 @@
-import ExactPanel from '../super-admin/SuperAdminPaidExact.jsx';
+import PanelOnly from '../super-admin/SuperAdminPanelOnly.jsx';
 
 export default function SuperAdminDashboard() {
-  return <ExactPanel />;
+  return <PanelOnly />;
 }
