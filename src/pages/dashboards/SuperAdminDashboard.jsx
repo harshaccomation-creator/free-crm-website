@@ -1,5 +1,5 @@
-import PanelOnly from '../super-admin/SuperAdminPanelOnly.jsx';
+import SuperAdminZipApp from '../../super-admin-zip/SuperAdminZipApp.jsx';
 
 export default function SuperAdminDashboard() {
-  return <PanelOnly />;
+  return <SuperAdminZipApp />;
 }
