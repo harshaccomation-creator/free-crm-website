@@ -6,7 +6,7 @@ const menuByRole = {
   employee: ['Dashboard', 'My Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
   manager: ['Dashboard', 'Team Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
   admin: ['Dashboard', 'Leads', 'Contacts', 'Tasks', 'Activities', 'Reports', 'Calendar', 'Users', 'Notifications', 'Settings'],
-  superAdmin: ['Overview', 'Companies', 'Users & Roles', 'Subscriptions', 'Revenue & Plans', 'Leads Monitor', 'Notifications', 'Email Logs', 'Security', 'Platform Settings', 'Reports', 'Activity Logs', 'Support Tickets'],
+  superAdmin: ['Overview', 'Companies', 'Users & Roles', 'Subscriptions', 'Revenue & Plans', 'Leads Monitor', 'Demo Requests', 'Website Health', 'Notifications', 'Email Logs', 'Security', 'Platform Settings', 'Reports', 'Activity Logs', 'Support Tickets'],
 };
 
 const routes = {
@@ -20,6 +20,8 @@ const routes = {
     Subscriptions: '/super-admin/subscriptions',
     'Revenue & Plans': '/super-admin/revenue-plans',
     'Leads Monitor': '/super-admin/leads-monitor',
+    'Demo Requests': '/super-admin/demo-requests',
+    'Website Health': '/super-admin/website-health',
     Notifications: '/super-admin/notifications',
     'Email Logs': '/super-admin/email-logs',
     Security: '/super-admin/security',
@@ -30,7 +32,7 @@ const routes = {
   },
 };
 
-const iconByItem = { Dashboard: 'grid', Overview: 'grid', 'My Leads': 'users', 'Team Leads': 'users', Leads: 'users', Contacts: 'users', 'Leads Monitor': 'users', Won: 'won', Tasks: 'check', Calendar: 'calendar', Activities: 'list', Reports: 'chart', Profile: 'user', Users: 'users', 'Users & Roles': 'users', Settings: 'settings', 'Platform Settings': 'settings', Notifications: 'bell', 'Email Logs': 'mail', Security: 'shield', 'Roles & Permissions': 'shield', Companies: 'building', Organizations: 'building', Modules: 'box', Subscriptions: 'rupee', 'Revenue & Plans': 'chart', 'Plans & Billing': 'rupee', 'Activity Logs': 'list', 'System Logs': 'list', Integrations: 'plug', Backup: 'refresh', 'Support Tickets': 'help' };
+const iconByItem = { Dashboard: 'grid', Overview: 'grid', 'My Leads': 'users', 'Team Leads': 'users', Leads: 'users', Contacts: 'users', 'Leads Monitor': 'users', 'Demo Requests': 'mail', 'Website Health': 'globe', Won: 'won', Tasks: 'check', Calendar: 'calendar', Activities: 'list', Reports: 'chart', Profile: 'user', Users: 'users', 'Users & Roles': 'users', Settings: 'settings', 'Platform Settings': 'settings', Notifications: 'bell', 'Email Logs': 'mail', Security: 'shield', 'Roles & Permissions': 'shield', Companies: 'building', Organizations: 'building', Modules: 'box', Subscriptions: 'rupee', 'Revenue & Plans': 'chart', 'Plans & Billing': 'rupee', 'Activity Logs': 'list', 'System Logs': 'list', Integrations: 'plug', Backup: 'refresh', 'Support Tickets': 'help' };
 
 function Icon({ name }) {
   const path = {
@@ -51,6 +53,7 @@ function Icon({ name }) {
     rupee: 'M6 4h12M6 8h12M7 4c6 0 7 8 0 8h-1l8 8',
     plug: 'M9 7V2m6 5V2M7 7h10v4a5 5 0 0 1-5 5v6m-4 0h8',
     mail: 'M4 6h16v12H4zM4 7l8 6 8-6',
+    globe: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18',
     help: 'M12 18h.01M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2.2-3 4',
     menu: 'M5 7h14M5 12h14M5 17h14'
   }[name] || 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z';
