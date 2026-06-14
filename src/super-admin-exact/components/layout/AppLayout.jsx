@@ -4,7 +4,7 @@ import Topbar from './Topbar';
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen bg-[#08111f] text-white">
+    <div className="sf-admin-root min-h-screen bg-[#08111f] text-white">
       <Sidebar />
       <div className="ml-[240px] min-h-screen">
         <Topbar />
