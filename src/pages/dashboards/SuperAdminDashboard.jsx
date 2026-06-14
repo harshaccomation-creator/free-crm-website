@@ -1,5 +1,5 @@
-import SuperAdminPortal from '../super-admin/SuperAdminPortal.jsx';
+import ExactPanel from '../super-admin/SuperAdminPaidExact.jsx';
 
 export default function SuperAdminDashboard() {
-  return <SuperAdminPortal view="dashboard" />;
+  return <ExactPanel />;
 }
