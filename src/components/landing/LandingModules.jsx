@@ -13,7 +13,9 @@ const bottomModules = [
   { icon: '★', title: 'About SalesFlow', text: 'A fast CRM made for lead follow-up and sales operations.' },
 ];
 
-export default function LandingModules({ openModal }) {
+export default function LandingModules({ action, openLoginPage }) {
+  const showNote = (title) => action?.(`${title} section selected`);
+
   return (
     <section id="products" className="landing-shell modules-section">
       <div className="modules-heading">
@@ -32,7 +34,7 @@ export default function LandingModules({ openModal }) {
             </div>
             <div className="module-footer-row">
               <span>{item.stat}</span>
-              <button onClick={() => openModal(`${item.title} Module`)}>Open →</button>
+              <button onClick={() => showNote(item.title)}>View →</button>
             </div>
           </article>
         ))}
@@ -43,7 +45,7 @@ export default function LandingModules({ openModal }) {
           <span>MODULAR CRM ARCHITECTURE</span>
           <h3>Professional CRM that stays stable as features grow.</h3>
           <p>Landing page, dashboard, admin, super admin, leads and lead activity will stay in separate files so future fixes are fast and safe.</p>
-          <button className="btn btn-primary" onClick={() => openModal('Start Free Trial')}>🚀 Start with SalesFlow</button>
+          <button className="btn btn-primary" onClick={openLoginPage}>🚀 Start with SalesFlow</button>
         </div>
         <div className="modules-mini-ui" aria-label="CRM module preview">
           <div className="mini-ui-sidebar"><span /><span /><span /></div>
@@ -61,7 +63,7 @@ export default function LandingModules({ openModal }) {
             <div className="module-icon small">{item.icon}</div>
             <h3>{item.title}</h3>
             <p>{item.text}</p>
-            <button onClick={() => openModal(item.title)}>Explore</button>
+            <button onClick={() => showNote(item.title)}>Explore</button>
           </article>
         ))}
       </div>
