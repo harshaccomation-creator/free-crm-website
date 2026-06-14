@@ -16,13 +16,14 @@ export default async function handler(request, response) {
     return sendJson(response, 405, { error: 'Method not allowed' });
   }
 
-  const host = process.env.ZOHO_SMTP_HOST || 'smtppro.zoho.com';
-  const port = Number(process.env.ZOHO_SMTP_PORT || 465);
-  const user = process.env.ZOHO_SMTP_USER;
-  const pass = process.env.ZOHO_SMTP_PASS;
+  const host = process.env.ZOHO_SMTP_HOST || process.env.SMTP_HOST || 'smtppro.zoho.com';
+  const port = Number(process.env.ZOHO_SMTP_PORT || process.env.SMTP_PORT || 465);
+  const user = process.env.ZOHO_SMTP_USER || process.env.SMTP_USER;
+  const pass = process.env.ZOHO_SMTP_PASS || process.env.SMTP_PASS;
   const to = process.env.DEMO_ALERT_TO || user;
+  const fromEmail = process.env.DEMO_ALERT_FROM || user;
 
-  if (!user || !pass || !to) {
+  if (!user || !pass || !to || !fromEmail) {
     return sendJson(response, 500, { error: 'Email alert is not configured.' });
   }
 
@@ -78,7 +79,7 @@ export default async function handler(request, response) {
     `;
 
     await transporter.sendMail({
-      from: `SalesFlow Hub <${user}>`,
+      from: `SalesFlow Hub <${fromEmail}>`,
       to,
       replyTo: lead.email,
       subject,
