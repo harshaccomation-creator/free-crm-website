@@ -1,27 +1,23 @@
-@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  * { box-sizing: border-box; }
-  body { font-family: 'Inter', system-ui, sans-serif; background: #08111f; color: #eaf2ff; -webkit-font-smoothing: antialiased; }
-  ::-webkit-scrollbar { width: 8px; height: 8px; }
-  ::-webkit-scrollbar-track { background: #07101d; }
-  ::-webkit-scrollbar-thumb { background: #1d2c47; border-radius: 999px; }
-}
-
 @layer components {
-  .btn-primary { @apply bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-xl text-sm transition-colors shadow-lg shadow-blue-950/30; }
-  .btn-outline { @apply border border-[#1c2b46] hover:bg-[#14233c] text-[#8ea6c9] font-medium px-4 py-2 rounded-xl text-sm transition-colors; }
-  .card { @apply bg-[#101b31] border border-[#1d2d4a] rounded-2xl shadow-sm shadow-black/20; }
-  .badge { @apply inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold; }
-  .table-th { @apply px-8 py-5 text-left text-xs font-bold text-[#8ca1c2] uppercase tracking-wider; }
-  .table-td { @apply px-8 py-4 text-sm text-[#dbe7ff]; }
-  .table-tr { @apply hover:bg-[#14233c] transition-colors border-b border-[#1b2b46] last:border-0; }
-  .sf-page { @apply min-h-screen bg-[#08111f] text-white; }
-  .sf-panel { @apply bg-[#101b31] border border-[#1d2d4a] rounded-2xl; }
-  .sf-card { @apply bg-[#101b31] border border-[#1d2d4a] rounded-2xl; }
-  .sf-muted { @apply text-[#8fa6cc]; }
-  .sf-title { @apply text-white font-bold; }
-  .sf-input { @apply bg-[#0b1527] border border-[#1c2b46] text-[#dbe7ff] placeholder:text-[#7890b6] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600; }
+  .sf-admin-root { font-family: 'Inter', system-ui, sans-serif; background: #08111f; color: #eaf2ff; -webkit-font-smoothing: antialiased; }
+  .sf-admin-root * { box-sizing: border-box; }
+  .sf-admin-root ::-webkit-scrollbar { width: 8px; height: 8px; }
+  .sf-admin-root ::-webkit-scrollbar-track { background: #07101d; }
+  .sf-admin-root ::-webkit-scrollbar-thumb { background: #1d2c47; border-radius: 999px; }
+  .sf-admin-root .btn-primary { @apply bg-blue-600 hover:bg-blue-500 text-white font-semibold px-4 py-2 rounded-xl text-sm transition-colors shadow-lg shadow-blue-950/30; }
+  .sf-admin-root .btn-outline { @apply border border-[#1c2b46] hover:bg-[#14233c] text-[#8ea6c9] font-medium px-4 py-2 rounded-xl text-sm transition-colors; }
+  .sf-admin-root .card { @apply bg-[#101b31] border border-[#1d2d4a] rounded-2xl shadow-sm shadow-black/20; }
+  .sf-admin-root .badge { @apply inline-flex items-center px-3 py-1 rounded-lg text-xs font-bold; }
+  .sf-admin-root .table-th { @apply px-8 py-5 text-left text-xs font-bold text-[#8ca1c2] uppercase tracking-wider; }
+  .sf-admin-root .table-td { @apply px-8 py-4 text-sm text-[#dbe7ff]; }
+  .sf-admin-root .table-tr { @apply hover:bg-[#14233c] transition-colors border-b border-[#1b2b46] last:border-0; }
+  .sf-admin-root .sf-page { @apply min-h-screen bg-[#08111f] text-white; }
+  .sf-admin-root .sf-panel { @apply bg-[#101b31] border border-[#1d2d4a] rounded-2xl; }
+  .sf-admin-root .sf-card { @apply bg-[#101b31] border border-[#1d2d4a] rounded-2xl; }
+  .sf-admin-root .sf-muted { @apply text-[#8fa6cc]; }
+  .sf-admin-root .sf-title { @apply text-white font-bold; }
+  .sf-admin-root .sf-input { @apply bg-[#0b1527] border border-[#1c2b46] text-[#dbe7ff] placeholder:text-[#7890b6] rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600; }
 }
