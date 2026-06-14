@@ -6,9 +6,9 @@ export default function AppLayout() {
   return (
     <div className="min-h-screen bg-[#08111f] text-white">
       <Sidebar />
-      <div className="ml-[330px] min-h-screen">
+      <div className="ml-[240px] min-h-screen">
         <Topbar />
-        <main className="p-9">
+        <main className="p-8">
           <Outlet />
         </main>
       </div>
