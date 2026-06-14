@@ -34,21 +34,45 @@ export default function BookDemoModal({ onClose }) {
     if (!form.preferredTime) return setMessage('Please select your preferred demo time.');
     if (!isBackendConfigured || !supabase) return setMessage('Backend is not configured. Please contact support.');
 
+    const payload = {
+      fullName: form.fullName.trim(),
+      email: cleanEmail,
+      mobile: cleanMobile,
+      companyName: form.companyName.trim(),
+      teamSize: form.teamSize,
+      requirement: form.requirement,
+      preferredTime: form.preferredTime,
+    };
+
     try {
       setLoading(true);
       const { error } = await supabase.from('demo_requests').insert({
-        full_name: form.fullName.trim(),
-        email: cleanEmail,
-        mobile: cleanMobile,
-        company_name: form.companyName.trim(),
-        team_size: form.teamSize,
-        requirement: form.requirement,
-        preferred_time: form.preferredTime,
+        full_name: payload.fullName,
+        email: payload.email,
+        mobile: payload.mobile,
+        company_name: payload.companyName,
+        team_size: payload.teamSize,
+        requirement: payload.requirement,
+        preferred_time: payload.preferredTime,
         status: 'new',
       });
 
       if (error) throw error;
-      setMessage('Demo request received. Our team will contact you shortly.');
+
+      const alertResponse = await fetch('/api/send-demo-alert', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const alertResult = await alertResponse.json().catch(() => ({}));
+      if (!alertResponse.ok) {
+        setMessage(`Demo saved, but email alert failed: ${alertResult.error || 'check email settings'}`);
+        setForm(blankDemoForm);
+        return;
+      }
+
+      setMessage('Demo request received. Email alert sent to our team.');
       setForm(blankDemoForm);
     } catch (error) {
       setMessage(error.message || 'Unable to save demo request.');
