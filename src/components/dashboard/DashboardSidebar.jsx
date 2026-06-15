@@ -1,18 +1,52 @@
-import { useEffect, useRef } from 'react';
 import './DashboardSidebar.css';
 import './DashboardSidebarLogoFix.css';
 
-const menuByRole = {
+const menus = {
   employee: ['Dashboard', 'My Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
   manager: ['Dashboard', 'Team Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
   admin: ['Dashboard', 'Leads', 'Contacts', 'Tasks', 'Activities', 'Reports', 'Calendar', 'Users', 'Notifications', 'Settings'],
-  superAdmin: ['Overview', 'Companies', 'Users & Roles', 'Subscriptions', 'Revenue & Plans', 'Leads Monitor', 'Demo Requests', 'Website Health', 'Notifications', 'Email Logs', 'Security', 'Platform Settings', 'Reports', 'Activity Logs', 'Support Tickets'],
+  superAdmin: ['Overview', 'Companies', 'Users & Roles', 'Subscriptions', 'Revenue & Plans', 'Leads Monitor', 'Notifications', 'Email Logs', 'Security', 'Platform Settings', 'Reports', 'Activity Logs', 'Support Tickets'],
 };
 
 const routes = {
-  employee: { Dashboard: '/employee/dashboard', 'My Leads': '/leads', Contacts: '/contacts', Won: '/employee/won', Tasks: '/employee/tasks', Calendar: '/employee/calendar', Activities: '/employee/activities', Reports: '/employee/reports', Notifications: '/notifications', Profile: '/employee/profile', Settings: '/settings' },
-  manager: { Dashboard: '/employee/dashboard', 'Team Leads': '/leads', Contacts: '/contacts', Won: '/employee/won', Tasks: '/employee/tasks', Calendar: '/employee/calendar', Activities: '/employee/activities', Reports: '/employee/reports', Notifications: '/notifications', Profile: '/employee/profile', Settings: '/settings' },
-  admin: { Dashboard: '/admin/dashboard', Leads: '/leads', Contacts: '/contacts', Tasks: '/admin/tasks', Activities: '/admin/activities', Reports: '/admin/reports', Calendar: '/admin/calendar', Users: '/admin/users', Notifications: '/notifications', Settings: '/settings' },
+  employee: {
+    Dashboard: '/employee/dashboard',
+    'My Leads': '/leads',
+    Contacts: '/contacts',
+    Won: '/employee/won',
+    Tasks: '/employee/tasks',
+    Calendar: '/employee/calendar',
+    Activities: '/employee/activities',
+    Reports: '/employee/reports',
+    Notifications: '/notifications',
+    Profile: '/employee/profile',
+    Settings: '/settings',
+  },
+  manager: {
+    Dashboard: '/employee/dashboard',
+    'Team Leads': '/leads',
+    Contacts: '/contacts',
+    Won: '/employee/won',
+    Tasks: '/employee/tasks',
+    Calendar: '/employee/calendar',
+    Activities: '/employee/activities',
+    Reports: '/employee/reports',
+    Notifications: '/notifications',
+    Profile: '/employee/profile',
+    Settings: '/settings',
+  },
+  admin: {
+    Dashboard: '/admin/dashboard',
+    Leads: '/leads',
+    Contacts: '/contacts',
+    Tasks: '/admin/tasks',
+    Activities: '/admin/activities',
+    Reports: '/admin/reports',
+    Calendar: '/admin/calendar',
+    Users: '/admin/users',
+    Notifications: '/notifications',
+    Settings: '/settings',
+  },
   superAdmin: {
     Overview: '/super-admin/dashboard',
     Companies: '/super-admin/companies',
@@ -20,8 +54,6 @@ const routes = {
     Subscriptions: '/super-admin/subscriptions',
     'Revenue & Plans': '/super-admin/revenue-plans',
     'Leads Monitor': '/super-admin/leads-monitor',
-    'Demo Requests': '/super-admin/demo-requests',
-    'Website Health': '/super-admin/website-health',
     Notifications: '/super-admin/notifications',
     'Email Logs': '/super-admin/email-logs',
     Security: '/super-admin/security',
@@ -32,68 +64,174 @@ const routes = {
   },
 };
 
-const iconByItem = { Dashboard: 'grid', Overview: 'grid', 'My Leads': 'users', 'Team Leads': 'users', Leads: 'users', Contacts: 'users', 'Leads Monitor': 'users', 'Demo Requests': 'mail', 'Website Health': 'globe', Won: 'won', Tasks: 'check', Calendar: 'calendar', Activities: 'list', Reports: 'chart', Profile: 'user', Users: 'users', 'Users & Roles': 'users', Settings: 'settings', 'Platform Settings': 'settings', Notifications: 'bell', 'Email Logs': 'mail', Security: 'shield', 'Roles & Permissions': 'shield', Companies: 'building', Organizations: 'building', Modules: 'box', Subscriptions: 'rupee', 'Revenue & Plans': 'chart', 'Plans & Billing': 'rupee', 'Activity Logs': 'list', 'System Logs': 'list', Integrations: 'plug', Backup: 'refresh', 'Support Tickets': 'help' };
-
-function Icon({ name }) {
-  const path = {
-    bell: 'M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0',
-    grid: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z',
-    users: 'M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2M9.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8',
-    refresh: 'M21 12a9 9 0 0 1-15.5 6.3L3 16m0 0v5h5',
-    won: 'M20 6 9 17l-5-5',
-    check: 'M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11',
-    calendar: 'M7 3v4m10-4v4M4 9h16M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z',
-    list: 'M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01',
-    chart: 'M4 19V5M4 19h16M8 16v-5M12 16V8M16 16v-9',
-    user: 'M20 21a8 8 0 0 0-16 0M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z',
-    building: 'M4 21V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v16M2 21h20',
-    settings: 'M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7',
-    shield: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z',
-    box: 'm21 8-9-5-9 5 9 5 9-5ZM3 8v8l9 5 9-5V8',
-    rupee: 'M6 4h12M6 8h12M7 4c6 0 7 8 0 8h-1l8 8',
-    plug: 'M9 7V2m6 5V2M7 7h10v4a5 5 0 0 1-5 5v6m-4 0h8',
-    mail: 'M4 6h16v12H4zM4 7l8 6 8-6',
-    globe: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM3.6 9h16.8M3.6 15h16.8M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18',
-    help: 'M12 18h.01M9.1 9a3 3 0 1 1 5.8 1c0 2-3 2.2-3 4',
-    menu: 'M5 7h14M5 12h14M5 17h14'
-  }[name] || 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z';
-  return <svg className="sfx-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d={path} /></svg>;
-}
-
-function navigateTo(path) { if (!path) return; window.history.pushState({}, '', path); window.dispatchEvent(new Event('salesflow:navigate')); }
-function isActive(item, path, currentPath, index) {
-  if (path) {
-    return currentPath === path
-      || (item === 'Overview' && currentPath === '/super-admin/dashboard')
-      || ((item === 'My Leads' || item === 'Team Leads' || item === 'Leads') && currentPath.startsWith('/leads'))
-      || (item === 'Contacts' && currentPath === '/contacts');
-  }
-  return index === 0 && currentPath.includes('/dashboard');
-}
-function SidebarBrand() { return <img className="sfx-real-logo" src="/assets/salesflow-hub-logo-transparent.png" alt="SalesFlow Hub" />; }
-
-const sidebarInlineStyle = {
-  position: 'fixed',
-  left: 0,
-  top: 0,
-  bottom: 0,
-  width: '220px',
-  minWidth: '220px',
-  maxWidth: '220px',
-  height: '100vh',
-  minHeight: '100vh',
-  maxHeight: '100vh',
-  boxSizing: 'border-box',
-  zIndex: 50,
+const icons = {
+  Dashboard: '▦',
+  Overview: '▦',
+  'My Leads': '♙',
+  'Team Leads': '♙',
+  Leads: '♙',
+  Contacts: '♙',
+  Won: '✓',
+  Tasks: '☑',
+  Calendar: '▣',
+  Activities: '☷',
+  Reports: '▥',
+  Notifications: '♢',
+  Profile: '♙',
+  Settings: '∘',
+  Users: '♙',
+  Companies: '▤',
+  Subscriptions: '₹',
+  'Revenue & Plans': '▥',
+  'Users & Roles': '♙',
+  'Leads Monitor': '♙',
+  'Email Logs': '✉',
+  Security: '◇',
+  'Platform Settings': '∘',
+  'Activity Logs': '☷',
+  'Support Tickets': '?',
 };
 
+function nav(path) {
+  if (!path) return;
+  window.history.pushState({}, '', path);
+  window.dispatchEvent(new Event('salesflow:navigate'));
+}
+
+function active(item, path) {
+  const current = window.location.pathname;
+  if (current === path) return true;
+  if ((item === 'My Leads' || item === 'Team Leads' || item === 'Leads') && current.startsWith('/leads')) return true;
+  return false;
+}
+
 export default function DashboardSidebar({ role = 'employee' }) {
-  const sidebarRef = useRef(null);
-  const safeRole = menuByRole[role] ? role : 'employee';
-  const items = menuByRole[safeRole];
-  const currentPath = window.location.pathname;
-  const homePath = routes[safeRole]?.Dashboard || routes[safeRole]?.Overview || '/employee/dashboard';
-  const label = safeRole === 'superAdmin' ? 'Super Admin Control' : safeRole === 'admin' ? 'Company Admin' : safeRole === 'manager' ? 'Manager Workspace' : 'Premium CRM';
-  useEffect(() => { const nav = sidebarRef.current?.querySelector('.sfx-nav'); if (nav && nav.scrollTop < 4) nav.scrollTop = 0; });
-  return <aside className="sfx-sidebar" style={sidebarInlineStyle} ref={sidebarRef}><div className="sfx-brand-row"><button className="sfx-brand sfx-brand-image sfx-brand-dark" onClick={() => navigateTo(homePath)} type="button"><SidebarBrand /></button><button className="sfx-menu" type="button" aria-label="Toggle menu"><Icon name="menu" /></button></div><nav className="sfx-nav">{items.map((item, index) => { const path = routes[safeRole]?.[item]; return <button key={item} type="button" className={isActive(item, path, currentPath, index) ? 'active' : ''} onClick={() => navigateTo(path)}><span className="sfx-nav-icon"><Icon name={iconByItem[item]} /></span><em>{item}</em></button>; })}</nav><div className="sfx-upgrade"><span>*</span><h3>{label}</h3><p>{safeRole === 'superAdmin' ? 'Platform companies, users, trials and system health.' : 'Clean CRM workspace with role based navigation.'}</p><button type="button" onClick={() => navigateTo(safeRole === 'superAdmin' ? '/super-admin/platform-settings' : '/settings')}>Open Settings</button></div><button className="sfx-help" type="button" onClick={() => navigateTo(safeRole === 'superAdmin' ? '/super-admin/notifications' : '/notifications')}><span>?</span><div><strong>{safeRole === 'superAdmin' ? 'Platform Alerts' : 'CRM Alerts'}</strong><small>Open Notifications</small></div></button></aside>;
+  const safeRole = menus[role] ? role : 'employee';
+  const items = menus[safeRole];
+  const home = routes[safeRole]?.Dashboard || routes[safeRole]?.Overview || '/employee/dashboard';
+
+  return (
+    <aside
+      className="sfx-sidebar"
+      style={{
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        bottom: 0,
+        width: 300,
+        minWidth: 300,
+        maxWidth: 300,
+        height: '100vh',
+        boxSizing: 'border-box',
+        background: '#050b1f',
+        color: '#eaf2ff',
+        padding: '22px 16px',
+        zIndex: 50,
+        overflow: 'hidden',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          marginBottom: 34,
+        }}
+      >
+        <button
+          type="button"
+          onClick={() => nav(home)}
+          style={{
+            border: '1px solid rgba(148,163,184,.45)',
+            background: '#08213f',
+            borderRadius: 24,
+            padding: '10px 14px',
+            cursor: 'pointer',
+            width: 210,
+          }}
+        >
+          <img
+            src="/assets/salesflow-hub-logo-transparent.png"
+            alt="SalesFlow Hub"
+            style={{
+              display: 'block',
+              width: '100%',
+              height: 'auto',
+            }}
+          />
+        </button>
+
+        <button
+          type="button"
+          style={{
+            border: 0,
+            background: 'transparent',
+            color: '#94a3b8',
+            fontSize: 22,
+            cursor: 'pointer',
+          }}
+        >
+          ≡
+        </button>
+      </div>
+
+      <nav
+        style={{
+          display: 'grid',
+          gap: 8,
+          height: 'calc(100vh - 150px)',
+          overflowY: 'auto',
+          paddingRight: 4,
+        }}
+      >
+        {items.map((item) => {
+          const path = routes[safeRole]?.[item];
+          const isActive = active(item, path);
+
+          return (
+            <button
+              key={item}
+              type="button"
+              onClick={() => nav(path)}
+              style={{
+                width: '100%',
+                height: 48,
+                border: '1px solid transparent',
+                borderRadius: 14,
+                background: isActive
+                  ? 'linear-gradient(135deg,#2563eb,#f97316)'
+                  : 'transparent',
+                color: '#eaf2ff',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 14,
+                padding: '0 16px',
+                fontSize: 15,
+                fontWeight: 800,
+                cursor: 'pointer',
+                textAlign: 'left',
+                boxSizing: 'border-box',
+              }}
+            >
+              <span
+                style={{
+                  width: 26,
+                  height: 26,
+                  display: 'grid',
+                  placeItems: 'center',
+                  borderRadius: 9,
+                  background: isActive ? 'rgba(255,255,255,.14)' : 'transparent',
+                  fontSize: 17,
+                  flex: '0 0 26px',
+                }}
+              >
+                {icons[item] || '•'}
+              </span>
+              <span>{item}</span>
+            </button>
+          );
+        })}
+      </nav>
+    </aside>
+  );
 }
