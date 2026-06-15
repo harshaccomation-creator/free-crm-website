@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Users, CalendarClock, Trophy, AlertTriangle, Plus, Phone, MessageCircle, ArrowUpRight, BarChart3, TrendingUp, Clock, CheckCircle2, Loader2 } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 import { listLeads, listMyActivities, listMyTasks } from "../../services/crmApi.js";
+import "../../styles/employeeDashboardImageRestore.css";
 
 function go(path) { window.history.pushState({}, "", path); window.dispatchEvent(new Event("salesflow:navigate")); }
 function MiniSpark({ color = "#2563eb" }) { return <svg width="86" height="34" viewBox="0 0 86 34" fill="none"><path d="M2 27 C12 20, 18 22, 27 15 C36 7, 45 12, 53 17 C62 23, 70 9, 84 5" stroke={color} strokeWidth="3" strokeLinecap="round" fill="none" /><path d="M2 27 C12 20, 18 22, 27 15 C36 7, 45 12, 53 17 C62 23, 70 9, 84 5 V34 H2 Z" fill={color} opacity=".08" /></svg>; }
