@@ -5,10 +5,12 @@ import LandingInfoPage from '../components/landing/LandingInfoPage.jsx';
 import LandingModules from '../components/landing/LandingModules.jsx';
 import LandingPricingFAQ from '../components/landing/LandingPricingFAQ.jsx';
 import PageLoader from '../components/landing/PageLoader.jsx';
+import BookDemoModal from '../components/landing/BookDemoModal.jsx';
 import CompanyAdminPreview from '../company-admin-new/CompanyAdminPreview.jsx';
 import { pageFromPathname, slugifyInfoPage } from '../components/landing/infoRoutes.js';
 import '../styles/landingPage.css';
 import '../styles/landingFit.css';
+import '../styles/bookDemoModal.css';
 
 const menuItems = ['Products', 'Solutions', 'Resources', 'Pricing', 'About'];
 const stats = [
@@ -19,10 +21,9 @@ const stats = [
 const sideItems = [
   ['Dashboard', '⌂'], ['Leads', '◉'], ['Deals', '◆'], ['Contacts', '☷'], ['Tasks', '✓'], ['Reports', '▣'], ['Settings', '⚙']
 ];
-const formModals = new Set(['Book a Demo', 'Start Free Trial', 'Contact Sales', 'Customer Support', 'Support', 'Chat', 'Choose Starter Plan']);
+const formModals = new Set(['Start Free Trial', 'Contact Sales', 'Customer Support', 'Support', 'Chat', 'Choose Starter Plan']);
 
 const MODAL_COPY = {
-  'Book a Demo': 'Share your details and our team will help you schedule a SalesFlow CRM demo.',
   'Start Free Trial': 'Start your 7-day SalesFlow CRM trial. We will contact you for setup and onboarding.',
   'Contact Sales': 'Tell us your requirement and our sales team will get back to you.',
   'Customer Support': 'Need help with SalesFlow? Send your details and support will reach out.',
@@ -104,7 +105,8 @@ export default function LandingPage() {
       <LandingFooter openModal={setModal} openInfoPage={openInfoPage} />
       <button className="chat-bubble" onClick={() => setModal('Chat')} aria-label="Open chat">💬</button>
       {notice && <div className="toast-message">{notice}</div>}
-      {modal && <div className="modal-backdrop"><div className={`action-modal ${!shouldShowForm ? 'info-modal' : ''}`}><button className="modal-close" onClick={() => setModal('')}>×</button><h2>{modal}</h2><p>{modalCopy}</p>{shouldShowForm ? <><input placeholder="Name" /><input placeholder="Email" /><button className="btn btn-primary" onClick={() => { action('Request submitted successfully'); setModal(''); }}><span className="btn-icon">✓</span>Submit</button></> : <button className="btn btn-primary info-close-btn" onClick={() => setModal('')}>Okay, Got it</button>}</div></div>}
+      {modal === 'Book a Demo' && <BookDemoModal onClose={() => setModal('')} />}
+      {modal && modal !== 'Book a Demo' && <div className="modal-backdrop"><div className={`action-modal ${!shouldShowForm ? 'info-modal' : ''}`}><button className="modal-close" onClick={() => setModal('')}>×</button><h2>{modal}</h2><p>{modalCopy}</p>{shouldShowForm ? <><input placeholder="Name" /><input placeholder="Email" /><button className="btn btn-primary" onClick={() => { action('Request submitted successfully'); setModal(''); }}><span className="btn-icon">✓</span>Submit</button></> : <button className="btn btn-primary info-close-btn" onClick={() => setModal('')}>Okay, Got it</button>}</div></div>}
     </div>
   );
 }
