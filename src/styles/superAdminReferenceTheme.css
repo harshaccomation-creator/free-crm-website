@@ -1,0 +1,361 @@
+/* Super Admin reference theme: dark premium layout with orange accent. Scoped only to Super Admin. */
+html body #root .sf-dashboard.super-admin-premium-page,
+html body #root .sf-dashboard.super-admin-premium-page.sa-dashboard-page,
+html body #root .sf-dashboard.super-admin-premium-page.super-panel-polish,
+html body #root .sf-dashboard.super-admin-premium-page.sa-dark-shell{
+  --ref-bg:#030712!important;
+  --ref-sidebar:#081225!important;
+  --ref-card:#0b1628!important;
+  --ref-card2:#0d1a2d!important;
+  --ref-line:rgba(148,163,184,.18)!important;
+  --ref-text:#f8fafc!important;
+  --ref-muted:#9db0ca!important;
+  --ref-orange:#ff7a1a!important;
+  --ref-green:#22e57c!important;
+  display:grid!important;
+  grid-template-columns:385px minmax(0,1fr)!important;
+  min-height:100vh!important;
+  background:#030712!important;
+  color:#f8fafc!important;
+  overflow-x:hidden!important;
+}
+html body #root .super-admin-premium-page .sfx-sidebar{
+  position:fixed!important;
+  left:0!important;
+  top:0!important;
+  bottom:0!important;
+  width:385px!important;
+  min-width:385px!important;
+  max-width:385px!important;
+  height:100vh!important;
+  background:#081225!important;
+  border-right:1px solid rgba(148,163,184,.14)!important;
+  box-shadow:none!important;
+  padding:26px 22px!important;
+  overflow:hidden!important;
+  z-index:50!important;
+}
+html body #root .super-admin-premium-page .sfx-sidebar > div:first-child{
+  margin-bottom:46px!important;
+}
+html body #root .super-admin-premium-page .sfx-sidebar > div:first-child > button:first-child{
+  width:260px!important;
+  border-radius:30px!important;
+  background:#0e1d34!important;
+  border:1px solid rgba(96,165,250,.28)!important;
+  padding:14px 18px!important;
+}
+html body #root .super-admin-premium-page .sfx-sidebar > div:first-child img{
+  max-height:62px!important;
+  object-fit:contain!important;
+}
+html body #root .super-admin-premium-page .sfx-sidebar nav{
+  height:calc(100vh - 160px)!important;
+  overflow-y:auto!important;
+  overflow-x:hidden!important;
+  display:grid!important;
+  gap:18px!important;
+  padding-right:8px!important;
+}
+html body #root .super-admin-premium-page .sfx-sidebar nav::-webkit-scrollbar{width:8px!important;}
+html body #root .super-admin-premium-page .sfx-sidebar nav::-webkit-scrollbar-track{background:transparent!important;}
+html body #root .super-admin-premium-page .sfx-sidebar nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.22)!important;border-radius:999px!important;}
+html body #root .super-admin-premium-page .sfx-sidebar nav button{
+  height:70px!important;
+  min-height:70px!important;
+  border-radius:26px!important;
+  color:#e8f0fb!important;
+  background:transparent!important;
+  font-size:20px!important;
+  font-weight:900!important;
+  padding:0 28px!important;
+  gap:22px!important;
+  border:1px solid transparent!important;
+  box-shadow:none!important;
+}
+html body #root .super-admin-premium-page .sfx-sidebar nav button span:first-child{
+  width:30px!important;
+  height:30px!important;
+  font-size:21px!important;
+  color:#e8f0fb!important;
+  background:transparent!important;
+}
+html body #root .super-admin-premium-page .sfx-sidebar nav button[style*="linear-gradient"],
+html body #root .super-admin-premium-page .sfx-sidebar nav button.active{
+  background:rgba(255,122,26,.14)!important;
+  border:1px solid rgba(255,122,26,.52)!important;
+  color:#ff7a1a!important;
+}
+html body #root .super-admin-premium-page .sfx-sidebar nav button[style*="linear-gradient"] span,
+html body #root .super-admin-premium-page .sfx-sidebar nav button.active span{
+  color:#ff7a1a!important;
+}
+html body #root .super-admin-premium-page .super-admin-main,
+html body #root .super-admin-premium-page .sa-main{
+  grid-column:2!important;
+  width:auto!important;
+  max-width:none!important;
+  min-width:0!important;
+  min-height:100vh!important;
+  padding:56px 56px 80px!important;
+  margin:0!important;
+  background:#030712!important;
+  color:#f8fafc!important;
+  box-sizing:border-box!important;
+}
+html body #root .super-admin-premium-page .sa-dashboard-inner,
+html body #root .super-admin-premium-page .sa-main > *{
+  max-width:1580px!important;
+  margin-left:0!important;
+  margin-right:0!important;
+}
+html body #root .super-admin-premium-page .sa-topbar,
+html body #root .super-admin-premium-page .sa-hero-topbar,
+html body #root .super-admin-premium-page .super-section-hero{
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+  box-shadow:none!important;
+  padding:0!important;
+  margin:0 0 42px!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 490px 260px!important;
+  gap:26px!important;
+  align-items:start!important;
+}
+html body #root .super-admin-premium-page .sa-title,
+html body #root .super-admin-premium-page .sa-topbar > div:first-child{
+  grid-column:1 / -1!important;
+  max-width:960px!important;
+}
+html body #root .super-admin-premium-page .super-kicker{
+  display:none!important;
+}
+html body #root .super-admin-premium-page h1{
+  color:#ffffff!important;
+  font-size:64px!important;
+  line-height:1!important;
+  letter-spacing:-.055em!important;
+  margin:0 0 22px!important;
+  font-weight:950!important;
+  text-shadow:none!important;
+}
+html body #root .super-admin-premium-page h2,
+html body #root .super-admin-premium-page h3{
+  color:#fff!important;
+  text-shadow:none!important;
+}
+html body #root .super-admin-premium-page p{
+  color:#9db0ca!important;
+  font-size:28px!important;
+  line-height:1.45!important;
+  max-width:1080px!important;
+}
+html body #root .super-admin-premium-page .sa-search,
+html body #root .super-admin-premium-page .super-actions label,
+html body #root .super-admin-premium-page .sa-actions label{
+  min-height:78px!important;
+  height:78px!important;
+  border-radius:25px!important;
+  border:1px solid rgba(148,163,184,.20)!important;
+  background:#0c1729!important;
+  color:#90a4c2!important;
+  box-shadow:none!important;
+  padding:0 28px!important;
+  max-width:620px!important;
+  width:100%!important;
+}
+html body #root .super-admin-premium-page input{
+  color:#e5edf8!important;
+  font-size:22px!important;
+}
+html body #root .super-admin-premium-page input::placeholder{color:#6f83a0!important;}
+html body #root .super-admin-premium-page .sa-top-actions,
+html body #root .super-admin-premium-page .super-actions,
+html body #root .super-admin-premium-page .sa-actions{
+  justify-content:flex-end!important;
+  gap:14px!important;
+}
+html body #root .super-admin-premium-page .sa-icon-btn,
+html body #root .super-admin-premium-page .sa-refresh,
+html body #root .super-admin-premium-page .sa-small-btn,
+html body #root .super-admin-premium-page .sa-panel-head button,
+html body #root .super-admin-premium-page .super-card-head button,
+html body #root .super-admin-premium-page .sa-filter-pills button,
+html body #root .super-admin-premium-page .sa-filter-row button{
+  height:72px!important;
+  border-radius:25px!important;
+  border:1px solid rgba(148,163,184,.18)!important;
+  background:#0e1a2d!important;
+  color:#fff!important;
+  box-shadow:none!important;
+  font-size:20px!important;
+  font-weight:900!important;
+}
+html body #root .super-admin-premium-page .sa-refresh,
+html body #root .super-admin-premium-page .sa-small-btn,
+html body #root .super-admin-premium-page .sa-panel-head button,
+html body #root .super-admin-premium-page .super-card-head button,
+html body #root .super-admin-premium-page .sa-filter-pills button,
+html body #root .super-admin-premium-page .sa-filter-row button{
+  background:#ff7a1a!important;
+  border-color:#ff7a1a!important;
+  color:#06101f!important;
+  padding:0 28px!important;
+}
+html body #root .super-admin-premium-page .sa-icon-btn{
+  width:72px!important;
+}
+html body #root .super-admin-premium-page .sa-stats-grid,
+html body #root .super-admin-premium-page .sa-stats-grid.four,
+html body #root .super-admin-premium-page .sa-stats-grid.five{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:30px!important;
+  margin:0 0 42px!important;
+  max-width:1580px!important;
+}
+html body #root .super-admin-premium-page .sa-stat-card,
+html body #root .super-admin-premium-page .sa-panel,
+html body #root .super-admin-premium-page .super-card{
+  background:#0c1729!important;
+  background:linear-gradient(180deg,#0d1a2d,#0a1525)!important;
+  border:1px solid rgba(148,163,184,.18)!important;
+  border-radius:34px!important;
+  box-shadow:none!important;
+  color:#f8fafc!important;
+}
+html body #root .super-admin-premium-page .sa-stat-card{
+  min-height:265px!important;
+  padding:42px!important;
+  display:block!important;
+  position:relative!important;
+}
+html body #root .super-admin-premium-page .sa-stat-icon{
+  display:none!important;
+}
+html body #root .super-admin-premium-page .sa-stat-card small{
+  display:block!important;
+  color:#9db0ca!important;
+  font-size:28px!important;
+  line-height:1.35!important;
+  font-weight:500!important;
+  margin-bottom:36px!important;
+}
+html body #root .super-admin-premium-page .sa-stat-card strong{
+  display:block!important;
+  color:#ffffff!important;
+  font-size:58px!important;
+  line-height:1!important;
+  font-weight:950!important;
+  margin:0 0 28px!important;
+}
+html body #root .super-admin-premium-page .sa-stat-card em{
+  display:block!important;
+  color:#22e57c!important;
+  font-style:normal!important;
+  font-size:18px!important;
+  font-weight:950!important;
+}
+html body #root .super-admin-premium-page .sa-stat-card i{
+  display:none!important;
+}
+html body #root .super-admin-premium-page .sa-main-grid,
+html body #root .super-admin-premium-page .sa-secondary-grid,
+html body #root .super-admin-premium-page .sa-feature-grid,
+html body #root .super-admin-premium-page .sa-overview-grid,
+html body #root .super-admin-premium-page .sa-bottom-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:34px!important;
+  max-width:1580px!important;
+  margin:0 0 42px!important;
+}
+html body #root .super-admin-premium-page .sa-panel,
+html body #root .super-admin-premium-page .super-card{
+  overflow:hidden!important;
+}
+html body #root .super-admin-premium-page .sa-panel-head,
+html body #root .super-admin-premium-page .super-card-head{
+  padding:36px 42px 28px!important;
+  border-bottom:1px solid rgba(148,163,184,.12)!important;
+}
+html body #root .super-admin-premium-page .sa-panel-head h2,
+html body #root .super-admin-premium-page .super-card-head h2{
+  font-size:30px!important;
+}
+html body #root .super-admin-premium-page .sa-panel-head p,
+html body #root .super-admin-premium-page .super-card-head p{
+  font-size:18px!important;
+  color:#9db0ca!important;
+}
+html body #root .super-admin-premium-page .sa-table-wrap,
+html body #root .super-admin-premium-page .super-table-wrap{
+  padding:0 42px 38px!important;
+}
+html body #root .super-admin-premium-page table th{
+  background:rgba(255,255,255,.03)!important;
+  color:#9db0ca!important;
+  font-size:16px!important;
+  padding:18px!important;
+  border-bottom:1px solid rgba(148,163,184,.12)!important;
+}
+html body #root .super-admin-premium-page table td{
+  color:#eef4ff!important;
+  font-size:17px!important;
+  padding:20px 18px!important;
+  border-bottom:1px solid rgba(148,163,184,.09)!important;
+}
+html body #root .super-admin-premium-page table td small{color:#8191aa!important;}
+html body #root .super-admin-premium-page .super-pill{border-radius:999px!important;padding:8px 12px!important;font-size:14px!important;font-weight:950!important;}
+html body #root .super-admin-premium-page .super-pill.blue{background:rgba(59,130,246,.15)!important;color:#93c5fd!important;}
+html body #root .super-admin-premium-page .super-pill.green{background:rgba(34,197,94,.14)!important;color:#86efac!important;}
+html body #root .super-admin-premium-page .super-pill.orange{background:rgba(255,122,26,.17)!important;color:#ffb36d!important;}
+html body #root .super-admin-premium-page .super-pill.red{background:rgba(239,68,68,.15)!important;color:#fca5a5!important;}
+html body #root .super-admin-premium-page .sa-chart-grid{stroke:rgba(148,163,184,.16)!important;}
+html body #root .super-admin-premium-page .sa-chart-area{fill:rgba(255,122,26,.10)!important;}
+html body #root .super-admin-premium-page .sa-chart-line{stroke:#ff7a1a!important;}
+html body #root .super-admin-premium-page .sa-chart-dot{fill:#ff7a1a!important;}
+html body #root .super-admin-premium-page .sa-bar-chart span{background:rgba(148,163,184,.10)!important;}
+html body #root .super-admin-premium-page .sa-bar-chart b{background:linear-gradient(180deg,#ff9b45,#ff7a1a)!important;}
+html body #root .super-admin-premium-page .sa-filter-pills,
+html body #root .super-admin-premium-page .sa-filter-row{gap:18px!important;margin:0 0 34px!important;}
+html body #root .super-admin-premium-page .sa-filter-pills span,
+html body #root .super-admin-premium-page .sa-filter-row span{
+  min-height:54px!important;
+  padding:0 22px!important;
+  border-radius:22px!important;
+  background:#0c1729!important;
+  border:1px solid rgba(148,163,184,.18)!important;
+  color:#dbeafe!important;
+  font-size:16px!important;
+  font-weight:900!important;
+}
+html body #root .super-admin-premium-page .sa-filter-pills span.active{
+  background:rgba(255,122,26,.14)!important;
+  color:#ff7a1a!important;
+  border-color:rgba(255,122,26,.42)!important;
+}
+html body #root .super-admin-premium-page .sa-activity-row,
+html body #root .super-admin-premium-page .sa-user-row,
+html body #root .super-admin-premium-page .super-user-row{
+  padding:22px 42px!important;
+  border-bottom:1px solid rgba(148,163,184,.1)!important;
+  color:#fff!important;
+}
+html body #root .super-admin-premium-page .sa-activity-row small,
+html body #root .super-admin-premium-page .sa-user-row small,
+html body #root .super-admin-premium-page .super-user-row small{color:#9db0ca!important;}
+@media(max-width:1500px){
+  html body #root .sf-dashboard.super-admin-premium-page{grid-template-columns:320px minmax(0,1fr)!important;}
+  html body #root .super-admin-premium-page .sfx-sidebar{width:320px!important;min-width:320px!important;max-width:320px!important;}
+  html body #root .super-admin-premium-page .super-admin-main{padding:38px 34px 70px!important;}
+  html body #root .super-admin-premium-page .sa-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+  html body #root .super-admin-premium-page h1{font-size:52px!important;}
+}
+@media(max-width:900px){
+  html body #root .sf-dashboard.super-admin-premium-page{grid-template-columns:1fr!important;}
+  html body #root .super-admin-premium-page .sfx-sidebar{position:relative!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;}
+  html body #root .super-admin-premium-page .super-admin-main{grid-column:1!important;padding:22px!important;}
+  html body #root .super-admin-premium-page .sa-stats-grid{grid-template-columns:1fr!important;}
+}
