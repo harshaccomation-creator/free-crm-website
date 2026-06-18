@@ -49,18 +49,18 @@ const routes = {
   },
   superAdmin: {
     Overview: '/super-admin/dashboard',
-    Companies: '/super-admin/companies',
-    'Users & Roles': '/super-admin/users-roles',
-    Subscriptions: '/super-admin/subscriptions',
-    'Revenue & Plans': '/super-admin/revenue-plans',
-    'Leads Monitor': '/super-admin/leads-monitor',
-    Notifications: '/super-admin/notifications',
-    'Email Logs': '/super-admin/email-logs',
-    Security: '/super-admin/security',
-    'Platform Settings': '/super-admin/platform-settings',
-    Reports: '/super-admin/reports',
-    'Activity Logs': '/super-admin/activity-logs',
-    'Support Tickets': '/super-admin/support-tickets',
+    Companies: '/super-admin/dashboard?view=companies',
+    'Users & Roles': '/super-admin/dashboard?view=users-roles',
+    Subscriptions: '/super-admin/dashboard?view=subscriptions',
+    'Revenue & Plans': '/super-admin/dashboard?view=revenue-plans',
+    'Leads Monitor': '/super-admin/dashboard?view=leads-monitor',
+    Notifications: '/super-admin/dashboard?view=notifications',
+    'Email Logs': '/super-admin/dashboard?view=email-logs',
+    Security: '/super-admin/dashboard?view=security',
+    'Platform Settings': '/super-admin/dashboard?view=platform-settings',
+    Reports: '/super-admin/dashboard?view=reports',
+    'Activity Logs': '/super-admin/dashboard?view=activity-logs',
+    'Support Tickets': '/super-admin/dashboard?view=support-tickets',
   },
 };
 
@@ -99,9 +99,10 @@ function nav(path) {
 }
 
 function active(item, path) {
-  const current = window.location.pathname;
+  const current = `${window.location.pathname}${window.location.search}`;
   if (current === path) return true;
-  if ((item === 'My Leads' || item === 'Team Leads' || item === 'Leads') && current.startsWith('/leads')) return true;
+  if (window.location.pathname === path) return true;
+  if ((item === 'My Leads' || item === 'Team Leads' || item === 'Leads') && window.location.pathname.startsWith('/leads')) return true;
   return false;
 }
 
