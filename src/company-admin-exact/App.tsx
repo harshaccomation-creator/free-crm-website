@@ -12,6 +12,7 @@ import Payments from "@/pages/Payments";
 import Team from "@/pages/Team";
 import Reports from "@/pages/Reports";
 import Notifications from "@/pages/Notifications";
+import SupportTickets from "@/pages/SupportTickets";
 import Settings from "@/pages/Settings";
 import Profile from "@/pages/Profile";
 
@@ -28,6 +29,7 @@ function Router() {
         <Route path="/team" component={Team} />
         <Route path="/reports" component={Reports} />
         <Route path="/notifications" component={Notifications} />
+        <Route path="/support-tickets" component={SupportTickets} />
         <Route path="/settings" component={Settings} />
         <Route path="/profile" component={Profile} />
         <Route component={NotFound} />
