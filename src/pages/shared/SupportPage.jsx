@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { AlertTriangle, CheckCircle2, Clock3, Headphones, LockKeyhole, Paperclip, Send, Sparkles, TicketCheck } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Clock3, Headphones, LockKeyhole, Paperclip, Send, TicketCheck } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 import { supabase } from "../../lib/supabaseClient.js";
 
@@ -15,11 +15,11 @@ function userContext() {
   };
 }
 
-function statusStyle(status) {
+function statusClass(status) {
   const value = String(status || "Open").toLowerCase();
-  if (value.includes("closed") || value.includes("resolved")) return "border-emerald-200 bg-emerald-50 text-emerald-700";
-  if (value.includes("progress")) return "border-blue-200 bg-blue-50 text-blue-700";
-  return "border-orange-200 bg-orange-50 text-orange-700";
+  if (value.includes("closed") || value.includes("resolved")) return "done";
+  if (value.includes("progress")) return "progress";
+  return "open";
 }
 
 export default function SupportPage() {
@@ -95,153 +95,167 @@ export default function SupportPage() {
 
   return (
     <EmployeeShell>
-      <div className="mx-auto max-w-7xl space-y-6">
-        <section className="relative overflow-hidden rounded-[28px] bg-slate-950 p-6 text-white shadow-xl md:p-8">
-          <div className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-orange-500/25 blur-3xl" />
-          <div className="absolute bottom-0 right-44 h-36 w-36 rounded-full bg-blue-500/20 blur-3xl" />
-          <div className="relative flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+      <div className="sf-support-page">
+        <style>{`
+          .sf-support-page{max-width:1220px;margin:0 auto;padding:2px 0 32px;color:#0f172a;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}
+          .sf-support-hero{position:relative;overflow:hidden;border-radius:28px;padding:30px 34px;background:linear-gradient(135deg,#07111f 0%,#0f172a 58%,#1f2937 100%);box-shadow:0 18px 45px rgba(15,23,42,.18);color:#fff;}
+          .sf-support-hero:before{content:"";position:absolute;right:-80px;top:-90px;width:260px;height:260px;border-radius:999px;background:rgba(249,115,22,.28);filter:blur(24px);}
+          .sf-support-hero:after{content:"";position:absolute;right:230px;bottom:-90px;width:210px;height:210px;border-radius:999px;background:rgba(59,130,246,.18);filter:blur(28px);}
+          .sf-support-hero-content{position:relative;z-index:1;display:flex;gap:20px;align-items:flex-start;justify-content:space-between;}
+          .sf-support-eyebrow{margin:0 0 8px;font-size:12px;font-weight:900;letter-spacing:.24em;text-transform:uppercase;color:#fdba74;}
+          .sf-support-title{margin:0;font-size:36px;line-height:1.08;font-weight:950;letter-spacing:-.04em;color:#fff;}
+          .sf-support-subtitle{max-width:760px;margin:12px 0 0;font-size:15px;line-height:1.7;font-weight:700;color:#cbd5e1;}
+          .sf-support-badges{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;min-width:270px;}
+          .sf-support-badge{display:flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.08);color:#f8fafc;border-radius:999px;padding:10px 13px;font-size:12px;font-weight:900;white-space:nowrap;}
+          .sf-support-notice{margin-top:16px;border-radius:18px;padding:13px 16px;font-size:13px;font-weight:800;border:1px solid #fed7aa;background:#fff7ed;color:#c2410c;}
+          .sf-support-notice.success{border-color:#bbf7d0;background:#f0fdf4;color:#047857;}.sf-support-notice.error{border-color:#fecaca;background:#fef2f2;color:#b91c1c;}
+          .sf-support-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:22px;margin-top:22px;align-items:start;}
+          .sf-support-card,.sf-support-side-card,.sf-support-table-card{background:#fff;border:1px solid #dbe4ef;border-radius:26px;box-shadow:0 12px 35px rgba(15,23,42,.07);}
+          .sf-support-card{padding:24px;}
+          .sf-support-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;border-bottom:1px solid #e5edf6;padding-bottom:18px;margin-bottom:20px;}
+          .sf-support-card-title-wrap{display:flex;gap:14px;align-items:flex-start;}
+          .sf-support-icon{width:48px;height:48px;border-radius:18px;background:#fff7ed;color:#f97316;display:grid;place-items:center;flex:0 0 48px;}
+          .sf-support-card h2{margin:0;font-size:22px;line-height:1.2;font-weight:950;color:#0f172a;letter-spacing:-.02em;}
+          .sf-support-card p{margin:7px 0 0;font-size:14px;line-height:1.55;font-weight:700;color:#64748b;}
+          .sf-support-lock{display:inline-flex;align-items:center;gap:8px;border:1px solid #dbe4ef;background:#f8fafc;color:#475569;border-radius:999px;padding:10px 13px;font-size:12px;font-weight:900;white-space:nowrap;}
+          .sf-support-form{display:grid;gap:18px;}
+          .sf-support-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;}
+          .sf-support-field{display:grid;gap:8px;}
+          .sf-support-label{font-size:12px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;color:#52637a;}
+          .sf-support-input,.sf-support-select,.sf-support-textarea{width:100%;box-sizing:border-box;border:1px solid #d5dfeb;background:#fff;color:#0f172a;border-radius:18px;padding:14px 16px;font-size:14px;font-weight:800;outline:none;box-shadow:0 6px 16px rgba(15,23,42,.035);transition:border-color .15s ease,box-shadow .15s ease;}
+          .sf-support-input::placeholder,.sf-support-textarea::placeholder{color:#8b98a9;}
+          .sf-support-input:focus,.sf-support-select:focus,.sf-support-textarea:focus{border-color:#f97316;box-shadow:0 0 0 4px rgba(249,115,22,.14);}
+          .sf-support-textarea{min-height:142px;resize:vertical;line-height:1.6;}
+          .sf-support-attach{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px dashed #cbd5e1;background:#f8fafc;border-radius:18px;padding:14px 16px;color:#52637a;font-size:13px;font-weight:800;cursor:pointer;}
+          .sf-support-attach:hover{border-color:#f97316;background:#fff7ed;}.sf-support-attach input{display:none;}
+          .sf-support-choose{border-radius:999px;background:#fff;color:#f97316;padding:6px 11px;font-size:12px;font-weight:950;box-shadow:0 4px 12px rgba(15,23,42,.08);}
+          .sf-support-form-footer{display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap;}
+          .sf-support-note{max-width:560px;margin:0;font-size:12px;line-height:1.55;font-weight:750;color:#64748b;}
+          .sf-support-submit{display:inline-flex;align-items:center;justify-content:center;gap:9px;border:0;border-radius:17px;background:#f97316;color:#fff;padding:14px 18px;font-size:14px;font-weight:950;box-shadow:0 12px 22px rgba(249,115,22,.26);cursor:pointer;transition:transform .15s ease,background .15s ease;}
+          .sf-support-submit:hover{background:#ea580c;transform:translateY(-1px);}.sf-support-submit:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+          .sf-support-side{display:grid;gap:16px;background:transparent;}
+          .sf-support-side-card{padding:21px;}
+          .sf-support-side-card h3{margin:12px 0 0;font-size:17px;font-weight:950;color:#0f172a;}.sf-support-side-card p{margin:8px 0 0;font-size:13px;line-height:1.65;font-weight:750;color:#64748b;}
+          .sf-support-side-icon{width:38px;height:38px;border-radius:14px;display:grid;place-items:center;background:#f8fafc;}.sf-support-side-icon.orange{color:#f97316;background:#fff7ed;}.sf-support-side-icon.green{color:#10b981;background:#ecfdf5;}.sf-support-side-icon.blue{color:#2563eb;background:#eff6ff;}
+          .sf-support-table-card{margin-top:22px;overflow:hidden;}
+          .sf-support-table-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:19px 22px;border-bottom:1px solid #e5edf6;}.sf-support-table-head h2{margin:0;font-size:18px;font-weight:950;color:#0f172a;}.sf-support-table-head p{margin:4px 0 0;font-size:13px;font-weight:750;color:#64748b;}
+          .sf-support-table-scroll{overflow-x:auto;}.sf-support-table{width:100%;border-collapse:collapse;font-size:13px;}.sf-support-table th{background:#f8fafc;text-align:left;padding:13px 18px;color:#52637a;font-size:11px;font-weight:950;letter-spacing:.08em;text-transform:uppercase;}.sf-support-table td{padding:15px 18px;border-top:1px solid #eef2f7;font-weight:750;color:#475569;}.sf-support-table td:first-child{font-weight:950;color:#0f172a;}.sf-support-empty{text-align:center!important;color:#94a3b8!important;padding:28px!important;}
+          .sf-support-status{display:inline-flex;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:950;border:1px solid #fed7aa;background:#fff7ed;color:#c2410c;}.sf-support-status.done{border-color:#bbf7d0;background:#f0fdf4;color:#047857;}.sf-support-status.progress{border-color:#bfdbfe;background:#eff6ff;color:#1d4ed8;}
+          @media(max-width:1100px){.sf-support-layout{grid-template-columns:1fr}.sf-support-side{grid-template-columns:repeat(3,minmax(0,1fr));}.sf-support-badges{justify-content:flex-start;}.sf-support-hero-content{flex-direction:column;}}
+          @media(max-width:760px){.sf-support-page{padding:0 0 24px}.sf-support-hero{padding:24px 20px;border-radius:22px}.sf-support-title{font-size:30px}.sf-support-layout{gap:16px}.sf-support-card{padding:18px;border-radius:22px}.sf-support-grid{grid-template-columns:1fr}.sf-support-side{grid-template-columns:1fr}.sf-support-card-head{flex-direction:column}.sf-support-lock{white-space:normal}.sf-support-submit{width:100%;}.sf-support-table-head{align-items:flex-start;}.sf-support-badges{min-width:0;}}
+        `}</style>
+
+        <section className="sf-support-hero">
+          <div className="sf-support-hero-content">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.28em] text-orange-300">SalesFlow Hub In-App Support</p>
-              <h1 className="mt-2 text-3xl font-black tracking-tight md:text-4xl">CRM Help & Support</h1>
-              <p className="mt-3 max-w-3xl text-sm font-semibold leading-6 text-slate-300 md:text-base">
-                Submit CRM-related issues including leads, follow-ups, tasks, reports, payments, dashboards, and technical bugs.
-              </p>
+              <p className="sf-support-eyebrow">SalesFlow Hub In-App Support</p>
+              <h1 className="sf-support-title">CRM Help & Support</h1>
+              <p className="sf-support-subtitle">Submit CRM-related issues including leads, follow-ups, tasks, reports, payments, dashboards, and technical bugs.</p>
             </div>
-            <div className="grid grid-cols-2 gap-3 sm:min-w-[320px]">
-              <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur">
-                <Sparkles className="h-5 w-5 text-orange-300" />
-                <p className="mt-2 text-xs font-bold text-slate-300">Support Mode</p>
-                <strong className="text-sm">Private Team Review</strong>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur">
-                <TicketCheck className="h-5 w-5 text-blue-300" />
-                <p className="mt-2 text-xs font-bold text-slate-300">Ticket Status</p>
-                <strong className="text-sm">Track in CRM</strong>
-              </div>
+            <div className="sf-support-badges">
+              <span className="sf-support-badge"><LockKeyhole size={15} /> Private team review</span>
+              <span className="sf-support-badge"><TicketCheck size={15} /> Track in CRM</span>
             </div>
           </div>
         </section>
 
-        {notice.text && (
-          <div className={`rounded-2xl border px-4 py-3 text-sm font-bold ${notice.type === "success" ? "border-emerald-200 bg-emerald-50 text-emerald-700" : notice.type === "error" ? "border-red-200 bg-red-50 text-red-700" : "border-orange-200 bg-orange-50 text-orange-700"}`}>
-            {notice.text}
-          </div>
-        )}
+        {notice.text && <div className={`sf-support-notice ${notice.type}`}>{notice.text}</div>}
 
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <section className="rounded-[28px] border border-slate-200 bg-white p-5 shadow-sm md:p-6">
-            <div className="flex flex-col gap-4 border-b border-slate-100 pb-5 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-start gap-4">
-                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-orange-50 text-orange-600">
-                  <Headphones className="h-5 w-5" />
-                </div>
+        <div className="sf-support-layout">
+          <section className="sf-support-card">
+            <div className="sf-support-card-head">
+              <div className="sf-support-card-title-wrap">
+                <div className="sf-support-icon"><Headphones size={22} /></div>
                 <div>
-                  <h2 className="text-xl font-black text-slate-950">Create CRM Support Ticket</h2>
-                  <p className="mt-1 text-sm font-semibold text-slate-500">
-                    For login or OTP issues, please use the Public Support page from the login screen.
-                  </p>
+                  <h2>Create CRM Support Ticket</h2>
+                  <p>For login or OTP issues, please use the Public Support page from the login screen.</p>
                 </div>
               </div>
-              <span className="inline-flex w-fit items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-black text-slate-600">
-                <LockKeyhole className="h-3.5 w-3.5" /> Secure internal request
-              </span>
+              <span className="sf-support-lock"><LockKeyhole size={15} /> Secure internal request</span>
             </div>
 
-            <form className="mt-6 space-y-5" onSubmit={submitTicket}>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <label className="space-y-2">
-                  <span className="text-xs font-black uppercase tracking-wider text-slate-500">Issue Type</span>
-                  <select value={form.category} onChange={(e) => update("category", e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-800 shadow-sm outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100">
+            <form className="sf-support-form" onSubmit={submitTicket}>
+              <div className="sf-support-grid">
+                <label className="sf-support-field">
+                  <span className="sf-support-label">Issue Type</span>
+                  <select value={form.category} onChange={(e) => update("category", e.target.value)} className="sf-support-select">
                     {issueTypes.map((item) => <option key={item}>{item}</option>)}
                   </select>
                 </label>
-
-                <label className="space-y-2">
-                  <span className="text-xs font-black uppercase tracking-wider text-slate-500">Priority</span>
-                  <select value={form.priority} onChange={(e) => update("priority", e.target.value)} className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-800 shadow-sm outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100">
+                <label className="sf-support-field">
+                  <span className="sf-support-label">Priority</span>
+                  <select value={form.priority} onChange={(e) => update("priority", e.target.value)} className="sf-support-select">
                     {priorities.map((item) => <option key={item}>{item}</option>)}
                   </select>
                 </label>
               </div>
 
-              <label className="block space-y-2">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-500">Subject</span>
-                <input value={form.subject} onChange={(e) => update("subject", e.target.value)} placeholder="Example: Follow-up reminder not showing" className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-slate-800 shadow-sm outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
+              <label className="sf-support-field">
+                <span className="sf-support-label">Subject</span>
+                <input value={form.subject} onChange={(e) => update("subject", e.target.value)} placeholder="Example: Follow-up reminder not showing" className="sf-support-input" />
               </label>
 
-              <label className="block space-y-2">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-500">Message</span>
-                <textarea value={form.message} onChange={(e) => update("message", e.target.value)} rows={7} placeholder="Describe the issue, where it occurred, what error was shown, and when it started." className="w-full resize-none rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-800 shadow-sm outline-none transition focus:border-orange-300 focus:ring-4 focus:ring-orange-100" />
+              <label className="sf-support-field">
+                <span className="sf-support-label">Message</span>
+                <textarea value={form.message} onChange={(e) => update("message", e.target.value)} placeholder="Describe the issue, where it occurred, what error was shown, and when it started." className="sf-support-textarea" />
               </label>
 
-              <label className="flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-sm font-bold text-slate-600 transition hover:border-orange-300 hover:bg-orange-50/40">
-                <span className="flex items-center gap-2"><Paperclip className="h-4 w-4" />{form.attachmentName || "Attach screenshot or PDF (optional)"}</span>
-                <input type="file" accept="image/*,.pdf" className="hidden" onChange={(e) => update("attachmentName", e.target.files?.[0]?.name || "")} />
-                <span className="rounded-full bg-white px-3 py-1 text-xs text-orange-600 shadow-sm">Choose</span>
+              <label className="sf-support-attach">
+                <span><Paperclip size={16} style={{ verticalAlign: "middle", marginRight: 8 }} />{form.attachmentName || "Attach screenshot or PDF (optional)"}</span>
+                <input type="file" accept="image/*,.pdf" onChange={(e) => update("attachmentName", e.target.files?.[0]?.name || "")} />
+                <span className="sf-support-choose">Choose</span>
               </label>
 
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-xs font-semibold text-slate-500">
-                  Do not include passwords, OTPs, or confidential customer credentials in the message.
-                </p>
-                <button type="submit" disabled={loading} className="inline-flex items-center justify-center gap-2 rounded-2xl bg-orange-500 px-5 py-3 text-sm font-black text-white shadow-lg shadow-orange-500/25 transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60">
-                  <Send className="h-4 w-4" />{loading ? "Creating Ticket..." : "Submit Ticket"}
-                </button>
+              <div className="sf-support-form-footer">
+                <p className="sf-support-note">Do not include passwords, OTPs, or confidential customer credentials in the message.</p>
+                <button type="submit" disabled={loading} className="sf-support-submit"><Send size={16} />{loading ? "Creating Ticket..." : "Submit Ticket"}</button>
               </div>
             </form>
           </section>
 
-          <aside className="space-y-4">
-            <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
-              <Clock3 className="h-5 w-5 text-orange-500" />
-              <h3 className="mt-3 font-black text-slate-950">Typical response time</h3>
-              <p className="mt-1 text-sm font-semibold leading-6 text-slate-500">Most support requests are reviewed during business hours.</p>
+          <aside className="sf-support-side">
+            <div className="sf-support-side-card">
+              <div className="sf-support-side-icon orange"><Clock3 size={20} /></div>
+              <h3>Typical response time</h3>
+              <p>Most support requests are reviewed during business hours.</p>
             </div>
-            <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
-              <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-              <h3 className="mt-3 font-black text-slate-950">Before submitting</h3>
-              <p className="mt-1 text-sm font-semibold leading-6 text-slate-500">Include the affected page, user role, error message, and steps to reproduce the issue.</p>
+            <div className="sf-support-side-card">
+              <div className="sf-support-side-icon green"><CheckCircle2 size={20} /></div>
+              <h3>Before submitting</h3>
+              <p>Include the affected page, user role, error message, and steps to reproduce the issue.</p>
             </div>
-            <div className="rounded-[24px] border border-slate-200 bg-white p-5 shadow-sm">
-              <AlertTriangle className="h-5 w-5 text-blue-500" />
-              <h3 className="mt-3 font-black text-slate-950">Security reminder</h3>
-              <p className="mt-1 text-sm font-semibold leading-6 text-slate-500">Never share passwords or OTPs. SalesFlow Support will never ask for OTP details.</p>
+            <div className="sf-support-side-card">
+              <div className="sf-support-side-icon blue"><AlertTriangle size={20} /></div>
+              <h3>Security reminder</h3>
+              <p>Never share passwords or OTPs. SalesFlow Support will never ask for OTP details.</p>
             </div>
           </aside>
         </div>
 
-        <section className="rounded-[28px] border border-slate-200 bg-white shadow-sm overflow-hidden">
-          <div className="flex flex-col gap-2 border-b border-slate-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <section className="sf-support-table-card">
+          <div className="sf-support-table-head">
             <div>
-              <h2 className="text-lg font-black text-slate-950">My CRM Tickets</h2>
-              <p className="text-sm font-semibold text-slate-500">Latest in-app support requests and status updates.</p>
+              <h2>My CRM Tickets</h2>
+              <p>Latest in-app support requests and status updates.</p>
             </div>
-            <TicketCheck className="h-5 w-5 text-orange-500" />
+            <TicketCheck size={22} color="#f97316" />
           </div>
-
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-slate-100 text-sm">
-              <thead className="bg-slate-50 text-left text-xs font-black uppercase tracking-wider text-slate-500">
-                <tr>
-                  <th className="px-5 py-3">Ticket</th>
-                  <th className="px-5 py-3">Category</th>
-                  <th className="px-5 py-3">Priority</th>
-                  <th className="px-5 py-3">Status</th>
-                  <th className="px-5 py-3">Agent</th>
-                  <th className="px-5 py-3">Created</th>
-                </tr>
+          <div className="sf-support-table-scroll">
+            <table className="sf-support-table">
+              <thead>
+                <tr><th>Ticket</th><th>Category</th><th>Priority</th><th>Status</th><th>Agent</th><th>Created</th></tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
+              <tbody>
                 {tickets.length === 0 ? (
-                  <tr><td colSpan="6" className="px-5 py-8 text-center font-bold text-slate-400">No support tickets yet.</td></tr>
+                  <tr><td colSpan="6" className="sf-support-empty">No support tickets yet.</td></tr>
                 ) : tickets.map((ticket) => (
-                  <tr key={ticket.id} className="hover:bg-slate-50/80">
-                    <td className="px-5 py-4 font-black text-slate-950">{ticket.subject}</td>
-                    <td className="px-5 py-4 font-semibold text-slate-600">{ticket.category}</td>
-                    <td className="px-5 py-4 font-semibold text-slate-600">{ticket.priority}</td>
-                    <td className="px-5 py-4"><span className={`rounded-full border px-3 py-1 text-xs font-black ${statusStyle(ticket.status)}`}>{ticket.status || "Open"}</span></td>
-                    <td className="px-5 py-4 font-semibold text-slate-600">{ticket.agent_name || "SalesFlow Support Team"}</td>
-                    <td className="px-5 py-4 font-semibold text-slate-500">{ticket.created_at ? new Date(ticket.created_at).toLocaleString() : "-"}</td>
+                  <tr key={ticket.id}>
+                    <td>{ticket.subject}</td>
+                    <td>{ticket.category}</td>
+                    <td>{ticket.priority}</td>
+                    <td><span className={`sf-support-status ${statusClass(ticket.status)}`}>{ticket.status || "Open"}</span></td>
+                    <td>{ticket.agent_name || "SalesFlow Support Team"}</td>
+                    <td>{ticket.created_at ? new Date(ticket.created_at).toLocaleString() : "-"}</td>
                   </tr>
                 ))}
               </tbody>
