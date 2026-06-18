@@ -3,6 +3,7 @@ import EmployeeLeadActivityPage from './pages/employee/EmployeeLeadActivityPage.
 import { useEffect, useState } from 'react';
 import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
+import PublicSupportPage from './pages/PublicSupportPage.jsx';
 import EmployeeDashboard from './pages/dashboards/EmployeeDashboardV2.jsx';
 import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
 import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
@@ -39,8 +40,8 @@ function go(path, setPath) {
   window.dispatchEvent(new Event('salesflow:navigate'));
 }
 
-function isSupportRoute(path) {
-  return path === '/support' || path === '/employee/support' || path === '/admin/support';
+function isInAppSupportRoute(path) {
+  return path === '/employee/support' || path === '/admin/support';
 }
 
 function isProtected(path) {
@@ -53,7 +54,7 @@ function isProtected(path) {
     path === '/settings' ||
     path === '/notifications' ||
     path === '/contacts' ||
-    isSupportRoute(path)
+    isInAppSupportRoute(path)
   );
 }
 
@@ -95,6 +96,7 @@ export default function AppSecure() {
     return <div className="crm-session-loader"><div className="crm-session-loader__card">Checking secure session...</div></div>;
   }
 
+  if (path === '/support') return <PublicSupportPage />;
   if (isProtected(path) && !loggedIn) return <LoginPage />;
   if (loggedIn && isProtected(path) && !canOpenRoute(path, role)) return <RedirectToRoleHome role={role} setPath={setPath} />;
   if (path === '/login') return <LoginPage />;
@@ -105,7 +107,7 @@ export default function AppSecure() {
     return <EmployeeDashboard />;
   }
 
-  if (isSupportRoute(path)) return <SupportPage />;
+  if (isInAppSupportRoute(path)) return <SupportPage />;
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
   if (path === '/employee/won') return <WonPageFixed />;
   if (path === '/employee/tasks') return <TasksPageFixed />;
