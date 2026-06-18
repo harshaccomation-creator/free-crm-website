@@ -14,6 +14,7 @@ import EmployeeContactsPage from './pages/employee/EmployeeContactsPage.jsx';
 import EmployeeCalendarPage from './pages/employee/EmployeeCalendarPage.jsx';
 import SettingsPage from './pages/shared/SettingsPage.jsx';
 import NotificationsPage from './pages/shared/NotificationsPage.jsx';
+import SupportPage from './pages/shared/SupportPage.jsx';
 import WonPageFixed from './pages/employee/WonPageFixed.jsx';
 import TasksPageFixed from './pages/employee/TasksPageFixed.jsx';
 import './styles/dashboardBase.css';
@@ -92,6 +93,7 @@ function isProtectedRoute(pathname) {
     pathname === '/leads' ||
     pathname.startsWith('/leads/') ||
     pathname === '/contacts' ||
+    pathname === '/support' ||
     pathname === '/settings' ||
     pathname === '/notifications';
 }
@@ -149,6 +151,7 @@ export default function App() {
   if (isLoggedIn && isSuperAdminRole(savedRole) && path.startsWith('/employee')) return <SuperAdminDashboard view="dashboard" />;
   if (isLoggedIn && isStaffRole(savedRole) && path.startsWith('/admin')) return <EmployeeDashboard />;
   if (isLoggedIn && !isSuperAdminRole(savedRole) && path.startsWith('/super-admin')) return isAdminRole(savedRole) ? <AdminDashboard /> : <EmployeeDashboard />;
+  if (path === '/support') return <SupportPage />;
   if (path === '/settings') return <SettingsPage />;
   if (path === '/notifications') return <NotificationsPage />;
   if (path === '/contacts') return <EmployeeContactsPage />;
