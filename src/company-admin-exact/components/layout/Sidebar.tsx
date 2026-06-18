@@ -10,6 +10,7 @@ import {
   Bell, 
   Settings, 
   User,
+  TicketCheck,
   Zap
 } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -22,6 +23,7 @@ const menuItems = [
   { name: "Payments", icon: CreditCard, href: "/payments" },
   { name: "Team Members", icon: UserCheck, href: "/team" },
   { name: "Reports", icon: BarChart2, href: "/reports" },
+  { name: "Support Tickets", icon: TicketCheck, href: "/support-tickets" },
   { name: "Notifications", icon: Bell, href: "/notifications", badge: 5 },
   { name: "Settings", icon: Settings, href: "/settings" },
   { name: "Profile", icon: User, href: "/profile" },
