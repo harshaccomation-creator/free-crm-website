@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Headphones, Mail, Send, ShieldCheck } from 'lucide-react';
 import { supabase } from '../lib/supabaseClient.js';
+import { sendSupportTicketToZoho, zohoNoticeText } from '../lib/zohoSupportClient.js';
 
 const issueTypes = ['OTP not received', 'Invalid login', 'Account access issue', 'Trial or payment activation', 'Other'];
 
@@ -32,11 +33,26 @@ export default function PublicSupportPage() {
       zoho_ticket_id: null,
     };
 
+    let savedTicketId = null;
     if (supabase) {
-      await supabase.from('support_tickets').insert(ticket);
+      const { data } = await supabase
+        .from('support_tickets')
+        .insert(ticket)
+        .select('id')
+        .single();
+      savedTicketId = data?.id || null;
     }
 
-    setNotice('Your support request has been submitted. Our team will reply to your registered email.');
+    const zohoResult = await sendSupportTicketToZoho({ ...ticket, support_ticket_id: savedTicketId });
+
+    if (supabase && savedTicketId && zohoResult?.ok && zohoResult?.zoho_ticket_id) {
+      await supabase
+        .from('support_tickets')
+        .update({ zoho_ticket_id: String(zohoResult.zoho_ticket_id), agent_name: 'Zoho Desk' })
+        .eq('id', savedTicketId);
+    }
+
+    setNotice(zohoNoticeText(zohoResult));
     setForm({ name: '', email: '', category: 'OTP not received', subject: '', message: '' });
     setLoading(false);
   };
