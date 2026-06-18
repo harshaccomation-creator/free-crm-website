@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import SuperAdminOverviewPage from './SuperAdminOverviewPage.jsx';
 import SuperAdminSectionPage from './SuperAdminSectionPage.jsx';
+import '../../styles/superAdminReferenceTheme.css';
 
 function getCurrentView() {
   return new URLSearchParams(window.location.search).get('view') || '';
