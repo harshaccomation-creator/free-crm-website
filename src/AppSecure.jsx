@@ -117,7 +117,7 @@ export default function AppSecure() {
   if (path === '/employee/lead-activity') return <EmployeeLeadActivityPage />;
   if (path === '/employee/reports') return <EmployeeReportsPage />;
   if (path === '/employee/profile') return <PremiumProfilePage />;
-  if (path === '/admin/dashboard') return <AdminDashboard />;
+  if (path.startsWith('/admin/dashboard')) return <AdminDashboard />;
   if (path === '/super-admin/dashboard') return <SuperAdminDashboard />;
   if (path === '/settings') return <SettingsPage />;
   if (path === '/notifications') return <NotificationsPage />;
