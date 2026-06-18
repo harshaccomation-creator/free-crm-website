@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AlertTriangle, CheckCircle2, Clock3, Headphones, LockKeyhole, Paperclip, Send, TicketCheck } from "lucide-react";
 import EmployeeShell from "../../components/employee/EmployeeShell.jsx";
 import { supabase } from "../../lib/supabaseClient.js";
+import { sendSupportTicketToZoho, zohoNoticeText } from "../../lib/zohoSupportClient.js";
 
 const issueTypes = ["Lead Management Issue", "Follow-up Issue", "Task Issue", "Payment Issue", "Report Issue", "Dashboard Issue", "Technical Bug", "Feature Request", "Other"];
 const priorities = ["Low", "Medium", "High", "Critical"];
@@ -34,7 +35,7 @@ export default function SupportPage() {
       if (!supabase) return;
       let query = supabase
         .from("support_tickets")
-        .select("id,subject,category,priority,status,agent_name,created_at")
+        .select("id,subject,category,priority,status,agent_name,created_at,zoho_ticket_id")
         .order("created_at", { ascending: false })
         .limit(20);
 
@@ -74,12 +75,23 @@ export default function SupportPage() {
       const { data, error } = await supabase
         .from("support_tickets")
         .insert(ticket)
-        .select("id,subject,category,priority,status,agent_name,created_at")
+        .select("id,subject,category,priority,status,agent_name,created_at,zoho_ticket_id")
         .single();
 
       if (!error && data) {
         setTickets((prev) => [data, ...prev]);
-        setNotice({ type: "success", text: "Your support ticket has been created. SalesFlow Support will review it shortly." });
+
+        const zohoResult = await sendSupportTicketToZoho({ ...ticket, support_ticket_id: data.id });
+        if (zohoResult?.ok && zohoResult?.zoho_ticket_id) {
+          await supabase
+            .from("support_tickets")
+            .update({ zoho_ticket_id: String(zohoResult.zoho_ticket_id), agent_name: "Zoho Desk" })
+            .eq("id", data.id);
+
+          setTickets((prev) => prev.map((item) => item.id === data.id ? { ...item, zoho_ticket_id: String(zohoResult.zoho_ticket_id), agent_name: "Zoho Desk" } : item));
+        }
+
+        setNotice({ type: zohoResult?.ok ? "success" : "warning", text: zohoNoticeText(zohoResult) });
       } else {
         setTickets((prev) => [{ ...ticket, id: Date.now(), created_at: new Date().toISOString() }, ...prev]);
         setNotice({ type: "warning", text: "The support page is ready. Backend ticket storage will work after the Supabase support table is connected." });
@@ -154,7 +166,7 @@ export default function SupportPage() {
             </div>
             <div className="sf-support-badges">
               <span className="sf-support-badge"><LockKeyhole size={15} /> Private team review</span>
-              <span className="sf-support-badge"><TicketCheck size={15} /> Track in CRM</span>
+              <span className="sf-support-badge"><TicketCheck size={15} /> Sent to Zoho Desk</span>
             </div>
           </div>
         </section>
@@ -217,7 +229,7 @@ export default function SupportPage() {
             <div className="sf-support-side-card">
               <div className="sf-support-side-icon orange"><Clock3 size={20} /></div>
               <h3>Typical response time</h3>
-              <p>Most support requests are reviewed during business hours.</p>
+              <p>Most support requests are reviewed inside Zoho Desk during business hours.</p>
             </div>
             <div className="sf-support-side-card">
               <div className="sf-support-side-icon green"><CheckCircle2 size={20} /></div>
