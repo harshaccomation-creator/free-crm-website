@@ -80,6 +80,15 @@ function hasActiveCrmSession() {
   );
 }
 
+function isSupportPath(pathname) {
+  return pathname === '/support' ||
+    pathname === '/support/' ||
+    pathname === '/employee/support' ||
+    pathname === '/employee/support/' ||
+    pathname === '/admin/support' ||
+    pathname === '/admin/support/';
+}
+
 function redirectTo(path, setPath) {
   window.history.replaceState({}, '', path);
   setPath(path);
@@ -93,7 +102,7 @@ function isProtectedRoute(pathname) {
     pathname === '/leads' ||
     pathname.startsWith('/leads/') ||
     pathname === '/contacts' ||
-    pathname === '/support' ||
+    isSupportPath(pathname) ||
     pathname === '/settings' ||
     pathname === '/notifications';
 }
@@ -126,6 +135,7 @@ export default function App() {
   useEffect(() => {
     const role = getSavedRole();
     if (!hasActiveCrmSession()) return;
+    if (isSupportPath(path)) return;
     if (isSuperAdminRole(role) && path.startsWith('/employee')) return redirectTo('/super-admin/dashboard', setPath);
     if (isSuperAdminRole(role) && path.startsWith('/admin')) return redirectTo('/super-admin/dashboard', setPath);
     if (isAdminRole(role) && path.startsWith('/employee')) return redirectTo('/admin/dashboard', setPath);
@@ -148,10 +158,10 @@ export default function App() {
 
   if (isProtected && !isLoggedIn) return <LoginPage />;
   if (path === '/login') return <LoginPage />;
+  if (isSupportPath(path)) return <SupportPage />;
   if (isLoggedIn && isSuperAdminRole(savedRole) && path.startsWith('/employee')) return <SuperAdminDashboard view="dashboard" />;
   if (isLoggedIn && isStaffRole(savedRole) && path.startsWith('/admin')) return <EmployeeDashboard />;
   if (isLoggedIn && !isSuperAdminRole(savedRole) && path.startsWith('/super-admin')) return isAdminRole(savedRole) ? <AdminDashboard /> : <EmployeeDashboard />;
-  if (path === '/support') return <SupportPage />;
   if (path === '/settings') return <SettingsPage />;
   if (path === '/notifications') return <NotificationsPage />;
   if (path === '/contacts') return <EmployeeContactsPage />;
