@@ -6,14 +6,14 @@ export async function sendSupportTicketToZoho(ticket) {
       body: JSON.stringify(ticket),
     });
 
-    return await response.json().catch(() => ({ ok: false, error: 'Invalid Zoho bridge response' }));
+    return await response.json().catch(() => ({ ok: false, error: 'Invalid support bridge response' }));
   } catch (error) {
-    return { ok: false, reason: 'ZOHO_BRIDGE_UNREACHABLE', error: error?.message || 'Unable to reach Zoho bridge' };
+    return { ok: false, reason: 'SUPPORT_BRIDGE_UNREACHABLE', error: error?.message || 'Unable to reach support bridge' };
   }
 }
 
 export function zohoNoticeText(result) {
-  if (result?.ok) return 'Your support ticket has been created and sent to Zoho Desk.';
-  if (result?.skipped || result?.reason === 'ZOHO_ENV_NOT_CONFIGURED') return 'Your support ticket has been created. Zoho Desk connection is pending environment setup.';
-  return 'Your support ticket has been created. Zoho Desk sync is pending.';
+  if (result?.ok) return 'Your support ticket has been created. SalesFlow Hub Support will review it shortly.';
+  if (result?.skipped || result?.reason === 'ZOHO_ENV_NOT_CONFIGURED') return 'Your support ticket has been created. SalesFlow Hub Support will review it shortly.';
+  return 'Your support ticket has been created. SalesFlow Hub Support will review it shortly.';
 }
