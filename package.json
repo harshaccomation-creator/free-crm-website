@@ -26,6 +26,7 @@
     "@tailwindcss/typography": "latest",
     "tw-animate-css": "latest",
     "zod": "latest",
+    "nodemailer": "latest",
     "@radix-ui/react-slot": "latest",
     "@radix-ui/react-avatar": "latest",
     "@radix-ui/react-tooltip": "latest",
