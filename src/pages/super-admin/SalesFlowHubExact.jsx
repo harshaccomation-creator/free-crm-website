@@ -84,6 +84,24 @@ const plansSeed = [
   { id: 'p3', name: 'Enterprise', price: 14999, companies: 22, status: 'Active', features: 'Advanced support, API, premium controls' },
 ];
 
+const emailLogsSeed = [
+  { type: 'OTP Verification', to: 'admin@apexsystems.com', status: 'Delivered', error: 'None' },
+  { type: 'Monthly Report', to: 'owner@bluehorizon.net', status: 'Delivered', error: 'None' },
+  { type: 'Payment Reminder', to: 'lars@nordiccraft.dk', status: 'Failed', error: 'SMTP Timeout' },
+];
+
+const activityLogsSeed = [
+  { id: 'al1', time: '2026-06-20 10:15', user: 'Raj Mehta', action: 'Login Success', module: 'Auth', details: 'Session started from IP 103.44.11.23' },
+  { id: 'al2', time: '2026-06-20 09:30', user: 'Amrit Sinha', action: 'Lead Created', module: 'Leads', details: 'Created lead Hindustan Retail Ltd.' },
+  { id: 'al3', time: '2026-06-20 08:45', user: 'Lars Nielsen', action: 'Profile Update', module: 'Settings', details: 'Updated business address' },
+];
+
+const reportsSeed = [
+  { name: 'Monthly Revenue Report', desc: 'Detailed breakdown of active subscriptions, upgrades, and gross invoices.' },
+  { name: 'Company Growth Stats', desc: 'Analysis of active, trial, and expired company profiles.' },
+  { name: 'Trial Conversion Audit', desc: 'Conversion ratios from trial status to paid subscriptions.' },
+];
+
 const navItems = [
   { id: 'overview', label: 'Overview', icon: BarChart3 },
   { id: 'companies', label: 'Companies', icon: Building2 },
@@ -227,7 +245,7 @@ function SupportTickets({ tickets }) { return <><PageTitle title="Support Ticket
 function WebsiteHealth({ health }) { return <><PageTitle title="Website Health" subtitle="Monitor production website, API and deployment status." /><section className="sfh-stats-grid four"><StatCard icon={Globe} label="Website Status" value="Live" change="Operational" tone="green"/><StatCard icon={Activity} label="API Health" value="Healthy" change="Operational" tone="blue"/><StatCard icon={Zap} label="Deployment" value="Success" change="Latest build" tone="teal"/><StatCard icon={AlertTriangle} label="Critical Issues" value={health.filter((h) => h.status === 'critical').length} change="Needs review" tone="red"/></section><Table heads={['Service','Status','Message','Metric','Impact']}>{health.map((h) => <tr key={h.id}><td><b>{h.service}</b></td><td><Badge>{h.status}</Badge></td><td>{h.message}</td><td>{h.metric}</td><td>{h.impactLevel}</td></tr>)}</Table></>; }
 
 function Content({ activeTab, data }) {
-  const { companies, users, plans, leads, notifications, emailLogs, logs, tickets, health } = data;
+  const { companies, users, plans, leads, notifications, emailLogs, logs, tickets, health, reports } = data;
   if (activeTab === 'companies') return <Companies companies={companies} />;
   if (activeTab === 'users') return <Users users={users} />;
   if (activeTab === 'invoices') return <Invoices companies={companies} />;
@@ -247,7 +265,18 @@ function Content({ activeTab, data }) {
 export default function SalesFlowHubExact() {
   const [activeTab, setActiveTab] = useState(viewFromUrl());
   const [drawer, setDrawer] = useState(false);
-  const data = useMemo(() => ({ companies: readStore(storage.companies, companiesSeed), users: readStore(storage.users, usersSeed), plans: readStore(storage.plans, plansSeed), leads: readStore(storage.leads, leadsSeed), notifications: logsSeed, emailLogs, logs: activityLogs, tickets: readStore(storage.tickets, ticketsSeed), health: readStore(storage.health, healthSeed) }), []);
+  const data = useMemo(() => ({
+    companies: readStore(storage.companies, companiesSeed),
+    users: readStore(storage.users, usersSeed),
+    plans: readStore(storage.plans, plansSeed),
+    leads: readStore(storage.leads, leadsSeed),
+    notifications: logsSeed,
+    emailLogs: readStore('salesflow_email_logs_v1', emailLogsSeed),
+    logs: readStore(storage.logs, activityLogsSeed),
+    tickets: readStore(storage.tickets, ticketsSeed),
+    health: readStore(storage.health, healthSeed),
+    reports: readStore('salesflow_reports_v1', reportsSeed)
+  }), []);
 
   useEffect(() => {
     const sync = () => setActiveTab(viewFromUrl());
