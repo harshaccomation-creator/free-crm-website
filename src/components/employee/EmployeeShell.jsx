@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import {
   LayoutDashboard, Users, Phone, Trophy, CheckSquare, Calendar,
   Activity, BarChart2, Bell, User, Settings, Menu, X,
-  LogOut, Search
+  LogOut, Search, LifeBuoy
 } from "lucide-react";
 import { clearStoredSession } from "../../hooks/useAuthProfile.js";
 import { supabase } from "../../lib/supabaseClient.js";
@@ -18,6 +18,7 @@ const navItems = [
   { label: "Calendar", icon: Calendar, href: "/employee/calendar" },
   { label: "Activities", icon: Activity, href: "/employee/activities" },
   { label: "Reports", icon: BarChart2, href: "/employee/reports" },
+  { label: "Help & Support", icon: LifeBuoy, href: "/employee/support" },
   { label: "Notifications", icon: Bell, href: "/notifications" },
   { label: "Profile", icon: User, href: "/employee/profile" },
   { label: "Settings", icon: Settings, href: "/settings" },

@@ -21,13 +21,11 @@ const stats = [
 const sideItems = [
   ['Dashboard', '⌂'], ['Leads', '◉'], ['Deals', '◆'], ['Contacts', '☷'], ['Tasks', '✓'], ['Reports', '▣'], ['Settings', '⚙']
 ];
-const formModals = new Set(['Start Free Trial', 'Contact Sales', 'Customer Support', 'Support', 'Chat', 'Choose Starter Plan']);
+const formModals = new Set(['Book a Demo', 'Start Free Trial', 'Contact Sales', 'Customer Support', 'Support', 'Chat', 'Choose Starter Plan']);
 
 const MODAL_COPY = {
   'Start Free Trial': 'Start your 7-day SalesFlow CRM trial. We will contact you for setup and onboarding.',
   'Contact Sales': 'Tell us your requirement and our sales team will get back to you.',
-  'Customer Support': 'Need help with SalesFlow? Send your details and support will reach out.',
-  Support: 'Need help with SalesFlow? Send your details and support will reach out.',
   Chat: 'Send your details and our team will contact you shortly.',
   'Choose Starter Plan': 'Share your details to activate the Starter plan setup process.',
 };
@@ -86,6 +84,11 @@ export default function LandingPage() {
     window.dispatchEvent(new PopStateEvent('popstate'));
   };
 
+  const openSupportPage = () => {
+    window.history.pushState({}, '', '/support');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  };
+
   if (isRouteLoading) {
     return <PageLoader label={loadingLabel} />;
   }
@@ -96,7 +99,7 @@ export default function LandingPage() {
 
   return (
     <div className="landing-page">
-      <div className="top-mini-bar"><div className="landing-shell mini-inner"><button onClick={() => action('English selected')}>🌐 English</button><button onClick={() => action('High contrast ready')}>◐ High Contrast</button><span /><button onClick={() => setModal('Support')}>🎧 Customer Support</button><button onClick={() => setModal('Contact Sales')}>✉ Contact Sales</button><button onClick={openLoginPage}>👤 Log in</button></div></div>
+      <div className="top-mini-bar"><div className="landing-shell mini-inner"><button onClick={() => action('English selected')}>🌐 English</button><button onClick={() => action('High contrast ready')}>◐ High Contrast</button><span /><button onClick={openSupportPage}>🎧 Customer Support</button><button onClick={() => setModal('Contact Sales')}>✉ Contact Sales</button><button onClick={openLoginPage}>👤 Log in</button></div></div>
       <header className="main-header"><div className="landing-shell header-inner"><button className="brand-wrap" onClick={() => goTo('hero')}><span className="brand-mark">S</span><span className="brand-name">Sales<span>Flow</span></span></button><nav className="desktop-menu">{menuItems.map((item) => <button key={item} onClick={() => goTo(item.toLowerCase())}>{item}</button>)}</nav><div className="header-actions"><button className="btn btn-soft" onClick={() => setModal('Book a Demo')}><span className="btn-icon">📅</span>Book a Demo</button><button className="btn btn-primary" onClick={() => setModal('Start Free Trial')}><span className="btn-icon">🚀</span>Start Free Trial <small>7 Days Free</small></button></div></div></header>
       <main id="hero" className="hero-section"><div className="landing-shell hero-layout"><section className="hero-content"><span className="pill">⚡ All-in-one CRM platform</span><h1>Where Sales Teams <span>Close More.</span> Faster.</h1><p>Manage leads, automate follow-ups, close deals and grow your revenue with a clean CRM built for speed.</p><div className="value-grid"><button onClick={() => goTo('products')}><strong>◎ Capture More Leads</strong><span>Collect leads from every channel in one clean pipeline.</span></button><button onClick={() => goTo('platform-highlights')}><strong>↻ Automate Follow-ups</strong><span>Never miss calls, reminders, meetings or next actions.</span></button><button onClick={() => goTo('pricing')}><strong>◆ Close More Deals</strong><span>Track activity, stages and team performance faster.</span></button></div><div className="hero-cta"><button className="btn btn-primary btn-big" onClick={() => setModal('Start Free Trial')}><span className="btn-icon">🚀</span>Start 7 Days Free Trial</button><button className="btn btn-outline btn-big" onClick={() => goTo('platform-highlights')}><span className="btn-icon">▼</span>Explore Features</button></div></section><section className="dashboard-mock"><div className="mock-sidebar"><strong>SalesFlow</strong>{sideItems.map(([item, icon]) => <button key={item} className={item === 'Dashboard' ? 'active' : ''} onClick={openLoginPage}><span>{icon}</span>{item}</button>)}</div><div className="mock-main"><div className="mock-top"><div><span>Good morning, Aman</span><h3>Sales Overview</h3></div><button onClick={() => goTo('reports')}>📅 May 1 - May 31</button></div><div className="mock-stats">{stats.map((item) => <button key={item.label} onClick={openLoginPage}><span>{item.label}</span><strong>{item.value}</strong><small>{item.trend}</small></button>)}</div><div className="mock-card chart-card premium-preview-card"><div className="card-head"><span>Weekly Performance</span><button onClick={openLoginPage}>📊 View Report</button></div><div className="preview-card-grid"><div className="mini-chart-panel"><div className="mini-chart-bars"><i style={{ height: '36%' }} /><i style={{ height: '58%' }} /><i style={{ height: '46%' }} /><i style={{ height: '74%' }} /><i style={{ height: '62%' }} /><i style={{ height: '88%' }} /></div><div className="mini-kpis"><span><b>24</b> Calls</span><span><b>12</b> Follow-ups</span><span><b>5</b> Deals</span></div></div><div className="inline-task-panel"><strong>Upcoming Tasks</strong><button onClick={openLoginPage}>☎ Call with new lead</button><button onClick={openLoginPage}>↻ Follow-up with Raj</button><button onClick={openLoginPage}>✉ Send proposal</button></div></div></div></div></section></div></main>
       <LandingExtraSections action={action} />

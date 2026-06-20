@@ -3,6 +3,7 @@ import EmployeeLeadActivityPage from './pages/employee/EmployeeLeadActivityPage.
 import { useEffect, useState } from 'react';
 import LandingPage from './pages/LandingPage.jsx';
 import LoginPage from './pages/LoginPage.jsx';
+import PublicSupportPage from './pages/PublicSupportPage.jsx';
 import EmployeeDashboard from './pages/dashboards/EmployeeDashboardV2.jsx';
 import AdminDashboard from './pages/dashboards/AdminDashboard.jsx';
 import SuperAdminDashboard from './pages/dashboards/SuperAdminDashboard.jsx';
@@ -16,6 +17,7 @@ import WonPageFixed from './pages/employee/WonPageFixed.jsx';
 import TasksPageFixed from './pages/employee/TasksPageFixed.jsx';
 import SettingsPage from './pages/shared/SettingsPage.jsx';
 import NotificationsPage from './pages/shared/NotificationsPage.jsx';
+import SupportPage from './pages/shared/SupportPage.jsx';
 import { useAuthProfile, roleHome } from './hooks/useAuthProfile.js';
 
 import './styles/dashboardBase.css';
@@ -38,6 +40,10 @@ function go(path, setPath) {
   window.dispatchEvent(new Event('salesflow:navigate'));
 }
 
+function isInAppSupportRoute(path) {
+  return path === '/employee/support' || path === '/admin/support';
+}
+
 function isProtected(path) {
   return (
     path.startsWith('/employee') ||
@@ -47,7 +53,8 @@ function isProtected(path) {
     path.startsWith('/leads/') ||
     path === '/settings' ||
     path === '/notifications' ||
-    path === '/contacts'
+    path === '/contacts' ||
+    isInAppSupportRoute(path)
   );
 }
 
@@ -64,24 +71,21 @@ function RedirectToRoleHome({ role, setPath }) {
 
   return (
     <div className="crm-session-loader">
-      <div className="crm-session-loader__card">
-        Redirecting to your workspace...
-      </div>
+      <div className="crm-session-loader__card">Redirecting to your workspace...</div>
     </div>
   );
 }
 
 export default function AppSecure() {
-  const [path, setPath] = useState(window.location.pathname);
+  const [path, setPath] = useState(window.location.pathname.replace(/\/$/, ''));
   const auth = useAuthProfile();
   const loggedIn = Boolean(auth?.user);
   const role = auth?.role || 'employee';
 
   useEffect(() => {
-    const sync = () => setPath(window.location.pathname);
+    const sync = () => setPath(window.location.pathname.replace(/\/$/, ''));
     window.addEventListener('popstate', sync);
     window.addEventListener('salesflow:navigate', sync);
-
     return () => {
       window.removeEventListener('popstate', sync);
       window.removeEventListener('salesflow:navigate', sync);
@@ -89,33 +93,21 @@ export default function AppSecure() {
   }, []);
 
   if (auth?.loading && isProtected(path)) {
-    return (
-      <div className="crm-session-loader">
-        <div className="crm-session-loader__card">
-          Checking secure session...
-        </div>
-      </div>
-    );
+    return <div className="crm-session-loader"><div className="crm-session-loader__card">Checking secure session...</div></div>;
   }
 
-  if (isProtected(path) && !loggedIn) {
-    return <LoginPage />;
-  }
+  if (path === '/support') return <PublicSupportPage />;
+  if (isProtected(path) && !loggedIn) return <LoginPage />;
+  if (loggedIn && isProtected(path) && !canOpenRoute(path, role)) return <RedirectToRoleHome role={role} setPath={setPath} />;
+  if (path === '/login') return <LoginPage />;
 
-  if (loggedIn && isProtected(path) && !canOpenRoute(path, role)) {
-    return <RedirectToRoleHome role={role} setPath={setPath} />;
-  }
-
-  if (path === '/login') {
-    return <LoginPage />;
-  }
-
-  if (loggedIn && path === '/') {
+  if (loggedIn && path === '') {
     if (role === 'super_admin') return <SuperAdminDashboard />;
     if (role === 'company_admin') return <AdminDashboard />;
     return <EmployeeDashboard />;
   }
 
+  if (isInAppSupportRoute(path)) return <SupportPage />;
   if (path === '/employee/dashboard') return <EmployeeDashboard />;
   if (path === '/employee/won') return <WonPageFixed />;
   if (path === '/employee/tasks') return <TasksPageFixed />;
@@ -125,17 +117,12 @@ export default function AppSecure() {
   if (path === '/employee/lead-activity') return <EmployeeLeadActivityPage />;
   if (path === '/employee/reports') return <EmployeeReportsPage />;
   if (path === '/employee/profile') return <PremiumProfilePage />;
-
-  if (path === '/admin/dashboard') return <AdminDashboard />;
+  if (path.startsWith('/admin/dashboard')) return <AdminDashboard />;
   if (path === '/super-admin/dashboard') return <SuperAdminDashboard />;
-
   if (path === '/settings') return <SettingsPage />;
   if (path === '/notifications') return <NotificationsPage />;
-
   if (path === '/leads') return <LeadListPage />;
-  if (path.startsWith('/leads/')) {
-    return <LeadDetailPage leadId={path.split('/')[2]} />;
-  }
+  if (path.startsWith('/leads/')) return <LeadDetailPage leadId={path.split('/')[2]} />;
 
   return <LandingPage />;
 }

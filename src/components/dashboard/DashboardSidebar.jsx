@@ -2,9 +2,9 @@ import './DashboardSidebar.css';
 import './DashboardSidebarLogoFix.css';
 
 const menus = {
-  employee: ['Dashboard', 'My Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
-  manager: ['Dashboard', 'Team Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Notifications', 'Profile', 'Settings'],
-  admin: ['Dashboard', 'Leads', 'Contacts', 'Tasks', 'Activities', 'Reports', 'Calendar', 'Users', 'Notifications', 'Settings'],
+  employee: ['Dashboard', 'My Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Help & Support', 'Notifications', 'Profile', 'Settings'],
+  manager: ['Dashboard', 'Team Leads', 'Contacts', 'Won', 'Tasks', 'Calendar', 'Activities', 'Reports', 'Help & Support', 'Notifications', 'Profile', 'Settings'],
+  admin: ['Dashboard', 'Leads', 'Contacts', 'Tasks', 'Activities', 'Reports', 'Calendar', 'Users', 'Help & Support', 'Notifications', 'Settings'],
   superAdmin: ['Overview', 'Companies', 'Users & Roles', 'Subscriptions', 'Revenue & Plans', 'Leads Monitor', 'Notifications', 'Email Logs', 'Security', 'Platform Settings', 'Reports', 'Activity Logs', 'Support Tickets'],
 };
 
@@ -18,6 +18,7 @@ const routes = {
     Calendar: '/employee/calendar',
     Activities: '/employee/activities',
     Reports: '/employee/reports',
+    'Help & Support': '/employee/support',
     Notifications: '/notifications',
     Profile: '/employee/profile',
     Settings: '/settings',
@@ -31,6 +32,7 @@ const routes = {
     Calendar: '/employee/calendar',
     Activities: '/employee/activities',
     Reports: '/employee/reports',
+    'Help & Support': '/employee/support',
     Notifications: '/notifications',
     Profile: '/employee/profile',
     Settings: '/settings',
@@ -44,6 +46,7 @@ const routes = {
     Reports: '/admin/reports',
     Calendar: '/admin/calendar',
     Users: '/admin/users',
+    'Help & Support': '/admin/support',
     Notifications: '/notifications',
     Settings: '/settings',
   },
@@ -76,6 +79,7 @@ const icons = {
   Calendar: '▣',
   Activities: '☷',
   Reports: '▥',
+  'Help & Support': '?',
   Notifications: '♢',
   Profile: '♙',
   Settings: '∘',

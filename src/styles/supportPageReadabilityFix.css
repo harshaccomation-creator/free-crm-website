@@ -1,0 +1,43 @@
+.sf-support-hero::before{
+  right:-130px!important;
+  top:-120px!important;
+  width:280px!important;
+  height:280px!important;
+  background:rgba(249,115,22,.14)!important;
+  filter:blur(44px)!important;
+}
+
+.sf-support-hero::after{
+  background:rgba(59,130,246,.14)!important;
+  filter:blur(40px)!important;
+}
+
+.sf-support-badges{
+  position:relative!important;
+  z-index:5!important;
+}
+
+.sf-support-badge{
+  background:#ffffff!important;
+  color:#0f172a!important;
+  border:1px solid #e2e8f0!important;
+  box-shadow:0 12px 28px rgba(2,6,23,.18)!important;
+  text-shadow:none!important;
+}
+
+.sf-support-badge svg{
+  color:#f97316!important;
+  stroke:#f97316!important;
+}
+
+.sf-support-side{
+  background:#f1f5f9!important;
+  border:1px solid #dbe4ef!important;
+  box-shadow:0 12px 35px rgba(15,23,42,.06)!important;
+}
+
+.sf-support-side-card{
+  background:#ffffff!important;
+  border:1px solid #e5edf6!important;
+  box-shadow:none!important;
+}
