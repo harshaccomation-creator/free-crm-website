@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+   "build": "npx vite build",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -18,6 +18,7 @@
     "wouter": "latest",
     "recharts": "latest",
     "framer-motion": "latest",
+    "motion": "latest",
     "clsx": "latest",
     "tailwind-merge": "latest",
     "class-variance-authority": "latest",
