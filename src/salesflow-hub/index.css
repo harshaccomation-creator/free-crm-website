@@ -1,0 +1,506 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+/* Global Beautiful High-Contrast Light Theme */
+body {
+  font-family: var(--font-sans);
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Force premium light panels with corporate accent top bars */
+.bg-white {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0 !important;
+  border-top: 3.5px solid #ff7a00 !important; /* Premium corporate orange top bar */
+  backdrop-filter: blur(16px) !important;
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.04), 0 2px 4px -1px rgba(15, 23, 42, 0.02) !important;
+  border-radius: 12px !important;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.bg-white:hover {
+  border-top: 3.5px solid #ff7a00 !important;
+  box-shadow: 0 12px 20px -3px rgba(15, 23, 42, 0.07), 0 4px 6px -2px rgba(15, 23, 42, 0.03) !important;
+  transform: translateY(-2px);
+}
+
+/* Slate background mappings */
+.bg-slate-50, .bg-gray-50, .bg-zinc-50, .bg-neutral-50,
+[class*="bg-slate-50/"], [class*="bg-gray-50/"], [class*="bg-zinc-50/"] {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+.bg-slate-100, .bg-gray-100, .bg-zinc-100, .bg-neutral-100,
+[class*="bg-slate-100/"], [class*="bg-gray-100/"], [class*="bg-zinc-100/"] {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+.bg-slate-200, .bg-gray-200, .bg-zinc-200, .bg-neutral-200,
+[class*="bg-slate-200/"], [class*="bg-gray-200/"], [class*="bg-zinc-200/"] {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+.bg-slate-300, .bg-gray-300, .bg-zinc-300, .bg-neutral-300 {
+  background-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+.hover\:bg-slate-50:hover, .hover\:bg-gray-50:hover, .hover\:bg-zinc-50:hover,
+[class*="hover:bg-slate-50/"]:hover, [class*="hover:bg-gray-50/"]:hover, [class*="hover:bg-zinc-50/"]:hover {
+  background-color: #f1f5f9 !important;
+}
+.hover\:bg-slate-100:hover, .hover\:bg-gray-100:hover, .hover\:bg-zinc-100:hover,
+[class*="hover:bg-slate-100/"]:hover, [class*="hover:bg-gray-100/"]:hover, [class*="hover:bg-zinc-100/"]:hover {
+  background-color: #e2e8f0 !important;
+}
+.hover\:bg-slate-200:hover, .hover\:bg-gray-200:hover, .hover\:bg-zinc-200:hover,
+[class*="hover:bg-slate-200/"]:hover, [class*="hover:bg-gray-200/"]:hover, [class*="hover:bg-zinc-200/"]:hover {
+  background-color: #cbd5e1 !important;
+}
+.group:hover {
+  background-color: #f8fafc !important;
+}
+
+.hover\:border-slate-300:hover {
+  border-color: #3b82f6 !important;
+}
+
+/* Secondary Button designs for crisp contrast inside light grids */
+button.bg-slate-50,
+button.bg-slate-100,
+button.bg-slate-250,
+button.bg-slate-200,
+button.bg-gray-100,
+button.bg-gray-200,
+[class*="bg-slate-100"],
+[class*="hover:bg-slate-200"] {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+button.bg-slate-50:hover,
+button.bg-slate-100:hover,
+button.bg-slate-250:hover,
+button.bg-slate-200:hover,
+button.bg-gray-100:hover,
+button.bg-gray-200:hover {
+  background-color: #e2e8f0 !important;
+  color: #0f172a !important;
+  border-color: #3b82f6 !important;
+}
+
+/* Light theme borders and structures */
+th, td, div, section, header, aside, main, table, nav, button {
+  border-color: #e2e8f0 !important;
+}
+.border-slate-200, .border-slate-100, .border-slate-300, [class*="border-slate-80"], [class*="border-slate-70"], [class*="border-white/"] {
+  border-color: #e2e8f0 !important;
+}
+
+/* Crisp table configurations */
+thead tr, thead th, thead {
+  background-color: #f8fafc !important;
+  color: #475569 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
+tbody tr {
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+/* High contrast deep typography for readable paragraphs and titles */
+.text-slate-900, 
+.text-slate-950, 
+.text-slate-800, 
+.text-slate-700, 
+.text-slate-650,
+.text-slate-850, 
+.text-slate-750,
+.text-slate-805,
+.text-slate-800\/80 {
+  color: #0f172a !important;
+}
+
+.text-slate-600, 
+.text-slate-500, 
+.text-slate-550,
+.text-slate-555,
+.text-slate-505,
+.text-slate-500\/80 {
+  color: #475569 !important;
+}
+
+.text-slate-400, 
+.text-slate-450 {
+  color: #64748b !important;
+}
+
+/* Light form elements with focused states */
+input, select, textarea, option {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+input:focus, select:focus, textarea:focus,
+.focus\:bg-white:focus,
+[class*="focus:bg-"]:focus {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #3b82f6 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15) !important;
+}
+
+input::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Premium colorful status icon blocks */
+.bg-blue-50 {
+  background-color: #eff6ff !important;
+  color: #1d4ed8 !important;
+}
+.bg-emerald-50 {
+  background-color: #ecfdf5 !important;
+  color: #047857 !important;
+}
+.bg-purple-50 {
+  background-color: #faf5ff !important;
+  color: #6b21a8 !important;
+}
+.bg-amber-50 {
+  background-color: #fffbeb !important;
+  color: #b45309 !important;
+}
+.bg-rose-50 {
+  background-color: #fff1f2 !important;
+  color: #be123c !important;
+}
+.bg-indigo-50 {
+  background-color: #e0e7ff !important;
+  color: #4338ca !important;
+}
+
+/* Status text coloring for light mode readability */
+.text-emerald-700, .text-emerald-750, .text-emerald-600 {
+  color: #047857 !important;
+}
+.text-blue-700, .text-[#3b82f6], .text-blue-600 {
+  color: #2563eb !important;
+}
+.text-amber-700, .text-amber-600 {
+  color: #b45309 !important;
+}
+.text-rose-700, .text-rose-500, .text-rose-600 {
+  color: #be123c !important;
+}
+.text-purple-700, .text-purple-600 {
+  color: #6b21a8 !important;
+}
+.text-indigo-700, .text-indigo-600 {
+  color: #4338ca !important;
+}
+
+/* Translucent gray overlay for modals */
+.bg-slate-900\/60 {
+  background-color: rgba(15, 23, 42, 0.4) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* Clean light scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* ASIDE / SIDEBAR & HEADER LIGHT THEME TRANSITION */
+aside,
+aside.bg-\[\#090D16\],
+.bg-\[\#090D16\] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-right: 1px solid #e2e8f0 !important;
+  box-shadow: 4px 0 20px rgba(15, 23, 42, 0.03) !important;
+}
+
+aside [class*="bg-black/"],
+aside [class*="bg-[#111827]"] {
+  background-color: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
+aside button {
+  color: #475569 !important;
+}
+
+aside button:hover {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Sidebar active tab conversion */
+aside button.active-sidebar-tab {
+  background: linear-gradient(to right, rgba(255, 122, 0, 0.08), rgba(59, 130, 246, 0.03)) !important;
+  color: #ff7a00 !important;
+  font-weight: 700 !important;
+  border-color: rgba(255, 122, 0, 0.25) !important;
+  box-shadow: 0 4px 12px rgba(255, 122, 0, 0.05) !important;
+}
+
+aside button.active-sidebar-tab *,
+aside button.active-sidebar-tab svg {
+  color: #ff7a00 !important;
+  font-weight: 700 !important;
+}
+
+/* Interactive Header */
+header,
+header.bg-\[\#090D16\]\/80,
+.bg-\[\#090D16\]\/80 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: #0f172a !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+header [class*="bg-[#111827]"],
+header [class*="bg-[#0b0f19]"],
+header [class*="bg-[#0d1321]"] {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Search match popover */
+.absolute.top-11.left-0.w-full.bg-\[\#0d1321\],
+[class*="bg-[#0d1321]"],
+[class*="bg-[#0b0f19]"],
+[class*="bg-[#111827]"],
+[class*="bg-[#0f172a]"] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+
+.absolute.top-11.left-0.w-full.bg-\[\#0d1321\] button:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* Preserve terminal box style inside diagnostics console for maximum high-tech realism */
+div.bg-\[\#090d16\] {
+  background-color: #0f172a !important;
+  border: 1px solid #1e293b !important;
+}
+
+div.bg-\[\#090d16\] * {
+  color: #f8fafc !important;
+}
+
+div.bg-\[\#090d16\] .text-slate-500 {
+  color: #64748b !important;
+}
+
+/* HIGH-FIDELITY CORRESPONDENCE / BILLING PAPER (WHITE A4 SHEET DESIGN) */
+.bg-invoice-paper {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid #e2e8f0 !important;
+  border-top: 4px solid #ff7a00 !important; /* Elegant corporate orange status band */
+  border-radius: 8px !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Base text overrides inside white invoice paper sheet */
+.bg-invoice-paper p,
+.bg-invoice-paper span,
+.bg-invoice-paper h1,
+.bg-invoice-paper h2,
+.bg-invoice-paper h3,
+.bg-invoice-paper h4,
+.bg-invoice-paper select,
+.bg-invoice-paper option,
+.bg-invoice-paper input,
+.bg-invoice-paper div {
+  color: #1e293b !important;
+}
+
+/* Explicit table cell overrides for perfect contrast inside white bg sheet */
+.bg-invoice-paper table {
+  border-collapse: collapse !important;
+  border: 1px solid #e2e8f0 !important;
+  width: 100% !important;
+  background-color: #ffffff !important;
+}
+
+.bg-invoice-paper th,
+.bg-invoice-paper td {
+  border: 1px solid #cbd5e1 !important;
+  padding: 8px 12px !important;
+  color: #334155 !important;
+}
+
+.bg-invoice-paper thead tr {
+  background-color: #f1f5f9 !important;
+}
+
+.bg-invoice-paper thead th {
+  color: #1e293b !important;
+  background-color: #f1f5f9 !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid #94a3b8 !important;
+}
+
+.bg-invoice-paper tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+.bg-invoice-paper tbody tr {
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+/* Make sure dark cards inside invoice retain dark background & white/light text */
+.bg-invoice-paper .bg-\[\#0f172a\],
+.bg-invoice-paper .bg-slate-900 {
+  background-color: #0f172a !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  border-radius: 8px !important;
+}
+
+.bg-invoice-paper .bg-\[\#0f172a\] *,
+.bg-invoice-paper .bg-slate-900 * {
+  color: #f8fafc !important;
+}
+
+.bg-invoice-paper .bg-white\/5 {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.bg-invoice-paper .bg-white\/5 * {
+  color: #1e293b !important;
+}
+
+/* Specifically preserve styling colors */
+.bg-invoice-paper .text-\[\#ff7a00\],
+.bg-invoice-paper .text-orange-500,
+.bg-invoice-paper span.text-\[\#ff7a00\] {
+  color: #e66d00 !important; /* Deep contrast orange for light sheet */
+  font-weight: 800 !important;
+}
+
+.bg-invoice-paper .text-rose-400,
+.bg-invoice-paper .text-rose-500,
+.bg-invoice-paper .text-rose-600 {
+  color: #be123c !important; /* Deep dark rose */
+  font-weight: 700 !important;
+}
+
+/* Success status (PAID badge) */
+.bg-invoice-paper .text-emerald-500,
+.bg-invoice-paper .text-\[\#10b981\],
+.bg-invoice-paper .bg-\[\#10b981\]\/10 {
+  color: #047857 !important; /* Emerald 700 for high readability */
+  border: 1.5px solid rgba(4, 120, 87, 0.25) !important;
+  background-color: rgba(4, 120, 87, 0.05) !important;
+}
+
+/* Secondary muted text */
+.bg-invoice-paper .text-slate-300 {
+  color: #475569 !important;
+}
+
+.bg-invoice-paper .text-slate-400 {
+  color: #475569 !important;
+}
+
+.bg-invoice-paper .text-slate-500 {
+  color: #475569 !important;
+}
+
+.bg-invoice-paper .text-slate-705,
+.bg-invoice-paper .text-slate-700 {
+  color: #334155 !important;
+}
+
+.bg-invoice-paper .text-slate-850,
+.bg-invoice-paper .text-slate-855,
+.bg-invoice-paper .text-slate-900 {
+  color: #0f172a !important;
+}
+
+/* Borders inside light sheet */
+.bg-invoice-paper .border-white\/10 {
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.bg-invoice-paper .border-slate-200 {
+  border-color: #cbd5e1 !important;
+}
+
+.bg-invoice-paper .border-b\.border-white\/10 {
+  border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* MASTER PRINT PAGE SPECIFIC RULES FOR HIGH-CONTRAST INK SAVING AND SYSTEMATIC LAYOUT */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  /* Select the exact invoice sheet and let browser display only this */
+  body > *:not(.fixed) {
+    display: none !important;
+  }
+  
+  .bg-invoice-paper {
+    box-shadow: none !important;
+    border: none !important;
+    background-color: #ffffff !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .bg-invoice-paper * {
+    color: #000000 !important;
+  }
+
+  .bg-invoice-paper .text-\[\#ff7a00\],
+  .bg-invoice-paper .text-orange-500 {
+    color: #ff7a00 !important;
+    font-weight: 800 !important;
+  }
+
+  .bg-invoice-paper .text-emerald-500,
+  .bg-invoice-paper .text-\[\#10b981\] {
+    color: #10b981 !important;
+    font-weight: 800 !important;
+  }
+}
+
+

@@ -1,0 +1,1 @@
+Logo PNG files are generated from the uploaded SalesFlow Hub logo. Use /assets/salesflow-hub-logo-dark.svg for white backgrounds and /assets/salesflow-hub-logo-light.svg for dark backgrounds.

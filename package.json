@@ -18,6 +18,7 @@
     "wouter": "latest",
     "recharts": "latest",
     "framer-motion": "latest",
+    "motion": "latest",
     "clsx": "latest",
     "tailwind-merge": "latest",
     "class-variance-authority": "latest",
