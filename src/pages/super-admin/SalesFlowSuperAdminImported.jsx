@@ -1,3 +1,3 @@
-import SalesFlowHubBridge from './SalesFlowHubBridge.jsx';
+import SalesFlowHubExact from './SalesFlowHubExact.jsx';
 
-export default SalesFlowHubBridge;
+export default SalesFlowHubExact;
