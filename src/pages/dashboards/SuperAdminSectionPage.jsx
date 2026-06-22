@@ -1,4 +1,4 @@
-import SalesFlowHubExact from '../super-admin/SalesFlowHubExact.jsx';
+import SalesFlowHubBridge from '../super-admin/SalesFlowHubBridge.jsx';
 
 const viewMap = {
   companies: 'companies',
@@ -33,5 +33,5 @@ export default function SuperAdminSectionPage({ view = 'overview' }) {
     window.history.replaceState({}, '', target);
   }
 
-  return <SalesFlowHubExact />;
+  return <SalesFlowHubBridge />;
 }
