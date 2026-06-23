@@ -105,6 +105,54 @@ function writeJson(key, value) {
   window.localStorage.setItem(key, JSON.stringify(value));
 }
 
+function formatINR(value) {
+  return `₹${Number(value || 0).toLocaleString('en-IN')}`;
+}
+
+function buildLiveStats(payload, companies, leads, tickets) {
+  const stats = payload.stats || {};
+  const monthlyRevenue = companies.reduce((sum, company) => sum + Number(company.monthlySpend || 0), 0);
+  const pendingPayments = leads
+    .filter((lead) => ['Negotiating', 'Proposal'].includes(lead.status))
+    .reduce((sum, lead) => sum + Number(lead.value || 0), 0);
+
+  return {
+    'TOTAL COMPANIES': Number(stats.totalCompanies ?? companies.length),
+    'ACTIVE COMPANIES': Number(stats.activeCompanies ?? companies.filter((company) => ['Active', 'Paid'].includes(company.status)).length),
+    'TRIAL COMPANIES': Number(stats.trialCompanies ?? companies.filter((company) => company.status === 'Trial').length),
+    'PAID COMPANIES': Number(stats.paidCompanies ?? companies.filter((company) => company.status === 'Paid').length),
+    'EXPIRED TRIALS': Number(stats.expiredTrials ?? companies.filter((company) => company.status === 'Expired').length),
+    'TOTAL USERS': Number(stats.totalUsers ?? 0),
+    'MONTHLY REVENUE': formatINR(monthlyRevenue),
+    'PENDING PAYMENTS': formatINR(pendingPayments),
+    'TOTAL LEADS': Number(stats.totalLeads ?? leads.length),
+    'OVERDUE TASKS': Number(stats.overdueTasks ?? 0),
+    'OPEN TICKETS': Number(stats.openTickets ?? tickets.filter((ticket) => ticket.status !== 'Resolved').length),
+  };
+}
+
+function installOverviewCardHydrator(liveStats) {
+  window.__salesflowHubLiveStats = liveStats;
+  const apply = () => {
+    const stats = window.__salesflowHubLiveStats || {};
+    document.querySelectorAll('.salesflow-hub-root span').forEach((label) => {
+      const key = String(label.textContent || '').trim().toUpperCase();
+      if (!Object.prototype.hasOwnProperty.call(stats, key)) return;
+      const card = label.closest('.bg-white');
+      const value = card?.querySelector('h3');
+      if (!value) return;
+      const next = typeof stats[key] === 'number' ? stats[key].toLocaleString('en-IN') : String(stats[key]);
+      if (value.textContent !== next) value.textContent = next;
+    });
+  };
+
+  window.clearInterval(window.__salesflowHubCardTimer);
+  window.__salesflowHubCardTimer = window.setInterval(apply, 700);
+  window.setTimeout(apply, 100);
+  window.setTimeout(apply, 800);
+  window.setTimeout(apply, 1600);
+}
+
 function syncHubStorage(payload) {
   const companies = (payload.companies || []).map((company) => ({
     id: String(company.id || company.name),
@@ -178,6 +226,7 @@ function syncHubStorage(payload) {
   writeJson(STORAGE_KEYS.TICKETS, tickets);
   writeJson(STORAGE_KEYS.NOTIFICATIONS, notifications);
   writeJson(STORAGE_KEYS.LOGS, logs);
+  installOverviewCardHydrator(buildLiveStats(payload, companies, leads, tickets));
 }
 
 export default function SalesFlowHubBridge() {
@@ -205,6 +254,12 @@ export default function SalesFlowHubBridge() {
     loadLiveData();
     return () => { alive = false; };
   }, []);
+
+  useEffect(() => {
+    if (!ready || !window.__salesflowHubLiveStats) return undefined;
+    installOverviewCardHydrator(window.__salesflowHubLiveStats);
+    return () => window.clearInterval(window.__salesflowHubCardTimer);
+  }, [ready]);
 
   if (!ready) {
     return <div className="crm-session-loader"><div className="crm-session-loader__card">{message}</div></div>;
