@@ -30,6 +30,71 @@
   border-radius: 8px !important;
 }
 
+.salesflow-hub-root [class*="to-[#0e1628]"] {
+  background-image: linear-gradient(135deg, #0f172a 0%, #182235 52%, #0b1120 100%) !important;
+  color: #f8fafc !important;
+}
+
+.salesflow-hub-root [class*="to-[#0e1628]"] > .absolute {
+  opacity: 0.18 !important;
+}
+
+.salesflow-hub-root [class*="to-[#0e1628]"] h4,
+.salesflow-hub-root [class*="to-[#0e1628]"] p,
+.salesflow-hub-root [class*="to-[#0e1628]"] span,
+.salesflow-hub-root [class*="to-[#0e1628]"] strong,
+.salesflow-hub-root [class*="to-[#0e1628]"] div {
+  color: #e5edf8 !important;
+}
+
+.salesflow-hub-root [class*="to-[#0e1628]"] h4,
+.salesflow-hub-root [class*="to-[#0e1628]"] [class*="text-3xl"] {
+  color: #ffffff !important;
+}
+
+.salesflow-hub-root [class*="to-[#0e1628]"] [class*="Bundle Features"],
+.salesflow-hub-root [class*="to-[#0e1628]"] .uppercase {
+  color: #cbd5e1 !important;
+}
+
+.salesflow-hub-root [class*="to-[#0e1628]"] [class*="bg-slate-100/50"] {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: rgba(255, 255, 255, 0.36) !important;
+}
+
+.salesflow-hub-root [class*="to-[#0e1628]"] button[class*="bg-slate-50"] {
+  background: rgba(248, 250, 252, 0.96) !important;
+  color: #334155 !important;
+}
+
+.salesflow-hub-root [class*="to-[#0e1628]"] input,
+.salesflow-hub-root [class*="to-[#0e1628]"] select {
+  color: #0f172a !important;
+}
+
+.salesflow-hub-root [class*="to-[#0e1628]"] svg {
+  color: #3b82f6 !important;
+}
+
+.salesflow-hub-root .lg\:col-span-8.bg-white,
+.salesflow-hub-root .lg\:col-span-4.bg-white {
+  color: #0f172a !important;
+}
+
+.salesflow-hub-root .lg\:col-span-8.bg-white h4,
+.salesflow-hub-root .lg\:col-span-4.bg-white h4,
+.salesflow-hub-root .lg\:col-span-8.bg-white span,
+.salesflow-hub-root .lg\:col-span-4.bg-white span,
+.salesflow-hub-root .lg\:col-span-8.bg-white p,
+.salesflow-hub-root .lg\:col-span-4.bg-white p {
+  color: #334155 !important;
+}
+
+.salesflow-hub-root .lg\:col-span-8.bg-white .font-mono,
+.salesflow-hub-root .lg\:col-span-4.bg-white .font-mono {
+  color: #0f172a !important;
+}
+
 .salesflow-hub-root ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
